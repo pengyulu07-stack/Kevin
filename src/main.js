@@ -16,6 +16,7 @@ const validDay = (value) => {
 const addDays = (day, count) => new Date(Date.parse(day + "T00:00:00Z") + count * 86400000).toISOString().slice(0, 10);
 const params = new URLSearchParams(location.search);
 let selectedDay = validDay(params.get("day")) ? params.get("day") : today();
+let viewMode = params.get("view") === "all" ? "all" : "top";
 let songs = [];
 let reactions = new Map();
 let comments = new Map();
@@ -43,9 +44,16 @@ function setDay(day) {
   if (!validDay(day)) return;
   selectedDay = day;
   $("date").value = day;
-  history.replaceState(null, "", "?day=" + day + location.hash);
+  history.replaceState(null, "", "?day=" + day + (viewMode === "all" ? "&view=all" : "") + location.hash);
   renderWeek();
   void loadSongs();
+}
+function setView(mode, push = true) {
+  viewMode = mode === "all" ? "all" : "top";
+  const url = "?day=" + selectedDay + (viewMode === "all" ? "&view=all" : "") + location.hash;
+  if (push) history.pushState(null, "", url);
+  renderSongs();
+  $("today").scrollIntoView({ block: "start" });
 }
 function renderWeek() {
   const rail = $("week-rail");
@@ -185,28 +193,26 @@ async function loadSongs() {
   const day = selectedDay;
   status("正在读取这一天的歌单…");
   try {
-    const result = await client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).limit(100);
-    if (result.error) throw result.error;
-    const nextSongs = result.data || [];
+    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
     const nextComments = new Map();
     if (nextSongs.length) {
-      const ids = nextSongs.map((song) => song.id);
-      const [reactionResult, commentResult] = await Promise.all([
-        client.from("reactions").select("song_id,user_id,emoji").in("song_id", ids).limit(1000),
-        client.from("comments").select("id,song_id,user_id,nickname,body,image_path,created_at").in("song_id", ids).order("created_at", { ascending: true }).limit(1000)
-      ]);
-      if (reactionResult.error) throw reactionResult.error;
-      if (commentResult.error) throw commentResult.error;
-      for (const row of reactionResult.data || []) {
-        const list = nextReactions.get(row.song_id) || [];
-        list.push(row);
-        nextReactions.set(row.song_id, list);
-      }
-      for (const row of commentResult.data || []) {
-        const list = nextComments.get(row.song_id) || [];
-        list.push(row);
-        nextComments.set(row.song_id, list);
+      for (let start = 0; start < nextSongs.length; start += 50) {
+        const ids = nextSongs.slice(start, start + 50).map((song) => song.id);
+        const [reactionRows, commentRows] = await Promise.all([
+          fetchEveryRow(() => client.from("reactions").select("song_id,user_id,emoji").in("song_id", ids).order("song_id").order("user_id")),
+          fetchEveryRow(() => client.from("comments").select("id,song_id,user_id,nickname,body,image_path,created_at").in("song_id", ids).order("created_at", { ascending: true }).order("id"))
+        ]);
+        for (const row of reactionRows) {
+          const list = nextReactions.get(row.song_id) || [];
+          list.push(row);
+          nextReactions.set(row.song_id, list);
+        }
+        for (const row of commentRows) {
+          const list = nextComments.get(row.song_id) || [];
+          list.push(row);
+          nextComments.set(row.song_id, list);
+        }
       }
     }
     if (request !== loadRequest) return;
@@ -221,20 +227,46 @@ async function loadSongs() {
     $("empty").hidden = false;
   }
 }
+async function fetchEveryRow(makeQuery) {
+  const rows = [];
+  for (let offset = 0; ; offset += 500) {
+    const result = await makeQuery().range(offset, offset + 499);
+    if (result.error) throw result.error;
+    rows.push(...(result.data || []));
+    if (!result.data || result.data.length < 500) return rows;
+  }
+}
+function supportCount(song) {
+  return (reactions.get(song.id) || []).filter((item) => item.emoji === "👍" || item.emoji === "❤️").length;
+}
 function renderSongs() {
   const filter = $("search").value.trim().toLocaleLowerCase();
-  const visible = songs.filter((song) => (song.title + " " + song.artist + " " + song.nickname).toLocaleLowerCase().includes(filter));
+  const ranked = [...songs].sort((a, b) => supportCount(b) - supportCount(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id));
+  const visible = viewMode === "all"
+    ? ranked.filter((song) => (song.title + " " + song.artist + " " + song.nickname).toLocaleLowerCase().includes(filter))
+    : ranked.slice(0, 5);
+  $("feed-title").textContent = viewMode === "all" ? "当天全部歌曲" : "今日精选 · 前 5 首";
+  $("song-count-unit").textContent = viewMode === "all" ? "首歌曲" : "首入选";
+  $("feed-subtitle").textContent = viewMode === "all" ? "按支持数排列" : "当天支持数最高的歌曲";
+  $("feed-search").classList.toggle("hidden", viewMode !== "all");
+  $("show-all-songs").classList.toggle("hidden", viewMode === "all");
+  $("show-top-songs").classList.toggle("hidden", viewMode !== "all");
   $("song-count").textContent = String(visible.length);
   const list = $("song-list");
   list.replaceChildren();
   $("empty").hidden = visible.length > 0;
-  for (const song of visible) list.append(createCard(song));
+  for (const song of visible) list.append(createCard(song, ranked.indexOf(song) + 1));
+  if (location.hash.startsWith("#song-") && songs.length && !document.getElementById(location.hash.slice(1)) && viewMode !== "all") {
+    setView("all", false);
+    return;
+  }
   if (location.hash.startsWith("#song-")) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: "center" });
 }
 function publicFile(bucket, path) { return client.storage.from(bucket).getPublicUrl(path).data.publicUrl; }
-function createCard(song) {
+function createCard(song, rank) {
   const card = el("article", "song-card");
   card.id = "song-" + song.id;
+  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + " 人支持"));
   const art = el("div", "song-art tone-" + (song.title.length % 4) + (song.cover_path ? " has-image" : ""));
   if (song.cover_path) {
     const image = el("img");
@@ -314,7 +346,7 @@ function createCard(song) {
   image.type = "file";
   image.name = "image";
   image.accept = "image/jpeg,image/png,image/webp,image/gif";
-  image.setAttribute("aria-label", "评论照片，最大 1 MB");
+  image.setAttribute("aria-label", "评论照片，静态图片可选至 15 MB 并自动压缩");
   const submit = el("button", "", "发布评论 ↗");
   submit.type = "submit";
   actions.append(image, submit);
@@ -357,6 +389,30 @@ async function uploadFile(bucket, file, types, maxBytes) {
   const { error } = await client.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type, cacheControl: "3600" });
   if (error) throw error;
   return path;
+}
+async function prepareImage(file) {
+  if (!(file instanceof File) || !file.size) return file;
+  if (!imageTypes[file.type]) throw new Error("照片支持 JPG、PNG、WebP 或 GIF。");
+  if (file.size <= 1024 * 1024) return file;
+  if (file.type === "image/gif") throw new Error("GIF 动图需要小于 1 MB；其他照片可自动压缩。");
+  if (file.size > 15 * 1024 * 1024) throw new Error("请选择不超过 15 MB 的照片。");
+  const source = await createImageBitmap(file);
+  try {
+    let longest = Math.min(Math.max(source.width, source.height), 1800);
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const scale = longest / Math.max(source.width, source.height);
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(source.width * scale));
+      canvas.height = Math.max(1, Math.round(source.height * scale));
+      canvas.getContext("2d").drawImage(source, 0, 0, canvas.width, canvas.height);
+      const quality = Math.max(0.5, 0.84 - attempt * 0.045);
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
+      if (!blob) throw new Error("照片压缩失败，请换一张图片。");
+      if (blob.size <= 1024 * 1024) return new File([blob], "daytone-photo.webp", { type: "image/webp" });
+      longest = Math.max(500, Math.round(longest * 0.78));
+    }
+    throw new Error("这张照片仍无法压缩到 1 MB，请换一张或裁剪后再试。");
+  } finally { source.close(); }
 }
 async function cleanUploads(paths) {
   for (const item of paths) {
@@ -402,7 +458,7 @@ async function publish(event) {
       audioPath = await uploadFile("tracks", file, audioTypes, 8 * 1024 * 1024);
       if (audioPath) uploaded.push({ bucket: "tracks", path: audioPath });
     }
-    coverPath = await uploadFile("images", cover, imageTypes, 1024 * 1024);
+    coverPath = await uploadFile("images", await prepareImage(cover), imageTypes, 1024 * 1024);
     if (coverPath) uploaded.push({ bucket: "images", path: coverPath });
     const song = {
       id: crypto.randomUUID(), owner_id: user.id, day, title, artist, nickname: profile.nickname, note,
@@ -438,7 +494,7 @@ async function publishComment(event, songId, errorNode, button) {
   button.textContent = "发布中…";
   const uploaded = [];
   try {
-    const imagePath = await uploadFile("images", file, imageTypes, 1024 * 1024);
+    const imagePath = await uploadFile("images", await prepareImage(file), imageTypes, 1024 * 1024);
     if (imagePath) uploaded.push({ bucket: "images", path: imagePath });
     const result = await client.from("comments").insert({
       song_id: songId, user_id: user.id, nickname: profile.nickname, body, image_path: imagePath
@@ -459,6 +515,15 @@ $("previous-day").addEventListener("click", () => setDay(addDays(selectedDay, -1
 $("next-day").addEventListener("click", () => setDay(addDays(selectedDay, 1)));
 $("date").addEventListener("change", (event) => setDay(event.target.value));
 $("search").addEventListener("input", renderSongs);
+$("show-all-songs").addEventListener("click", () => setView("all"));
+$("show-top-songs").addEventListener("click", () => setView("top"));
+window.addEventListener("popstate", () => {
+  const query = new URLSearchParams(location.search);
+  viewMode = query.get("view") === "all" ? "all" : "top";
+  const day = validDay(query.get("day")) ? query.get("day") : today();
+  if (day !== selectedDay) setDay(day);
+  else renderSongs();
+});
 for (const id of ["open-upload", "open-upload-empty"]) $(id).addEventListener("click", openUpload);
 for (const id of ["close-dialog", "cancel-dialog"]) $(id).addEventListener("click", () => $("upload-dialog").close());
 $("upload-form").addEventListener("submit", (event) => void publish(event));

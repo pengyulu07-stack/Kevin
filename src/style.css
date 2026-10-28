@@ -25,3 +25,6 @@
 @media(max-width:700px){.header-actions{gap:4px}.header-actions .quiet-action{font-size:10px}.comment-form .comment-actions{align-items:flex-start}}
 dialog{max-height:90vh;overflow:auto}
 @media(max-width:500px){.header nav{display:none}.header{gap:10px}.header-actions{margin-left:auto}.header-actions .quiet-action{font-size:10px}}
+.song-rank{grid-column:1/-1;padding:9px 14px;border-bottom:1px solid #718c5b36;color:#d5e8ad;font-size:10px;font-weight:700;letter-spacing:.08em}
+.feed-switch{display:flex;justify-content:center;gap:10px;padding:20px 0 6px}
+.feed-switch .outline-button{font-size:12px;padding:11px 18px}
