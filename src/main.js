@@ -14,7 +14,11 @@ const musicGenres = [
   ["chinese", "Chinese Music"], ["instrumental", "Instrumental"],
   ["folk", "Folk"], ["kpop", "K-Pop"], ["indie", "Indie"], ["other", "Other"]
 ];
-const musicGenreName = (key) => musicGenres.find(([id]) => id === key)?.[1] || "All Music";
+const musicLanguages = [["mandarin", "Chinese"], ["english", "English"], ["japanese", "Japanese"], ["korean", "Korean"], ["other_language", "Other languages"]];
+const musicCharts = [...musicGenres, ...musicLanguages];
+const isLanguageChart = (key) => musicLanguages.some(([id]) => id === key);
+const songInChart = (song, key) => key === "all" || (isLanguageChart(key) ? song.language === key : (song.genres || [song.genre]).includes(key));
+const musicGenreName = (key) => musicCharts.find(([id]) => id === key)?.[1] || "All Music";
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
 const validDay = (value) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -23,7 +27,7 @@ const validDay = (value) => {
 };
 const addDays = (day, count) => new Date(Date.parse(day + "T00:00:00Z") + count * 86400000).toISOString().slice(0, 10);
 const params = new URLSearchParams(location.search);
-window.daytoneGenre = musicGenres.some(([id]) => id === params.get("genre")) ? params.get("genre") : "all";
+window.daytoneGenre = musicCharts.some(([id]) => id === params.get("genre")) ? params.get("genre") : "all";
 let selectedDay = validDay(params.get("day")) ? params.get("day") : today();
 let viewMode = params.get("view") === "all" ? "all" : "top";
 let songs = [];
@@ -204,7 +208,7 @@ async function loadSongs() {
   const day = selectedDay;
   status("Loading songs for this date…");
   try {
-    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
+    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,language,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
     const nextComments = new Map();
     if (nextSongs.length) {
@@ -253,7 +257,7 @@ function supportCount(song) {
 }
 function renderSongs() {
   const filter = $("search").value.trim().toLocaleLowerCase();
-  const chartSongs = songs.filter((song) => window.daytoneGenre === "all" || (song.genres || [song.genre]).includes(window.daytoneGenre));
+  const chartSongs = songs.filter((song) => songInChart(song,window.daytoneGenre));
   const ranked = [...chartSongs].sort((a, b) => supportCount(b) - supportCount(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id));
   const visible = viewMode === "all"
     ? [...chartSongs].filter((song) => (song.title + " " + song.artist + " " + song.nickname).toLocaleLowerCase().includes(filter))
@@ -308,6 +312,7 @@ function createCard(song, rank, discussion = false) {
   meta.append(el("p", "song-byline", (song.artist ? song.artist + " · " : "") + song.nickname));
   const genreRow = el("div", "song-genre-row");
   for (const key of song.genres || [song.genre || "other"]) genreRow.append(el("span", "song-genre-tag", musicGenreName(key)));
+  genreRow.append(el("span", "song-genre-tag language-tag", musicGenreName(song.language || "other_language")));
   if (user?.id === song.owner_id) {
     const edit = el("details", "genre-editor"), summary = el("summary", "", "Edit categories"), choices = el("div", "genre-editor-grid");
     for (const [key, label] of musicGenres) {
@@ -431,7 +436,8 @@ async function copyLink(path) {
 function openUpload() {
   if (!requireAccount()) return;
   $("form-error").textContent = "";
-  document.querySelectorAll('#upload-form input[name="genres"]').forEach(x => x.checked = x.value === (window.daytoneGenre === "all" ? "other" : window.daytoneGenre));
+  document.querySelectorAll('#upload-form input[name="genres"]').forEach(x => x.checked = x.value === (musicGenres.some(([id]) => id === window.daytoneGenre) ? window.daytoneGenre : "other"));
+  $("upload-form").elements.language.value = isLanguageChart(window.daytoneGenre) ? window.daytoneGenre : "other_language";
   $("upload-form").querySelector(".upload-genres").open = window.daytoneGenre !== "all";
   showDialog("upload-dialog");
 }
@@ -484,6 +490,7 @@ async function publish(event) {
   const note = String(data.get("note") || "").trim();
   const genres = data.getAll("genres").map(String);
   if (!genres.length) genres.push("other");
+  const language = String(data.get("language") || "other_language");
   const source = data.get("source");
   const file = data.get("file");
   const cover = data.get("cover");
@@ -506,10 +513,11 @@ async function publish(event) {
   const uploaded = [];
   try {
     const day = today();
-    const usedResult = await client.from("songs").select("daily_slot").eq("owner_id", user.id).eq("day", day);
+    const usedResult = await client.from("songs").select("daily_slot,genres,language").eq("owner_id", user.id).eq("day", day);
     if (usedResult.error) throw usedResult.error;
     const used = new Set((usedResult.data || []).map((item) => item.daily_slot));
-    if (used.size >= 3) throw new Error("You have shared three songs today. Come back tomorrow.");
+    for (const key of genres) if ((usedResult.data || []).filter(x => x.genres?.includes(key)).length >= 8) throw new Error("Eight songs per category per day: " + musicGenreName(key) + ".");
+    if ((usedResult.data || []).filter(x => x.language === language).length >= 8) throw new Error("Eight songs per language chart per day: " + musicGenreName(language) + ".");
     let audioPath = null;
     let coverPath = null;
     if (source === "file") {
@@ -519,18 +527,18 @@ async function publish(event) {
     coverPath = await uploadFile("images", await prepareImage(cover), imageTypes, 1024 * 1024);
     if (coverPath) uploaded.push({ bucket: "images", path: coverPath });
     const song = {
-      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, nickname: profile.nickname, note, genre: genres[0], genres,
+      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, nickname: profile.nickname, note, genre: genres[0], genres, language,
       audio_path: audioPath, source_url: sourceUrl, cover_path: coverPath,
       file_size: audioPath ? file.size : null
     };
     let saved = false;
-    for (const slot of [1, 2, 3]) {
+    for (let slot = 1; slot <= 120; slot++) {
       if (used.has(slot)) continue;
       const result = await client.from("songs").insert({ ...song, daily_slot: slot });
       if (!result.error) { saved = true; break; }
       if (result.error.code !== "23505") throw result.error;
     }
-    if (!saved) throw new Error("You have shared three songs today. Come back tomorrow.");
+    if (!saved) throw new Error("No room for another song today.");
     form.reset();
     $("upload-dialog").close();
     setDay(day);
@@ -579,7 +587,7 @@ window.addEventListener("popstate", () => {
   const query = new URLSearchParams(location.search);
   if (!((query.get("space") === "music" && ["top", "all"].includes(query.get("view"))) || (!query.has("space") && !query.has("page") && query.has("day")))) return;
   viewMode = query.get("view") === "all" ? "all" : "top";
-  window.daytoneGenre = musicGenres.some(([id]) => id === query.get("genre")) ? query.get("genre") : "all";
+  window.daytoneGenre = musicCharts.some(([id]) => id === query.get("genre")) ? query.get("genre") : "all";
   const day = validDay(query.get("day")) ? query.get("day") : today();
   if (day !== selectedDay) setDay(day);
   else renderSongs();
