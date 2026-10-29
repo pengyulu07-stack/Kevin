@@ -43,14 +43,15 @@ function toast(message) {
 function setDay(day) {
   if (!validDay(day)) return;
   selectedDay = day;
+  window.dispatchEvent(new CustomEvent("daytone:day", { detail: { day } }));
   $("date").value = day;
-  history.replaceState(null, "", "?day=" + day + (viewMode === "all" ? "&view=all" : "") + location.hash);
+  history.replaceState(null, "", "?space=music&day=" + day + "&view=" + viewMode + location.hash);
   renderWeek();
   void loadSongs();
 }
 function setView(mode, push = true) {
   viewMode = mode === "all" ? "all" : "top";
-  const url = "?day=" + selectedDay + (viewMode === "all" ? "&view=all" : "") + location.hash;
+  const url = "?space=music&day=" + selectedDay + "&view=" + viewMode + location.hash;
   if (push) history.pushState(null, "", url);
   renderSongs();
   $("today").scrollIntoView({ block: "start" });
@@ -62,16 +63,17 @@ function renderWeek() {
     const day = addDays(selectedDay, offset);
     const button = el("button", "day-tile" + (offset === 0 ? " selected" : ""));
     button.type = "button";
-    button.setAttribute("aria-label", "查看 " + day + " 的歌单");
-    const weekday = new Intl.DateTimeFormat("zh-CN", { weekday: "short", timeZone: "UTC" }).format(new Date(day + "T12:00:00Z"));
+    button.setAttribute("aria-label", "View " + day + " songs");
+    const weekday = new Intl.DateTimeFormat("en-US", { weekday: "short", timeZone: "UTC" }).format(new Date(day + "T12:00:00Z"));
     button.append(el("small", "", weekday), el("strong", "", day.slice(-2)));
     button.addEventListener("click", () => setDay(day));
     rail.append(button);
   }
 }
 function updateAccount() {
-  $("account-button").textContent = profile ? profile.nickname + " · 我的账号" : (user ? "设置昵称" : "登录 / 注册");
+  $("account-button").textContent = profile ? profile.nickname + " · My account" : (user ? "Set nickname" : "Log in / Sign up");
   renderSongs();
+  window.dispatchEvent(new Event("daytone:profile"));
 }
 function showDialog(id) {
   const dialog = $(id);
@@ -80,17 +82,17 @@ function showDialog(id) {
 function switchAuth(mode) {
   authMode = mode;
   const signup = mode === "signup";
-  $("auth-title").textContent = signup ? "加入日听" : "欢迎回来";
+  $("auth-title").textContent = signup ? "Join DAYTONE" : "Welcome back";
   $("nickname-field").classList.toggle("hidden", !signup);
   $("auth-form").elements.nickname.required = signup;
   $("auth-form").elements.password.autocomplete = signup ? "new-password" : "current-password";
   $("show-signup").classList.toggle("selected", signup);
   $("show-signin").classList.toggle("selected", !signup);
-  $("submit-auth").textContent = signup ? "创建账号 ↗" : "登录日听 ↗";
+  $("submit-auth").textContent = signup ? "Create account ↗" : "Log in ↗";
   $("auth-error").textContent = "";
 }
 function openAuth(mode = "signup") {
-  if (!client) { toast("网站后台尚未连接。"); return; }
+  if (!client) { toast("The shared database is not connected."); return; }
   switchAuth(mode);
   showDialog("auth-dialog");
 }
@@ -101,16 +103,16 @@ function openProfile() {
   showDialog("profile-dialog");
 }
 function requireAccount() {
-  if (!client) { toast("网站后台尚未连接。"); return false; }
-  if (!user) { openAuth("signup"); toast("先设置登录号和昵称，就能参与分享。"); return false; }
-  if (!profile) { openProfile(); toast("先保存你的昵称。"); return false; }
+  if (!client) { toast("The shared database is not connected."); return false; }
+  if (!user) { openAuth("signup"); toast("Set your ID and nickname to join in."); return false; }
+  if (!profile) { openProfile(); toast("Save your nickname first."); return false; }
   return true;
 }
 async function hydrateProfile() {
   if (!client || !user) return;
   const actor = user;
   let result = await client.from("profiles").select("nickname").eq("user_id", actor.id).maybeSingle();
-  if (result.error) { toast("昵称读取失败，请稍后重试。"); return; }
+  if (result.error) { toast("Could not load your nickname. Please try again."); return; }
   if (!result.data) {
     const nickname = String(actor.user_metadata?.nickname || "").trim().slice(0, 30);
     if (nickname) {
@@ -131,9 +133,9 @@ async function submitAuth(event) {
   const id = String(form.elements.login_id.value).trim();
   const password = form.elements.password.value;
   const nickname = String(form.elements.nickname.value).trim();
-  if (!/^\d{6}$/.test(id)) { $("auth-error").textContent = "请输入六位数字登录号。"; return; }
-  if (password.length < 8) { $("auth-error").textContent = "密码至少需要 8 位。"; return; }
-  if (authMode === "signup" && !nickname) { $("auth-error").textContent = "注册时请填写昵称。"; return; }
+  if (!/^\d{6}$/.test(id)) { $("auth-error").textContent = "Enter a six-digit ID."; return; }
+  if (password.length < 8) { $("auth-error").textContent = "Password must have at least 8 characters."; return; }
+  if (authMode === "signup" && !nickname) { $("auth-error").textContent = "Enter a nickname to sign up."; return; }
   const button = $("submit-auth");
   button.disabled = true;
   $("auth-error").textContent = "";
@@ -143,26 +145,26 @@ async function submitAuth(event) {
       ? await client.auth.signUp({ email, password, options: { data: { nickname } } })
       : await client.auth.signInWithPassword({ email, password });
     if (response.error) throw response.error;
-    if (!response.data.session || !response.data.user) throw new Error("账号尚未启用，请联系站长检查登录设置。");
+    if (!response.data.session || !response.data.user) throw new Error("Account setup is incomplete. Please contact the site owner.");
     user = response.data.user;
     await hydrateProfile();
     $("auth-dialog").close();
-    toast(authMode === "signup" ? "账号已创建，请记住六位登录号和密码。" : "欢迎回来。");
+    toast(authMode === "signup" ? "Account created. Keep your six-digit ID and password safe." : "Welcome back.");
     form.elements.password.value = "";
   } catch (error) {
     const message = String(error.message || "");
     $("auth-error").textContent = error.code === "user_already_exists" || /already registered/i.test(message)
-      ? "这个六位号码已被注册，请换一个。"
-      : /Invalid login credentials/i.test(message) ? "登录号或密码不正确。"
-      : /invalid email/i.test(message) ? "数字账号尚未配置好，请联系站长。"
-      : message || "暂时无法登录，请稍后重试。";
+      ? "This six-digit ID is taken. Please choose another."
+      : /Invalid login credentials/i.test(message) ? "Incorrect ID or password."
+      : /invalid email/i.test(message) ? "Numeric ID login is not configured. Please contact the site owner."
+      : message || "Could not log in. Please try again.";
   } finally { button.disabled = false; }
 }
 async function submitProfile(event) {
   event.preventDefault();
   if (!user) { openAuth("signin"); return; }
   const nickname = String($("profile-form").elements.nickname.value).trim();
-  if (!nickname || nickname.length > 30) { $("profile-error").textContent = "昵称需要 1 到 30 个字。"; return; }
+  if (!nickname || nickname.length > 30) { $("profile-error").textContent = "Nickname must be 1–30 characters."; return; }
   const button = $("save-profile");
   button.disabled = true;
   try {
@@ -173,25 +175,25 @@ async function submitProfile(event) {
     profile = { nickname };
     $("profile-dialog").close();
     updateAccount();
-    toast("昵称已保存。");
-  } catch (error) { $("profile-error").textContent = error.message || "昵称保存失败。"; }
+    toast("Nickname saved.");
+  } catch (error) { $("profile-error").textContent = error.message || "Could not save nickname."; }
   finally { button.disabled = false; }
 }
 async function signOut() {
   if (!client) return;
   const { error } = await client.auth.signOut();
-  if (error) { toast("退出失败，请稍后重试。"); return; }
+  if (error) { toast("Could not log out. Please try again."); return; }
   user = null;
   profile = null;
   $("profile-dialog").close();
   updateAccount();
-  toast("已退出。");
+  toast("Logged out.");
 }
 async function loadSongs() {
-  if (!client) { status("页面预览：共享数据库尚未连接。"); $("empty").hidden = false; return; }
+  if (!client) { status("Preview: the shared database is not connected."); $("empty").hidden = false; return; }
   const request = ++loadRequest;
   const day = selectedDay;
-  status("正在读取这一天的歌单…");
+  status("Loading songs for this date…");
   try {
     const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
@@ -220,10 +222,11 @@ async function loadSongs() {
     reactions = nextReactions;
     comments = nextComments;
     renderSongs();
-    status(songs.length ? "已同步 " + day + " 的歌单。" : "这一天还没有分享。");
+    status(songs.length ? "Loaded " + day + " songs." : "No songs have been shared this day.");
+    window.dispatchEvent(new Event("daytone:songs-loaded"));
   } catch (error) {
     if (request !== loadRequest) return;
-    status("暂时无法读取歌单：" + (error.message || "请稍后重试"));
+    status("Could not load songs: " + (error.message || "please try again"));
     $("empty").hidden = false;
   }
 }
@@ -243,11 +246,12 @@ function renderSongs() {
   const filter = $("search").value.trim().toLocaleLowerCase();
   const ranked = [...songs].sort((a, b) => supportCount(b) - supportCount(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id));
   const visible = viewMode === "all"
-    ? ranked.filter((song) => (song.title + " " + song.artist + " " + song.nickname).toLocaleLowerCase().includes(filter))
+    ? [...songs].filter((song) => (song.title + " " + song.artist + " " + song.nickname).toLocaleLowerCase().includes(filter))
+      .sort((a, b) => a.nickname.localeCompare(b.nickname, "zh-CN") || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id))
     : ranked.slice(0, 5);
-  $("feed-title").textContent = viewMode === "all" ? "当天全部歌曲" : "今日精选 · 前 5 首";
-  $("song-count-unit").textContent = viewMode === "all" ? "首歌曲" : "首入选";
-  $("feed-subtitle").textContent = viewMode === "all" ? "按支持数排列" : "当天支持数最高的歌曲";
+  $("feed-title").textContent = viewMode === "all" ? "All songs today" : "Today’s Top 5";
+  $("song-count-unit").textContent = viewMode === "all" ? "songs" : "selected";
+  $("feed-subtitle").textContent = viewMode === "all" ? "Grouped by contributor" : "Most supported songs today";
   $("feed-search").classList.toggle("hidden", viewMode !== "all");
   $("show-all-songs").classList.toggle("hidden", viewMode === "all");
   $("show-top-songs").classList.toggle("hidden", viewMode !== "all");
@@ -255,7 +259,14 @@ function renderSongs() {
   const list = $("song-list");
   list.replaceChildren();
   $("empty").hidden = visible.length > 0;
-  for (const song of visible) list.append(createCard(song, ranked.indexOf(song) + 1));
+  let lastAuthor = null;
+  for (const song of visible) {
+    if (viewMode === "all" && song.nickname !== lastAuthor) {
+      list.append(el("h3", "publisher-heading", "@" + song.nickname));
+      lastAuthor = song.nickname;
+    }
+    list.append(createCard(song, ranked.indexOf(song) + 1));
+  }
   if (location.hash.startsWith("#song-") && songs.length && !document.getElementById(location.hash.slice(1)) && viewMode !== "all") {
     setView("all", false);
     return;
@@ -263,33 +274,46 @@ function renderSongs() {
   if (location.hash.startsWith("#song-")) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: "center" });
 }
 function publicFile(bucket, path) { return client.storage.from(bucket).getPublicUrl(path).data.publicUrl; }
-function createCard(song, rank) {
+function createCard(song, rank, discussion = false) {
   const card = el("article", "song-card");
-  card.id = "song-" + song.id;
-  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + " 人支持"));
+  if (!discussion) card.id = "song-" + song.id;
+  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + " supporters"));
   const art = el("div", "song-art tone-" + (song.title.length % 4) + (song.cover_path ? " has-image" : ""));
   if (song.cover_path) {
     const image = el("img");
     image.src = publicFile("images", song.cover_path);
-    image.alt = song.title + " 的封面";
+    image.alt = song.title + " cover";
     image.loading = "lazy";
     art.append(image);
   } else art.append(el("b", "", song.title.slice(0, 2)));
+  if (!discussion) {
+    art.setAttribute("role", "button"); art.tabIndex = 0;
+    art.setAttribute("aria-label", "Open " + song.title + " discussion");
+    art.addEventListener("click", () => window.dispatchEvent(new CustomEvent("daytone:open-music-discussion", { detail: { id: song.id } })));
+    art.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); art.click(); } });
+  }
   card.append(art);
   const meta = el("div", "song-meta");
   meta.append(el("h3", "", song.title));
   meta.append(el("p", "song-byline", (song.artist ? song.artist + " · " : "") + song.nickname));
   if (song.note) meta.append(el("div", "song-note", "“" + song.note + "”"));
   meta.append(el("small", "", song.day + " · " + new Date(song.created_at).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })));
+  const copyName = el("button", "copy-name", "Copy song title");
+  copyName.type = "button";
+  copyName.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(song.title); toast("Song title copied. Search for it in your own app."); }
+    catch { toast("Could not copy automatically. Select the title to copy it."); }
+  });
+  meta.append(copyName);
   if (song.audio_path) {
     const audio = el("audio", "song-player");
     audio.controls = true;
     audio.preload = "none";
     audio.src = publicFile("tracks", song.audio_path);
-    audio.setAttribute("aria-label", "播放 " + song.title);
+    audio.setAttribute("aria-label", "Play " + song.title);
     meta.append(audio);
   } else if (song.source_url) {
-    const link = el("a", "open-link", "去原平台听这首歌 ↗");
+    const link = el("a", "open-link", "Listen on the original platform ↗");
     link.href = song.source_url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
@@ -303,7 +327,7 @@ function createCard(song, rank) {
     const chosen = rows.some((item) => item.emoji === symbol && item.user_id === user?.id);
     const button = el("button", "reaction" + (chosen ? " chosen" : ""));
     button.type = "button";
-    button.setAttribute("aria-label", symbol + " " + count + " 人回应");
+    button.setAttribute("aria-label", symbol + " " + count + " reactions");
     button.setAttribute("aria-pressed", String(chosen));
     button.append(document.createTextNode(symbol), el("span", "", String(count)));
     button.addEventListener("click", () => void react(song.id, symbol, chosen));
@@ -311,23 +335,23 @@ function createCard(song, rank) {
   }
   const share = el("button", "share-song", "↗");
   share.type = "button";
-  share.setAttribute("aria-label", "分享 " + song.title);
+  share.setAttribute("aria-label", "Share " + song.title);
   share.addEventListener("click", () => void copyLink("?day=" + song.day + "#song-" + song.id));
   bottom.append(row, share);
   meta.append(bottom);
   const section = el("section", "comment-section");
   const songComments = comments.get(song.id) || [];
-  section.append(el("div", "comment-heading", "评论 · " + songComments.length));
+  section.append(el("div", "comment-heading", "Comments · " + songComments.length));
   const commentList = el("div", "comment-list");
-  if (!songComments.length) commentList.append(el("div", "comment-empty", "还没有评论，留下第一句。"));
+  if (!songComments.length) commentList.append(el("div", "comment-empty", "No comments yet. Be the first."));
   for (const item of songComments) {
     const entry = el("div", "comment");
-    entry.append(el("strong", "", item.nickname), el("time", "", new Date(item.created_at).toLocaleString("zh-CN", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })));
+    entry.append(el("strong", "", item.nickname), el("time", "", new Date(item.created_at).toLocaleString("en-US", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })));
     if (item.body) entry.append(el("p", "", item.body));
     if (item.image_path) {
       const image = el("img");
       image.src = publicFile("images", item.image_path);
-      image.alt = item.nickname + " 分享的照片";
+      image.alt = item.nickname + " shared photo";
       image.loading = "lazy";
       entry.append(image);
     }
@@ -339,15 +363,15 @@ function createCard(song, rank) {
   box.name = "body";
   box.maxLength = 500;
   box.rows = 2;
-  box.placeholder = "写一句评论，或只发一张照片…";
-  box.setAttribute("aria-label", "评论内容");
+  box.placeholder = "Write a comment, or just share a photo…";
+  box.setAttribute("aria-label", "Comment");
   const actions = el("div", "comment-actions");
   const image = el("input");
   image.type = "file";
   image.name = "image";
   image.accept = "image/jpeg,image/png,image/webp,image/gif";
-  image.setAttribute("aria-label", "评论照片，静态图片可选至 15 MB 并自动压缩");
-  const submit = el("button", "", "发布评论 ↗");
+  image.setAttribute("aria-label", "Comment photo; still images up to 15 MB are compressed");
+  const submit = el("button", "", "Post comment ↗");
   submit.type = "submit";
   actions.append(image, submit);
   const error = el("div", "comment-error");
@@ -368,12 +392,12 @@ async function react(songId, symbol, chosen) {
       : await query.upsert({ song_id: songId, user_id: user.id, emoji: symbol }, { onConflict: "song_id,user_id" });
     if (result.error) throw result.error;
     await loadSongs();
-  } catch (error) { toast(error.message || "回应没有保存，请稍后再试。"); }
+  } catch (error) { toast(error.message || "Reaction could not be saved. Please try again."); }
 }
 async function copyLink(path) {
   const url = new URL(path, location.href).href;
-  try { await navigator.clipboard.writeText(url); toast("链接已复制，可以发给朋友。"); }
-  catch { toast("无法自动复制，请从浏览器地址栏复制链接。"); }
+  try { await navigator.clipboard.writeText(url); toast("Link copied. Share it with friends."); }
+  catch { toast("Could not copy. Please copy the URL from your browser."); }
 }
 function openUpload() {
   if (!requireAccount()) return;
@@ -382,9 +406,9 @@ function openUpload() {
 }
 async function uploadFile(bucket, file, types, maxBytes) {
   if (!(file instanceof File) || !file.size) return null;
-  if (file.size > maxBytes) throw new Error(bucket === "tracks" ? "音频请压缩到 8 MB 以内。" : "照片请压缩到 1 MB 以内。");
+  if (file.size > maxBytes) throw new Error(bucket === "tracks" ? "Audio must be under 8 MB." : "Photo must be under 1 MB.");
   const ext = types[file.type];
-  if (!ext) throw new Error(bucket === "tracks" ? "支持 MP3、M4A、OGG、WAV 或 WebM 音频。" : "照片支持 JPG、PNG、WebP 或 GIF。");
+  if (!ext) throw new Error(bucket === "tracks" ? "Supported audio: MP3, M4A, OGG, WAV, or WebM." : "Supported images: JPG, PNG, WebP, or GIF.");
   const path = user.id + "/" + crypto.randomUUID() + "." + ext;
   const { error } = await client.storage.from(bucket).upload(path, file, { upsert: false, contentType: file.type, cacheControl: "3600" });
   if (error) throw error;
@@ -392,10 +416,10 @@ async function uploadFile(bucket, file, types, maxBytes) {
 }
 async function prepareImage(file) {
   if (!(file instanceof File) || !file.size) return file;
-  if (!imageTypes[file.type]) throw new Error("照片支持 JPG、PNG、WebP 或 GIF。");
+  if (!imageTypes[file.type]) throw new Error("Supported images: JPG, PNG, WebP, or GIF.");
   if (file.size <= 1024 * 1024) return file;
-  if (file.type === "image/gif") throw new Error("GIF 动图需要小于 1 MB；其他照片可自动压缩。");
-  if (file.size > 15 * 1024 * 1024) throw new Error("请选择不超过 15 MB 的照片。");
+  if (file.type === "image/gif") throw new Error("GIFs must be under 1 MB; other photos can be compressed.");
+  if (file.size > 15 * 1024 * 1024) throw new Error("Choose a photo under 15 MB.");
   const source = await createImageBitmap(file);
   try {
     let longest = Math.min(Math.max(source.width, source.height), 1800);
@@ -407,11 +431,11 @@ async function prepareImage(file) {
       canvas.getContext("2d").drawImage(source, 0, 0, canvas.width, canvas.height);
       const quality = Math.max(0.5, 0.84 - attempt * 0.045);
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/webp", quality));
-      if (!blob) throw new Error("照片压缩失败，请换一张图片。");
+      if (!blob) throw new Error("Could not compress photo. Choose another image.");
       if (blob.size <= 1024 * 1024) return new File([blob], "daytone-photo.webp", { type: "image/webp" });
       longest = Math.max(500, Math.round(longest * 0.78));
     }
-    throw new Error("这张照片仍无法压缩到 1 MB，请换一张或裁剪后再试。");
+    throw new Error("This photo could not be compressed below 1 MB. Crop it or choose another.");
   } finally { source.close(); }
 }
 async function cleanUploads(paths) {
@@ -433,25 +457,25 @@ async function publish(event) {
   const urlText = String(data.get("url") || "").trim();
   const errorNode = $("form-error");
   errorNode.textContent = "";
-  if (!title) { errorNode.textContent = "请填写歌名。"; return; }
+  if (!title) { errorNode.textContent = "Enter a song title."; return; }
   let sourceUrl = null;
   if (source === "link" && urlText) {
     try {
       const parsed = new URL(urlText);
       if (parsed.protocol !== "https:") throw new Error();
       sourceUrl = parsed.href;
-    } catch { errorNode.textContent = "音乐链接需要以 https:// 开头。"; return; }
+    } catch { errorNode.textContent = "Music links must start with https://."; return; }
   }
   const button = $("submit-song");
   button.disabled = true;
-  button.textContent = "正在发布…";
+  button.textContent = "Publishing…";
   const uploaded = [];
   try {
     const day = today();
     const usedResult = await client.from("songs").select("daily_slot").eq("owner_id", user.id).eq("day", day);
     if (usedResult.error) throw usedResult.error;
     const used = new Set((usedResult.data || []).map((item) => item.daily_slot));
-    if (used.size >= 3) throw new Error("今天已分享三首，明天再来吧。");
+    if (used.size >= 3) throw new Error("You have shared three songs today. Come back tomorrow.");
     let audioPath = null;
     let coverPath = null;
     if (source === "file") {
@@ -472,15 +496,15 @@ async function publish(event) {
       if (!result.error) { saved = true; break; }
       if (result.error.code !== "23505") throw result.error;
     }
-    if (!saved) throw new Error("今天已分享三首，明天再来吧。");
+    if (!saved) throw new Error("You have shared three songs today. Come back tomorrow.");
     form.reset();
     $("upload-dialog").close();
     setDay(day);
-    toast("已经分享到今天的歌单。");
+    toast("Song added to today’s list.");
   } catch (error) {
     await cleanUploads(uploaded);
-    errorNode.textContent = error.message || "发布失败，请稍后再试。";
-  } finally { button.disabled = false; button.textContent = "发布这首歌 ↗"; }
+    errorNode.textContent = error.message || "Could not publish. Please try again.";
+  } finally { button.disabled = false; button.textContent = "Publish song ↗"; }
 }
 async function publishComment(event, songId, errorNode, button) {
   event.preventDefault();
@@ -489,9 +513,9 @@ async function publishComment(event, songId, errorNode, button) {
   const body = form.elements.body.value.trim();
   const file = form.elements.image.files[0];
   errorNode.textContent = "";
-  if (!body && !file) { errorNode.textContent = "写一句话或选一张照片。"; return; }
+  if (!body && !file) { errorNode.textContent = "Write a comment or choose a photo."; return; }
   button.disabled = true;
-  button.textContent = "发布中…";
+  button.textContent = "Posting…";
   const uploaded = [];
   try {
     const imagePath = await uploadFile("images", await prepareImage(file), imageTypes, 1024 * 1024);
@@ -502,11 +526,11 @@ async function publishComment(event, songId, errorNode, button) {
     if (result.error) throw result.error;
     form.reset();
     await loadSongs();
-    toast("评论已发布。");
+    toast("Comment posted.");
   } catch (error) {
     await cleanUploads(uploaded);
-    errorNode.textContent = error.message || "评论失败，请稍后再试。";
-  } finally { button.disabled = false; button.textContent = "发布评论 ↗"; }
+    errorNode.textContent = error.message || "Could not post comment. Please try again.";
+  } finally { button.disabled = false; button.textContent = "Post comment ↗"; }
 }
 
 $("date").value = selectedDay;
@@ -519,6 +543,7 @@ $("show-all-songs").addEventListener("click", () => setView("all"));
 $("show-top-songs").addEventListener("click", () => setView("top"));
 window.addEventListener("popstate", () => {
   const query = new URLSearchParams(location.search);
+  if (!((query.get("space") === "music" && query.has("view")) || (!query.has("space") && !query.has("page") && query.has("day")))) return;
   viewMode = query.get("view") === "all" ? "all" : "top";
   const day = validDay(query.get("day")) ? query.get("day") : today();
   if (day !== selectedDay) setDay(day);
