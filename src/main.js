@@ -319,12 +319,23 @@ function publicFile(bucket, path) { return client.storage.from(bucket).getPublic
 function musicEmbed(sourceUrl) {
   try {
     const source = new URL(sourceUrl);
-    if (source.protocol !== 'https:' || source.hostname !== 'open.spotify.com') return null;
-    const match = source.pathname.match(/^\/(track|album|playlist)\/([A-Za-z0-9]{22})\/?$/);
-    if (!match) return null;
+    if (source.protocol !== 'https:') return null;
+    if (/\.(mp3|m4a|ogg|wav|webm)$/i.test(source.pathname) && !/^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/i.test(source.hostname)) {
+      const audio=el('audio','song-player');audio.controls=true;audio.preload='none';audio.src=source.href;audio.setAttribute('referrerpolicy','no-referrer');audio.setAttribute('aria-label','Play linked audio');return audio;
+    }
     const frame = el('iframe', 'platform-player');
-    frame.src = 'https://open.spotify.com/embed/' + match[1] + '/' + match[2];
-    frame.title = 'Listen on Spotify';
+    if (source.hostname === 'open.spotify.com') {
+      const match = source.pathname.match(/^\/(track|album|playlist)\/([A-Za-z0-9]{22})\/?$/);
+      if (!match) return null;
+      frame.src = 'https://open.spotify.com/embed/' + match[1] + '/' + match[2];
+      frame.title = 'Listen on Spotify';
+    } else if (source.hostname === 'music.apple.com') {
+      if (!/^\/[a-z]{2}(-[a-z]{2})?\/(album|song|playlist)\/[a-zA-Z0-9-]+\/(\d{4,20}|pl\.[a-zA-Z0-9.]+)\/?$/i.test(source.pathname)) return null;
+      const embedded = new URL(source.href); embedded.hostname = 'embed.music.apple.com';
+      embedded.search = source.searchParams.has('i') ? '?i=' + encodeURIComponent(source.searchParams.get('i')) : '';
+      frame.src = embedded.href;
+      frame.title = 'Listen on Apple Music';
+    } else return null;
     frame.loading = 'lazy';
     frame.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
     frame.referrerPolicy = 'strict-origin-when-cross-origin';
