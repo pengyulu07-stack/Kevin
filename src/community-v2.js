@@ -5,29 +5,32 @@
   const imageUrl = path => publicFile('images', path);
   const query = new URLSearchParams(location.search);
   let day = validDay(query.get('day')) ? query.get('day') : today();
-  const routeScreen = q => q.get('page') === 'lobby' ? 'lobby' : q.get('space') === 'group' ? 'group' : q.get('space') === 'forum' ? (q.get('view') === 'all' ? 'forum-all' : 'forum') : q.get('space') === 'music' && q.get('view') === 'hub' ? 'music-hub' : q.get('space') === 'music' || q.has('day') || location.hash.startsWith('#song-') ? (q.get('view') === 'all' || location.hash.startsWith('#song-') ? 'music-all' : 'music') : 'welcome';
+  const routeScreen = q => q.get('page') === 'lobby' ? 'lobby' : q.get('space') === 'playlists' ? 'playlists' : q.get('space') === 'group' ? 'group' : q.get('space') === 'forum' ? (q.get('view') === 'all' ? 'forum-all' : 'forum') : q.get('space') === 'music' && q.get('view') === 'hub' ? 'music-hub' : q.get('space') === 'music' || q.has('day') || location.hash.startsWith('#song-') ? (q.get('view') === 'all' || location.hash.startsWith('#song-') ? 'music-all' : 'music') : 'welcome';
   let screen = routeScreen(query);
   window.daytoneGroupId = query.get('group') || null;
+  window.daytonePlaylistId = query.get('space')==='playlists' ? query.get('list') : null;
+  window.daytonePlaylistGroup = query.get('space')==='playlists' ? query.get('group') : null;
   window.daytoneSpan = query.get('period') === 'all' ? 'all' : 'today';
   window.daytoneGroupPeriod = window.daytoneSpan;
   let monthCursor = day.slice(0, 7);
   let posts = [], postReactions = new Map(), postComments = new Map();
   let selectedPostId = null, selectedSongId = null, loadId = 0;
-  const screens = { welcome: 'welcome', lobby: 'taxi-lobby', 'music-hub': 'music-hub', music: 'music-gallery', 'music-all': 'today', group: 'group-screen', forum: 'forum-rank', 'forum-all': 'generic-feed' };
+  const screens = { welcome: 'welcome', lobby: 'taxi-lobby', 'music-hub': 'music-hub', playlists: 'playlists-screen', music: 'music-gallery', 'music-all': 'today', group: 'group-screen', forum: 'forum-rank', 'forum-all': 'generic-feed' };
   const photoScenes = ['music-1.png', 'music-2.png', 'music-3.png'];
   const dateLabel = value => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', timeZone: 'UTC' }).format(new Date(value + 'T12:00:00Z'));
   const copyIcon = () => { const node = make('span', 'paper-copy-icon'); node.setAttribute('aria-hidden', 'true'); return node; };
   function copyButton(value, label = 'Copy title') { const button = make('button', 'paper-copy'); button.type = 'button'; button.setAttribute('aria-label', label); button.title = label; button.append(copyIcon()); button.addEventListener('click', event => { event.stopPropagation(); void copyName(value); }); return button; }
   async function copyName(value) { try { await navigator.clipboard.writeText(value); toast('Copied: ' + value + '. Search for it in your own app.'); } catch { toast('Could not copy. Select the title to copy it.'); } }
-  function updateRoute(push = true) { const url = screen === 'welcome' ? './' : screen === 'lobby' ? '?page=lobby&day=' + day : screen === 'group' ? '?space=group&group=' + encodeURIComponent(window.daytoneGroupId || '') + '&day=' + day + '&view=top' + (window.daytoneGroupPeriod === 'all' ? '&period=all' : '') : screen === 'music-hub' ? '?space=music&day=' + day + '&view=hub' : '?space=' + (screen.startsWith('music') ? 'music' : 'forum') + '&day=' + day + '&view=' + (screen.endsWith('-all') ? 'all' : 'top') + (screen.startsWith('music') && window.daytoneGenre !== 'all' ? '&genre=' + window.daytoneGenre : '') + (screen === 'music' && window.daytoneSpan === 'all' ? '&period=all' : ''); (push ? history.pushState : history.replaceState).call(history, null, '', url); }
+  function updateRoute(push = true) { const url = screen === 'welcome' ? './' : screen === 'lobby' ? '?page=lobby&day=' + day : screen === 'playlists' ? '?space=playlists' + (window.daytonePlaylistId?'&list='+encodeURIComponent(window.daytonePlaylistId):'') + (window.daytonePlaylistGroup?'&group='+encodeURIComponent(window.daytonePlaylistGroup):'') : screen === 'group' ? '?space=group&group=' + encodeURIComponent(window.daytoneGroupId || '') + '&day=' + day + '&view=top' + (window.daytoneGroupPeriod === 'all' ? '&period=all' : '') : screen === 'music-hub' ? '?space=music&day=' + day + '&view=hub' : '?space=' + (screen.startsWith('music') ? 'music' : 'forum') + '&day=' + day + '&view=' + (screen.endsWith('-all') ? 'all' : 'top') + (screen.startsWith('music') && window.daytoneGenre !== 'all' ? '&genre=' + window.daytoneGenre : '') + (screen === 'music' && window.daytoneSpan === 'all' ? '&period=all' : ''); (push ? history.pushState : history.replaceState).call(history, null, '', url); }
   function show(next, push = true) {
-    screen = next; document.body.dataset.screen = next; document.body.dataset.space = next.startsWith('music') ? 'music' : next.startsWith('forum') ? 'forum' : next === 'group' ? 'group' : 'none';
+    screen = next; document.body.dataset.screen = next; document.body.dataset.space = next.startsWith('music') || next==='playlists' ? 'music' : next.startsWith('forum') ? 'forum' : next === 'group' ? 'group' : 'none';
     for (const [key, id] of Object.entries(screens)) $v(id).hidden = key !== next;
-    $v('current-space-label').textContent = next.startsWith('music') || next === 'group' ? 'MUSIC' : next.startsWith('forum') ? 'FORUM' : 'DAYTONE';
+    $v('current-space-label').textContent = next.startsWith('music') || next === 'group' || next==='playlists' ? 'MUSIC' : next.startsWith('forum') ? 'FORUM' : 'DAYTONE';
     $v('floating-post').hidden = next !== 'forum-all' && next !== 'music-all';
     if (next === 'welcome') renderCalendar();
     if (next === 'lobby') renderLobby();
     if (next === 'music-hub') window.DaytoneMusicRooms?.renderHub();
+    if (next === 'playlists') window.DaytonePlaylists?.render();
     if (next === 'group') window.DaytoneMusicRooms?.renderGroup();
     if (next === 'music' || next === 'music-all') {
       if (selectedDay !== day) setDay(day);
@@ -64,7 +67,7 @@
     }
   }
   function gallerySupport(song) { return window.daytoneSpan === 'all' ? Number(song.supporters || 0) : supportCount(song); }
-  function sortedSongs() { return (window.daytoneSpan === 'all' ? (window.DaytoneMusicRooms?.allTimePublicSongs() || []) : songs.filter(x => window.daytoneGenre === 'all' || (x.genres || [x.genre]).includes(window.daytoneGenre))).sort((a, b) => gallerySupport(b) - gallerySupport(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id)); }
+  function sortedSongs() { return (window.daytoneSpan === 'all' ? (window.DaytoneMusicRooms?.allTimePublicSongs() || []) : songs.filter(x => songInChart(x,window.daytoneGenre))).sort((a, b) => gallerySupport(b) - gallerySupport(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id)); }
   function record(song, rank) {
     const wrap = make('article', 'gallery-record' + (rank === 1 ? ' first' : '') + (song ? ' has-song' : ' is-empty'));
     const scene = make('img', 'scene-image'); scene.src = rank === 1 ? photoScenes[1] : rank === 2 ? photoScenes[0] : photoScenes[2]; scene.alt = ''; scene.hidden = window.daytoneGenre !== 'all'; wrap.append(scene);
@@ -184,7 +187,7 @@
     const button = $v('generic-post-submit'); button.disabled = true; button.textContent = 'Posting…'; const uploaded = [];
     try { const publishDay = today(), usedResult = await client.from('posts').select('daily_slot').eq('owner_id', user.id).eq('day', publishDay).eq('category', 'forum'); if (usedResult.error) throw usedResult.error; const used = new Set((usedResult.data || []).map(x => x.daily_slot)); if (used.size >= 3) throw Error('You have started three forums today. Come back tomorrow.'); const path = await uploadFile('images', await prepareImage(file), imageTypes, 1024 * 1024); if (path) uploaded.push({ bucket: 'images', path }); const record = { id: crypto.randomUUID(), owner_id: user.id, day: publishDay, category: 'forum', post_type: String(data.get('post_type') || 'question'), title, creator, body, nickname: profile.nickname, image_path: path, source_url: sourceUrl }; let saved = false; for (const slot of [1, 2, 3]) { if (used.has(slot)) continue; const result = await client.from('posts').insert({ ...record, daily_slot: slot }); if (!result.error) { saved = true; break; } if (result.error.code !== '23505') throw result.error; } if (!saved) throw Error('You have started three forums today. Come back tomorrow.'); form.reset(); $v('generic-post-dialog').close(); day = publishDay; show('forum'); await loadPosts(); toast('Forum started.'); } catch (error) { await cleanUploads(uploaded); errorNode.textContent = error.message || 'Could not publish. Please try again.'; } finally { button.disabled = false; button.textContent = 'Publish post ↗'; }
   }
-  function syncUrl() { const q = new URLSearchParams(location.search); day = validDay(q.get('day')) ? q.get('day') : today(); monthCursor = day.slice(0, 7); window.daytoneGenre = musicGenres.some(([id]) => id === q.get('genre')) ? q.get('genre') : 'all'; window.daytoneGroupId = q.get('group') || null; window.daytoneSpan = q.get('period') === 'all' ? 'all' : 'today'; window.daytoneGroupPeriod = window.daytoneSpan; show(routeScreen(q), false); }
+  function syncUrl() { const q = new URLSearchParams(location.search); day = validDay(q.get('day')) ? q.get('day') : today(); monthCursor = day.slice(0, 7); window.daytoneGenre = musicCharts.some(([id]) => id === q.get('genre')) ? q.get('genre') : 'all'; window.daytoneGroupId = q.get('space')==='group' ? q.get('group') : null; window.daytonePlaylistId=q.get('space')==='playlists'?q.get('list'):null;window.daytonePlaylistGroup=q.get('space')==='playlists'?q.get('group'):null;window.daytoneSpan = q.get('period') === 'all' ? 'all' : 'today'; window.daytoneGroupPeriod = window.daytoneSpan; show(routeScreen(q), false); }
   $v('welcome-name').textContent = profile?.nickname || user?.user_metadata?.nickname || 'friend'; renderCalendar(); show(screen, false);
   $v('calendar-prev').addEventListener('click', () => { const [y, m] = monthCursor.split('-').map(Number); monthCursor = new Date(Date.UTC(y, m - 2, 1)).toISOString().slice(0, 7); renderCalendar(); });
   $v('calendar-next').addEventListener('click', () => { const [y, m] = monthCursor.split('-').map(Number); monthCursor = new Date(Date.UTC(y, m, 1)).toISOString().slice(0, 7); renderCalendar(); });
@@ -227,6 +230,6 @@
     openGenre(key) { window.daytoneGenre = key; window.daytoneSpan = 'today'; renderSongs(); show('music'); },
     openGroup(id) { window.daytoneGroupId = id; window.daytoneGroupPeriod = 'today'; show('group'); },
     renderMusicGallery,
-    refresh() { if (screen === 'welcome') renderCalendar(); else if (screen === 'music-hub') window.DaytoneMusicRooms?.renderHub(); else if (screen === 'group') window.DaytoneMusicRooms?.renderGroup(); else if(screen==='music'){renderMusicGallery();if(window.daytoneSpan==='all')void window.DaytoneMusicRooms?.loadAllTimePublic();} }
+    refresh() { if (screen === 'welcome') renderCalendar(); else if (screen === 'music-hub') window.DaytoneMusicRooms?.renderHub(); else if(screen==='playlists')window.DaytonePlaylists?.render(); else if (screen === 'group') window.DaytoneMusicRooms?.renderGroup(); else if(screen==='music'){renderMusicGallery();if(window.daytoneSpan==='all')void window.DaytoneMusicRooms?.loadAllTimePublic();} }
   };
 })();
