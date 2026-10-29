@@ -254,6 +254,7 @@
     try{path=await uploadGroupFile(await prepareImage(file),imageTypes,1024*1024);const result=await client.from('group_comments').insert({song_id:id,user_id:user.id,nickname:profile.nickname,body,image_path:path});if(result.error)throw result.error;await loadGroupSongs();toast('Reply posted in your group.');}
     catch(failed){if(path)await cleanUploads([{bucket:'group-media',path}]);error.textContent=failed.message||'Could not post reply.';}finally{button.disabled=false;}}
   function wireEvents(){
+    for(const form of [$r('upload-form'),$r('group-song-form')])form.addEventListener('change',event=>{const target=event.target;if(target.name!=='genres')return;const boxes=[...form.querySelectorAll('input[name="genres"]')],other=boxes.find(x=>x.value==='other');if(target.value==='other'&&target.checked)boxes.filter(x=>x!==other).forEach(x=>x.checked=false);else if(target.checked&&other)other.checked=false;if(!boxes.some(x=>x.checked)&&other)other.checked=true;});
     $r('hub-back').addEventListener('click',()=>app.show('lobby'));
     $r('hub-create-group').addEventListener('click',()=>{if(requireAccount())showDialog('group-create-dialog');});
     $r('hub-join-group').addEventListener('click',()=>{if(requireAccount())showDialog('group-join-dialog');});
