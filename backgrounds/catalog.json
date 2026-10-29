@@ -1,0 +1,162 @@
+[
+  {
+    "id": "taxi-0",
+    "src": "taxi-driver.png",
+    "title": "Taxi Driver (1976)",
+    "source": "",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "taxi-1",
+    "src": "taxi-cab.png",
+    "title": "Taxi Driver (1976)",
+    "source": "",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "taxi-2",
+    "src": "taxi-cinema.png",
+    "title": "Taxi Driver (1976)",
+    "source": "",
+    "side": "left",
+    "layout": "grid"
+  },
+  {
+    "id": "eight-1",
+    "src": "backgrounds/eight-1.jpg",
+    "title": "8½ (1963)",
+    "source": "https://www.criterion.com/films/150-8",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "eight-2",
+    "src": "backgrounds/eight-2.jpg",
+    "title": "8½ (1963)",
+    "source": "https://www.criterion.com/films/150-8",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "eight-3",
+    "src": "backgrounds/eight-3.jpg",
+    "title": "8½ (1963)",
+    "source": "https://www.criterion.com/films/150-8",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "eight-4",
+    "src": "backgrounds/eight-4.jpg",
+    "title": "8½ (1963)",
+    "source": "https://www.criterion.com/films/150-8",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "mood-1",
+    "src": "backgrounds/mood-1.jpg",
+    "title": "In the Mood for Love (2000)",
+    "source": "https://www.criterion.com/films/198-in-the-mood-for-love",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "mood-2",
+    "src": "backgrounds/mood-2.jpg",
+    "title": "In the Mood for Love (2000)",
+    "source": "https://www.criterion.com/films/198-in-the-mood-for-love",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "mood-3",
+    "src": "backgrounds/mood-3.jpg",
+    "title": "In the Mood for Love (2000)",
+    "source": "https://www.criterion.com/films/198-in-the-mood-for-love",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "mood-4",
+    "src": "backgrounds/mood-4.jpg",
+    "title": "In the Mood for Love (2000)",
+    "source": "https://www.criterion.com/films/198-in-the-mood-for-love",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "mood-5",
+    "src": "backgrounds/mood-5.jpg",
+    "title": "In the Mood for Love (2000)",
+    "source": "https://www.criterion.com/films/198-in-the-mood-for-love",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-1",
+    "src": "backgrounds/paris-1.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-2",
+    "src": "backgrounds/paris-2.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-3",
+    "src": "backgrounds/paris-3.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-4",
+    "src": "backgrounds/paris-4.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-5",
+    "src": "backgrounds/paris-5.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "left",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-6",
+    "src": "backgrounds/paris-6.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "paris-7",
+    "src": "backgrounds/paris-7.jpg",
+    "title": "Paris, Texas (1984)",
+    "source": "https://www.criterion.com/films/1502-paris-texas",
+    "side": "right",
+    "layout": "stack"
+  },
+  {
+    "id": "odyssey-1",
+    "src": "backgrounds/odyssey-1.jpg",
+    "title": "2001: A Space Odyssey (1968)",
+    "source": "https://www.bfi.org.uk/features/gallery-2001-space-odyssey-then-now",
+    "side": "right",
+    "layout": "stack"
+  }
+]
