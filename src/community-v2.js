@@ -45,6 +45,7 @@
     $v('taxi-lobby').dataset.scene = scene;
     $v('taxi-lobby').querySelector('.taxi-image').src = '' + ['taxi-driver.png', 'taxi-cab.png', 'taxi-cinema.png'][index];
     $v('lobby-date').textContent = dateLabel(day);
+    window.DaytoneAppearance?.render();
   }
   function setChosenDay(value) { if (!validDay(value)) return; day = value; monthCursor = value.slice(0, 7); renderCalendar(); if (screen === 'lobby') renderLobby(); window.DaytoneMusicRooms?.renderCalendarCharts(); }
   function renderCalendar() {
