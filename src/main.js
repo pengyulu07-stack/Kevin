@@ -16,6 +16,29 @@ const musicGenres = [
 ];
 const musicLanguages = [["mandarin", "Chinese"], ["english", "English"], ["japanese", "Japanese"], ["korean", "Korean"], ["other_language", "Other languages"]];
 const musicCharts = [...musicGenres, ...musicLanguages];
+let customMusicCategories = [];
+async function loadMusicCategories() {
+  if (!client) return;
+  try { customMusicCategories = await fetchEveryRow(() => client.from('music_categories').select('id,name,owner_id,created_at').order('created_at', { ascending: true })); }
+  catch { toast('Could not load community categories.'); return; }
+  for (const category of customMusicCategories) {
+    if (!musicGenres.some(([id]) => id === category.id)) {
+      musicGenres.push([category.id, category.name]);
+      musicCharts.push([category.id, category.name]);
+    }
+  }
+  for (const grid of document.querySelectorAll('#upload-form .genre-check-grid, #group-song-form .genre-check-grid')) {
+    for (const category of customMusicCategories) {
+      if (grid.querySelector(`input[value="${category.id}"]`)) continue;
+      const label = el('label'), input = el('input'); input.type = 'checkbox'; input.name = 'genres'; input.value = category.id;
+      label.append(input, document.createTextNode(' ' + category.name)); grid.append(label);
+    }
+  }
+  const routeGenre = new URLSearchParams(location.search).get('genre');
+  if (musicCharts.some(([id]) => id === routeGenre) && window.daytoneGenre !== routeGenre) window.daytoneGenre = routeGenre;
+  window.dispatchEvent(new Event('daytone:categories'));
+  if (window.DaytoneCommunity?.getScreen()?.startsWith('music')) window.DaytoneCommunity.refresh();
+}
 const isLanguageChart = (key) => musicLanguages.some(([id]) => id === key);
 const songInChart = (song, key) => key === "all" || (isLanguageChart(key) ? song.language === key : (song.genres || [song.genre]).includes(key));
 const musicGenreName = (key) => musicCharts.find(([id]) => id === key)?.[1] || "All Music";
@@ -32,6 +55,7 @@ let selectedDay = validDay(params.get("day")) ? params.get("day") : today();
 let viewMode = params.get("view") === "all" ? "all" : "top";
 let songs = [];
 let reactions = new Map();
+let votes = new Map();
 let comments = new Map();
 let user = null;
 let profile = null;
@@ -210,14 +234,17 @@ async function loadSongs() {
   try {
     const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,language,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
+    const nextVotes = new Map();
     const nextComments = new Map();
     if (nextSongs.length) {
       for (let start = 0; start < nextSongs.length; start += 50) {
         const ids = nextSongs.slice(start, start + 50).map((song) => song.id);
-        const [reactionRows, commentRows] = await Promise.all([
+        const [reactionRows, voteRows, commentRows] = await Promise.all([
           fetchEveryRow(() => client.from("reactions").select("song_id,user_id,emoji").in("song_id", ids).order("song_id").order("user_id")),
+          fetchEveryRow(() => client.from("song_votes").select("song_id,user_id").in("song_id", ids).order("song_id")),
           fetchEveryRow(() => client.from("comments").select("id,song_id,user_id,nickname,body,image_path,created_at").in("song_id", ids).order("created_at", { ascending: true }).order("id"))
         ]);
+        for (const row of voteRows) { const list = nextVotes.get(row.song_id) || []; list.push(row); nextVotes.set(row.song_id, list); }
         for (const row of reactionRows) {
           const list = nextReactions.get(row.song_id) || [];
           list.push(row);
@@ -233,6 +260,7 @@ async function loadSongs() {
     if (request !== loadRequest) return;
     songs = nextSongs;
     reactions = nextReactions;
+    votes = nextVotes;
     comments = nextComments;
     renderSongs();
     status(songs.length ? "Loaded " + day + " songs." : "No songs have been shared this day.");
@@ -253,7 +281,7 @@ async function fetchEveryRow(makeQuery) {
   }
 }
 function supportCount(song) {
-  return (reactions.get(song.id) || []).filter((item) => item.emoji === "👍" || item.emoji === "❤️").length;
+  return (votes.get(song.id) || []).length;
 }
 function renderSongs() {
   const filter = $("search").value.trim().toLocaleLowerCase();
@@ -265,7 +293,7 @@ function renderSongs() {
     : ranked.slice(0, 5);
   $("feed-title").textContent = viewMode === "all" ? musicGenreName(window.daytoneGenre) + " · all songs" : musicGenreName(window.daytoneGenre) + " · Top 5";
   $("song-count-unit").textContent = viewMode === "all" ? "songs" : "selected";
-  $("feed-subtitle").textContent = viewMode === "all" ? "Grouped by contributor" : "Most supported songs today";
+  $("feed-subtitle").textContent = viewMode === "all" ? "Grouped by contributor" : "Most voted songs today";
   $("feed-search").classList.toggle("hidden", viewMode !== "all");
   $("show-all-songs").classList.toggle("hidden", viewMode === "all");
   $("show-top-songs").classList.toggle("hidden", viewMode !== "all");
@@ -288,10 +316,25 @@ function renderSongs() {
   if (location.hash.startsWith("#song-")) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: "center" });
 }
 function publicFile(bucket, path) { return client.storage.from(bucket).getPublicUrl(path).data.publicUrl; }
+function musicEmbed(sourceUrl) {
+  try {
+    const source = new URL(sourceUrl);
+    if (source.protocol !== 'https:' || source.hostname !== 'open.spotify.com') return null;
+    const match = source.pathname.match(/^\/(track|album|playlist)\/([A-Za-z0-9]{22})\/?$/);
+    if (!match) return null;
+    const frame = el('iframe', 'platform-player');
+    frame.src = 'https://open.spotify.com/embed/' + match[1] + '/' + match[2];
+    frame.title = 'Listen on Spotify';
+    frame.loading = 'lazy';
+    frame.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    return frame;
+  } catch { return null; }
+}
 function createCard(song, rank, discussion = false) {
   const card = el("article", "song-card");
   if (!discussion) card.id = "song-" + song.id;
-  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + " supporters"));
+  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + (supportCount(song)===1 ? " vote" : " votes")));
   const art = el("div", "song-art tone-" + (song.title.length % 4) + (song.cover_path ? " has-image" : ""));
   if (song.cover_path) {
     const image = el("img");
@@ -314,20 +357,8 @@ function createCard(song, rank, discussion = false) {
   for (const key of song.genres || [song.genre || "other"]) genreRow.append(el("span", "song-genre-tag", musicGenreName(key)));
   genreRow.append(el("span", "song-genre-tag language-tag", musicGenreName(song.language || "other_language")));
   if (user?.id === song.owner_id) {
-    const edit = el("details", "genre-editor"), summary = el("summary", "", "Edit categories"), choices = el("div", "genre-editor-grid");
-    for (const [key, label] of musicGenres) {
-      const line = el("label"), input = el("input"); input.type = "checkbox"; input.value = key; input.checked = (song.genres || [song.genre || "other"]).includes(key);
-      line.append(input, document.createTextNode(label)); choices.append(line);
-    }
-    const save = el("button", "outline-button", "Save categories"); save.type = "button";
-    save.addEventListener("click", async () => {
-      const chosen = [...choices.querySelectorAll("input:checked")].map(x => x.value);
-      if (!chosen.length || chosen.length > 3) { toast("Choose one to three categories."); return; }
-      const { error } = await client.from("songs").update({ genre: chosen[0], genres: chosen }).eq("id", song.id).eq("owner_id", user.id);
-      if (error) { toast(error.message || "Could not change categories."); return; }
-      toast("Song categories updated."); await loadSongs();
-    });
-    edit.append(summary, choices, save); genreRow.append(edit);
+    const edit = el('button', 'outline-button author-edit', 'Edit song ↗'); edit.type = 'button';
+    edit.addEventListener('click', () => window.DaytoneAuthorTools?.openSong(song)); genreRow.append(edit);
   }
   meta.append(genreRow);
   if (song.note) meta.append(el("div", "song-note", "“" + song.note + "”"));
@@ -352,8 +383,13 @@ function createCard(song, rank, discussion = false) {
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     meta.append(link);
+    const embedded = musicEmbed(song.source_url);
+    if (embedded) meta.append(embedded);
   }
   const bottom = el("div", "card-bottom");
+  const chosenVote = (votes.get(song.id) || []).some(item => item.user_id === user?.id);
+  const voteButton = el('button','song-vote'+(chosenVote?' chosen':''),'☆ Vote · '+supportCount(song));
+  voteButton.type='button';voteButton.setAttribute('aria-pressed',String(chosenVote));voteButton.addEventListener('click',()=>void voteForSong(song.id,chosenVote));
   const row = el("div", "reaction-row");
   const rows = reactions.get(song.id) || [];
   for (const symbol of emoji) {
@@ -371,7 +407,7 @@ function createCard(song, rank, discussion = false) {
   share.type = "button";
   share.setAttribute("aria-label", "Share " + song.title);
   share.addEventListener("click", () => void copyLink("?day=" + song.day + "#song-" + song.id));
-  bottom.append(row, share);
+  bottom.append(voteButton, row, share);
   meta.append(bottom);
   const section = el("section", "comment-section");
   const songComments = comments.get(song.id) || [];
@@ -389,6 +425,7 @@ function createCard(song, rank, discussion = false) {
       image.loading = "lazy";
       entry.append(image);
     }
+    if (item.user_id === user?.id) { const edit = el('button', 'author-edit-link', 'Edit reply'); edit.type = 'button'; edit.addEventListener('click', () => window.DaytoneAuthorTools?.openComment('comments', item, loadSongs)); entry.append(edit); }
     commentList.append(entry);
   }
   section.append(commentList);
@@ -427,6 +464,11 @@ async function react(songId, symbol, chosen) {
     if (result.error) throw result.error;
     await loadSongs();
   } catch (error) { toast(error.message || "Reaction could not be saved. Please try again."); }
+}
+async function voteForSong(songId,chosen){
+  if(!requireAccount())return;
+  try{const result=chosen?await client.from('song_votes').delete().eq('song_id',songId).eq('user_id',user.id):await client.from('song_votes').insert({song_id:songId,user_id:user.id});if(result.error)throw result.error;await loadSongs();window.dispatchEvent(new Event('daytone:vote'));}
+  catch(error){toast(error.message||'Could not save vote.');}
 }
 async function copyLink(path) {
   const url = new URL(path, location.href).href;
@@ -619,7 +661,8 @@ if (client) {
   client.auth.getUser().then(async ({ data }) => {
     user = data.user;
     if (user) await hydrateProfile();
-    else { updateAccount(); openAuth("signup"); }
+    else updateAccount();
   }).catch(() => updateAccount());
 }
 void loadSongs();
+void loadMusicCategories();

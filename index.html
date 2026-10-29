@@ -8,17 +8,20 @@
   <title>DAYTONE</title>
   <link rel="stylesheet" href="src/style.css?v=20261029a">
   <link rel="stylesheet" href="src/community-v2.css?v=20261029b">
-  <link rel="stylesheet" href="src/music-rooms.css?v=20261029a">
+  <link rel="stylesheet" href="src/music-rooms.css?v=20261030a">
   <link rel="stylesheet" href="src/appearance.css?v=20261029c">
-  <link rel="stylesheet" href="src/music-extras.css?v=20261029e">
+  <link rel="stylesheet" href="src/music-extras.css?v=20261030a">
+  <link rel="stylesheet" href="src/site-tools.css?v=20261029f">
+  <link rel="stylesheet" href="src/site-navigation.css?v=20261030a">
 </head>
 <body>
   <div class="site-shell">
     <header class="header">
       <a class="brand" href="./" aria-label="DAYTONE home"><span class="brand-mark">♫</span><span>DAYTONE<small>EVERY DAY, TOGETHER</small></span></a>
       <nav aria-label="Main navigation"><button id="space-select" class="nav-space" type="button">Back to entrance</button><span id="current-space-label">DAYTONE</span></nav>
-      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
+      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
     </header>
+    <nav id="site-quick-nav" class="site-quick-nav" aria-label="Quick navigation"><button type="button" data-go="welcome">Today</button><button type="button" data-go="music-hub">Music charts</button><button type="button" data-go="playlists">Playlists</button><button type="button" data-go="forum-all">Forum</button></nav>
 
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
@@ -33,9 +36,9 @@
 
     <div class="ritual-bar"><span><i class="mini-disc"></i> OUR LITTLE LISTENING ROOM</span><p>One date, some friends, their favorite songs.</p><span>Updated daily · played again anytime ↗</span></div>
 
-    <section id="welcome" class="welcome" aria-labelledby="welcome-title"><div class="welcome-heading"><p class="welcome-eyebrow">DAYTONE · A DAY TO SHARE</p><h1 id="welcome-title">Welcome, <span id="welcome-name">friend</span>.</h1><p>Choose a date, then begin.</p></div><div class="calendar-layout"><aside id="follow-chart-left" class="follow-chart-side" aria-label="First followed chart"></aside><div class="paper-calendar"><div class="paper-calendar-head"><button id="calendar-prev" type="button" aria-label="Previous month">←</button><div><small>DAYTONE / CALENDAR</small><h2 id="calendar-month"></h2></div><button id="calendar-next" type="button" aria-label="Next month">→</button></div><div id="calendar-grid" class="calendar-grid" aria-label="Choose a date"></div><div class="calendar-foot"><span>A day, held on paper</span><span id="calendar-picked"></span></div></div><aside id="follow-chart-right" class="follow-chart-side" aria-label="Second followed chart"></aside></div><div id="calendar-follow-controls" class="calendar-follow-controls"></div><button id="calendar-feedback" class="calendar-feedback" type="button">✎ Leave feedback</button><button id="start-day" class="start-day" type="button">Begin Today <span>↗</span></button></section>
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title"><div class="welcome-heading"><p class="welcome-eyebrow">DAYTONE · A DAY TO SHARE</p><h1 id="welcome-title">Welcome, <span id="welcome-name">friend</span>.</h1><p>Choose a date to see its songs and conversations.</p></div><div class="calendar-layout"><aside id="follow-chart-left" class="follow-chart-side" aria-label="First followed chart"></aside><div class="paper-calendar"><div class="paper-calendar-head"><button id="calendar-prev" type="button" aria-label="Previous month">←</button><div><small>DAYTONE / CALENDAR</small><h2 id="calendar-month"></h2></div><button id="calendar-next" type="button" aria-label="Next month">→</button></div><div id="calendar-grid" class="calendar-grid" aria-label="Choose a date"></div><div class="calendar-foot"><span>A day, held on paper</span><span id="calendar-picked"></span></div></div><aside id="follow-chart-right" class="follow-chart-side" aria-label="Second followed chart"></aside></div><div id="calendar-day-preview" class="calendar-day-preview" aria-live="polite"></div><details id="calendar-follow-controls" class="calendar-follow-controls"></details><button id="calendar-feedback" class="calendar-feedback" type="button">✎ Leave feedback</button><button id="start-day" class="start-day" type="button">Begin Today <span>↗</span></button></section>
     <section id="taxi-lobby" class="taxi-lobby" aria-label="Choose a room" hidden><img src="taxi-driver.png" alt="Taxi Driver film still" class="taxi-image"><div class="taxi-shade"></div><div class="taxi-date"><small>DAYTONE / TODAY</small><strong id="lobby-date"></strong></div><div class="taxi-mirror"><small>CHOOSE A ROOM</small><button type="button" data-space="music">Music <span>Charts &amp; private groups ↗</span></button><button type="button" data-space="forum">Forum <span>FORUM ↗</span></button><button type="button" disabled aria-label="Daily Life, coming soon">Daily Life <span>Coming soon</span></button><button type="button" disabled aria-label="Film, coming soon">Film <span>Coming soon</span></button><button type="button" disabled aria-label="Art, coming soon">Art <span>Coming soon</span></button></div><button id="lobby-settings" class="lobby-settings" type="button">⚙ Your entrance</button><div id="lobby-frame-credit" class="lobby-frame-credit"></div><button id="lobby-back" type="button" class="lobby-back">← Back to calendar</button></section>
-    <section id="music-hub" class="music-hub" aria-labelledby="music-hub-title" hidden><div class="music-hub-heading"><div><small>MUSIC / THE INDEX</small><h1 id="music-hub-title">Music charts &amp; groups.</h1><p id="music-hub-date"></p><div class="music-hub-help">Open All Music, explore a category, or create a private group for your friends.</div></div><div class="hub-actions"><button id="hub-back" type="button">← Back to rooms</button><button id="hub-create-group" type="button">＋ Create a private group</button><button id="hub-join-group" type="button">Join with code ↗</button></div></div><div id="music-hub-total" class="music-hub-total"></div><div class="hub-middle-grid"><div id="music-hub-follows" class="music-hub-follows"></div><div id="music-hub-playlist" class="music-hub-playlist"></div></div><div id="music-hub-groups" class="music-hub-groups"></div><details id="music-hub-categories" class="music-hub-categories"><summary>Explore all music categories <span>＋</span></summary><div id="music-hub-category-grid" class="music-hub-category-grid"></div></details></section>
+    <section id="music-hub" class="music-hub" aria-labelledby="music-hub-title" hidden><div class="music-hub-heading"><div><small>MUSIC / THE INDEX</small><h1 id="music-hub-title">Music charts &amp; groups.</h1><p id="music-hub-date"></p><div class="music-hub-help">Open All Music, explore a category, or create a private group for your friends.</div></div><div class="hub-actions"><button id="hub-back" type="button">← Back to rooms</button><button id="hub-create-category" type="button">＋ New category</button><button id="hub-create-group" type="button">＋ Create a private group</button><button id="hub-join-group" type="button">Join with code ↗</button></div></div><div id="music-hub-total" class="music-hub-total"></div><div class="hub-middle-grid"><div id="music-hub-follows" class="music-hub-follows"></div><div id="music-hub-playlist" class="music-hub-playlist"></div></div><div id="music-hub-groups" class="music-hub-groups"></div><details id="music-hub-categories" class="music-hub-categories"><summary>Explore all music categories <span>＋</span></summary><div id="music-hub-category-grid" class="music-hub-category-grid"></div></details></section>
     <section id="playlists-screen" class="playlists-screen" aria-labelledby="playlists-title" hidden>
       <div class="playlist-heading"><div><small>DAYTONE / THE LONG PLAY</small><h1 id="playlists-title">Playlists stay.</h1><p>A collection for more than one day. Find a list, then copy any song into your own app.</p></div><div class="playlist-heading-actions"><button id="playlists-back" type="button">← Music charts</button><button id="playlist-create" type="button">＋ Share a playlist</button></div></div>
       <div id="playlist-filters" class="playlist-filters"></div><p id="playlist-status" class="playlist-status"></p><div id="playlist-list" class="playlist-list"></div>
@@ -75,11 +78,17 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="config.js"></script>
   <script defer src="vendor/supabase.js"></script>
-  <script defer src="src/main.js?v=20261029e"></script>
-  <script defer src="src/community-v2.js?v=20261029e"></script>
-  <script defer src="src/music-rooms.js?v=20261029e"></script>
+  <script defer src="src/main.js?v=20261029f"></script>
+  <script defer src="src/link-enrichment.js?v=20261029a"></script>
+  <script defer src="src/community-v2.js?v=20261029f"></script>
+  <script defer src="src/music-rooms.js?v=20261030a"></script>
   <script defer src="src/appearance.js?v=20261029c"></script>
-  <script defer src="src/playlists.js?v=20261029e"></script>
-  <script defer src="src/notifications.js?v=20261029e"></script>
+  <script defer src="src/playlists.js?v=20261030a"></script>
+  <script defer src="src/notifications.js?v=20261030a"></script>
+  <script defer src="src/categories.js?v=20261029f"></script>
+  <script defer src="src/author-tools.js?v=20261029f"></script>
+  <script defer src="src/site-language.js?v=20261030a"></script>
+  <script defer src="src/site-guide.js?v=20261029f"></script>
+  <script defer src="src/site-navigation.js?v=20261030a"></script>
 </body>
 </html>

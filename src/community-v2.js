@@ -40,6 +40,7 @@
     if (next.startsWith('forum')) { if (next === 'forum') renderForumTop(); else renderForumAll(); void loadPosts(); }
     if (push) updateRoute(true);
     const active = $v(screens[next]); active.classList.remove('entering'); void active.offsetWidth; active.classList.add('entering');
+    window.dispatchEvent(new CustomEvent('daytone:screen-changed',{detail:{screen:next,day}}));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function renderLobby() {
@@ -50,7 +51,7 @@
     $v('lobby-date').textContent = dateLabel(day);
     window.DaytoneAppearance?.render();
   }
-  function setChosenDay(value) { if (!validDay(value)) return; day = value; monthCursor = value.slice(0, 7); renderCalendar(); if (screen === 'lobby') renderLobby(); window.DaytoneMusicRooms?.renderCalendarCharts(); }
+  function setChosenDay(value) { if (!validDay(value)) return; day = value; monthCursor = value.slice(0, 7); renderCalendar(); if (screen === 'lobby') renderLobby(); window.DaytoneMusicRooms?.renderCalendarCharts(); window.dispatchEvent(new CustomEvent('daytone:calendar-day',{detail:{day}})); }
   function renderCalendar() {
     const [year, month] = monthCursor.split('-').map(Number);
     $v('calendar-month').textContent = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long' }).format(new Date(Date.UTC(year, month - 1, 1)));
@@ -127,6 +128,7 @@
       if (request !== loadId || loadingDay !== day || !screen.startsWith('forum')) return;
       posts = next; postReactions = rMap; postComments = cMap; $v('generic-status').textContent = next.length ? '' : 'No forum posts yet today.';
       if (screen === 'forum') renderForumTop(); else renderForumAll();
+      window.dispatchEvent(new Event('daytone:forums-loaded'));
       if ($v('generic-discussion-dialog').open && selectedPostId) { const selected = posts.find(x => x.id === selectedPostId); if (selected) renderDiscussion(selected); else $v('generic-discussion-dialog').close(); }
     } catch (error) { if (request === loadId) $v('generic-status').textContent = 'Could not load: ' + (error.message || 'please try again'); }
   }
@@ -147,7 +149,7 @@
     body.append(make('small', 'forum-card-rank', featured ? 'NO. 0' + rank + ' / ' + forumScore(post) + '  replies and reactions' : new Date(post.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })));
     body.append(make('h3', '', post.title), make('p', 'byline', '@' + post.nickname + ' · ' + ({ question: 'Question', discussion: 'Discussion', debate: 'Debate' }[post.post_type] || 'Discussion')));
     if (post.body) body.append(make('p', 'summary', post.body.length > 180 ? post.body.slice(0, 180) + '…' : post.body));
-    const actions = make('div', 'card-actions'); addReactionButtons(actions, post); actions.append(copyButton(post.title, 'Copy forum title')); const discuss = make('button', 'discussion-open', 'Discussion ' + (postComments.get(post.id) || []).length + ' ↗'); discuss.type = 'button'; discuss.addEventListener('click', () => openDiscussion(post.id)); actions.append(discuss); body.append(actions); card.append(body); return card;
+    const actions = make('div', 'card-actions'); addReactionButtons(actions, post); actions.append(copyButton(post.title, 'Copy forum title')); if(post.owner_id===user?.id){const edit=make('button','author-edit-link','Edit forum');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openPost(post));actions.append(edit);} const discuss = make('button', 'discussion-open', 'Discussion ' + (postComments.get(post.id) || []).length + ' ↗'); discuss.type = 'button'; discuss.addEventListener('click', () => openDiscussion(post.id)); actions.append(discuss); body.append(actions); card.append(body); return card;
   }
   function renderForumAll() {
     if (screen !== 'forum-all') return;
@@ -170,9 +172,10 @@
     if (post.body) host.append(make('p', '', post.body));
     if (post.source_url) { const link = make('a', 'open-link', 'Open related link ↗'); link.href = post.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; host.append(link); }
     host.append(copyButton(post.title, 'Copy forum title'));
+    if(post.owner_id===user?.id){const edit=make('button','author-edit-link','Edit forum');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openPost(post));host.append(edit);}
     const actions = make('div', 'card-actions'); addReactionButtons(actions, post); host.append(actions);
     const list = make('div', 'comment-list'), items = postComments.get(post.id) || []; list.append(make('h3', 'publisher-heading', 'Discussion · ' + items.length));
-    for (const item of items) { const line = make('div', 'comment'); line.append(make('strong', '', item.nickname), make('time', '', new Date(item.created_at).toLocaleString('en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }))); if (item.body) line.append(make('p', '', item.body)); if (item.image_path) { const img = make('img'); img.src = imageUrl(item.image_path); img.alt = item.nickname + ' photo'; img.loading = 'lazy'; line.append(img); } list.append(line); } host.append(list);
+    for (const item of items) { const line = make('div', 'comment'); line.append(make('strong', '', item.nickname), make('time', '', new Date(item.created_at).toLocaleString('en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }))); if (item.body) line.append(make('p', '', item.body)); if (item.image_path) { const img = make('img'); img.src = imageUrl(item.image_path); img.alt = item.nickname + ' photo'; img.loading = 'lazy'; line.append(img); } if(item.user_id===user?.id){const edit=make('button','author-edit-link','Edit reply');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openComment('post_comments',item));line.append(edit);} list.append(line); } host.append(list);
     const form = make('form', 'comment-form'), textarea = make('textarea'); textarea.name = 'body'; textarea.maxLength = 800; textarea.rows = 3; textarea.placeholder = 'Ask a question, share a thought, or just post a photo…';
     const upload = make('input'); upload.type = 'file'; upload.name = 'image'; upload.accept = 'image/jpeg,image/png,image/webp,image/gif'; upload.setAttribute('aria-label', 'Comment photo or meme');
     const submit = make('button', '', 'Post reply ↗'); submit.type = 'submit'; const row = make('div', 'comment-actions'), error = make('div', 'comment-error'); error.setAttribute('role', 'alert'); row.append(upload, submit); form.append(textarea, row, error); form.addEventListener('submit', event => void publishComment(event, post.id, error, submit)); host.append(form);
@@ -220,6 +223,7 @@
   window.addEventListener('daytone:songs-loaded', () => { if (screen === 'music') renderMusicGallery(); if (selectedSongId && $v('music-discussion-dialog').open) { const song = songs.find(x => x.id === selectedSongId); if (song) $v('music-discussion-body').replaceChildren(createCard(song, sortedSongs().findIndex(x => x.id === song.id) + 1, true)); } });
   window.addEventListener('daytone:open-music-discussion', event => openMusicDiscussion(event.detail.id));
   window.addEventListener('daytone:profile', () => { $v('welcome-name').textContent = profile?.nickname || user?.user_metadata?.nickname || 'friend'; window.DaytoneMusicRooms?.refreshAccount(); });
+  window.addEventListener('daytone:forum-edited',()=>{if(screen.startsWith('forum'))void loadPosts();});
   window.addEventListener('daytone:day', event => { day = event.detail.day; monthCursor = day.slice(0, 7); if (screen === 'music') renderMusicGallery(); });
   window.addEventListener('popstate', syncUrl);
   window.DaytoneCommunity = {
@@ -229,6 +233,8 @@
     setDay(value) { setChosenDay(value); if (screen !== 'welcome') updateRoute(false); },
     openGenre(key) { window.daytoneGenre = key; window.daytoneSpan = 'today'; renderSongs(); show('music'); },
     openGroup(id) { window.daytoneGroupId = id; window.daytoneGroupPeriod = 'today'; show('group'); },
+    openMusicDiscussion,
+    openForumDiscussion:openDiscussion,
     renderMusicGallery,
     refresh() { if (screen === 'welcome') renderCalendar(); else if (screen === 'music-hub') window.DaytoneMusicRooms?.renderHub(); else if(screen==='playlists')window.DaytonePlaylists?.render(); else if (screen === 'group') window.DaytoneMusicRooms?.renderGroup(); else if(screen==='music'){renderMusicGallery();if(window.daytoneSpan==='all')void window.DaytoneMusicRooms?.loadAllTimePublic();} }
   };

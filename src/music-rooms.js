@@ -18,7 +18,7 @@
   ];
   const groupFonts = ["Didot,'Bodoni 72',Georgia,serif","Georgia,'Times New Roman',serif","'Palatino Linotype',Palatino,Georgia,serif"];
   let follows = [], groups = [], activeGroup = null, groupSongs = [];
-  let groupReactions = new Map(), groupComments = new Map(), artworkIdeas = [];
+  let groupReactions = new Map(), groupVotes = new Map(), groupComments = new Map(), artworkIdeas = [];
   let chartRequest = 0, groupRequest = 0, blobCache = new Map();
   let publicAllTime = [], publicAllTimeGenre = '', publicAllTimeRequest = 0, groupAllTime = [];
   const formatDay = value => new Intl.DateTimeFormat('en-US', { year:'numeric',month:'long',day:'numeric',timeZone:'UTC' }).format(new Date(value + 'T12:00:00Z'));
@@ -28,9 +28,9 @@
     button.addEventListener('click', async event => { event.stopPropagation(); try { await navigator.clipboard.writeText(value); toast('Copied: ' + value); } catch { toast('Select the text to copy it.'); } }); return button;
   }
   const hasGenre = (song,key) => songInChart(song,key);
-  const support = (song,map) => (map.get(song.id)||[]).filter(x => x.emoji==='👍'||x.emoji==='❤️').length;
+  const support = (song,map) => (map.get(song.id)||[]).length;
   async function refreshAccount() {
-    if(!user){for(const url of blobCache.values())URL.revokeObjectURL(url);blobCache.clear();groupSongs=[];groupAllTime=[];groupReactions.clear();groupComments.clear();$r('group-top-three').replaceChildren();$r('group-song-list').replaceChildren();}
+    if(!user){for(const url of blobCache.values())URL.revokeObjectURL(url);blobCache.clear();groupSongs=[];groupAllTime=[];groupReactions.clear();groupVotes.clear();groupComments.clear();$r('group-top-three').replaceChildren();$r('group-song-list').replaceChildren();}
     await Promise.all([loadFollows(),loadGroups()]); renderFollowControls(); renderCalendarCharts(); if(app.getScreen()==='music-hub') renderHub(); if(app.getScreen()==='group') renderGroup();
   }
   function allTimePublicSongs(){return publicAllTimeGenre===window.daytoneGenre?publicAllTime:[];}
@@ -55,20 +55,21 @@
   }
   function renderFollowControls() {
     const host=$r('calendar-follow-controls'); host.replaceChildren();
-    const top=el('div','follow-controls-head'); top.append(el('div','', 'FOLLOW TWO CHARTS'),el('p','', 'Pick up to two music charts. Their daily leaders appear beside your calendar.')); host.append(top);
+    const summary=el('summary','follow-controls-summary','Choose up to five followed charts ↗');host.append(summary);
+    const top=el('div','follow-controls-head'); top.append(el('div','', 'FOLLOW FIVE CHARTS'),el('p','', 'Pick up to five music charts. Their daily leaders appear beside your calendar.')); host.append(top);
     const grid=el('div','follow-controls-grid');
     for(const [key,label] of musicCharts){
       const chosen=follows.some(x=>x.genre===key),button=el('button','follow-chip'+(chosen?' chosen':''),label);
       button.type='button';button.setAttribute('aria-pressed',String(chosen));button.addEventListener('click',()=>void toggleFollow(key));grid.append(button);
     }
     host.append(grid);
-    host.append(el('small','follow-note',user ? follows.length+'/2 charts followed' : 'Sign in to keep your choices across devices.'));
+    host.append(el('small','follow-note',user ? follows.length+'/5 charts followed' : 'Sign in to keep your choices across devices.'));
   }
   async function toggleFollow(key) {
     if(!requireAccount())return;
     const prior=follows.find(x=>x.genre===key);
     if(prior){const {error}=await client.from('user_chart_follows').delete().eq('user_id',user.id).eq('genre',key);if(error){toast(error.message);return;}}
-    else {const slot=[1,2].find(n=>!follows.some(x=>x.slot===n));if(!slot){toast('You can follow up to two charts.');return;}
+    else {const slot=[1,2,3,4,5].find(n=>!follows.some(x=>x.slot===n));if(!slot){toast('You can follow up to five charts.');return;}
       const {error}=await client.from('user_chart_follows').insert({user_id:user.id,slot,genre:key});if(error){toast(error.message);return;}}
     await loadFollows();renderFollowControls();renderCalendarCharts();if(app.getScreen()==='music-hub')renderHub();
   }
@@ -77,19 +78,19 @@
     const left=$r('follow-chart-left'),right=$r('follow-chart-right');
     if(!follows.length){placeholderRail(left,'YOUR CHART / 01');placeholderRail(right,'YOUR CHART / 02');return;}
     const request=++chartRequest,day=app.getDay();
-    placeholderRail(left,'LOADING / 01');placeholderRail(right,'LOADING / 02');
+    left.replaceChildren();right.replaceChildren();
     try {
       const {data,error}=await client.from('songs').select('id,title,nickname,genre,genres,language,created_at').eq('day',day).order('created_at',{ascending:false}).limit(500);
-      if(error)throw error;const rows=data||[],ids=rows.map(x=>x.id);let reactionsForDay=[];
-      for(let i=0;i<ids.length;i+=100){const result=await client.from('reactions').select('song_id,emoji').in('song_id',ids.slice(i,i+100));if(result.error)throw result.error;reactionsForDay.push(...(result.data||[]));}
+      if(error)throw error;const rows=data||[],ids=rows.map(x=>x.id);let votesForDay=[];
+      for(let i=0;i<ids.length;i+=100){const result=await client.from('song_votes').select('song_id').in('song_id',ids.slice(i,i+100));if(result.error)throw result.error;votesForDay.push(...(result.data||[]));}
       if(request!==chartRequest || day!==app.getDay())return;
-      const counts=new Map();for(const row of reactionsForDay)if(row.emoji==='👍'||row.emoji==='❤️')counts.set(row.song_id,(counts.get(row.song_id)||0)+1);
-      for(let i=0;i<2;i++){
-        const host=i===0?left:right,item=follows.find(x=>x.slot===i+1);if(!item){placeholderRail(host,'YOUR CHART / 0'+(i+1));continue;}
-        host.replaceChildren();const head=el('button','follow-rail-title',musicGenreName(item.genre)+' ↗');head.type='button';head.addEventListener('click',()=>app.openGenre(item.genre));host.append(el('small','follow-rail-kicker','FOLLOWING / 0'+(i+1)),head);
-        const matches=rows.filter(x=>hasGenre(x,item.genre)).sort((a,b)=>(counts.get(b.id)||0)-(counts.get(a.id)||0)||b.created_at.localeCompare(a.created_at)).slice(0,3);
-        if(!matches.length){host.append(el('p','follow-rail-none','No songs here on '+formatDay(day)+' yet.'));continue;}
-        for(let n=0;n<matches.length;n++){const song=matches[n],line=el('div','follow-rail-row'),open=el('button','follow-rail-open');open.type='button';open.append(el('small','',String(n+1).padStart(2,'0')),el('strong','',song.title),el('span','', '@'+song.nickname));open.addEventListener('click',()=>app.openGenre(item.genre));line.append(open,smallCopy(song.title));host.append(line);}
+      const counts=new Map();for(const row of votesForDay)counts.set(row.song_id,(counts.get(row.song_id)||0)+1);
+      for(const item of follows){
+        const host=item.slot<=3?left:right,block=el('section','follow-rail-block'),head=el('button','follow-rail-title',musicGenreName(item.genre)+' ↗');head.type='button';head.addEventListener('click',()=>app.openGenre(item.genre));block.append(el('small','follow-rail-kicker','FOLLOWING / 0'+item.slot),head);
+        const matches=rows.filter(x=>hasGenre(x,item.genre)).sort((a,b)=>(counts.get(b.id)||0)-(counts.get(a.id)||0)||b.created_at.localeCompare(a.created_at)).slice(0,1);
+        if(!matches.length)block.append(el('p','follow-rail-none','No songs here today.'));
+        for(let n=0;n<matches.length;n++){const song=matches[n],line=el('div','follow-rail-row'),open=el('button','follow-rail-open');open.type='button';open.append(el('small','',String(n+1).padStart(2,'0')),el('strong','',song.title),el('span','', '@'+song.nickname));open.addEventListener('click',()=>app.openGenre(item.genre));line.append(open,smallCopy(song.title));block.append(line);}
+        host.append(block);
       }
     } catch(error){if(request===chartRequest){placeholderRail(left,'YOUR CHART / 01');placeholderRail(right,'YOUR CHART / 02');}}
   }
@@ -101,7 +102,7 @@
   function renderHub() {
     $r('music-hub-date').textContent=formatDay(app.getDay())+' / CHOOSE A CHART';
     const total=$r('music-hub-total');total.replaceChildren();const all=el('button','hub-total-card');all.type='button';all.append(el('small','','01 / THE PUBLIC CHART'),el('strong','','All Music'),el('span','','Every public song, one daily Top 5 ↗'));all.addEventListener('click',()=>app.openGenre('all'));total.append(all);
-    const followHost=$r('music-hub-follows');followHost.replaceChildren();followHost.append(el('h2','','Following & your groups'));if(follows.length||groups.length){const grid=el('div','hub-card-grid');for(const item of follows)grid.append(categoryCard(item.genre,musicGenreName(item.genre),'followed'));for(const group of groups){const button=el('button','hub-group-card');button.type='button';const [ink,paper]=groupThemes[group.theme_index]||groupThemes[0];button.style.setProperty('--card-ink',ink);button.style.setProperty('--card-paper',paper);button.append(el('small','','PRIVATE / MEMBERS ONLY'),el('strong','',group.name),el('span','','Enter group ↗'));button.addEventListener('click',()=>app.openGroup(group.id));grid.append(button);}followHost.append(grid);}else{followHost.append(el('p','hub-follow-empty','Follow up to two charts beside the calendar, or join a private group. Your choices will appear here.'));}
+    const followHost=$r('music-hub-follows');followHost.replaceChildren();followHost.append(el('h2','','Following & your groups'));if(follows.length||groups.length){const grid=el('div','hub-card-grid');for(const item of follows)grid.append(categoryCard(item.genre,musicGenreName(item.genre),'followed'));for(const group of groups){const button=el('button','hub-group-card');button.type='button';const [ink,paper]=groupThemes[group.theme_index]||groupThemes[0];button.style.setProperty('--card-ink',ink);button.style.setProperty('--card-paper',paper);button.append(el('small','','PRIVATE / MEMBERS ONLY'),el('strong','',group.name),el('span','','Enter group ↗'));button.addEventListener('click',()=>app.openGroup(group.id));grid.append(button);}followHost.append(grid);}else{followHost.append(el('p','hub-follow-empty','Follow up to five charts beside the calendar, or join a private group. Your choices will appear here.'));}
     $r('music-hub-groups').replaceChildren();
     const categoryHost=$r('music-hub-category-grid');categoryHost.replaceChildren();for(const [key,label] of musicGenres)categoryHost.append(categoryCard(key,label));categoryHost.append(el('h3','category-divider','LANGUAGE CHARTS'));for(const [key,label] of musicLanguages)categoryHost.append(categoryCard(key,label));
   }
@@ -116,7 +117,7 @@
     if(error)throw error;const url=URL.createObjectURL(data);blobCache.set(path,url);return url;
   }
   async function setPrivateMedia(node,path) { if(!path)return;try{const url=await privateObjectUrl(path);if(node.isConnected)node.src=url;}catch{node.alt='Private image unavailable';} }
-  function groupSongScore(song){return window.daytoneGroupPeriod==='all'?Number(song.supporters||0):support(song,groupReactions);}
+  function groupSongScore(song){return window.daytoneGroupPeriod==='all'?Number(song.supporters||0):support(song,groupVotes);}
   function rankedGroupSongs(){return window.daytoneGroupPeriod==='all'?groupAllTime:[...groupSongs].sort((a,b)=>groupSongScore(b)-groupSongScore(a)||b.created_at.localeCompare(a.created_at)||a.id.localeCompare(b.id));}
   async function renderGroup() {
     if(!user){$r('group-screen-title').textContent='A private listening room';$r('group-board-title').textContent='Sign in to open this room';$r('group-top-three').replaceChildren();$r('group-song-list').replaceChildren();return;}
@@ -136,18 +137,21 @@
     $r('group-board-title').textContent='Loading this group…';
     try{
       const result=await client.from('group_songs').select('id,group_id,owner_id,day,daily_slot,title,artist,nickname,note,genres,language,audio_path,source_url,cover_path,created_at').eq('group_id',groupId).eq('day',day).order('created_at',{ascending:false});
-      if(result.error)throw result.error;const rows=result.data||[],ids=rows.map(x=>x.id),rMap=new Map(),cMap=new Map();
-      for(let i=0;i<ids.length;i+=100){const chunk=ids.slice(i,i+100);const [rr,cc]=await Promise.all([
+      if(result.error)throw result.error;const rows=result.data||[],ids=rows.map(x=>x.id),rMap=new Map(),vMap=new Map(),cMap=new Map();
+      for(let i=0;i<ids.length;i+=100){const chunk=ids.slice(i,i+100);const [rr,vv,cc]=await Promise.all([
         client.from('group_reactions').select('song_id,user_id,emoji').in('song_id',chunk),
+        client.from('group_song_votes').select('song_id,user_id').in('song_id',chunk),
         client.from('group_comments').select('id,song_id,user_id,nickname,body,image_path,created_at').in('song_id',chunk).order('created_at')]);
-        if(rr.error)throw rr.error;if(cc.error)throw cc.error;
+        if(rr.error)throw rr.error;if(vv.error)throw vv.error;if(cc.error)throw cc.error;
         for(const row of rr.data||[]){const list=rMap.get(row.song_id)||[];list.push(row);rMap.set(row.song_id,list);}
+        for(const row of vv.data||[]){const list=vMap.get(row.song_id)||[];list.push(row);vMap.set(row.song_id,list);}
         for(const row of cc.data||[]){const list=cMap.get(row.song_id)||[];list.push(row);cMap.set(row.song_id,list);}
       }
       if(request!==groupRequest||window.daytoneGroupId!==groupId||app.getDay()!==day)return;
-      groupSongs=rows;groupReactions=rMap;groupComments=cMap;
+      groupSongs=rows;groupReactions=rMap;groupVotes=vMap;groupComments=cMap;
       if(window.daytoneGroupPeriod==='all')await loadGroupAllTime(request,groupId);else renderGroupBoard();
       const dialog=$r('group-discussion-dialog');if(dialog.open&&dialog.dataset.songId)openGroupDiscussion(dialog.dataset.songId,true);
+      window.dispatchEvent(new CustomEvent('daytone:group-songs-loaded',{detail:{groupId,day}}));
     }catch(error){if(request===groupRequest){$r('group-board-title').textContent='Could not load this group';toast(error.message||'Please try again.');}}
   }
   async function loadGroupAllTime(request=groupRequest,groupId=activeGroup?.id){
@@ -233,6 +237,7 @@
     catch(failed){if(path)await cleanUploads([{bucket:'group-media',path}]);error.textContent=failed.message||'Could not upload artwork.';}finally{button.disabled=false;}}
   function reactionButtons(host,song){const rows=groupReactions.get(song.id)||[];for(const symbol of emoji){const count=rows.filter(x=>x.emoji===symbol).length,chosen=rows.some(x=>x.emoji===symbol&&x.user_id===user?.id),button=el('button','reaction'+(chosen?' chosen':''),symbol+' '+count);button.type='button';button.setAttribute('aria-pressed',String(chosen));button.addEventListener('click',()=>void reactGroupSong(song.id,symbol,chosen));host.append(button);}}
   async function reactGroupSong(id,symbol,chosen){if(!requireAccount())return;try{const result=chosen?await client.from('group_reactions').delete().eq('song_id',id).eq('user_id',user.id):await client.from('group_reactions').upsert({song_id:id,user_id:user.id,emoji:symbol},{onConflict:'song_id,user_id'});if(result.error)throw result.error;await loadGroupSongs();}catch(error){toast(error.message||'Could not react.');}}
+  async function voteGroupSong(id,chosen){if(!requireAccount())return;try{const result=chosen?await client.from('group_song_votes').delete().eq('song_id',id).eq('user_id',user.id):await client.from('group_song_votes').insert({song_id:id,user_id:user.id});if(result.error)throw result.error;await loadGroupSongs();}catch(error){toast(error.message||'Could not save vote.');}}
   function openGroupDiscussion(id,refresh=false){
     const song=groupSongs.find(x=>x.id===id)||groupAllTime.find(x=>x.id===id);if(!song)return;
     if(window.daytoneGroupPeriod==='all'&&song.day!==app.getDay()){
@@ -242,11 +247,14 @@
     host.append(el('small','kicker','PRIVATE GROUP / '+activeGroup.name),el('h2','',song.title),el('p','song-byline',(song.artist?song.artist+' · ':'')+'@'+song.nickname));
     if(song.cover_path){const art=el('img','group-discussion-cover');art.alt=song.title+' cover';host.append(art);void setPrivateMedia(art,song.cover_path);}
     if(song.note)host.append(el('p','song-note',song.note));host.append(smallCopy(song.title));
+    if(song.owner_id===user?.id){const edit=el('button','author-edit-link','Edit song');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openGroupSong(song,activeGroup.id));host.append(edit);}
     if(song.audio_path){const audio=el('audio','song-player');audio.controls=true;audio.preload='none';audio.setAttribute('aria-label','Play '+song.title);host.append(audio);void setPrivateMedia(audio,song.audio_path);}
     else if(song.source_url){const link=el('a','open-link','Listen on the original platform ↗');link.href=song.source_url;link.target='_blank';link.rel='noopener noreferrer';host.append(link);}
+    const chosenVote=(groupVotes.get(song.id)||[]).some(x=>x.user_id===user?.id);
+    const vote=el('button','song-vote'+(chosenVote?' chosen':''),'☆ Vote · '+groupSongScore(song));vote.type='button';vote.setAttribute('aria-pressed',String(chosenVote));vote.addEventListener('click',()=>void voteGroupSong(song.id,chosenVote));host.append(vote);
     const actions=el('div','group-reactions');reactionButtons(actions,song);host.append(actions);
     const commentsForSong=groupComments.get(id)||[],list=el('div','comment-list');list.append(el('h3','publisher-heading','Discussion · '+commentsForSong.length));
-    for(const item of commentsForSong){const line=el('div','comment');line.append(el('strong','',item.nickname),el('time','',new Date(item.created_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})));if(item.body)line.append(el('p','',item.body));if(item.image_path){const img=el('img');img.alt=item.nickname+' shared photo';line.append(img);void setPrivateMedia(img,item.image_path);}list.append(line);}host.append(list);
+    for(const item of commentsForSong){const line=el('div','comment');line.append(el('strong','',item.nickname),el('time','',new Date(item.created_at).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})));if(item.body)line.append(el('p','',item.body));if(item.image_path){const img=el('img');img.alt=item.nickname+' shared photo';line.append(img);void setPrivateMedia(img,item.image_path);}if(item.user_id===user?.id){const edit=el('button','author-edit-link','Edit reply');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openComment('group_comments',item,null,activeGroup.id));line.append(edit);}list.append(line);}host.append(list);
     const form=el('form','comment-form');form.innerHTML='<label>Reply<textarea name="body" maxlength="500" rows="3" placeholder="Ask, respond, or share a photo…"></textarea></label><label>Photo (optional)<input name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif"></label><p class="comment-error" role="alert"></p><button type="submit">Post reply ↗</button>';
     form.addEventListener('submit',event=>void publishGroupComment(event,id));host.append(form);if(!refresh||!dialog.open)dialog.showModal();
   }
@@ -271,6 +279,7 @@
     $r('feedback-form').addEventListener('submit',event=>void sendFeedback(event));
   }
   setupDialogs();wireEvents();renderFollowControls();renderCalendarCharts();void refreshAccount();
-  window.DaytoneMusicRooms={renderHub,renderGroup,renderCalendarCharts,refreshAccount,allTimePublicSongs,loadAllTimePublic,genrePalette:key=>palettes[key]};
+  window.addEventListener('daytone:categories',()=>{renderFollowControls();renderCalendarCharts();if(app.getScreen()==='music-hub')renderHub();});
+  window.DaytoneMusicRooms={renderHub,renderGroup,renderCalendarCharts,refreshAccount,reloadGroupSongs:loadGroupSongs,openGroupDiscussion,allTimePublicSongs,loadAllTimePublic,genrePalette:key=>palettes[key]};
   app.refresh();
 })();
