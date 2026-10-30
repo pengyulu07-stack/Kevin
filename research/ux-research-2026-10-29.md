@@ -2,7 +2,7 @@
 
 ## 研究边界
 
-本轮围绕用户给出的 SIDE B 截图、日听现有页面与功能需求，先建立两个各 50 项的资料组和两个各 50 项的 GitHub 对照组；2026-10-30 又加入 100 个去重的 GitHub 对照。当前共 **100 个资料链接、200 个 GitHub 项目**。GitHub 项目逐一读取了 README 的开头与功能描述；资料逐一通过检索结果确认主题，关键指南进一步阅读正文。这是设计研究索引和实现判断，不代表对 200 个项目做了完整代码审计，也不代表复制其代码或拥有其图片版权。用户提出的 300 项资料目标仍在继续整理，当前不能称为已完成。
+本轮围绕用户给出的 SIDE B 截图、日听现有页面与功能需求，先建立两个各 50 项的资料组和两个各 50 项的 GitHub 对照组；2026-10-30 又加入 100 个去重的 GitHub 对照。当前共 **300 个资料链接、200 个 GitHub 项目**。GitHub 项目逐一读取了 README 的开头与功能描述；新增 200 个资料页面逐一打开核对标题和主题，关键指南进一步阅读正文。资料索引的广度不等于逐篇完整研读，也不代表对 200 个项目做了完整代码审计，更不代表复制其代码或拥有其图片版权。
 
 ## 用户真正要完成的事
 
@@ -374,3 +374,224 @@
 2. Vote 与表情分离；公开榜和小组榜同一计票规则；历史支持迁移一次。
 3. 简化发布、支持可用的官方播放器、平台链接和歌单元数据；每个平台逐一验证。
 4. 观察真实用户任务后，再决定最近浏览、收藏、搜索和更深个性化，而不是先叠加十几个入口。
+
+
+## 本轮新增资料对页面的具体影响
+
+| 查到的依据 | DAYTONE 的决定 |
+| --- | --- |
+| [NN/g 首页设计](https://www.nngroup.com/articles/homepage-design-principles/)指出首页应尽快展示内容与下一步行动；[视觉层级](https://www.nngroup.com/articles/visual-hierarchy-ux-definition/)强调通过大小、颜色、分组明确重点 | 欢迎语和纸感日历保留，欢迎语下加一个直达所选日歌曲的文字入口；默认音乐榜比论坛和未来分类更先出现 |
+| [NN/g 反馈请求](https://www.nngroup.com/articles/user-feedback/)强调避免在任务中途打断用户 | 反馈仍是用户主动打开的入口，不做自动弹窗 |
+| [NN/g 通知建议](https://www.nngroup.com/articles/transactional-notifications/)强调简短、及时、可选的通知 | 保留铃铛和显示范围设置；回复类通知继续提供直达讨论的动作，不让同一消息反复弹出 |
+| [NN/g 微交互](https://www.nngroup.com/articles/microinteractions/)与[动效时长](https://www.nngroup.com/articles/animation-duration/)讨论反馈和目的 | 直达按钮只做短暂平滑滚动；用户启用减少动画时立即跳转，不加无功能的漫长转场 |
+| [MDN HTML 音频](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio)、[HTML 对话框](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog)和[降低动画](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40media/prefers-reduced-motion) | 音频使用浏览器原生播放控件；设置和分享用可键盘操作的对话框；动效尊重系统偏好 |
+
+新增 200 项为逐一打开核对的**资料索引**；正文重点研读与 DAYTONE 决定见上表。这里不把技术 API 页面误写成用户行为研究，也不把打开页面等同于完成用户访谈。
+
+## 资料索引：扩展的设计与实现资料 200 项（2026-10-30）
+
+### 设计、发现、反馈与写作：NN/g 100 项
+
+101. [Dropdown List](https://www.nngroup.com/articles/dropdown-list/) — 设计资料；已打开核对标题与主题。
+102. [Ux Writing Faqs](https://www.nngroup.com/articles/ux-writing-faqs/) — 设计资料；已打开核对标题与主题。
+103. [Information Seeking China](https://www.nngroup.com/articles/information-seeking-china/) — 设计资料；已打开核对标题与主题。
+104. [Good Visual Design](https://www.nngroup.com/articles/good-visual-design/) — 设计资料；已打开核对标题与主题。
+105. [Button States Communicate Interaction](https://www.nngroup.com/articles/button-states-communicate-interaction/) — 设计资料；已打开核对标题与主题。
+106. [Eas Framework Simplify Forms](https://www.nngroup.com/articles/eas-framework-simplify-forms/) — 设计资料；已打开核对标题与主题。
+107. [Testing Visual Design](https://www.nngroup.com/articles/testing-visual-design/) — 设计资料；已打开核对标题与主题。
+108. [Content Strategy Study Guide](https://www.nngroup.com/articles/content-strategy-study-guide/) — 设计资料；已打开核对标题与主题。
+109. [Content Strategy Vs Ux Writing](https://www.nngroup.com/articles/content-strategy-vs-ux-writing/) — 设计资料；已打开核对标题与主题。
+110. [Visual Design Cheat Sheet](https://www.nngroup.com/articles/visual-design-cheat-sheet/) — 设计资料；已打开核对标题与主题。
+111. [Typography Terms Ux](https://www.nngroup.com/articles/typography-terms-ux/) — 设计资料；已打开核对标题与主题。
+112. [Ux Writing Study Guide](https://www.nngroup.com/articles/ux-writing-study-guide/) — 设计资料；已打开核对标题与主题。
+113. [7 Tips Memorable Imagery](https://www.nngroup.com/articles/7-tips-memorable-imagery/) — 设计资料；已打开核对标题与主题。
+114. [Homepage Design Principles](https://www.nngroup.com/articles/homepage-design-principles/) — 设计资料；已打开核对标题与主题。
+115. [Aesthetic Usability Effect](https://www.nngroup.com/articles/aesthetic-usability-effect/) — 设计资料；已打开核对标题与主题。
+116. [Formatting Long Form Content](https://www.nngroup.com/articles/formatting-long-form-content/) — 设计资料；已打开核对标题与主题。
+117. [In Page Links Content Navigation](https://www.nngroup.com/articles/in-page-links-content-navigation/) — 设计资料；已打开核对标题与主题。
+118. [Accessibility Inclusivity Study Guide](https://www.nngroup.com/articles/accessibility-inclusivity-study-guide/) — 设计资料；已打开核对标题与主题。
+119. [Information Architecture Sitemaps](https://www.nngroup.com/articles/information-architecture-sitemaps/) — 设计资料；已打开核对标题与主题。
+120. [Imagery In Visual Design](https://www.nngroup.com/articles/imagery-in-visual-design/) — 设计资料；已打开核对标题与主题。
+121. [Error Messages Scoring Rubric](https://www.nngroup.com/articles/error-messages-scoring-rubric/) — 设计资料；已打开核对标题与主题。
+122. [Error Message Guidelines](https://www.nngroup.com/articles/error-message-guidelines/) — 设计资料；已打开核对标题与主题。
+123. [User Feedback](https://www.nngroup.com/articles/user-feedback/) — 设计资料；已打开核对标题与主题。
+124. [Content Strategy](https://www.nngroup.com/articles/content-strategy/) — 设计资料；已打开核对标题与主题。
+125. [Transactional Notifications](https://www.nngroup.com/articles/transactional-notifications/) — 设计资料；已打开核对标题与主题。
+126. [Visual Design In Ux Study Guide](https://www.nngroup.com/articles/visual-design-in-ux-study-guide/) — 设计资料；已打开核对标题与主题。
+127. [Visual Treatments Accessibility](https://www.nngroup.com/articles/visual-treatments-accessibility/) — 设计资料；已打开核对标题与主题。
+128. [Enriched Site Search Suggestions](https://www.nngroup.com/articles/enriched-site-search-suggestions/) — 设计资料；已打开核对标题与主题。
+129. [Usability Checklist](https://www.nngroup.com/articles/usability-checklist/) — 设计资料；已打开核对标题与主题。
+130. [Alternatives Pagination Listing Pages](https://www.nngroup.com/articles/alternatives-pagination-listing-pages/) — 设计资料；已打开核对标题与主题。
+131. [Product Photos Listing Pages](https://www.nngroup.com/articles/product-photos-listing-pages/) — 设计资料；已打开核对标题与主题。
+132. [Inclusive Design](https://www.nngroup.com/articles/inclusive-design/) — 设计资料；已打开核对标题与主题。
+133. [Category Pages](https://www.nngroup.com/articles/category-pages/) — 设计资料；已打开核对标题与主题。
+134. [Ia Category Outliers](https://www.nngroup.com/articles/ia-category-outliers/) — 设计资料；已打开核对标题与主题。
+135. [Feature Checklists Are Not Enough](https://www.nngroup.com/articles/feature-checklists-are-not-enough/) — 设计资料；已打开核对标题与主题。
+136. [Color Enhance Design](https://www.nngroup.com/articles/color-enhance-design/) — 设计资料；已打开核对标题与主题。
+137. [Visual Design Heuristics Posters](https://www.nngroup.com/articles/visual-design-heuristics-posters/) — 设计资料；已打开核对标题与主题。
+138. [Aesthetic Minimalist Design](https://www.nngroup.com/articles/aesthetic-minimalist-design/) — 设计资料；已打开核对标题与主题。
+139. [Visual Hierarchy Ux Definition](https://www.nngroup.com/articles/visual-hierarchy-ux-definition/) — 设计资料；已打开核对标题与主题。
+140. [State Switch Buttons](https://www.nngroup.com/articles/state-switch-buttons/) — 设计资料；已打开核对标题与主题。
+141. [Listbox Dropdown](https://www.nngroup.com/articles/listbox-dropdown/) — 设计资料；已打开核对标题与主题。
+142. [Principles Visual Design](https://www.nngroup.com/articles/principles-visual-design/) — 设计资料；已打开核对标题与主题。
+143. [Animation Duration](https://www.nngroup.com/articles/animation-duration/) — 设计资料；已打开核对标题与主题。
+144. [Pinball Pattern Search Behavior](https://www.nngroup.com/articles/pinball-pattern-search-behavior/) — 设计资料；已打开核对标题与主题。
+145. [Split Buttons](https://www.nngroup.com/articles/split-buttons/) — 设计资料；已打开核对标题与主题。
+146. [Better Link Labels](https://www.nngroup.com/articles/better-link-labels/) — 设计资料；已打开核对标题与主题。
+147. [Input Steppers](https://www.nngroup.com/articles/input-steppers/) — 设计资料；已打开核对标题与主题。
+148. [Microinteractions](https://www.nngroup.com/articles/microinteractions/) — 设计资料；已打开核对标题与主题。
+149. [Storyboards Visualize Ideas](https://www.nngroup.com/articles/storyboards-visualize-ideas/) — 设计资料；已打开核对标题与主题。
+150. [Site Search Suggestions](https://www.nngroup.com/articles/site-search-suggestions/) — 设计资料；已打开核对标题与主题。
+151. [Search Log Analysis](https://www.nngroup.com/articles/search-log-analysis/) — 设计资料；已打开核对标题与主题。
+152. [Homepage Links](https://www.nngroup.com/articles/homepage-links/) — 设计资料；已打开核对标题与主题。
+153. [Split Buttons Navigation](https://www.nngroup.com/articles/split-buttons-navigation/) — 设计资料；已打开核对标题与主题。
+154. [Checklist Registration Login](https://www.nngroup.com/articles/checklist-registration-login/) — 设计资料；已打开核对标题与主题。
+155. [Scroll Animations](https://www.nngroup.com/articles/scroll-animations/) — 设计资料；已打开核对标题与主题。
+156. [Presenting Bulleted Lists](https://www.nngroup.com/articles/presenting-bulleted-lists/) — 设计资料；已打开核对标题与主题。
+157. [Universal Navigation](https://www.nngroup.com/articles/universal-navigation/) — 设计资料；已打开核对标题与主题。
+158. [Visual Indicators Differentiators](https://www.nngroup.com/articles/visual-indicators-differentiators/) — 设计资料；已打开核对标题与主题。
+159. [Trustworthy Design](https://www.nngroup.com/articles/trustworthy-design/) — 设计资料；已打开核对标题与主题。
+160. [List Entries](https://www.nngroup.com/articles/list-entries/) — 设计资料；已打开核对标题与主题。
+161. [Navigation You Are Here](https://www.nngroup.com/articles/navigation-you-are-here/) — 设计资料；已打开核对标题与主题。
+162. [Utility Navigation](https://www.nngroup.com/articles/utility-navigation/) — 设计资料；已打开核对标题与主题。
+163. [Content Behind Forms](https://www.nngroup.com/articles/content-behind-forms/) — 设计资料；已打开核对标题与主题。
+164. [Audience Based Navigation](https://www.nngroup.com/articles/audience-based-navigation/) — 设计资料；已打开核对标题与主题。
+165. [Emotional Design Fail](https://www.nngroup.com/articles/emotional-design-fail/) — 设计资料；已打开核对标题与主题。
+166. [Scoped Search](https://www.nngroup.com/articles/scoped-search/) — 设计资料；已打开核对标题与主题。
+167. [Ia Questions Navigation Menus](https://www.nngroup.com/articles/ia-questions-navigation-menus/) — 设计资料；已打开核对标题与主题。
+168. [Animation Usability](https://www.nngroup.com/articles/animation-usability/) — 设计资料；已打开核对标题与主题。
+169. [Search Not Enough](https://www.nngroup.com/articles/search-not-enough/) — 设计资料；已打开核对标题与主题。
+170. [Ia Vs Navigation](https://www.nngroup.com/articles/ia-vs-navigation/) — 设计资料；已打开核对标题与主题。
+171. [Radio Buttons Default Selection](https://www.nngroup.com/articles/radio-buttons-default-selection/) — 设计资料；已打开核对标题与主题。
+172. [Keyboard Accessibility](https://www.nngroup.com/articles/keyboard-accessibility/) — 设计资料；已打开核对标题与主题。
+173. [Search No Results Serp](https://www.nngroup.com/articles/search-no-results-serp/) — 设计资料；已打开核对标题与主题。
+174. [Category Names Suck](https://www.nngroup.com/articles/category-names-suck/) — 设计资料；已打开核对标题与主题。
+175. [Homepage Real Estate Allocation](https://www.nngroup.com/articles/homepage-real-estate-allocation/) — 设计资料；已打开核对标题与主题。
+176. [Form Design White Space](https://www.nngroup.com/articles/form-design-white-space/) — 设计资料；已打开核对标题与主题。
+177. [Navigation Cognitive Strain](https://www.nngroup.com/articles/navigation-cognitive-strain/) — 设计资料；已打开核对标题与主题。
+178. [Item List View All](https://www.nngroup.com/articles/item-list-view-all/) — 设计资料；已打开核对标题与主题。
+179. [Search Navigation](https://www.nngroup.com/articles/search-navigation/) — 设计资料；已打开核对标题与主题。
+180. [Homepage Design Changes](https://www.nngroup.com/articles/homepage-design-changes/) — 设计资料；已打开核对标题与主题。
+181. [Mini Ia Structuring Information](https://www.nngroup.com/articles/mini-ia-structuring-information/) — 设计资料；已打开核对标题与主题。
+182. [Right Justified Navigation Menus](https://www.nngroup.com/articles/right-justified-navigation-menus/) — 设计资料；已打开核对标题与主题。
+183. [Content Strategy Long Vs Short](https://www.nngroup.com/articles/content-strategy-long-vs-short/) — 设计资料；已打开核对标题与主题。
+184. [Fancy Formatting Looks Like An Ad](https://www.nngroup.com/articles/fancy-formatting-looks-like-an-ad/) — 设计资料；已打开核对标题与主题。
+185. [Breadcrumb Navigation Useful](https://www.nngroup.com/articles/breadcrumb-navigation-useful/) — 设计资料；已打开核对标题与主题。
+186. [Fixing Information Architecture](https://www.nngroup.com/articles/fixing-information-architecture/) — 设计资料；已打开核对标题与主题。
+187. [Web Writing Use Search Keywords](https://www.nngroup.com/articles/web-writing-use-search-keywords/) — 设计资料；已打开核对标题与主题。
+188. [Accessibility Is Not Enough](https://www.nngroup.com/articles/accessibility-is-not-enough/) — 设计资料；已打开核对标题与主题。
+189. [Forms Vs Applications](https://www.nngroup.com/articles/forms-vs-applications/) — 设计资料；已打开核对标题与主题。
+190. [Mental Models For Search](https://www.nngroup.com/articles/mental-models-for-search/) — 设计资料；已打开核对标题与主题。
+191. [Checkboxes Vs Radio Buttons](https://www.nngroup.com/articles/checkboxes-vs-radio-buttons/) — 设计资料；已打开核对标题与主题。
+192. [Guidelines For Visualizing Links](https://www.nngroup.com/articles/guidelines-for-visualizing-links/) — 设计资料；已打开核对标题与主题。
+193. [Change The Color Of Visited Links](https://www.nngroup.com/articles/change-the-color-of-visited-links/) — 设计资料；已打开核对标题与主题。
+194. [Alternative Interfaces For Accessibility](https://www.nngroup.com/articles/alternative-interfaces-for-accessibility/) — 设计资料；已打开核对标题与主题。
+195. [Search Visible And Simple](https://www.nngroup.com/articles/search-visible-and-simple/) — 设计资料；已打开核对标题与主题。
+196. [Reset And Cancel Buttons](https://www.nngroup.com/articles/reset-and-cancel-buttons/) — 设计资料；已打开核对标题与主题。
+197. [Communicating Trustworthiness](https://www.nngroup.com/articles/communicating-trustworthiness/) — 设计资料；已打开核对标题与主题。
+198. [Browser Navigation](https://www.nngroup.com/articles/browser-navigation/) — 设计资料；已打开核对标题与主题。
+199. [Coping Information Overload](https://www.nngroup.com/articles/coping-information-overload/) — 设计资料；已打开核对标题与主题。
+200. [Most Violated Homepage Guidelines](https://www.nngroup.com/articles/most-violated-homepage-guidelines/) — 设计资料；已打开核对标题与主题。
+
+### 浏览器能力、可访问性与性能：MDN 100 项
+
+201. [Web / HTML / Reference / Elements / a](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/a) — 浏览器实现资料；已打开核对标题与主题。
+202. [Web / HTML / Reference / Elements / article](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/article) — 浏览器实现资料；已打开核对标题与主题。
+203. [Web / HTML / Reference / Elements / aside](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/aside) — 浏览器实现资料；已打开核对标题与主题。
+204. [Web / HTML / Reference / Elements / button](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/button) — 浏览器实现资料；已打开核对标题与主题。
+205. [Web / HTML / Reference / Elements / details](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details) — 浏览器实现资料；已打开核对标题与主题。
+206. [Web / HTML / Reference / Elements / dialog](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog) — 浏览器实现资料；已打开核对标题与主题。
+207. [Web / HTML / Reference / Elements / figure](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figure) — 浏览器实现资料；已打开核对标题与主题。
+208. [Web / HTML / Reference / Elements / figcaption](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/figcaption) — 浏览器实现资料；已打开核对标题与主题。
+209. [Web / HTML / Reference / Elements / footer](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/footer) — 浏览器实现资料；已打开核对标题与主题。
+210. [Web / HTML / Reference / Elements / form](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/form) — 浏览器实现资料；已打开核对标题与主题。
+211. [Web / HTML / Reference / Elements / header](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/header) — 浏览器实现资料；已打开核对标题与主题。
+212. [Web / HTML / Reference / Elements / img](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img) — 浏览器实现资料；已打开核对标题与主题。
+213. [Web / HTML / Reference / Elements / input](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input) — 浏览器实现资料；已打开核对标题与主题。
+214. [Web / HTML / Reference / Elements / label](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label) — 浏览器实现资料；已打开核对标题与主题。
+215. [Web / HTML / Reference / Elements / main](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/main) — 浏览器实现资料；已打开核对标题与主题。
+216. [Web / HTML / Reference / Elements / nav](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/nav) — 浏览器实现资料；已打开核对标题与主题。
+217. [Web / HTML / Reference / Elements / ol](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol) — 浏览器实现资料；已打开核对标题与主题。
+218. [Web / HTML / Reference / Elements / option](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/option) — 浏览器实现资料；已打开核对标题与主题。
+219. [Web / HTML / Reference / Elements / picture](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/picture) — 浏览器实现资料；已打开核对标题与主题。
+220. [Web / HTML / Reference / Elements / progress](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/progress) — 浏览器实现资料；已打开核对标题与主题。
+221. [Web / HTML / Reference / Elements / section](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/section) — 浏览器实现资料；已打开核对标题与主题。
+222. [Web / HTML / Reference / Elements / select](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/select) — 浏览器实现资料；已打开核对标题与主题。
+223. [Web / HTML / Reference / Elements / source](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/source) — 浏览器实现资料；已打开核对标题与主题。
+224. [Web / HTML / Reference / Elements / summary](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary) — 浏览器实现资料；已打开核对标题与主题。
+225. [Web / HTML / Reference / Elements / time](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/time) — 浏览器实现资料；已打开核对标题与主题。
+226. [Web / HTML / Reference / Elements / ul](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ul) — 浏览器实现资料；已打开核对标题与主题。
+227. [Web / HTML / Reference / Elements / video](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/video) — 浏览器实现资料；已打开核对标题与主题。
+228. [Web / API / Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) — 浏览器实现资料；已打开核对标题与主题。
+229. [Web / API / Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) — 浏览器实现资料；已打开核对标题与主题。
+230. [Web / API / Notifications API](https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API) — 浏览器实现资料；已打开核对标题与主题。
+231. [Web / API / Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) — 浏览器实现资料；已打开核对标题与主题。
+232. [Web / API / Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) — 浏览器实现资料；已打开核对标题与主题。
+233. [Web / API / Web Storage API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API) — 浏览器实现资料；已打开核对标题与主题。
+234. [Web / API / History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API) — 浏览器实现资料；已打开核对标题与主题。
+235. [Web / API / HTMLDialogElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLDialogElement) — 浏览器实现资料；已打开核对标题与主题。
+236. [Web / API / AbortSignal](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal) — 浏览器实现资料；已打开核对标题与主题。
+237. [Web / API / Clipboard](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard) — 浏览器实现资料；已打开核对标题与主题。
+238. [Web / API / Navigator / clipboard](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/clipboard) — 浏览器实现资料；已打开核对标题与主题。
+239. [Web / API / Element / scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView) — 浏览器实现资料；已打开核对标题与主题。
+240. [Web / API / Document / startViewTransition](https://developer.mozilla.org/en-US/docs/Web/API/Document/startViewTransition) — 浏览器实现资料；已打开核对标题与主题。
+241. [Web / API / Window / matchMedia](https://developer.mozilla.org/en-US/docs/Web/API/Window/matchMedia) — 浏览器实现资料；已打开核对标题与主题。
+242. [Web / API / URLSearchParams](https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams) — 浏览器实现资料；已打开核对标题与主题。
+243. [Web / API / URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) — 浏览器实现资料；已打开核对标题与主题。
+244. [Web / API / Response](https://developer.mozilla.org/en-US/docs/Web/API/Response) — 浏览器实现资料；已打开核对标题与主题。
+245. [Web / API / Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) — 浏览器实现资料；已打开核对标题与主题。
+246. [Web / API / HTMLAudioElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement) — 浏览器实现资料；已打开核对标题与主题。
+247. [Web / API / HTMLImageElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement) — 浏览器实现资料；已打开核对标题与主题。
+248. [Web / API / MediaElementAudioSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/MediaElementAudioSourceNode) — 浏览器实现资料；已打开核对标题与主题。
+249. [Web / API / ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver) — 浏览器实现资料；已打开核对标题与主题。
+250. [Web / API / MutationObserver](https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver) — 浏览器实现资料；已打开核对标题与主题。
+251. [Web / API / PerformanceObserver](https://developer.mozilla.org/en-US/docs/Web/API/PerformanceObserver) — 浏览器实现资料；已打开核对标题与主题。
+252. [Web / API / Notification](https://developer.mozilla.org/en-US/docs/Web/API/Notification) — 浏览器实现资料；已打开核对标题与主题。
+253. [Web / API / Element / animate](https://developer.mozilla.org/en-US/docs/Web/API/Element/animate) — 浏览器实现资料；已打开核对标题与主题。
+254. [Web / CSS / Reference / Properties / object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/object-fit) — 浏览器实现资料；已打开核对标题与主题。
+255. [Web / CSS / Reference / Properties / aspect-ratio](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/aspect-ratio) — 浏览器实现资料；已打开核对标题与主题。
+256. [Web / CSS / Reference / Properties / animation](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation) — 浏览器实现资料；已打开核对标题与主题。
+257. [Web / CSS / Reference / Properties / animation-play-state](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation-play-state) — 浏览器实现资料；已打开核对标题与主题。
+258. [Web / CSS / Reference / Properties / transition](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/transition) — 浏览器实现资料；已打开核对标题与主题。
+259. [Web / CSS / Reference / Properties / scroll-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-behavior) — 浏览器实现资料；已打开核对标题与主题。
+260. [Web / CSS / Reference / Properties / scroll-margin-top](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/scroll-margin-top) — 浏览器实现资料；已打开核对标题与主题。
+261. [Web / CSS / Reference / Properties / font-family](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-family) — 浏览器实现资料；已打开核对标题与主题。
+262. [Web / CSS / Reference / Properties / font-size](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/font-size) — 浏览器实现资料；已打开核对标题与主题。
+263. [Web / CSS / Reference / Properties / line-height](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/line-height) — 浏览器实现资料；已打开核对标题与主题。
+264. [Web / CSS / Reference / Properties / background](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background) — 浏览器实现资料；已打开核对标题与主题。
+265. [Web / CSS / Reference / Properties / background-image](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/background-image) — 浏览器实现资料；已打开核对标题与主题。
+266. [Web / CSS / Reference / Properties / color](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color) — 浏览器实现资料；已打开核对标题与主题。
+267. [Web / CSS / Reference / Properties / box-shadow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/box-shadow) — 浏览器实现资料；已打开核对标题与主题。
+268. [Web / CSS / Reference / Properties / display](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/display) — 浏览器实现资料；已打开核对标题与主题。
+269. [Web / CSS / Reference / Properties / grid-template-columns](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/grid-template-columns) — 浏览器实现资料；已打开核对标题与主题。
+270. [Web / CSS / Reference / Properties / flex](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/flex) — 浏览器实现资料；已打开核对标题与主题。
+271. [Web / CSS / Reference / Properties / position](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position) — 浏览器实现资料；已打开核对标题与主题。
+272. [Web / CSS / Reference / Properties / opacity](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/opacity) — 浏览器实现资料；已打开核对标题与主题。
+273. [Web / CSS / Reference / Properties / max-width](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/max-width) — 浏览器实现资料；已打开核对标题与主题。
+274. [Web / CSS / Reference / Properties / min-height](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/min-height) — 浏览器实现资料；已打开核对标题与主题。
+275. [Web / CSS / Reference / Properties / overflow](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/overflow) — 浏览器实现资料；已打开核对标题与主题。
+276. [Web / CSS / Reference / Properties / visibility](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/visibility) — 浏览器实现资料；已打开核对标题与主题。
+277. [Web / CSS / Reference / Properties / cursor](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/cursor) — 浏览器实现资料；已打开核对标题与主题。
+278. [Learn web development / Core / Accessibility](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility) — 浏览器实现资料；已打开核对标题与主题。
+279. [Learn web development / Core / Accessibility / HTML](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML) — 浏览器实现资料；已打开核对标题与主题。
+280. [Learn web development / Core / Accessibility / CSS and JavaScript](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/CSS_and_JavaScript) — 浏览器实现资料；已打开核对标题与主题。
+281. [Learn web development / Core / Accessibility / Multimedia](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/Multimedia) — 浏览器实现资料；已打开核对标题与主题。
+282. [Learn web development / Core / CSS layout / Flexbox](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Flexbox) — 浏览器实现资料；已打开核对标题与主题。
+283. [Learn web development / Core / CSS layout / Grids](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Grids) — 浏览器实现资料；已打开核对标题与主题。
+284. [Learn web development / Core / CSS layout / Media queries](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/CSS_layout/Media_queries) — 浏览器实现资料；已打开核对标题与主题。
+285. [Learn web development / Core / Structuring content / HTML forms](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_forms) — 浏览器实现资料；已打开核对标题与主题。
+286. [Learn web development / Core / Structuring content / HTML video and audio](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_video_and_audio) — 浏览器实现资料；已打开核对标题与主题。
+287. [Learn web development / Core / Text styling / Web fonts](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Text_styling/Web_fonts) — 浏览器实现资料；已打开核对标题与主题。
+288. [Learn web development / Extensions / Forms / Form validation](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/Form_validation) — 浏览器实现资料；已打开核对标题与主题。
+289. [Learn web development / Extensions / Forms / How to structure a web form](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms/How_to_structure_a_web_form) — 浏览器实现资料；已打开核对标题与主题。
+290. [Learn web development / Extensions / Performance / Best practices](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Performance/Best_practices) — 浏览器实现资料；已打开核对标题与主题。
+291. [Learn web development / Extensions / Performance / Multimedia](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Performance/Multimedia) — 浏览器实现资料；已打开核对标题与主题。
+292. [Learn web development / Extensions / Performance / Perceived performance](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Performance/Perceived_performance) — 浏览器实现资料；已打开核对标题与主题。
+293. [Learn web development / Extensions / Client-side APIs / Client-side storage](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_APIs/Client-side_storage) — 浏览器实现资料；已打开核对标题与主题。
+294. [Learn web development / Extensions / Client-side APIs / Video and audio APIs](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_APIs/Video_and_audio_APIs) — 浏览器实现资料；已打开核对标题与主题。
+295. [Web / CSS / Reference / At-rules / @media / prefers-reduced-motion](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion) — 浏览器实现资料；已打开核对标题与主题。
+296. [Web / Accessibility / ARIA](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA) — 浏览器实现资料；已打开核对标题与主题。
+297. [Web / API / Window / localStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage) — 浏览器实现资料；已打开核对标题与主题。
+298. [Web / API / Document / visibilityState](https://developer.mozilla.org/en-US/docs/Web/API/Document/visibilityState) — 浏览器实现资料；已打开核对标题与主题。
+299. [Web / API / HTMLMediaElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement) — 浏览器实现资料；已打开核对标题与主题。
+300. [Web / API / MediaSession](https://developer.mozilla.org/en-US/docs/Web/API/MediaSession) — 浏览器实现资料；已打开核对标题与主题。
