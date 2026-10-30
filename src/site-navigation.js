@@ -11,6 +11,7 @@
     else app.show(target);
   }
   nav.querySelectorAll('[data-go]').forEach(button=>button.addEventListener('click',()=>navigate(button.dataset.go)));
+  document.getElementById('jump-to-songs')?.addEventListener('click',()=>host.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));
   function navState(screen){for(const button of nav.querySelectorAll('[data-go]')){
     const key=button.dataset.go;
     const active=key==='welcome'?screen==='welcome':key==='music-hub'?['music-hub','music','music-all','group'].includes(screen):key==='forum-all'?screen.startsWith('forum'):screen===key;
@@ -30,7 +31,7 @@
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', 'Music on this day'));
     host.append(head);const grid=node('div','day-preview-grid');
     const music=node('section','day-preview-section day-preview-main'),periodic=node('section','day-preview-section day-preview-periodic');
-    music.append(node('h3','','Today · Top 5'));const periodHead=node('div','period-head');periodHead.append(node('h3','','Across the dates'));const tabs=node('div','period-tabs');for(const [key,label] of [['month','Month'],['week','Week']]){const button=node('button',period===key?'active':'',label);button.type='button';button.setAttribute('aria-pressed',String(period===key));button.addEventListener('click',()=>{period=key;void render();});tabs.append(button);}periodHead.append(tabs);periodic.append(periodHead);
+    music.append(node('h3','','Selected day · Top 5'));const periodHead=node('div','period-head');periodHead.append(node('h3','','Across the dates'));const tabs=node('div','period-tabs');for(const [key,label] of [['month','Month'],['week','Week']]){const button=node('button',period===key?'active':'',label);button.type='button';button.setAttribute('aria-pressed',String(period===key));button.addEventListener('click',()=>{period=key;void render();});tabs.append(button);}periodHead.append(tabs);periodic.append(periodHead);
     grid.append(music,periodic);host.append(grid);const archive=node('section','month-archive'),forum=node('section','forum-after-music');host.append(archive,forum);return {music,periodic,archive,forum};
   }
   function boundaries(day){const date=new Date(day+'T12:00:00Z'),monday=new Date(date);monday.setUTCDate(date.getUTCDate()-((date.getUTCDay()+6)%7));return {start:day.slice(0,7)+'-01',end:new Date(Date.UTC(date.getUTCFullYear(),date.getUTCMonth()+1,1)).toISOString().slice(0,10),weekStart:monday.toISOString().slice(0,10),weekEnd:new Date(monday.getTime()+7*86400000).toISOString().slice(0,10)};}

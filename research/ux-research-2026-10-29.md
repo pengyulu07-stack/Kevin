@@ -2,7 +2,7 @@
 
 ## 研究边界
 
-本轮围绕用户给出的 SIDE B 截图、日听现有页面与功能需求，建立两个各 50 项的资料组和两个各 50 项的 GitHub 对照组。下方共 **100 个资料链接、100 个 GitHub 项目**。GitHub 项目逐一读取了 README 的开头与功能描述；资料逐一通过检索结果确认主题，关键指南进一步阅读正文。这里是设计研究索引和实现判断，不代表对 200 个项目做了完整代码审计，也不代表复制其代码或拥有其图片版权。
+本轮围绕用户给出的 SIDE B 截图、日听现有页面与功能需求，先建立两个各 50 项的资料组和两个各 50 项的 GitHub 对照组；2026-10-30 又加入 100 个去重的 GitHub 对照。当前共 **100 个资料链接、200 个 GitHub 项目**。GitHub 项目逐一读取了 README 的开头与功能描述；资料逐一通过检索结果确认主题，关键指南进一步阅读正文。这是设计研究索引和实现判断，不代表对 200 个项目做了完整代码审计，也不代表复制其代码或拥有其图片版权。用户提出的 300 项资料目标仍在继续整理，当前不能称为已完成。
 
 ## 用户真正要完成的事
 
@@ -262,6 +262,111 @@
 98. [umami-software/umami](https://github.com/umami-software/umami) — 已读项目说明；对照更便捷及可自定义的功能。
 99. [queen-raae/gatsby-remark-oembed](https://github.com/queen-raae/gatsby-remark-oembed) — 已读项目说明；对照更便捷及可自定义的功能。
 100. [wrav/oembed](https://github.com/wrav/oembed) — 已读项目说明；对照更便捷及可自定义的功能。
+
+## GitHub 对照扩展：另外 100 项（2026-10-30）
+
+下列项目逐一检索并读取 README 前 35 行，用于比较不同做法和识别不适合日听的路线；没有逐一运行、审核源码，也没有复制其中的代码。与前面的 100 项去重后，GitHub 对照索引共 200 项。
+
+101. [zhongyang219/MusicPlayer2](https://github.com/zhongyang219/MusicPlayer2) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+102. [RetroMusicPlayer/RetroMusicPlayer](https://github.com/RetroMusicPlayer/RetroMusicPlayer) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+103. [andremion/Music-Player](https://github.com/andremion/Music-Player) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+104. [clementine-player/Clementine](https://github.com/clementine-player/Clementine) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+105. [ryanhoo/StylishMusicPlayer](https://github.com/ryanhoo/StylishMusicPlayer) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+106. [cshum/scm-music-player](https://github.com/cshum/scm-music-player) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+107. [iammert/MusicPlayerView](https://github.com/iammert/MusicPlayerView) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+108. [strawberrymusicplayer/strawberry](https://github.com/strawberrymusicplayer/strawberry) — 播放控件与列表呈现；已核对 README 开头，未做代码审计。
+109. [galnir/Master-Bot](https://github.com/galnir/Master-Bot) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+110. [linsomniac/spotify_to_ytmusic](https://github.com/linsomniac/spotify_to_ytmusic) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+111. [akornor/playlistor](https://github.com/akornor/playlistor) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+112. [satyawikananda/awesome-music-playlist](https://github.com/satyawikananda/awesome-music-playlist) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+113. [naomiaro/waveform-playlist](https://github.com/naomiaro/waveform-playlist) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+114. [Denon/syncPlaylist](https://github.com/Denon/syncPlaylist) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+115. [Pushan2005/SpotTransfer](https://github.com/Pushan2005/SpotTransfer) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+116. [plamere/SortYourMusic](https://github.com/plamere/SortYourMusic) — 跨平台歌单的组织和导入；已核对 README 开头，未做代码审计。
+117. [pdaddyo/soundbounce](https://github.com/pdaddyo/soundbounce) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+118. [klnusbaum/UDJ-Server](https://github.com/klnusbaum/UDJ-Server) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+119. [fmbot-discord/fmbot](https://github.com/fmbot-discord/fmbot) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+120. [Rayman/fusic-meteor](https://github.com/Rayman/fusic-meteor) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+121. [remotion-dev/template-music-visualization](https://github.com/remotion-dev/template-music-visualization) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+122. [Freelander/ting](https://github.com/Freelander/ting) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+123. [John-Weeks-Dev/music-social-network-api](https://github.com/John-Weeks-Dev/music-social-network-api) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+124. [wafarifki/musicwithlyrics](https://github.com/wafarifki/musicwithlyrics) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+125. [pdaddyo/soundbounce-v2](https://github.com/pdaddyo/soundbounce-v2) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+126. [ragestudio/comty](https://github.com/ragestudio/comty) — 分享关系与协作场景；已核对 README 开头，未做代码审计。
+127. [lystdo/Codes-for-WSDM-CUP-Music-Rec-1st-place-solution](https://github.com/lystdo/Codes-for-WSDM-CUP-Music-Rec-1st-place-solution) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+128. [ucalyptus/Spotify-Recommendation-Engine](https://github.com/ucalyptus/Spotify-Recommendation-Engine) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+129. [feiyutalk/netease-music-recommendation](https://github.com/feiyutalk/netease-music-recommendation) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+130. [microw/Music_recommendation](https://github.com/microw/Music_recommendation) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+131. [metabrainz/troi-recommendation-playground](https://github.com/metabrainz/troi-recommendation-playground) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+132. [lbdeoliveira/song-playlist-recommendation](https://github.com/lbdeoliveira/song-playlist-recommendation) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+133. [VikramShenoy97/Music-Recommendation-Using-Deep-Learning](https://github.com/VikramShenoy97/Music-Recommendation-Using-Deep-Learning) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+134. [jw-zhang-zju/Yue](https://github.com/jw-zhang-zju/Yue) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+135. [SylCard/Content-based-Music-Recommendation](https://github.com/SylCard/Content-based-Music-Recommendation) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+136. [taylorhawks/RNN-music-recommender](https://github.com/taylorhawks/RNN-music-recommender) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+137. [joeseesun/music-genre-finder](https://github.com/joeseesun/music-genre-finder) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+138. [tastejs/TasteMusic](https://github.com/tastejs/TasteMusic) — 推荐机制与可解释性；已核对 README 开头，未做代码审计。
+139. [kalbhor/MusicRepair](https://github.com/kalbhor/MusicRepair) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+140. [xhongc/music-tag-web](https://github.com/xhongc/music-tag-web) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+141. [KRTirtho/spotube-plugin-musicbrainz-listenbrainz](https://github.com/KRTirtho/spotube-plugin-musicbrainz-listenbrainz) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+142. [Arthi-chaud/Meelo](https://github.com/Arthi-chaud/Meelo) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+143. [wow-signal-dev/metadata-remote](https://github.com/wow-signal-dev/metadata-remote) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+144. [KristoforMaynard/music-tag](https://github.com/KristoforMaynard/music-tag) — 歌曲识别与元数据来源；已核对 README 开头，未做代码审计。
+145. [bluefireteam/audioplayers](https://github.com/bluefireteam/audioplayers) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+146. [vidstack/player](https://github.com/vidstack/player) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+147. [media-kit/media-kit](https://github.com/media-kit/media-kit) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+148. [freeman-jiang/beatsync](https://github.com/freeman-jiang/beatsync) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+149. [serversideup/amplitudejs](https://github.com/serversideup/amplitudejs) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+150. [kosmetism/react-soundplayer](https://github.com/kosmetism/react-soundplayer) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+151. [E-Kuerschner/useAudioPlayer](https://github.com/E-Kuerschner/useAudioPlayer) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+152. [electronoora/webaudio-mod-player](https://github.com/electronoora/webaudio-mod-player) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+153. [Experience-Monks/web-audio-player](https://github.com/Experience-Monks/web-audio-player) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+154. [AwesomeWebProjects/react-player](https://github.com/AwesomeWebProjects/react-player) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+155. [umd-mith/webvtt-player](https://github.com/umd-mith/webvtt-player) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+156. [codrops/RecordPlayer](https://github.com/codrops/RecordPlayer) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+157. [pseudosavant/player.html](https://github.com/pseudosavant/player.html) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+158. [feross/timidity](https://github.com/feross/timidity) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+159. [muxinc/media-chrome](https://github.com/muxinc/media-chrome) — 浏览器音频能力与控件；已核对 README 开头，未做代码审计。
+160. [frontendbr/forum](https://github.com/frontendbr/forum) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+161. [lobsters/lobsters](https://github.com/lobsters/lobsters) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+162. [thedevdojo/chatter](https://github.com/thedevdojo/chatter) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+163. [Kunena/Kunena-Forum](https://github.com/Kunena/Kunena-Forum) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+164. [excid3/simple_discussion](https://github.com/excid3/simple_discussion) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+165. [filecoin-project/community](https://github.com/filecoin-project/community) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+166. [edemaine/coauthor](https://github.com/edemaine/coauthor) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+167. [frappe/gameplan](https://github.com/frappe/gameplan) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+168. [hoppula/refire-forum](https://github.com/hoppula/refire-forum) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+169. [helpyio/helpy](https://github.com/helpyio/helpy) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+170. [disintegration/bebop](https://github.com/disintegration/bebop) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+171. [88250/symphony](https://github.com/88250/symphony) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+172. [ego008/goyoubbs](https://github.com/ego008/goyoubbs) — 讨论列表与参与线索；已核对 README 开头，未做代码审计。
+173. [bevacqua/rome](https://github.com/bevacqua/rome) — 日期选择和浏览；已核对 README 开头，未做代码审计。
+174. [PawanKolhe/color-calendar](https://github.com/PawanKolhe/color-calendar) — 日期选择和浏览；已核对 README 开头，未做代码审计。
+175. [dubrox/Multiple-Dates-Picker-for-jQuery-UI](https://github.com/dubrox/Multiple-Dates-Picker-for-jQuery-UI) — 日期选择和浏览；已核对 README 开头，未做代码审计。
+176. [acidb/mobiscroll](https://github.com/acidb/mobiscroll) — 日期选择和浏览；已核对 README 开头，未做代码审计。
+177. [SimonAKing/HomePage](https://github.com/SimonAKing/HomePage) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+178. [swup/swup](https://github.com/swup/swup) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+179. [Rapid-Application-Development-JS/AnimateTransition](https://github.com/Rapid-Application-Development-JS/AnimateTransition) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+180. [barbajs/barba](https://github.com/barbajs/barba) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+181. [agusibrahim/LoginPageConcept](https://github.com/agusibrahim/LoginPageConcept) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+182. [PedroBern/react-tiger-transition](https://github.com/PedroBern/react-tiger-transition) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+183. [codrops/PixelTransition](https://github.com/codrops/PixelTransition) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+184. [meursyphus/ssgoi](https://github.com/meursyphus/ssgoi) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+185. [ismamz/next-transition-router](https://github.com/ismamz/next-transition-router) — 页面转场与动效强度；已核对 README 开头，未做代码审计。
+186. [widgetify-app/widgetify-extension](https://github.com/widgetify-app/widgetify-extension) — 用户自定义入口；已核对 README 开头，未做代码审计。
+187. [xtditom/YourDynamicDashboard](https://github.com/xtditom/YourDynamicDashboard) — 用户自定义入口；已核对 README 开头，未做代码审计。
+188. [thepeacemonk/Onigiri](https://github.com/thepeacemonk/Onigiri) — 用户自定义入口；已核对 README 开头，未做代码审计。
+189. [decaf-dev/obsidian-dashboards](https://github.com/decaf-dev/obsidian-dashboards) — 用户自定义入口；已核对 README 开头，未做代码审计。
+190. [Temavrix/NexaView](https://github.com/Temavrix/NexaView) — 用户自定义入口；已核对 README 开头，未做代码审计。
+191. [WhiskeyCoder/Nextt](https://github.com/WhiskeyCoder/Nextt) — 用户自定义入口；已核对 README 开头，未做代码审计。
+192. [buildship-ai/feedbackfin](https://github.com/buildship-ai/feedbackfin) — 低干扰反馈入口；已核对 README 开头，未做代码审计。
+193. [NeosiaNexus/SitePing](https://github.com/NeosiaNexus/SitePing) — 低干扰反馈入口；已核对 README 开头，未做代码审计。
+194. [Sendmux/website-feedback-widget](https://github.com/Sendmux/website-feedback-widget) — 低干扰反馈入口；已核对 README 开头，未做代码审计。
+195. [avayyyyyyy/Opinify](https://github.com/avayyyyyyy/Opinify) — 低干扰反馈入口；已核对 README 开头，未做代码审计。
+196. [pkalogiros/AudioMass](https://github.com/pkalogiros/AudioMass) — 音频可视化与性能；已核对 README 开头，未做代码审计。
+197. [kelvinau/circular-audio-wave](https://github.com/kelvinau/circular-audio-wave) — 音频可视化与性能；已核对 README 开头，未做代码审计。
+198. [hoch/canopy](https://github.com/hoch/canopy) — 音频可视化与性能；已核对 README 开头，未做代码审计。
+199. [naomiaro/webaudio-peaks](https://github.com/naomiaro/webaudio-peaks) — 音频可视化与性能；已核对 README 开头，未做代码审计。
+200. [mrkev/webgpu-waveform](https://github.com/mrkev/webgpu-waveform) — 音频可视化与性能；已核对 README 开头，未做代码审计。
 
 ## 实施优先级
 
