@@ -31,10 +31,10 @@
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     const results=document.createElement('div');results.className='song-lookup-results';results.setAttribute('aria-label','Matching recordings');
     title.closest('label').after(button,status,results);
-    let timer,sequence=0,suggestedUrl='';
+    let timer,sequence=0,suggestedUrl='',suggestedArtist='';
     const select=(row,automatic)=>{
       if(!automatic)title.value=row.trackName;
-      if(!automatic||!artist.value.trim())artist.value=row.artistName;
+      if(!automatic||!artist.value.trim()){artist.value=row.artistName;suggestedArtist=row.artistName;}
       const link=form.elements.url,selected=form.querySelector('input[name="source"]:checked');
       if(link && (!link.value.trim()||link.value===suggestedUrl) && selected?.value!=='file'){
         link.value=row.trackViewUrl;suggestedUrl=row.trackViewUrl;const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));
@@ -45,6 +45,7 @@
     };
     title.addEventListener('input',()=>{
       clearTimeout(timer);++sequence;
+      if(suggestedArtist&&artist.value===suggestedArtist){artist.value='';suggestedArtist='';}
       const link=form.elements.url;if(suggestedUrl&&link?.value===suggestedUrl){link.value='';suggestedUrl='';const radio=form.querySelector('input[name="source"][value="none"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));}
       const value=title.value.trim();if(value.length<3||/^https:\/\//i.test(value))return;
       timer=setTimeout(()=>void search(),950);

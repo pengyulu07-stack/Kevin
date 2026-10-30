@@ -43,7 +43,7 @@
 
 - **发现与回访**：分类关注上限按用户最新决定改为五个；日历直接显示当日 Top 5、周/月榜和整月日期索引，歌单与私人小组另有入口。保持榜单数量可选，避免五个榜单同时挤在日历中央。以后优先补“最近看过”和“保存的内容”。依据 NN/g 关于[推荐内容反馈](https://www.nngroup.com/articles/recommendation-guidelines/)和[自定义与个性化](https://www.nngroup.com/articles/customization-personalization/)的分析。
 - **只填歌名发布**：在歌名输入停顿后查找公开曲库，精确匹配时先填歌手和官方播放链接，同名版本保持可切换。用户自己填写的歌名不被自动改写；搜索失败仍可只填歌名。此决定来自 Apple 的[搜索结果字段说明](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html)及本地多版本实测。封面只使用发布者自己上传的图片；不自动取用第三方专辑图。
-- **能否直接听**：平台授权决定站内播放能力。Spotify [Embed](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed)与 Apple [Marketing Tools](https://artists.apple.com/support/1117-apple-music-marketing-tools)提供官方播放器；公开音频直链可尝试浏览器原生播放。QQ、网易等暂保留原页直达，不以未经证实的接口或转存录音作为默认方案。
+- **能否直接听**：平台授权决定站内播放能力。Spotify [Embed](https://developer.spotify.com/documentation/embeds/tutorials/creating-an-embed)与 Apple [Marketing Tools](https://artists.apple.com/support/1117-apple-music-marketing-tools)提供官方播放器；Apple Music 嵌入已在站内测试页实测显示并可播放该曲的 90 秒预览，完整曲目仍取决于平台账号与授权。公开音频直链可尝试浏览器原生播放。QQ、网易等暂保留原页直达，不以未经证实的接口或转存录音作为默认方案。
 - **表态**：一人一歌一票，可撤销；六个表情继续表达感受。Vote 决定榜单，Emoji 不改排名。论坛热度仍看回复与参与。
 - **空状态**：当天无人发歌时仍显示入口和明确的“分享第一首”；避免空白榜。依据[空状态设计](https://www.nngroup.com/articles/empty-state-interface-design/)。
 - **动画**：日期切换、进入榜单和弹窗只使用简短过渡；持续旋转的唱片应可停，系统要求减少动画时停止。依据[NN/g 动效用途](https://www.nngroup.com/articles/animation-purpose-ux/)、[W3C 暂停运动内容](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide)和[MDN 减少动画设置](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/%40media/prefers-reduced-motion)。
