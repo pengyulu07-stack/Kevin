@@ -39,7 +39,7 @@
       const cover=node('button','edition-gallery-cover');cover.type='button';cover.setAttribute('aria-label','Listen to '+song.title);cover.title='Listen to '+song.title;
       if(song.cover_path){const image=node('img');image.src=publicFile('images',song.cover_path);image.alt='';image.loading='lazy';cover.append(image);}else cover.append(node('span','','♫'));
       cover.addEventListener('click',()=>window.DaytoneListen?.open(song));card.append(cover);
-      const caption=node('div','edition-gallery-caption');caption.append(node('small','',String(index+1).padStart(2,'0')+' / '+(counts.get(song.id)||0)+' votes'),node('h4','',song.title),node('p','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
+      const caption=node('div','edition-gallery-caption');caption.append(node('small','',String(index+1).padStart(2,'0')+' / '+(counts.get(song.id)||0)+((counts.get(song.id)||0)===1?' vote':' votes')),node('h4','',song.title),node('p','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
       const discuss=node('button','edition-gallery-discuss','Read & discuss ↗');discuss.type='button';discuss.addEventListener('click',()=>{app.setDay(day);app.show('music-all');if(songs.some(item=>item.id===song.id))app.openMusicDiscussion(song.id);else window.addEventListener('daytone:songs-loaded',()=>app.openMusicDiscussion(song.id),{once:true});});caption.append(discuss);card.append(caption);wall.append(card);
     });host.append(wall);
   }
