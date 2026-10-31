@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="src/site-tools.css?v=20261029f">
   <link rel="stylesheet" href="src/site-navigation.css?v=20261030d">
   <link rel="stylesheet" href="src/listen.css?v=20261031a">
-  <link rel="stylesheet" href="src/editorial.css?v=20261031g">
+  <link rel="stylesheet" href="src/editorial.css?v=20261031j">
 </head>
 <body>
   <div class="site-shell">
@@ -38,7 +38,7 @@
 
     <div class="ritual-bar"><span><i class="mini-disc"></i> OUR LITTLE LISTENING ROOM</span><p>One date, some friends, their favorite songs.</p><span>Updated daily · played again anytime ↗</span></div>
 
-    <section id="welcome" class="welcome" aria-labelledby="welcome-title"><div class="welcome-heading"><p class="welcome-eyebrow">DAYTONE · A DAY TO SHARE</p><h1 id="welcome-title">Welcome, <span id="welcome-name">friend</span>.</h1><p>The music is here. Pick a date, press a cover, or keep reading.</p><button id="jump-to-songs" class="jump-to-songs" type="button">See this day’s music ↓</button></div><div class="calendar-layout"><aside id="follow-chart-left" class="follow-chart-side" aria-label="First followed chart"></aside><div class="paper-calendar"><div class="paper-calendar-head"><button id="calendar-prev" type="button" aria-label="Previous month">←</button><div><small>DAYTONE / CALENDAR</small><h2 id="calendar-month"></h2></div><button id="calendar-next" type="button" aria-label="Next month">→</button></div><div id="calendar-grid" class="calendar-grid" aria-label="Choose a date"></div><div class="calendar-foot"><span>A day, held on paper</span><span id="calendar-picked"></span></div></div><aside id="follow-chart-right" class="follow-chart-side" aria-label="Second followed chart"></aside></div><div id="calendar-day-preview" class="calendar-day-preview" aria-live="polite"></div><details id="calendar-follow-controls" class="calendar-follow-controls"></details><button id="calendar-feedback" class="calendar-feedback" type="button">✎ Leave feedback</button><button id="start-day" class="start-day" type="button">Explore the rooms <span>↗</span></button></section>
+    <section id="welcome" class="welcome" aria-labelledby="welcome-title"><div class="welcome-heading"><p class="welcome-eyebrow">DAYTONE · A DAY TO SHARE</p><h1 id="welcome-title">Welcome, <span id="welcome-name">friend</span>.</h1><p>The music is here. Pick a date, press a cover, or keep reading.</p><button id="jump-to-songs" class="jump-to-songs" type="button">See this day’s music ↓</button><div class="display-mode-switch" role="group" aria-label="Choose display style"><span>VIEW THE DAY</span><button type="button" data-layout-choice="edition" aria-pressed="true">Edition</button><button type="button" data-layout-choice="scenes" aria-pressed="false">Scenes</button></div></div><div class="calendar-layout"><aside id="follow-chart-left" class="follow-chart-side" aria-label="First followed chart"></aside><div class="paper-calendar"><div class="paper-calendar-head"><button id="calendar-prev" type="button" aria-label="Previous month">←</button><div><small>DAYTONE / CALENDAR</small><h2 id="calendar-month"></h2></div><button id="calendar-next" type="button" aria-label="Next month">→</button></div><div id="calendar-grid" class="calendar-grid" aria-label="Choose a date"></div><div class="calendar-foot"><span>A day, held on paper</span><span id="calendar-picked"></span></div></div><aside id="follow-chart-right" class="follow-chart-side" aria-label="Second followed chart"></aside></div><div id="calendar-day-preview" class="calendar-day-preview" aria-live="polite"></div><details id="calendar-follow-controls" class="calendar-follow-controls"></details><button id="calendar-feedback" class="calendar-feedback" type="button">✎ Leave feedback</button><button id="start-day" class="start-day" type="button">Explore the rooms <span>↗</span></button></section>
     <section id="taxi-lobby" class="taxi-lobby" aria-label="Choose a room" hidden><img src="taxi-driver.png" alt="Taxi Driver film still" class="taxi-image"><div class="taxi-shade"></div><div class="taxi-date"><small>DAYTONE / TODAY</small><strong id="lobby-date"></strong></div><div class="taxi-mirror"><small>CHOOSE A ROOM</small><button type="button" data-space="music">Music <span>Charts &amp; private groups ↗</span></button><button type="button" data-space="forum">Forum <span>FORUM ↗</span></button><button type="button" data-space="daily">Daily Life <span>Open the diary ↗</span></button><button type="button" data-space="film">Film <span>Open the screen ↗</span></button><button type="button" data-space="art">Art <span>Open the studio ↗</span></button><button type="button" data-space="books">Books <span>Open the shelf ↗</span></button></div><button id="lobby-settings" class="lobby-settings" type="button">⚙ Your entrance</button><div id="lobby-frame-credit" class="lobby-frame-credit"></div><button id="lobby-back" type="button" class="lobby-back">← Back to calendar</button></section>
     <section id="music-hub" class="music-hub" aria-labelledby="music-hub-title" hidden><div class="music-hub-heading"><div><small>MUSIC / THE INDEX</small><h1 id="music-hub-title">Music charts &amp; groups.</h1><p id="music-hub-date"></p><div class="music-hub-help">Open All Music, explore a category, or create a private group for your friends.</div></div><div class="hub-actions"><button id="hub-back" type="button">← Back to rooms</button><button id="hub-create-category" type="button">＋ New category</button><button id="hub-create-group" type="button">＋ Create a private group</button><button id="hub-join-group" type="button">Join with code ↗</button></div></div><div id="music-hub-total" class="music-hub-total"></div><div class="hub-middle-grid"><div id="music-hub-follows" class="music-hub-follows"></div><div id="music-hub-playlist" class="music-hub-playlist"></div></div><div id="music-hub-groups" class="music-hub-groups"></div><details id="music-hub-categories" class="music-hub-categories"><summary>Explore all music categories <span>＋</span></summary><div id="music-hub-category-grid" class="music-hub-category-grid"></div></details></section>
     <section id="playlists-screen" class="playlists-screen" aria-labelledby="playlists-title" hidden>
@@ -81,17 +81,17 @@
   <script src="config.js"></script>
   <script defer src="vendor/supabase.js"></script>
   <script defer src="src/main.js?v=20261031h"></script>
-  <script defer src="src/listen.js?v=20261031b"></script>
+  <script defer src="src/listen.js?v=20261031j"></script>
   <script defer src="src/link-enrichment.js?v=20261030d"></script>
   <script defer src="src/community-v2.js?v=20261031e"></script>
   <script defer src="src/music-rooms.js?v=20261031b"></script>
-  <script defer src="src/appearance.js?v=20261029c"></script>
+  <script defer src="src/appearance.js?v=20261031j"></script>
   <script defer src="src/playlists.js?v=20261030a"></script>
   <script defer src="src/notifications.js?v=20261030a"></script>
   <script defer src="src/categories.js?v=20261029f"></script>
   <script defer src="src/author-tools.js?v=20261029f"></script>
-  <script defer src="src/site-language.js?v=20261031i"></script>
+  <script defer src="src/site-language.js?v=20261031j"></script>
   <script defer src="src/site-guide.js?v=20261029f"></script>
-  <script defer src="src/site-navigation.js?v=20261031i"></script>
+  <script defer src="src/site-navigation.js?v=20261031j"></script>
 </body>
 </html>

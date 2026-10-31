@@ -81,6 +81,8 @@
     body.append(node('p', 'listen-source-label', 'Open in the music app you use'));
     body.append(officialLinks(title, artist));
     if (!dialog.open) dialog.showModal();
+    const sharedAudio=body.querySelector('audio');
+    if(sharedAudio) void sharedAudio.play().catch(()=>{});
     if (!playable) void findRecording(title, artist, current);
   }
   dialog.addEventListener('close', () => { ++request; body.querySelectorAll('audio').forEach(audio => audio.pause()); body.replaceChildren(); });
