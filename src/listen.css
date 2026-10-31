@@ -1,0 +1,17 @@
+.listen-action{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid #a88970;background:#f3e8d6;color:#4e2726;padding:7px 11px;margin:10px 8px 0 0;font:13px Georgia,serif;cursor:pointer}
+.listen-action:hover,.listen-action:focus-visible{background:#4b1b1e;color:#fff4e5;outline-offset:2px}
+.listen-dialog{width:min(650px,calc(100vw - 28px));max-height:min(85vh,790px);overflow:auto;border:1px solid #9a7d63;border-radius:0;background:#faf2e6;color:#4d302c;box-shadow:8px 12px 0 #2a1417a8;padding:0}
+.listen-dialog::backdrop{background:#170d11b5;backdrop-filter:blur(3px)}
+.listen-shell{padding:clamp(19px,4vw,32px);background:repeating-linear-gradient(0deg,transparent 0 32px,#ab967617 33px)}
+.listen-top{display:flex;align-items:start;justify-content:space-between;gap:15px;border-bottom:1px solid #c8b69b;padding-bottom:13px}
+.listen-top small{font:10px Georgia,serif;letter-spacing:2px;color:#9c6956}.listen-top h2{font:normal 27px Didot,'Bodoni 72',Georgia,serif;margin:5px 0}
+.listen-top button{border:0;background:transparent;color:#4d302c;font:30px Georgia,serif;line-height:1;cursor:pointer}
+#listen-body h3{font:normal clamp(28px,4vw,42px)/1.16 Didot,'Bodoni 72',Georgia,serif;margin:22px 0 4px;overflow-wrap:anywhere}
+.listen-artist{font:italic 16px Georgia,serif;color:#806553;margin:0 0 20px}.listen-note{font:13px/1.5 Georgia,serif;color:#806b5b;margin:13px 0}
+.listen-player{display:block;width:100%;min-height:150px;margin:20px 0;border:0;background:#231b1b}.listen-player:is(audio){min-height:42px;height:42px}
+.listen-original{display:inline-block;border-bottom:1px solid #8d5a49;color:#713d34;padding:5px 0;margin:6px 0;font:14px Georgia,serif}
+.listen-choices{display:grid;gap:5px;max-height:210px;overflow:auto}.listen-choice{display:grid;text-align:left;gap:3px;border:1px solid #cbb8a1;background:#f8eee0;color:#4d302c;padding:9px 11px;cursor:pointer}
+.listen-choice.selected,.listen-choice:hover{border-color:#7e4a39;background:#edddc9}.listen-choice strong{font:16px Georgia,serif}.listen-choice span{font:11px Georgia,serif;color:#836b58}
+.listen-source-label{font:italic 13px Georgia,serif;color:#806b5b;border-top:1px solid #c8b69b;margin:22px 0 9px;padding-top:15px}
+.listen-links{display:flex;flex-wrap:wrap;gap:7px}.listen-provider{border:1px solid #b89a80;padding:7px 10px;color:#63372f;font:12px Georgia,serif}.listen-provider:hover,.listen-provider:focus-visible{background:#4b1b1e;color:#fff4e5}
+.playlist-track .listen-action{margin:0 2px 0 auto;flex:none}.playlist-track .paper-copy{flex:none}

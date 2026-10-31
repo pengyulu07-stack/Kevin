@@ -54,7 +54,7 @@
     if(activeGroup) activeGroup=groups.find(x=>x.id===activeGroup.id)||null;
   }
   function renderFollowControls() {
-    const host=$r('calendar-follow-controls'); host.replaceChildren();
+    const host=$r('calendar-follow-controls'); host.replaceChildren();host.open=true;
     const summary=el('summary','follow-controls-summary','Choose up to five followed charts ↗');host.append(summary);
     const top=el('div','follow-controls-head'); top.append(el('div','', 'FOLLOW FIVE CHARTS'),el('p','', 'Pick up to five music charts. Their daily leaders appear beside your calendar.')); host.append(top);
     const grid=el('div','follow-controls-grid');

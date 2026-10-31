@@ -356,8 +356,8 @@ function createCard(song, rank, discussion = false) {
   } else art.append(el("b", "", song.title.slice(0, 2)));
   if (!discussion) {
     art.setAttribute("role", "button"); art.tabIndex = 0;
-    art.setAttribute("aria-label", "Open " + song.title + " discussion");
-    art.addEventListener("click", () => window.dispatchEvent(new CustomEvent("daytone:open-music-discussion", { detail: { id: song.id } })));
+    art.setAttribute("aria-label", "Listen to " + song.title);
+    art.addEventListener("click", () => window.DaytoneListen?.open(song));
     art.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); art.click(); } });
   }
   card.append(art);
@@ -381,6 +381,11 @@ function createCard(song, rank, discussion = false) {
     catch { toast("Could not copy automatically. Select the title to copy it."); }
   });
   meta.append(copyName);
+  const listen = el('button', 'listen-action', '▷ Listen');
+  listen.type = 'button';
+  listen.setAttribute('aria-label', 'Listen to ' + song.title);
+  listen.addEventListener('click', () => window.DaytoneListen?.open(song));
+  meta.append(listen);
   if (song.audio_path) {
     const audio = el("audio", "song-player");
     audio.controls = true;
@@ -394,8 +399,6 @@ function createCard(song, rank, discussion = false) {
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     meta.append(link);
-    const embedded = musicEmbed(song.source_url);
-    if (embedded) meta.append(embedded);
   }
   const bottom = el("div", "card-bottom");
   const chosenVote = (votes.get(song.id) || []).some(item => item.user_id === user?.id);

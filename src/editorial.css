@@ -1,0 +1,90 @@
+/* Desktop-first daily edition: the date and the music share one opening spread. */
+@media(min-width:1051px){
+  .welcome{display:grid;grid-template-columns:minmax(305px,365px) minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr;column-gap:32px;align-items:start;padding:28px clamp(24px,3vw,46px) 55px}
+  .welcome-heading{grid-column:1/-1;text-align:center;margin-bottom:26px}
+  .welcome-heading .welcome-eyebrow{font-size:10px;letter-spacing:3px}
+  .welcome-heading h1{font-size:clamp(43px,4vw,61px);line-height:1.15}
+  .welcome-heading>p:last-child{margin-bottom:5px}
+  .calendar-layout{grid-column:1;grid-row:2;display:flex;flex-direction:column;gap:13px;width:100%;margin:0}
+  .calendar-layout .paper-calendar{width:100%;padding:18px 23px 18px;transform:rotate(-.35deg);min-height:0;box-shadow:2px 4px 0 #dfd0ba,4px 7px 0 #baa98d,8px 14px 24px #583e292a}
+  .paper-calendar-head h2{font-size:28px}.paper-calendar-head small{font-size:8px}.paper-calendar-head button{font-size:24px;padding:4px 7px}
+  .calendar-grid{grid-auto-rows:38px;gap:1px;padding-top:6px}.calendar-weekday{font-size:11px}.calendar-day{font-size:19px}.calendar-day.chosen:before{width:38px;height:33px;left:calc(50% - 20px);top:3px}
+  .calendar-foot{font-size:10px;margin-top:6px;padding-top:8px}
+  .follow-chart-side{width:100%;padding:7px 0;border-top:1px solid #c7b59e}.follow-rail-empty{display:none}.follow-rail-title{font-size:17px;padding:4px 0}.follow-rail-row{padding:6px 0}.follow-rail-open strong{font-size:13px}
+  .calendar-day-preview{grid-column:2;grid-row:2/6;width:100%;margin:0;padding:20px 25px 26px;box-shadow:4px 6px 0 #cebba0;background:repeating-linear-gradient(0deg,transparent 0 33px,#c7b59d12 34px),#fbf5eb}
+  .day-preview-head h2{font-size:clamp(27px,2.7vw,38px)}
+  .day-preview-grid{grid-template-columns:minmax(0,1.25fr) minmax(235px,.82fr);gap:18px}
+  .day-preview-main{padding-right:17px}.day-preview-periodic{padding:0 13px 13px;margin-top:12px}
+  .day-preview-section h3{font-size:20px;margin:13px 0 7px}.day-preview-row{gap:7px;padding:7px 0}.day-preview-art{width:38px;height:38px;font-size:20px}.day-preview-open strong{font-size:14px}.day-preview-score{font-size:9px}
+  .day-preview-periodic .day-preview-art{width:31px;height:31px}.day-preview-periodic .day-preview-open strong{font-size:12px}
+  .welcome .calendar-follow-controls{grid-column:1;grid-row:3;width:100%;margin:8px 0 0;padding:0!important}
+  .welcome .calendar-feedback{grid-column:1;grid-row:4;margin:8px 0 0}
+  .welcome .start-day{grid-column:1;grid-row:5;position:static;justify-self:stretch;align-self:start;margin-top:18px;width:100%;min-width:0;padding:13px 17px;font-size:19px;box-shadow:5px 6px 0 #ab8d77}
+}
+.site-quick-nav{position:sticky;top:0;z-index:8;border-top:2px solid #4b1b1e;background:#f8f0e3f5;backdrop-filter:blur(8px)}
+.site-quick-nav button{font-size:13px;letter-spacing:.015em}
+.site-quick-nav button.active{background:#4b1b1e;color:#fbf0df;border-color:#4b1b1e;box-shadow:none}
+.day-preview-head{align-items:baseline}.day-preview-head .kicker{color:#a44a33}
+.day-preview-section h3,.forum-after-head h3{color:#4b1b1e}
+.day-preview-row:hover,.day-preview-forum:hover{background:#f0e3d0}
+.day-preview-open:focus-visible,.period-tabs button:focus-visible,.calendar-day:focus-visible{outline:2px solid #a4382d;outline-offset:2px}
+.month-archive{margin-top:24px}.month-day summary:hover{color:#a4382d}
+body[data-screen="welcome"] #welcome,body[data-screen="music-hub"] #music-hub,body[data-screen="playlists"] #playlists-screen,body[data-screen="music"] #music-gallery,body[data-screen="forum"] #forum-rank{animation:edition-in .32s ease-out both}
+@keyframes edition-in{from{opacity:.78;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:1050px){.site-quick-nav{top:0}}
+@media(prefers-reduced-motion:reduce){body[data-screen] #welcome,body[data-screen] #music-hub,body[data-screen] #playlists-screen,body[data-screen] #music-gallery,body[data-screen] #forum-rank{animation:none}}
+.edition-gallery{border-top:1px solid #c5ac8b;margin-top:27px;padding-top:20px}
+.edition-gallery-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:13px}
+.edition-gallery-head small{font:10px Georgia,serif;letter-spacing:2px;color:#9c5745}.edition-gallery-head h3{font:normal clamp(25px,2.4vw,36px) Didot,'Bodoni 72',Georgia,serif;margin:4px 0 0}
+.edition-gallery-head button,.edition-gallery-discuss{border:0;border-bottom:1px solid currentColor;background:none;color:#793f34;padding:4px 0;font:italic 12px Georgia,serif;cursor:pointer}
+.edition-gallery-wall{display:grid;grid-template-columns:1.45fr 1fr 1fr;gap:12px}
+.edition-gallery-card{min-height:270px;position:relative;overflow:hidden;background:#281719;border:5px ridge #a46b36;box-shadow:3px 5px 0 #71503a;color:#fff0da}
+.edition-gallery-card.lead{min-height:350px;border-width:9px}
+.edition-gallery-scene{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(2px) brightness(.52) saturate(.65);transform:scale(1.02)}
+.edition-gallery-cover{position:absolute;left:50%;top:41%;width:min(48%,190px);aspect-ratio:1;transform:translate(-50%,-50%);border:8px solid #131214;border-radius:50%;padding:0;overflow:hidden;background:repeating-radial-gradient(circle,#131314 0 3px,#292829 4px 5px);box-shadow:0 9px 25px #000b;color:#f4e0c8;cursor:pointer;animation:turn 18s linear infinite}
+.edition-gallery-card.lead .edition-gallery-cover{width:min(50%,235px)}
+.edition-gallery-cover img{width:100%;height:100%;object-fit:cover;border-radius:50%;border:20px solid #201c1d}.edition-gallery-cover span{font:60px Georgia,serif}
+.edition-gallery-cover:hover,.edition-gallery-cover:focus-visible{animation-play-state:paused;outline:3px solid #e2bf94;outline-offset:3px}
+.edition-gallery-cover:after{content:'▶';position:absolute;right:8px;bottom:8px;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#f5e8d4;color:#47191b;font:13px Georgia,serif;box-shadow:0 0 8px #000b}
+.edition-gallery-caption{position:absolute;left:0;right:0;bottom:0;padding:37px 14px 13px;background:linear-gradient(transparent,#100909ed 23%)}
+.edition-gallery-caption small{font:9px Georgia,serif;letter-spacing:2px}.edition-gallery-caption h4{font:normal clamp(20px,2vw,29px) Didot,'Bodoni 72',Georgia,serif;margin:3px 0;overflow-wrap:anywhere}.edition-gallery-caption p{font:11px Georgia,serif;margin:3px 0 7px}.edition-gallery-discuss{color:#f4d1ad}
+.day-preview-art{border:0;cursor:pointer}.day-preview-art:hover,.day-preview-art:focus-visible{outline:2px solid #a4382d;outline-offset:2px}
+.song-art[role=button]:hover:after{content:'▶';position:absolute;inset:auto 8px 8px auto;background:#f6ecdb;color:#4b1b1e;padding:6px 8px;border-radius:50%;font-size:12px}
+@media(min-width:1051px){.welcome .calendar-day-preview{grid-row:2/6}.welcome .start-day{background:none;color:#6a4137;border:1px solid #a6896c;box-shadow:none;font-size:13px;justify-self:start;width:auto;padding:8px 10px}}
+@media(max-width:1050px){.edition-gallery-wall{grid-template-columns:1fr 1fr}.edition-gallery-card.lead{grid-column:1/-1}}
+@media(max-width:600px){.edition-gallery-wall{grid-template-columns:1fr}.edition-gallery-card.lead{grid-column:auto}.edition-gallery-card{min-height:300px}.edition-gallery-head{align-items:start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){.edition-gallery-cover{animation:none}}
+.room-shelf{border-top:1px solid #c5ac8b;margin-top:24px;padding-top:16px}
+.room-shelf-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:11px;gap:10px}.room-shelf-head small{font:9px Georgia,serif;letter-spacing:2px;color:#9c5745}.room-shelf-head h3{font:normal 27px Didot,'Bodoni 72',Georgia,serif;margin:3px 0}
+.room-shelf-controls{display:flex;gap:5px}.room-shelf-controls button{border:1px solid #b49a78;background:none;color:#60382e;padding:4px 11px;font:20px Georgia,serif;cursor:pointer}
+.room-shelf-track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;padding:3px 3px 12px}
+.room-shelf-card{display:flex;flex:0 0 min(220px,70%);min-height:165px;flex-direction:column;align-items:start;text-align:left;scroll-snap-align:start;border:1px solid #8b6a56;background:#e3d6c2;color:#392a28;padding:14px;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.room-shelf-card strong{font:normal 29px Didot,'Bodoni 72',Georgia,serif;margin:14px 0 5px}.room-shelf-card small{font:9px Georgia,serif;letter-spacing:2px}.room-shelf-card span{font:12px/1.35 Georgia,serif}.room-shelf-card em{font:11px Georgia,serif;margin-top:auto;padding-top:10px;border-bottom:1px solid}
+.room-shelf-card:hover,.room-shelf-card:focus-visible{transform:translateY(-3px);box-shadow:3px 5px 0 #a98b70;outline:2px solid #783e31;outline-offset:2px}
+.room-shelf-card.forum-all{background:#d8d7cf;color:#302b2a!important}.room-shelf-card.film-all{background:#292f37;color:#efe5d2}.room-shelf-card.art-all{background:#b9a296;color:#342928}.room-shelf-card.books-all{background:#bdaf98;color:#302d2a}
+.calendar-follow-controls .follow-controls-grid{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;padding:8px 2px 12px;scroll-snap-type:x proximity}.calendar-follow-controls .follow-chip{flex:none;scroll-snap-align:start;padding:7px 12px}
+body[data-space="daily"] #generic-feed{background:#ede1cd}body[data-space="film"] #generic-feed{background:#ece4d9}body[data-space="art"] #generic-feed{background:#e3d1c8}body[data-space="books"] #generic-feed{background:#e7e0d2}
+body[data-space="film"] #generic-feed .generic-card{background:#fbf6ed}
+body[data-screen="daily-all"] #generic-feed,body[data-screen="film-all"] #generic-feed,body[data-screen="art-all"] #generic-feed,body[data-screen="books-all"] #generic-feed{display:block!important}
+#generic-feed{padding:30px clamp(18px,3vw,44px) 100px;border:1px solid #ccb69c;min-height:calc(100vh - 180px)}
+body[data-space="film"] #generic-feed .generic-card-photo.no-photo{background:linear-gradient(135deg,#433b42,#8e6655)}
+body[data-space="books"] #generic-feed .generic-card-photo.no-photo{background:linear-gradient(130deg,#3c4239,#93846c)}
+body[data-space="books"] #generic-feed .generic-card h3{font-family:Didot,'Bodoni 72',Georgia,serif}
+body[data-space="books"] #generic-feed .generic-card-photo img{object-fit:contain;background:#e7e0d2}
+body[data-screen$="-all"] #generic-feed .generic-actions{padding-bottom:38px}
+body[data-screen$="-all"]:not([data-screen="music-all"]) #generic-feed .generic-actions #generic-post{display:none}
+body[data-screen$="-all"]:not([data-screen="music-all"]) .floating-post{bottom:17px;right:18px;padding:10px 14px}
+@media(prefers-reduced-motion:reduce){.room-shelf-card{transition:none}}
+/* Keep the editor route out of the public sign-in flow until its permissions are ready. */
+#auth-destination{display:none!important}
+#generic-feed{position:relative;overflow:hidden}
+#generic-feed::before{display:block;width:max-content;max-width:100%;margin:-30px -44px 23px;padding:9px 19px 9px 44px;background:#5c3630;color:#fff6e8;font:10px Georgia,serif;letter-spacing:.28em}
+body[data-space="daily"] #generic-feed::before{content:'IN THE MARGINS';background:#966d56}
+body[data-space="film"] #generic-feed::before{content:'AFTER THE CREDITS';background:#55494e}
+body[data-space="art"] #generic-feed::before{content:'A CLOSER LOOK';background:#5f6867}
+body[data-space="books"] #generic-feed::before{content:'THE READING ROOM';background:#54594f}
+body[data-space="books"] #generic-feed .generic-card-photo{border:14px solid #e6dcc8;border-left-width:23px;box-shadow:inset 6px 0 10px #3c312d36;background:#b7a68b}
+body[data-space="books"] #generic-feed .generic-card-photo img{object-fit:contain;background:#e7e0d2}
+@media(max-width:600px){#generic-feed::before{margin:-20px -18px 20px;padding-left:18px}}
+@media(min-width:1051px){.welcome .calendar-layout{position:sticky;top:79px;z-index:2;background:#f6f0e5;padding-bottom:10px;box-shadow:0 8px 12px #f6f0e5}.welcome .calendar-day-preview{grid-row:2/7}.welcome .calendar-follow-controls{grid-row:3}.welcome .calendar-feedback{grid-row:4}.welcome .start-day{grid-row:5}}
+body[data-space="books"] #generic-feed .generic-empty{border-left:12px solid #8a735d;background:repeating-linear-gradient(0deg,#fbf7ef 0 29px,#d8cab331 30px),#fbf7ef}
