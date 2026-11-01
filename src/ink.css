@@ -1,0 +1,119 @@
+/* An ink-dark reading room. Colour identifies a space; paper is reserved for the calendar. */
+:root{--bg:#10161a;--paper:#172026;--wine:#eee9df;--red:#b77f68;--accent:#d0a889;--accent2:#af8879;--category-accent:#b77f68;--ink-line:#3a4749;--ink-muted:#b0b8b5;--ink-raised:#202a30;color-scheme:dark}
+body,body[data-active-room="music"]{--room-accent:#c59070;--room-veil:#1d2930;background:#0e1418;color:#ece9df}
+body[data-active-room="film"]{--room-accent:#b7bec1;--room-veil:#222a30}
+body[data-active-room="art"]{--room-accent:#c89a9c;--room-veil:#30252b}
+body[data-active-room="books"]{--room-accent:#bec5a0;--room-veil:#293026}
+body[data-active-room="daily"]{--room-accent:#d0aa81;--room-veil:#302b25}
+body[data-active-room="forum"]{--room-accent:#9fb8bf;--room-veil:#223038}
+.site-shell,.header,.site-quick-nav.site-quick-nav,.welcome.welcome{background:#11191d;color:#eee9df}
+.header,.site-quick-nav.site-quick-nav{border-color:#344148}
+.brand,.header nav a,.quiet-action{color:#eae5dc}
+.header-actions .quiet-action,.header-actions .site-language,.header-actions .notification-bell,.header nav button{color:#d9dfdc}
+.header-actions .quiet-action:hover,.header-actions .quiet-action:focus-visible,.header-actions .notification-bell:hover{color:#fff;border-color:#a9b6b8}
+.header-actions .site-language select{color:#f0ece4;background:#263238;border-color:#66767a}
+.welcome.welcome{padding-top:19px}
+.welcome-heading{margin-bottom:17px}
+.welcome-heading h1{margin:4px 0 8px}
+.welcome-heading .jump-to-songs{margin-top:7px}
+.site-quick-nav button{color:#b2bbb9}
+.site-quick-nav button:hover,.site-quick-nav button.active{background:#26333a;border-color:#657174;color:#f3eee5;box-shadow:inset 0 -2px var(--room-accent)}
+.welcome.welcome{background:#11191d}
+.welcome:before{border-color:#38474a}
+.welcome-eyebrow,.welcome-heading>p:last-child,.display-mode-switch span{color:#a6b2b2}
+.welcome h1,.welcome-heading h1{color:#eee9df}
+.welcome .jump-to-songs,.calendar-feedback,.follow-controls-summary{color:var(--room-accent);border-color:#536166}
+.display-mode-switch button{background:#20292e;border-color:#506067;color:#d7dcd8}
+.display-mode-switch button.selected{background:#344248;border-color:var(--room-accent);color:#f5f1e9}
+.paper-calendar{background:#e9dfcb;color:#442e2d;box-shadow:5px 7px 0 #6c706936}
+.paper-calendar *{color-scheme:light}
+.calendar-day-preview,.welcome .calendar-day-preview{background:#182126;color:#ece8de;border-color:#506169;box-shadow:5px 7px 0 #090e12}
+.calendar-day-preview[data-room="film"],.calendar-day-preview[data-room="art"],.calendar-day-preview[data-room="books"],.calendar-day-preview[data-room="daily"],.calendar-day-preview[data-room="forum"]{background:var(--room-veil);color:#edece6}
+.day-preview-head,.day-preview-main,.day-preview-periodic,.month-archive,.forum-after-music,.room-switcher{border-color:#45535a}
+.day-preview-head>small,.day-preview-open span,.day-preview-forum span,.day-preview-empty,.day-preview-loading,.period-caption,.month-day summary small{color:#aab4b4}
+.day-preview-section h3,.forum-after-head h3,.day-preview-open,.day-preview-forum,.month-day summary,.room-content-intro h3{color:#ede9df}
+.day-preview-row,.day-preview-forum,.month-day,.room-content-intro{border-color:#3f4d53}
+.day-preview-row:hover,.day-preview-forum:hover{background:#29343a}
+.day-preview-art{background:#354149;color:#ebe9df}
+.day-preview-open small,.day-preview-forum small,.day-preview-head .kicker,.room-content-copy small{color:var(--room-accent)}
+.day-preview-periodic{background:#202c32;border-color:#44545b}
+.period-tabs button{color:#aab5b6}.period-tabs button.active{color:#f0e6da;border-color:var(--room-accent)}
+.day-preview-action,.day-preview-actions button{background:#263238;border-color:#54636a;color:#e7e8e1}
+.day-preview-action:hover,.day-preview-actions button:hover{background:#35454b;color:#fff}
+.day-preview-vote.chosen,.day-preview-actions button:last-child{background:#794d40;border-color:#a87761;color:#fff6ed}
+.room-switcher .room-shelf-card,.room-switcher .room-shelf-card.music-hub{color:#b7c1bf!important;border-color:transparent}
+.room-switcher .room-shelf-card:hover{background:#29353a;color:#f0eee8!important}
+.room-switcher .room-shelf-card.selected{background:#2a373c;color:#faf4e9!important;border-color:var(--room-accent);box-shadow:inset 0 -2px var(--room-accent)}
+.room-swipe-hint{display:block;margin-top:4px;color:#9da9aa;font:11px/1.35 system-ui,sans-serif}
+.room-content-open{background:#202b30;color:#eee9e2}.room-content-card{background:#202b30;border-color:#4b5960}
+.room-content-copy p{color:#b6c0bd}
+.room-content-image{background:#151d22}
+.follow-chart-side,.follow-controls-head,.follow-note,.follow-controls-head p,.follow-rail-open,.follow-rail-title,.follow-rail-none,.follow-rail-empty p{color:#bfc8c5}
+.follow-rail-row,.follow-rail-block,.follow-rail-title,.calendar-follow-controls{border-color:#435259}
+.follow-chip{background:#1e292f;border-color:#4c5a61;color:#d7dfdc}
+.follow-chip:hover{background:#303e43}
+.follow-chip.chosen{background:#38494c;border-color:var(--room-accent);color:#f6f0e5}
+.follow-family{padding:10px 0 13px;border-bottom:1px solid #354348}
+.follow-family h3{margin:0 0 8px;color:#a8b6b6;font:600 11px/1.4 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.room-shelf,.room-switcher,.edition-gallery{border-color:#435259}
+.room-shelf-head h3,.edition-gallery-head h3{color:#edeae2}
+.room-shelf-controls button{color:#d6d9d5;border-color:#53646b}
+.music-hub,.playlists-screen,.content-layout,.generic-feed,.forum-rank,.collection-screen{background:#131b20;color:#ece9e1}
+.music-hub-heading,.playlist-heading,.forum-rank,.generic-feed,.collection-heading{border-color:#4c5c61}
+.music-hub-heading p,.music-hub-help,.playlist-heading p,.collection-heading p{color:#aebbb9}
+.hub-actions button,.music-hub-categories summary{color:#d8dcd6;border-color:#55636a}
+.hub-total-card{background:#26343a;color:#f2eee5;box-shadow:5px 6px 0 #0b1114}
+.hub-category-card,.hub-group-card{filter:saturate(.65) brightness(.88)}
+.hub-category-card:hover,.hub-group-card:hover{filter:saturate(.85) brightness(1)}
+.forum-feature,.forum-list-card,.generic-card,.generic-empty,.forum-top-empty,.song-card,.collection-item{background:#202a30;color:#eae8e0;border-color:#536168;box-shadow:none}
+.forum-feature h3,.generic-card h3{color:#f3eee4}
+.forum-feature .byline,.forum-list-card .byline,.forum-feature .summary,.song-meta p,.song-meta small,.song-note{color:#adb8b7}
+.forum-feature .card-actions button,.forum-list-card .card-actions button,.outline-button,.listen-action{background:#29363b;color:#e6e8e1;border-color:#59686e}
+.forum-feature .card-actions button:hover,.forum-list-card .card-actions button:hover,.outline-button:hover,.listen-action:hover{background:#3a4a4f;color:#fff}
+body[data-space="daily"] #generic-feed,body[data-space="film"] #generic-feed,body[data-space="art"] #generic-feed,body[data-space="books"] #generic-feed{background:#131b20}
+body[data-space="film"] #generic-feed .generic-card{background:#222d33}
+.music-gallery{background:#131a20}
+.music-extra{background:#222e33;color:#e9e5dc;border-color:#52626a}
+.music-extra span:first-child{color:var(--room-accent)}
+.date-actions button,.date-actions input,.day-tile{background:#233036;color:#e5e8e2;border-color:#53636a}
+.day-tile.selected,.primary-button{background:#805345;color:#fff5ed;border-color:#ac7864}
+.feed-toolbar,.sidebar,.rule,.how,footer{border-color:#46565c;color:#b5c0bc}
+.sidebar .side-card,.side-card.subtle{background:#202b31;color:#dee3dc}
+.listen-dialog,dialog:not(.discussion-dialog){background:#1d282e;color:#e9e9e1;border-color:#6a7a7c;box-shadow:8px 12px 0 #080e12}
+.listen-shell{background:#1d282e}
+.listen-top,.listen-source-label{border-color:#4b5e63}
+.listen-top button,.listen-top h2,.listen-original,.listen-choice,.listen-provider{color:#ece9df}
+.listen-artist,.listen-note,.listen-source-label{color:#afbdba}
+.listen-choice,.listen-provider,.song-lookup-option{background:#27353b;border-color:#56686d;color:#ece9e2}
+.listen-choice.selected,.listen-choice:hover,.listen-provider:hover,.song-lookup-option:hover{background:#37494e;color:#fff}
+.listen-choice span,.song-lookup-option small{color:#b3c0bd}
+dialog:not(.discussion-dialog) input,dialog:not(.discussion-dialog) textarea,dialog:not(.discussion-dialog) select{background:#141e23;color:#f0eee7;border-color:#53666b}
+.collection-link,.collection-search{background:#223037;border-color:#52636a;color:#edf0e9}
+.collection-link:hover,.collection-link:focus-visible,.collection-link[aria-pressed="true"]{background:#3a4a50;border-color:var(--room-accent);color:#fff}
+.collection-item:hover{background:#2b3a40;border-color:var(--room-accent)}
+.collection-cover{background:#34454a;color:#eee7dc}
+.collection-item-copy small{color:var(--room-accent)}.collection-item-copy span{color:#abb9b7}
+.daytone-player-dock{background:#172126;border-top-color:#5c6b6d;color:#f0ede5}
+.daytone-player-dock.video{background:#172126}.player-dock-status{background:#27353a;color:#eee9e1}
+.daytone-video-dialog{background:#1d282e;color:#f0eee8;border-color:#5c6c70}
+.youtube-publish-preview:not([hidden]){background:#253238;border-color:#59696d;color:#e9e9e0}
+.video-dialog-foot button,.video-dialog-foot a{background:#26363b;border-color:#617175;color:#f1eee7}
+.video-dialog-foot button:hover,.video-dialog-foot a:hover{background:#3b4c51}
+.youtube-action,.listen-youtube,.edition-gallery-video{background:#9a3e39;border-color:#b95b51;color:#fff}
+.day-preview-row-actions{flex-wrap:wrap;gap:5px}
+.day-preview-video-links,.song-video-search,.edition-gallery-video-links{display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap}
+.video-search-link{display:inline-flex;align-items:center;justify-content:center;min-height:31px;padding:5px 9px;border:1px solid #64777b;background:#1c292e;color:#e7e7df;text-decoration:none;font:600 11px/1.2 system-ui,sans-serif;letter-spacing:.01em;white-space:nowrap;transition:background .16s,border-color .16s,transform .16s}
+.video-search-link:hover,.video-search-link:focus-visible{background:#34464b;border-color:#e4ddd2;color:#fff;transform:translateY(-1px);outline:none}
+.day-preview-video-links .video-search-link:first-child,.song-video-search .video-search-link:first-child,.edition-gallery-video-links .video-search-link:first-child{border-left:3px solid #b96158}
+.day-preview-video-links .video-search-link:last-child,.song-video-search .video-search-link:last-child,.edition-gallery-video-links .video-search-link:last-child{border-left:3px solid #7099b4}
+.song-video-search{margin:8px 0}
+.edition-gallery-video-links{position:absolute;right:12px;top:12px;z-index:4}
+.edition-gallery-video-links .video-search-link{background:#111b21e8;backdrop-filter:blur(5px)}
+.edition-gallery-card{border-color:#846c54;box-shadow:3px 5px 0 #0d1418}
+.edition-gallery-caption{background:linear-gradient(transparent,#0b1218f0 24%)}
+@keyframes room-content-arrive{from{opacity:.55;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes room-content-arrive-previous{from{opacity:.55;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+.calendar-day-preview[data-room-motion="previous"]>.day-preview-head,.calendar-day-preview[data-room-motion="previous"]>.day-preview-grid,.calendar-day-preview[data-room-motion="previous"]>.room-content,.calendar-day-preview[data-room-motion="previous"]>.edition-gallery,.calendar-day-preview[data-room-motion="previous"]>.month-archive{animation:room-content-arrive .26s ease-out both}
+.calendar-day-preview[data-room-motion="previous"]>.day-preview-head,.calendar-day-preview[data-room-motion="previous"]>.day-preview-grid,.calendar-day-preview[data-room-motion="previous"]>.room-content,.calendar-day-preview[data-room-motion="previous"]>.edition-gallery,.calendar-day-preview[data-room-motion="previous"]>.month-archive{animation-name:room-content-arrive-previous}
+.calendar-day-preview[data-room-motion="next"]>.day-preview-head,.calendar-day-preview[data-room-motion="next"]>.day-preview-grid,.calendar-day-preview[data-room-motion="next"]>.room-content,.calendar-day-preview[data-room-motion="next"]>.edition-gallery,.calendar-day-preview[data-room-motion="next"]>.month-archive{animation:room-content-arrive .26s ease-out both}
+@media(prefers-reduced-motion:reduce){.calendar-day-preview[data-room-motion]>*{animation:none!important}}

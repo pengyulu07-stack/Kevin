@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#111110">
+  <meta name="theme-color" content="#11191d">
   <meta name="description" content="DAYTONE：Share music and conversations today.">
   <title>DAYTONE</title>
   <link rel="stylesheet" href="src/style.css?v=20261029a">
@@ -16,13 +16,15 @@
   <link rel="stylesheet" href="src/listen.css?v=20261101a">
   <link rel="stylesheet" href="src/editorial.css?v=20261101a">
   <link rel="stylesheet" href="src/dark.css?v=20261101c">
+  <link rel="stylesheet" href="src/ink.css?v=20261101e">
+  <link rel="stylesheet" href="src/chart-presets.css?v=20261101b">
 </head>
 <body>
   <div class="site-shell">
     <header class="header">
       <a class="brand" href="./" aria-label="DAYTONE home"><span class="brand-mark">♫</span><span>DAYTONE<small>EVERY DAY, TOGETHER</small></span></a>
       <nav aria-label="Main navigation"><button id="space-select" class="nav-space" type="button">Back to entrance</button><span id="current-space-label">DAYTONE</span></nav>
-      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
+      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button><button class="quiet-action" id="chart-design-open" type="button">Design</button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
     </header>
     <nav id="site-quick-nav" class="site-quick-nav" aria-label="Main sections"><button type="button" data-go="welcome">Today</button><button type="button" data-go="following">Following</button><button type="button" data-go="explore">Library</button></nav>
 
@@ -83,8 +85,8 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="config.js"></script>
   <script defer src="vendor/supabase.js"></script>
-  <script defer src="src/main.js?v=20261101c"></script>
-  <script defer src="src/listen.js?v=20261101c"></script>
+  <script defer src="src/main.js?v=20261101d"></script>
+  <script defer src="src/listen.js?v=20261101d"></script>
   <script defer src="src/link-enrichment.js?v=20261101c"></script>
   <script defer src="src/community-v2.js?v=20261101c"></script>
   <script defer src="src/music-rooms.js?v=20261031b"></script>
@@ -93,8 +95,9 @@
   <script defer src="src/notifications.js?v=20261030a"></script>
   <script defer src="src/categories.js?v=20261029f"></script>
   <script defer src="src/author-tools.js?v=20261029f"></script>
-  <script defer src="src/site-language.js?v=20261101c"></script>
+  <script defer src="src/site-language.js?v=20261101d"></script>
   <script defer src="src/site-guide.js?v=20261029f"></script>
-  <script defer src="src/site-navigation.js?v=20261101c"></script>
+  <script defer src="src/site-navigation.js?v=20261101d"></script>
+  <script defer src="src/chart-presets.js?v=20261101b"></script>
 </body>
 </html>

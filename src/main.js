@@ -7,13 +7,21 @@ const client = ready ? window.supabase.createClient(config.supabaseUrl, config.s
 const emoji = ["👍", "👎", "🐶", "❤️", "😭", "🤮"];
 const audioTypes = { "audio/mpeg": "mp3", "audio/mp4": "m4a", "audio/x-m4a": "m4a", "audio/ogg": "ogg", "audio/wav": "wav", "audio/x-wav": "wav", "audio/webm": "webm" };
 const imageTypes = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" };
-const musicGenres = [
-  ["pop", "Pop"], ["rock", "Rock"], ["hiphop", "Hip-Hop & Rap"],
-  ["electronic", "Electronic"], ["rnb", "R&B / Soul"], ["jazz", "Jazz"],
-  ["classical", "Classical"], ["soundtrack", "Soundtrack"],
-  ["chinese", "Chinese Music"], ["instrumental", "Instrumental"],
-  ["folk", "Folk"], ["kpop", "K-Pop"], ["indie", "Indie"], ["other", "Other"]
+const musicGenreFamilies = [
+  {name:"Popular & guitar", genres:[["pop","Pop"],["rock","Rock"],["alternative","Alternative"],["indie","Indie"],["punk","Punk"],["metal","Metal"],["kpop","K-Pop"],["jpop","J-Pop"],["citypop","City Pop"]]},
+  {name:"Beats & electronic", genres:[["hiphop","Hip-Hop & Rap"],["rnb","R&B / Soul"],["electronic","Electronic"],["dance","Dance"],["funk","Funk"],["ambient","Ambient"]]},
+  {name:"Acoustic & composed", genres:[["jazz","Jazz"],["blues","Blues"],["classical","Classical"],["piano","Piano"],["instrumental","Instrumental"],["folk","Folk"],["acoustic","Acoustic"],["singer_songwriter","Singer-Songwriter"],["country","Country"],["opera","Opera & Choral"]]},
+  {name:"Screen & across borders", genres:[["soundtrack","Soundtrack"],["anime","Anime"],["chinese","Chinese Music"],["latin","Latin"],["afrobeats","Afrobeats"],["reggae","Reggae"],["experimental","Experimental"],["gospel","Gospel"],["other","Other"]]}
 ];
+const musicGenres = musicGenreFamilies.flatMap(family=>family.genres);
+for (const grid of document.querySelectorAll('#upload-form .genre-check-grid')) {
+  grid.replaceChildren();
+  for (const [key,label] of musicGenres) {
+    const choice=document.createElement('label'),input=document.createElement('input');
+    input.type='checkbox';input.name='genres';input.value=key;if(key==='other')input.checked=true;
+    choice.append(input,document.createTextNode(' '+label));grid.append(choice);
+  }
+}
 const musicLanguages = [["mandarin", "Chinese"], ["english", "English"], ["japanese", "Japanese"], ["korean", "Korean"], ["other_language", "Other languages"]];
 const musicCharts = [...musicGenres, ...musicLanguages];
 let customMusicCategories = [];
@@ -416,6 +424,9 @@ function createCard(song, rank, discussion = false) {
   listen.setAttribute('aria-label', 'Listen to ' + song.title);
   listen.addEventListener('click', () => window.DaytoneListen?.open(song));
   meta.append(listen);
+  const videoSearch = el('div','song-video-search');
+  videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song));
+  meta.append(videoSearch);
   if (youtubeVideoId(song.source_url)) {
     const video=el('button','listen-youtube','▶ YouTube video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');
     video.addEventListener('click',()=>window.DaytoneListen?.openVideo(song));meta.append(video);

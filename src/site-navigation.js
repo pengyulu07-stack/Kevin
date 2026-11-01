@@ -134,7 +134,9 @@
     vote.addEventListener('click',()=>void voteForSong(song.id,chosen));
     const discuss=node('button','day-preview-action day-preview-discuss');discuss.type='button';discuss.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10.5h8"/></svg>';discuss.title='Discuss '+song.title;discuss.setAttribute('aria-label','Discuss '+song.title);discuss.addEventListener('click',()=>discussSong(song,day));
     const copy=node('button','paper-copy');copy.type='button';copy.title='Copy song title';copy.setAttribute('aria-label','Copy song title');const icon=node('span','paper-copy-icon');icon.setAttribute('aria-hidden','true');copy.append(icon);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(song.title);toast('Copied: '+song.title);}catch{toast('Select the title to copy it.');}});actions.append(vote,discuss,copy);
-    if(youtubeVideoId(song.source_url)){const video=node('button','day-preview-action youtube-action','▶ YouTube');video.type='button';video.title='Watch '+song.title+' on YouTube';video.setAttribute('aria-label',video.title);video.addEventListener('click',()=>window.DaytoneListen?.openVideo(song));actions.append(video);}
+    const videoLinks=node('span','day-preview-video-links');
+    videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song));
+    actions.append(videoLinks);
     row.append(art,open,actions);return row;
   }
   function renderGallery(host,rows,counts,day){
@@ -149,7 +151,8 @@
       const cover=node('button','edition-gallery-cover');cover.type='button';cover.setAttribute('aria-label','Listen to '+song.title);cover.title='Listen to '+song.title;
       const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';cover.append(image);}else cover.append(node('span','','♫'));
       cover.addEventListener('click',()=>window.DaytoneListen?.open(song));card.append(cover);
-      if(youtubeVideoId(song.source_url)){const video=node('button','edition-gallery-video','▶ YouTube');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');video.addEventListener('click',()=>window.DaytoneListen?.openVideo(song));card.append(video);}
+      const videoLinks=node('div','edition-gallery-video-links');
+      videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song));card.append(videoLinks);
       const caption=node('div','edition-gallery-caption');caption.append(node('small','',String(index+1).padStart(2,'0')+' / '+(counts.get(song.id)||0)+((counts.get(song.id)||0)===1?' vote':' votes')),node('h4','',song.title),node('p','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
       const discuss=node('button','edition-gallery-discuss','Discuss ↗');discuss.type='button';discuss.addEventListener('click',()=>discussSong(song,day));caption.append(discuss);card.append(caption);wall.append(card);
     });host.append(wall);
@@ -163,14 +166,16 @@
       const introduction=document.querySelector('.welcome-heading>p:last-of-type');if(introduction)introduction.textContent='Choose a date, then browse what people shared.';
       void render();
     };
-    if(!document.startViewTransition||matchMedia('(prefers-reduced-motion: reduce)').matches){change();return;}
-    document.activeViewTransition?.skipTransition();document.documentElement.dataset.roomMotion=direction;
-    const transition=document.startViewTransition(change);void transition.finished.finally(()=>{delete document.documentElement.dataset.roomMotion;});
+    change();
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    host.dataset.roomMotion=direction;
+    clearTimeout(selectRoom.motionTimer);
+    selectRoom.motionTimer=setTimeout(()=>delete host.dataset.roomMotion,360);
   }
   function stepRoom(direction){const index=rooms.findIndex(room=>room.key===activeRoom);selectRoom(rooms[(index+direction+rooms.length)%rooms.length].key);}
   function roomShelf(){
     const shelf=node('section','room-shelf room-switcher'),head=node('div','room-shelf-head');
-    head.append(node('div','', ''));head.firstChild.append(node('small','','DAYTONE / SPACES'),node('h3','','Browse the spaces'));
+    head.append(node('div','', ''));head.firstChild.append(node('small','','DAYTONE / SPACES'),node('h3','','Browse the spaces'),node('span','room-swipe-hint','Swipe left or right over this page to change spaces.'));
     const controls=node('div','room-shelf-controls'),previous=node('button','','←'),next=node('button','','→');
     previous.type=next.type='button';previous.setAttribute('aria-label','Previous room');next.setAttribute('aria-label','Next room');controls.append(previous,next);head.append(controls);shelf.append(head);
     const track=node('div','room-shelf-track');track.setAttribute('aria-label','Choose a room');
@@ -250,18 +255,26 @@
   window.addEventListener('daytone:screen-changed',event=>{navState(event.detail.screen);if(event.detail.screen==='welcome')void render();else if(['following','explore'].includes(event.detail.screen))void renderCollection(event.detail.screen);else roomCache.clear();});
   window.addEventListener('daytone:vote',()=>{monthCache=null;if(app.getScreen()==='welcome')void render();});
   window.addEventListener('daytone:songs-loaded',()=>{monthCache=null;});
-  let gestureAmount=0,gestureTimer=0,gestureLocked=false;
-  const welcome=document.getElementById('welcome');
-  welcome.addEventListener('wheel',event=>{
-    if(app.getScreen()!=='welcome'||Math.abs(event.deltaX)<Math.abs(event.deltaY)*1.2||Math.abs(event.deltaX)<6)return;
-    event.preventDefault();if(gestureLocked)return;
-    gestureAmount+=event.deltaX;clearTimeout(gestureTimer);
-    gestureTimer=setTimeout(()=>{gestureAmount=0;gestureLocked=false;},320);
-    if(Math.abs(gestureAmount)>55){stepRoom(gestureAmount>0?1:-1);gestureAmount=0;gestureLocked=true;}
+  let gestureAmount=0,gestureTimer=0,gestureLockedUntil=0;
+  const gestureSurface=document.getElementById('welcome');
+  const gestureExcluded='input,select,textarea,summary,dialog,.room-shelf-track,.calendar-follow-controls,[contenteditable],audio,video,iframe';
+  gestureSurface.addEventListener('wheel',event=>{
+    if(app.getScreen()!=='welcome'||event.ctrlKey||event.metaKey||event.shiftKey||!(event.target instanceof Element)||event.target.closest(gestureExcluded))return;
+    // Only a deliberate two-finger horizontal gesture over the daily spread changes spaces.
+    // Leave vertical scrolling and the category strip to the browser.
+    const x=event.deltaX*(event.deltaMode===1?16:1),y=event.deltaY*(event.deltaMode===1?16:1);
+    if(Math.abs(x)<8||Math.abs(x)<Math.abs(y)*1.6){gestureAmount=0;return;}
+    event.preventDefault();
+    if(Date.now()<gestureLockedUntil)return;
+    gestureAmount+=x;clearTimeout(gestureTimer);
+    gestureTimer=setTimeout(()=>gestureAmount=0,220);
+    if(Math.abs(gestureAmount)<90)return;
+    const direction=gestureAmount<0?1:-1;gestureAmount=0;gestureLockedUntil=Date.now()+760;
+    stepRoom(direction);
   },{passive:false});
   let touchStart=null;
-  welcome.addEventListener('touchstart',event=>{const touch=event.touches[0];touchStart=touch?{x:touch.clientX,y:touch.clientY}:null;},{passive:true});
-  welcome.addEventListener('touchend',event=>{if(!touchStart||app.getScreen()!=='welcome')return;const touch=event.changedTouches[0],dx=touch.clientX-touchStart.x,dy=touch.clientY-touchStart.y;touchStart=null;if(Math.abs(dx)>85&&Math.abs(dx)>Math.abs(dy)*1.5)stepRoom(dx>0?1:-1);},{passive:true});
+  gestureSurface.addEventListener('touchstart',event=>{const touch=event.touches[0];touchStart=touch&&event.target instanceof Element&&!event.target.closest(gestureExcluded)?{x:touch.clientX,y:touch.clientY}:null;},{passive:true});
+  gestureSurface.addEventListener('touchend',event=>{if(!touchStart||app.getScreen()!=='welcome')return;const touch=event.changedTouches[0],dx=touch.clientX-touchStart.x,dy=touch.clientY-touchStart.y;touchStart=null;if(Math.abs(dx)>110&&Math.abs(dx)>Math.abs(dy)*1.6)stepRoom(dx>0?1:-1);},{passive:true});
   document.body.dataset.activeRoom=activeRoom;
   navState(app.getScreen());if(app.getScreen()==='welcome')void render();else if(['following','explore'].includes(app.getScreen()))void renderCollection(app.getScreen());
 })();

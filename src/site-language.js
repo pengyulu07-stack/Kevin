@@ -57,7 +57,13 @@
     'MUSIC / ARCHIVE':'音乐 / 往日','Open a date to see the songs shared that day.':'展开日期，查看当天的歌曲。',
     'No posts here for this date yet.':'这一天还没有人发布内容。','Discussions on this date':'这一天的讨论',
     'Music or video link':'音乐或视频链接','Public music or video link':'公开的音乐或视频链接',
-    'Album cover':'专辑封面','Remove':'移除','Cover removed. You can still add your own photo.':'已移除封面，也可以上传自己的照片。'
+    'Album cover':'专辑封面','Remove':'移除','Cover removed. You can still add your own photo.':'已移除封面，也可以上传自己的照片。',
+    'Design':'设计','DAYTONE / DESIGN':'DAYTONE / 设计','Choose a listening room':'选择榜单设计','Choose a look for each music chart. Your choice is saved on this device.':'为每个音乐榜选择画面样式；设置会保存在这台设备上。','Music chart':'音乐榜单','Music chart for design':'选择要设计的音乐榜','Close design choices':'关闭设计选择',
+    'Ink & Linen':'墨色与亚麻','Record Sleeve':'唱片封套','Archive':'档案','Midnight Cinema':'午夜电影','Letterpress':'凸版印刷','Gallery Wall':'画廊墙','Monochrome':'单色','Velvet':'丝绒','Blueprint':'蓝图','Collage':'拼贴',
+    'Quiet slate, warm lettering':'冷灰底色与暖色文字','The cover takes the stage':'突出专辑封面','A numbered listening index':'带编号的音乐档案','Deep blue and still frames':'深蓝与电影画面','Ink pressed into paper':'纸上印刷质感','Framed art and generous margins':'画框与留白','A restrained black-and-white edition':'克制的黑白画面','Soft burgundy and copper':'酒红与铜色','Fine lines and a cool field':'细线与冷色底面','Offset panels and editorial type':'错位拼贴与编辑字体',
+    'Popular & guitar':'流行与吉他','Beats & electronic':'节拍与电子','Acoustic & composed':'原声与作曲','Screen & across borders':'影像与世界','Language charts':'语言榜','Community categories':'社区分类',
+    'Alternative':'另类','Punk':'朋克','Metal':'金属','J-Pop':'日系流行','City Pop':'城市流行','Dance':'舞曲','Funk':'放克','Ambient':'氛围','Blues':'蓝调','Piano':'钢琴','Acoustic':'原声','Singer-Songwriter':'创作歌手','Country':'乡村','Opera & Choral':'歌剧与合唱','Anime':'动漫','Latin':'拉丁','Afrobeats':'非洲节拍','Reggae':'雷鬼','Experimental':'实验','Gospel':'福音',
+    'Bilibili ↗':'B 站 ↗','Swipe left or right over this page to change spaces.':'在这个页面横向滑动，可切换栏目。'
   });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;

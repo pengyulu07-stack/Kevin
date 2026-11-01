@@ -8,6 +8,13 @@
     classical: ['#60634e','#f1e7cf'], soundtrack: ['#26394d','#d7dee2'], chinese: ['#80352b','#f1d5ae'],
     instrumental: ['#4b665f','#e5e7d6'], folk: ['#86664f','#f6dfbc'], kpop: ['#6d4770','#f6dceb'],
     indie: ['#506356','#e9dab7'], other: ['#64352e','#f4e6ce'],
+    alternative:['#394a55','#e7ded0'], punk:['#543942','#e9d0ba'], metal:['#293237','#d6d4cd'],
+    jpop:['#5b4b67','#eee4de'], citypop:['#295d67','#d9e3d8'], dance:['#344d69','#e8dbdb'],
+    funk:['#665342','#f1e1bd'], ambient:['#4b626c','#e3e7dc'], blues:['#374863','#ddd8ca'],
+    piano:['#545954','#eee7d9'], acoustic:['#665846','#ede1ca'], singer_songwriter:['#735a55','#e9d7c9'],
+    country:['#6c5541','#e9ddc7'], opera:['#494453','#eae2d4'], anime:['#575270','#e6e0df'],
+    latin:['#80584b','#f1dfcd'], afrobeats:['#6c5c43','#ece2c6'], reggae:['#465a47','#e0e5cf'],
+    experimental:['#42535b','#e0e2da'], gospel:['#595241','#efe7d3'],
     mandarin: ['#6c443d','#f6e9d5'], english: ['#283f53','#e7e9e4'], japanese: ['#8d4e54','#f5e8df'],
     korean: ['#534a70','#eee8f5'], other_language: ['#596047','#f1ebd4']
   };
@@ -57,12 +64,17 @@
     const host=$r('calendar-follow-controls'); host.replaceChildren();host.open=true;
     const summary=el('summary','follow-controls-summary','Choose up to five followed charts ↗');host.append(summary);
     const top=el('div','follow-controls-head'); top.append(el('div','', 'FOLLOW FIVE CHARTS'),el('p','', 'Pick up to five music charts. Their daily leaders appear beside your calendar.')); host.append(top);
-    const grid=el('div','follow-controls-grid');
-    for(const [key,label] of musicCharts){
-      const chosen=follows.some(x=>x.genre===key),button=el('button','follow-chip'+(chosen?' chosen':''),label);
-      button.type='button';button.setAttribute('aria-pressed',String(chosen));button.addEventListener('click',()=>void toggleFollow(key));grid.append(button);
+    const sections=[...musicGenreFamilies.map(family=>[family.name,family.genres]),['Language charts',musicLanguages]];
+    const extras=musicGenres.filter(([key])=>!musicGenreFamilies.some(family=>family.genres.some(([id])=>id===key)));
+    if(extras.length)sections.push(['Community categories',extras]);
+    for(const [name,items] of sections){
+      const section=el('section','follow-family'),heading=el('h3','',name),grid=el('div','follow-controls-grid');section.append(heading);
+      for(const [key,label] of items){
+        const chosen=follows.some(x=>x.genre===key),button=el('button','follow-chip'+(chosen?' chosen':''),label);
+        button.type='button';button.setAttribute('aria-pressed',String(chosen));button.addEventListener('click',()=>void toggleFollow(key));grid.append(button);
+      }
+      section.append(grid);host.append(section);
     }
-    host.append(grid);
     host.append(el('small','follow-note',user ? follows.length+'/5 charts followed' : 'Sign in to keep your choices across devices.'));
   }
   async function toggleFollow(key) {
@@ -104,7 +116,11 @@
     const total=$r('music-hub-total');total.replaceChildren();const all=el('button','hub-total-card');all.type='button';all.append(el('small','','01 / THE PUBLIC CHART'),el('strong','','All Music'),el('span','','Every public song, one daily Top 5 ↗'));all.addEventListener('click',()=>app.openGenre('all'));total.append(all);
     const followHost=$r('music-hub-follows');followHost.replaceChildren();followHost.append(el('h2','','Following & your groups'));if(follows.length||groups.length){const grid=el('div','hub-card-grid');for(const item of follows)grid.append(categoryCard(item.genre,musicGenreName(item.genre),'followed'));for(const group of groups){const button=el('button','hub-group-card');button.type='button';const [ink,paper]=groupThemes[group.theme_index]||groupThemes[0];button.style.setProperty('--card-ink',ink);button.style.setProperty('--card-paper',paper);button.append(el('small','','PRIVATE / MEMBERS ONLY'),el('strong','',group.name),el('span','','Enter group ↗'));button.addEventListener('click',()=>app.openGroup(group.id));grid.append(button);}followHost.append(grid);}else{followHost.append(el('p','hub-follow-empty','Follow up to five charts beside the calendar, or join a private group. Your choices will appear here.'));}
     $r('music-hub-groups').replaceChildren();
-    const categoryHost=$r('music-hub-category-grid');categoryHost.replaceChildren();for(const [key,label] of musicGenres)categoryHost.append(categoryCard(key,label));categoryHost.append(el('h3','category-divider','LANGUAGE CHARTS'));for(const [key,label] of musicLanguages)categoryHost.append(categoryCard(key,label));
+    const categoryHost=$r('music-hub-category-grid');categoryHost.replaceChildren();
+    for(const family of musicGenreFamilies){categoryHost.append(el('h3','category-divider',family.name.toUpperCase()));for(const [key,label] of family.genres)categoryHost.append(categoryCard(key,label));}
+    const extras=musicGenres.filter(([key])=>!musicGenreFamilies.some(family=>family.genres.some(([id])=>id===key)));
+    if(extras.length){categoryHost.append(el('h3','category-divider','COMMUNITY CATEGORIES'));for(const [key,label] of extras)categoryHost.append(categoryCard(key,label));}
+    categoryHost.append(el('h3','category-divider','LANGUAGE CHARTS'));for(const [key,label] of musicLanguages)categoryHost.append(categoryCard(key,label));
   }
   function openFeedback(){if(!requireAccount())return;$r('feedback-error').textContent='';showDialog('feedback-dialog');}
   async function sendFeedback(event){event.preventDefault();if(!requireAccount())return;const form=$r('feedback-form'),message=form.elements.message.value.trim(),day=today();if(message.length<3){$r('feedback-error').textContent='Write a little more about your idea.';return;}

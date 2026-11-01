@@ -22,13 +22,25 @@
   const node=(tag,className,value)=>{const item=document.createElement(tag);item.className=className;if(value!=null)item.textContent=value;return item;};
   const normal=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
   function platform(value){try{const host=new URL(value).hostname;return ['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(host)?'SoundCloud':['bilibili.com','www.bilibili.com','m.bilibili.com'].includes(host)?'Bilibili':['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com','youtu.be'].includes(host)?'YouTube':['c6.y.qq.com','y.qq.com','i.y.qq.com'].includes(host)?'QQ Music':['music.163.com','y.music.163.com'].includes(host)?'NetEase Music':host==='open.spotify.com'?'Spotify':host==='music.apple.com'?'Apple Music':'Original link';}catch{return 'Original link';}}
+  function videoSearchUrl(provider,song){
+    const query=[song?.title,song?.artist].filter(Boolean).join(' ').trim();
+    const base=provider==='bilibili'?'https://search.bilibili.com/all?keyword=':'https://www.youtube.com/results?search_query=';
+    return base+encodeURIComponent(query);
+  }
+  function videoSearchLink(provider,song,extraClass=''){
+    const name=provider==='bilibili'?'Bilibili':'YouTube';
+    const link=node('a','video-search-link '+extraClass,name+' ↗');
+    link.href=videoSearchUrl(provider,song);link.target='_blank';link.rel='noopener noreferrer';
+    link.title='Search '+name+' for '+song.title;link.setAttribute('aria-label',link.title);
+    return link;
+  }
   function directLink(url,label){const link=node('a','listen-original',label+' ↗');link.href=url;link.target='_blank';link.rel='noopener noreferrer';return link;}
   function searchLinks(title,artist){
     const term=[title,artist].filter(Boolean).join(' '),links=node('div','listen-links');
     for(const [host,label] of [
       ['https://y.qq.com/n/ryqq/search?w=','QQ Music'],
       ['https://music.163.com/#/search/m/?s=','NetEase Music'],
-      ['https://www.bilibili.com/search?keyword=','Bilibili'],
+      ['https://search.bilibili.com/all?keyword=','Bilibili'],
       ['https://soundcloud.com/search?q=','SoundCloud'],
       ['https://www.youtube.com/results?search_query=','YouTube'],
       ['https://open.spotify.com/search/','Spotify'],
@@ -103,5 +115,5 @@
     if(!videoDialog.open)videoDialog.showModal();
   }
   dialog.addEventListener('close',()=>{++request;body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo};
+  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink};
 })();
