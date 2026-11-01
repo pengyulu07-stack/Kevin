@@ -40,7 +40,16 @@
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     const results=document.createElement('div');results.className='song-lookup-results';results.setAttribute('aria-label','Matching recordings');
     const preview=document.createElement('div');preview.className='catalog-cover-preview';preview.hidden=true;
-    title.closest('label').after(button,status,preview,results);
+    const sources=document.createElement('details');sources.className='publish-source-search';
+    const summary=document.createElement('summary');summary.textContent='Find a playable version';
+    const hint=document.createElement('p');hint.textContent='Open a search, check the version, then paste its link into Music or video link below.';
+    const links=document.createElement('div');links.className='publish-source-links';
+    const providers=[['YouTube','https://www.youtube.com/results?search_query='],['Bilibili','https://search.bilibili.com/all?keyword='],['SoundCloud','https://soundcloud.com/search?q=']];
+    const sourceLinks=providers.map(([name,base])=>{const link=document.createElement('a');link.textContent=name+' ↗';link.target='_blank';link.rel='noopener noreferrer';link.dataset.base=base;links.append(link);return link;});
+    const updateSources=()=>{const query=[title.value.trim(),artist.value.trim()].filter(Boolean).join(' ');for(const link of sourceLinks){if(query)link.href=link.dataset.base+encodeURIComponent(query);else link.removeAttribute('href');link.setAttribute('aria-disabled',String(!query));link.tabIndex=query?0:-1;}};
+    sources.append(summary,hint,links);
+    title.closest('label').after(button,status,preview,results,sources);
+    updateSources();title.addEventListener('input',updateSources);artist.addEventListener('input',updateSources);
     let timer,sequence=0,suggestedArtist='';
     const artwork=value=>{
       try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com'))?url.href:'';} catch{return '';}
@@ -58,6 +67,7 @@
     const select=(row,automatic)=>{
       if(!automatic)title.value=row.trackName;
       if(!automatic||!artist.value.trim()){artist.value=row.artistName;suggestedArtist=row.artistName;}
+      updateSources();
       showCatalog(row);
       status.replaceChildren(document.createTextNode((automatic?'Artist and cover found: ':'Album details selected: ')+row.trackName+' · '+row.artistName+'. To let visitors play it here, add a playable link or audio file. '));
       const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='Open on Apple Music ↗';status.append(source);
@@ -113,7 +123,7 @@
       finally{if(current===sequence)button.disabled=false;}
     }
     button.addEventListener('click',()=>void search());
-    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);});
+    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);updateSources();});
   }
   function setup(form,input,title,artist,playlist=false){
     if(!form||!input||!title)return;
