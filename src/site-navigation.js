@@ -77,7 +77,7 @@
         if(!choices.childElementCount)intro.append(node('p','collection-status',user?'Follow a chart on Home, or join a private group.':'Log in to keep the charts and groups you follow.'));
         else intro.append(choices);
         intro.append(collectionButton('Choose music charts ↗',()=>app.show('music-hub'),'muted'));root.append(intro);
-        const recent=publicSongs.filter(song=>[...keys].some(key=>songInChart(song,key))).slice(0,24);
+        const recent=publicSongs.filter(song=>[...keys].some(key=>songInChart(song,key)));
         const section=node('div','collection-section');section.append(node('h2','','New in your charts'));
         if(!recent.length)section.append(node('p','collection-status','New songs from followed charts will appear here.'));
         else {const list=node('div','collection-list');recent.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);}
