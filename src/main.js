@@ -316,6 +316,21 @@ function renderSongs() {
   if (location.hash.startsWith("#song-")) document.getElementById(location.hash.slice(1))?.scrollIntoView({ block: "center" });
 }
 function publicFile(bucket, path) { return client.storage.from(bucket).getPublicUrl(path).data.publicUrl; }
+function youtubeVideoId(value) {
+  try {
+    const url=new URL(value);let id='';
+    if(url.hostname==='youtu.be')id=url.pathname.slice(1);
+    else if(['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com'].includes(url.hostname))id=url.pathname==='/watch'?url.searchParams.get('v')||'':url.pathname.match(/^\/(?:shorts|live|embed)\/([A-Za-z0-9_-]{11})\/?$/)?.[1]||'';
+    return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
+  } catch{return '';}
+}
+function songCoverUrl(song) { const id=youtubeVideoId(song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
+function soundCloudTrackUrl(value) {
+  try { const url=new URL(value);if(url.protocol!=='https:'||!['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname))return '';
+    const parts=url.pathname.split('/').filter(Boolean);if(parts.length!==2||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
+    return 'https://soundcloud.com/'+parts.map(encodeURIComponent).join('/');
+  } catch{return '';}
+}
 function musicEmbed(sourceUrl) {
   try {
     const source = new URL(sourceUrl);
@@ -324,7 +339,21 @@ function musicEmbed(sourceUrl) {
       const audio=el('audio','song-player');audio.controls=true;audio.preload='none';audio.src=source.href;audio.setAttribute('referrerpolicy','no-referrer');audio.setAttribute('aria-label','Play linked audio');return audio;
     }
     const frame = el('iframe', 'platform-player');
-    if (source.hostname === 'open.spotify.com') {
+    const youtubeId=youtubeVideoId(source.href);
+    if (youtubeId) {
+      frame.src='https://www.youtube-nocookie.com/embed/'+youtubeId+'?rel=0';
+      frame.title='Play on YouTube';
+      frame.classList.add('video-player');
+    } else if (['www.bilibili.com','bilibili.com','m.bilibili.com'].includes(source.hostname)) {
+      const bvid=source.pathname.match(/^\/video\/(BV[A-Za-z0-9]{10})\/?$/)?.[1];
+      if(!bvid)return null;
+      frame.src='https://player.bilibili.com/player.html?bvid='+bvid+'&page=1';
+      frame.title='Play on Bilibili';
+      frame.classList.add('video-player');
+    } else if (soundCloudTrackUrl(source.href)) {
+      frame.src='https://w.soundcloud.com/player/?url='+encodeURIComponent(soundCloudTrackUrl(source.href))+'&color=%23c6563d&auto_play=false&show_artwork=true&show_comments=false';
+      frame.title='Listen on SoundCloud';
+    } else if (source.hostname === 'open.spotify.com') {
       const match = source.pathname.match(/^\/(track|album|playlist)\/([A-Za-z0-9]{22})\/?$/);
       if (!match) return null;
       frame.src = 'https://open.spotify.com/embed/' + match[1] + '/' + match[2];
@@ -346,10 +375,11 @@ function createCard(song, rank, discussion = false) {
   const card = el("article", "song-card");
   if (!discussion) card.id = "song-" + song.id;
   card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + (supportCount(song)===1 ? " vote" : " votes")));
-  const art = el("div", "song-art tone-" + (song.title.length % 4) + (song.cover_path ? " has-image" : ""));
-  if (song.cover_path) {
+  const coverUrl = songCoverUrl(song);
+  const art = el("div", "song-art tone-" + (song.title.length % 4) + (coverUrl ? " has-image" : ""));
+  if (coverUrl) {
     const image = el("img");
-    image.src = publicFile("images", song.cover_path);
+    image.src = coverUrl;
     image.alt = song.title + " cover";
     image.loading = "lazy";
     art.append(image);
@@ -386,6 +416,10 @@ function createCard(song, rank, discussion = false) {
   listen.setAttribute('aria-label', 'Listen to ' + song.title);
   listen.addEventListener('click', () => window.DaytoneListen?.open(song));
   meta.append(listen);
+  if (youtubeVideoId(song.source_url)) {
+    const video=el('button','listen-youtube','▶ YouTube video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');
+    video.addEventListener('click',()=>window.DaytoneListen?.openVideo(song));meta.append(video);
+  }
   if (song.audio_path) {
     const audio = el("audio", "song-player");
     audio.controls = true;
@@ -402,7 +436,7 @@ function createCard(song, rank, discussion = false) {
   }
   const bottom = el("div", "card-bottom");
   const chosenVote = (votes.get(song.id) || []).some(item => item.user_id === user?.id);
-  const voteButton = el('button','song-vote'+(chosenVote?' chosen':''),'☆ Vote · '+supportCount(song));
+  const voteButton = el('button','song-vote'+(chosenVote?' chosen':''),(chosenVote?'♥':'♡')+' Support · '+supportCount(song));
   voteButton.type='button';voteButton.setAttribute('aria-pressed',String(chosenVote));voteButton.addEventListener('click',()=>void voteForSong(song.id,chosenVote));
   const row = el("div", "reaction-row");
   const rows = reactions.get(song.id) || [];
@@ -531,6 +565,15 @@ async function prepareImage(file) {
     throw new Error("This photo could not be compressed below 1 MB. Crop it or choose another.");
   } finally { source.close(); }
 }
+async function catalogCoverFile(value) {
+  const url = new URL(value);
+  if (url.protocol !== 'https:' || !(url.hostname === 'mzstatic.com' || url.hostname.endsWith('.mzstatic.com'))) throw new Error('Invalid catalog cover.');
+  const response = await fetch(url.href, { mode: 'cors', signal: AbortSignal.timeout(6000) });
+  if (!response.ok) throw new Error('Catalog cover could not be loaded.');
+  const blob = await response.blob();
+  if (!imageTypes[blob.type] || blob.size > 15 * 1024 * 1024) throw new Error('Catalog cover format is unavailable.');
+  return prepareImage(new File([blob], 'catalog-cover.' + imageTypes[blob.type], { type: blob.type }));
+}
 async function cleanUploads(paths) {
   for (const item of paths) {
     try { await client.storage.from(item.bucket).remove([item.path]); } catch { /* A failed cleanup can be removed by the owner later. */ }
@@ -563,6 +606,9 @@ async function publish(event) {
       sourceUrl = parsed.href;
     } catch { errorNode.textContent = "Music links must start with https://."; return; }
   }
+  if (sourceUrl && youtubeVideoId(sourceUrl) && !form.elements.confirm_video?.checked) {
+    errorNode.textContent = "Confirm that this YouTube video is the version you want to share."; return;
+  }
   const button = $("submit-song");
   button.disabled = true;
   button.textContent = "Publishing…";
@@ -580,7 +626,13 @@ async function publish(event) {
       audioPath = await uploadFile("tracks", file, audioTypes, 8 * 1024 * 1024);
       if (audioPath) uploaded.push({ bucket: "tracks", path: audioPath });
     }
-    coverPath = await uploadFile("images", await prepareImage(cover), imageTypes, 1024 * 1024);
+    let coverToUpload = await prepareImage(cover);
+    let coverUnavailable = false;
+    if (!(coverToUpload instanceof File) && form.dataset.catalogArtUrl) {
+      try { coverToUpload = await catalogCoverFile(form.dataset.catalogArtUrl); }
+      catch { coverUnavailable = true; }
+    }
+    coverPath = await uploadFile("images", coverToUpload, imageTypes, 1024 * 1024);
     if (coverPath) uploaded.push({ bucket: "images", path: coverPath });
     const song = {
       id: crypto.randomUUID(), owner_id: user.id, day, title, artist, nickname: profile.nickname, note, genre: genres[0], genres, language,
@@ -598,7 +650,7 @@ async function publish(event) {
     form.reset();
     $("upload-dialog").close();
     setDay(day);
-    toast("Song added to today’s list.");
+    toast(coverUnavailable ? 'Song shared. The catalog cover could not be added; you can edit it later.' : 'Song shared.');
   } catch (error) {
     await cleanUploads(uploaded);
     errorNode.textContent = error.message || "Could not publish. Please try again.";

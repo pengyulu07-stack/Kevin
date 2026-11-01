@@ -9,6 +9,17 @@
 #listen-body h3{font:normal clamp(28px,4vw,42px)/1.16 Didot,'Bodoni 72',Georgia,serif;margin:22px 0 4px;overflow-wrap:anywhere}
 .listen-artist{font:italic 16px Georgia,serif;color:#806553;margin:0 0 20px}.listen-note{font:13px/1.5 Georgia,serif;color:#806b5b;margin:13px 0}
 .listen-player{display:block;width:100%;min-height:150px;margin:20px 0;border:0;background:#231b1b}.listen-player:is(audio){min-height:42px;height:42px}
+.listen-player-stage{position:relative;min-height:160px;margin:17px 0 8px;background:#211b1b;overflow:hidden}
+.listen-player-stage .listen-player{margin:0;min-height:160px;opacity:0;transition:opacity .2s ease}
+.listen-player-stage.ready .listen-player{opacity:1}
+.listen-player-stage .video-player{aspect-ratio:16/9;min-height:260px}
+.listen-player-status{position:absolute;inset:0;display:grid;place-items:center;padding:20px;text-align:center;color:#f7ebdb;font:14px Georgia,serif;background:repeating-linear-gradient(90deg,#302522 0 22px,#392c27 23px 44px);animation:listen-pulse 1.3s ease-in-out infinite alternate}
+@keyframes listen-pulse{to{filter:brightness(1.22)}}
+.catalog-cover-preview:not([hidden]){display:flex;align-items:center;gap:10px;margin:8px 0 15px;padding:8px;border:1px solid #d4bea5;background:#f5ecdf;color:#54392f}
+.catalog-cover-preview img{width:54px;height:54px;object-fit:cover;flex:none}
+.catalog-cover-preview span{min-width:0;flex:1;font:12px/1.35 Georgia,serif}
+.catalog-cover-preview button{border:0;background:transparent;text-decoration:underline;color:inherit;cursor:pointer;font:12px Georgia,serif}
+@media(prefers-reduced-motion:reduce){.listen-player-status{animation:none}.listen-player-stage .listen-player{transition:none}}
 .listen-original{display:inline-block;border-bottom:1px solid #8d5a49;color:#713d34;padding:5px 0;margin:6px 0;font:14px Georgia,serif}
 .listen-choices{display:grid;gap:5px;max-height:210px;overflow:auto}.listen-choice{display:grid;text-align:left;gap:3px;border:1px solid #cbb8a1;background:#f8eee0;color:#4d302c;padding:9px 11px;cursor:pointer}
 .listen-choice.selected,.listen-choice:hover{border-color:#7e4a39;background:#edddc9}.listen-choice strong{font:16px Georgia,serif}.listen-choice span{font:11px Georgia,serif;color:#836b58}

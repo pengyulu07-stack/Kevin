@@ -33,10 +33,36 @@
     'Today’s picks':'今日精选','TODAY ON DISPLAY':'今天的展示','Ranked by support today':'按今天的支持数排序','View all posts today ↗':'查看今天全部内容 ↗','← Back to today’s Top':'← 返回今日热门','＋ Share something':'＋ 分享内容','ADD TO DAYTONE':'加入 DAYTONE','Share':'分享','Up to three forum posts per day. Only the title is required.':'每天最多发布三条论坛内容，只需填写标题。','Name / title':'名称 / 标题','Give this post a title':'为内容取个标题','A title is enough; add your thoughts if you like':'只写标题也可以；也欢迎写下你的想法','Photo or meme (optional)':'照片或表情包（可选）','Related link (optional)':'相关链接（可选）','Publish post ↗':'发布内容 ↗','Close feedback':'关闭意见箱','What would you change or add?':'你想修改或增加什么？',
     'MAKE YOURSELF AT HOME':'把入口布置成喜欢的样子','Your entrance':'你的入口','Close settings':'关闭设置','Your background and room menu, just for you. Your account keeps these choices on other devices.':'背景与选项位置由你决定；登录后换设备也会保留。','Background':'背景','Daily cinema':'每日电影画面','A different frame each day, from 20 film stills.':'从 20 张电影画面中每天轮换一张。','Keep a favorite':'固定一张','Choose one frame from the collection.':'从图库中选一张喜欢的。','Upload my own':'上传自己的照片','A private photo, visible only to you.':'私人照片，只有你自己能看见。','Browse the 20-frame collection':'浏览 20 张图库照片','Room menu position':'空间菜单位置','Automatic · suit the image':'自动适应照片','Left side':'左侧','Right side':'右侧','Room menu layout':'空间菜单排列','Automatic':'自动','Vertical list':'竖排列表','Two-column grid':'两列排列','The date sits on the opposite side. On small screens, the menu moves below the image so everything stays readable.':'日期显示在另一侧；小屏幕上菜单会移到图片下方，方便阅读。','Keep the right side quiet, or let the bell hold new activity.':'右侧可以保持安静，也可以让铃铛收纳新动态。','Show':'显示范围','Followed charts, groups & replies to my posts':'关注的榜单、小组，以及自己帖子的回复','All public and joined-group activity':'所有公开内容及已加入小组的动态','Display':'显示方式','Bell only':'仅铃铛','Right-side text':'右侧文字','Bell and right-side text':'铃铛与右侧文字','Changes save to your account.':'设置会保存到你的账号。','Your entrance preview':'入口预览','Reset':'重置','Save my entrance ↗':'保存我的入口 ↗'
   };
+  Object.assign(zh,{
+    'Home':'首页','Following':'关注','Explore all':'全部内容','Library':'资料库','Main sections':'主栏目',
+    'YOUR DAYTONE':'你的 DAYTONE','The music charts and private groups you chose.':'你关注的音乐榜单和加入的私人小组。',
+    'THE WHOLE COLLECTION':'全部分享','Every public room has a place here. Start with what was shared recently.':'这里可以查看所有公开栏目，从最近的分享开始。',
+    'Your choices':'你的关注','New in your charts':'关注榜单的新歌','Browse by room':'按栏目浏览','Recently shared':'最近分享','All public shares':'全部公开分享','All':'全部','Search titles and artists':'搜索名称、歌手或作者','Search public shares':'搜索公开分享','No matching shares.':'没有符合条件的分享。',
+    'Choose music charts ↗':'选择音乐榜单 ↗','Music & charts ↗':'音乐与榜单 ↗','Playlists ↗':'歌单 ↗','Daily Life ↗':'日常 ↗','Forum ↗':'论坛 ↗','Film ↗':'电影 ↗','Art ↗':'艺术 ↗','Books ↗':'书籍 ↗',
+    'Log in to keep the charts and groups you follow.':'登录后可以保存关注的榜单与小组。','Follow a chart on Home, or join a private group.':'在首页关注榜单，或加入私人小组。',
+    'New songs from followed charts will appear here.':'关注榜单有新歌时会显示在这里。','Nothing has been shared yet.':'还没有公开分享。','Loading…':'正在加载…',
+    'New songs from your charts and groups, with your own posts below.':'关注的榜单与小组有新内容时会显示在这里；下方可查看自己的分享。','Browse everything shared publicly.':'浏览全部公开分享。','Your shares':'我的分享','Things you share will appear here.':'你发布的内容会显示在这里。',
+    'Check this video version':'确认视频版本','This is the video listeners will see.':'听众将看到这个视频。','Yes, this is the version I want to share':'是的，我要分享这个版本。','YouTube video':'YouTube 视频','Shared version':'分享者选择的版本','Full screen':'全屏',
+    'NOW PLAYING / DAYTONE':'正在播放 / DAYTONE','Stop and close player':'停止并关闭播放器','Still loading? Use the original link above.':'加载较慢，可点击上方原始链接。',
+    'DAYTONE / LISTEN':'DAYTONE / 播放','Listen':'播放','Close player':'关闭播放器',
+    'Find it in another app':'在其他应用中搜索','Finding a matching recording…':'正在查找对应版本…',
+    'Choose a recording:':'选择版本：','No matching recording found. Search an app below.':'没有找到对应版本，可以在下方应用中搜索。',
+    'Could not find a recording. Search an app below.':'暂时无法查找，可以在下方应用中搜索。',
+    'DAYTONE / SPACES':'DAYTONE / 空间','Browse the spaces':'浏览空间',
+    'Songs and charts.':'歌曲和榜单。','Films shared today.':'当天分享的电影。','Art shared today.':'当天分享的艺术。',
+    'Books shared today.':'当天分享的书。','Notes from today.':'当天的日常。','Questions and discussion.':'提问和讨论。',
+    'Choose a date, then browse what people shared.':'选择日期，看看大家分享了什么。',
+    'See Music ↓':'查看音乐 ↓','Top 5 on this date':'这一天的前五名','Popular songs':'热门歌曲',
+    'MUSIC / TODAY':'音乐 / 今天','Songs on display':'展示中的歌曲','No songs shared on this date yet.':'这一天还没有人分享歌曲。',
+    'MUSIC / ARCHIVE':'音乐 / 往日','Open a date to see the songs shared that day.':'展开日期，查看当天的歌曲。',
+    'No posts here for this date yet.':'这一天还没有人发布内容。','Discussions on this date':'这一天的讨论',
+    'Music or video link':'音乐或视频链接','Public music or video link':'公开的音乐或视频链接',
+    'Album cover':'专辑封面','Remove':'移除','Cover removed. You can still add your own photo.':'已移除封面，也可以上传自己的照片。'
+  });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;
   const select = document.getElementById('site-language'); select.value = language;
-  const userContent = '.song-card h3,.song-note,.comment p,.comment strong,.playlist-track strong,.playlist-card-body strong,.playlist-detail h2,.forum-feature h3,.forum-list-card h3,.group-list-song strong,.group-discussion-cover,.day-preview-open strong,.edition-gallery-caption h4,.room-content-copy,#listen-body h3,#listen-body .listen-choice strong,#listen-body .listen-choice span';
+  const userContent = '.song-card h3,.song-note,.comment p,.comment strong,.playlist-track strong,.playlist-card-body strong,.playlist-detail h2,.forum-feature h3,.forum-list-card h3,.group-list-song strong,.group-discussion-cover,.day-preview-open strong,.edition-gallery-caption h4,.room-content-copy,.collection-item-copy strong,.collection-item-copy span,#listen-body h3,#listen-body .listen-choice strong,#listen-body .listen-choice span';
   function translate(value) {
     const trimmed = value.trim(); if (!trimmed) return value;
     let changed = zh[trimmed];
@@ -45,6 +71,10 @@
     if (!changed && /^☆ Vote · (\d+)$/.test(trimmed)) changed = trimmed.replace(/^☆ Vote · (\d+)$/, '☆ 投票 · $1');
     if (!changed && /^(\d+)\/5 charts followed$/.test(trimmed)) changed = trimmed.replace(/^(\d+)\/5 charts followed$/, '已关注 $1/5 个榜单');
     if (!changed && /^(\d+) songs? ↗$/.test(trimmed)) changed = trimmed.replace(/^(\d+) songs? ↗$/, '$1 首歌 ↗');
+    if (!changed && /^Open in (.+) ↗$/.test(trimmed)) changed = trimmed.replace(/^Open in (.+) ↗$/, '在 $1 中打开 ↗');
+    if (!changed && /^Opening (.+)…$/.test(trimmed)) changed = trimmed.replace(/^Opening (.+)…$/, '正在打开 $1…');
+    if (!changed && /^Still loading\? Open in (.+) instead\.$/.test(trimmed)) changed = trimmed.replace(/^Still loading\? Open in (.+) instead\.$/, '加载较慢，可直接在 $1 中打开。');
+    if (!changed && /^See (Music|Film|Art|Books|Daily Life|Forum) ↓$/.test(trimmed)) changed = trimmed.replace(/^See (.+) ↓$/, (_,name)=>'查看'+(zh[name]||name)+' ↓');
     if (!changed && /^Selected: (.+)\. Check it before publishing\.$/.test(trimmed)) changed = trimmed.replace(/^Selected: (.+)\. Check it before publishing\.$/, '已选择：$1。发布前请核对。');
     if (!changed && /^(\d+) books shared$/.test(trimmed)) changed = trimmed.replace(/^(\d+) books shared$/, '$1 本书已分享');
     if (!changed && /^(\d+) votes?$/.test(trimmed)) changed = trimmed.replace(/^(\d+) votes?$/, '$1 票');
