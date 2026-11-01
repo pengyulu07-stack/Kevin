@@ -534,7 +534,8 @@ async function copyLink(path) {
   try { await navigator.clipboard.writeText(url); toast("Link copied. Share it with friends."); }
   catch { toast("Could not copy. Please copy the URL from your browser."); }
 }
-function openUpload() {
+async function openUpload() {
+  if (user && !profile) await hydrateProfile();
   if (!requireAccount()) return;
   $("form-error").textContent = "";
   document.querySelectorAll('#upload-form input[name="genres"]').forEach(x => x.checked = x.value === (musicGenres.some(([id]) => id === window.daytoneGenre) ? window.daytoneGenre : "other"));
