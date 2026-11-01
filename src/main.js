@@ -394,7 +394,7 @@ function createCard(song, rank, discussion = false) {
   } else art.append(el("b", "", song.title.slice(0, 2)));
   if (!discussion) {
     art.setAttribute("role", "button"); art.tabIndex = 0;
-    art.setAttribute("aria-label", "Listen to " + song.title);
+    art.setAttribute("aria-label", window.DaytoneListen?.actionLabel(song) || "Find " + song.title);
     art.addEventListener("click", () => window.DaytoneListen?.open(song));
     art.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); art.click(); } });
   }
@@ -419,9 +419,9 @@ function createCard(song, rank, discussion = false) {
     catch { toast("Could not copy automatically. Select the title to copy it."); }
   });
   meta.append(copyName);
-  const listen = el('button', 'listen-action', '▷ Listen');
+  const listen = el('button', 'listen-action', window.DaytoneListen?.canPlayHere(song) ? '▷ Play here' : '↗ Find song');
   listen.type = 'button';
-  listen.setAttribute('aria-label', 'Listen to ' + song.title);
+  listen.setAttribute('aria-label', window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title);
   listen.addEventListener('click', () => window.DaytoneListen?.open(song));
   meta.append(listen);
   const videoSearch = el('div','song-video-search');

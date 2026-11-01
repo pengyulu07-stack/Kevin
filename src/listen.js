@@ -18,9 +18,7 @@
   videoDialog.addEventListener('close',()=>videoStage.replaceChildren());
   videoDialog.querySelector('#video-fullscreen').addEventListener('click',()=>videoStage.querySelector('iframe')?.requestFullscreen?.());
   dock.querySelector('#player-dock-close').addEventListener('click',()=>{dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
-  let request=0;
   const node=(tag,className,value)=>{const item=document.createElement(tag);item.className=className;if(value!=null)item.textContent=value;return item;};
-  const normal=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
   function platform(value){try{const host=new URL(value).hostname;return ['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(host)?'SoundCloud':['bilibili.com','www.bilibili.com','m.bilibili.com'].includes(host)?'Bilibili':['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com','youtu.be'].includes(host)?'YouTube':['c6.y.qq.com','y.qq.com','i.y.qq.com'].includes(host)?'QQ Music':['music.163.com','y.music.163.com'].includes(host)?'NetEase Music':host==='open.spotify.com'?'Spotify':host==='music.apple.com'?'Apple Music':'Original link';}catch{return 'Original link';}}
   function videoSearchUrl(provider,song){
     const query=[song?.title,song?.artist].filter(Boolean).join(' ').trim();
@@ -49,6 +47,8 @@
     return links;
   }
   function playerFor(url){const player=typeof musicEmbed==='function'?musicEmbed(url):null;if(player){player.classList.add('listen-player');if(player.tagName==='IFRAME')player.loading='eager';}return player;}
+  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && platform(song.source_url)!=='Apple Music' && playerFor(song.source_url)));}
+  function actionLabel(song){return (canPlayHere(song)?'Play ':'Find ') + String(song?.title||'song');}
   function openDock(song,player){
     dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();
     dock.querySelector('#player-dock-title').textContent=song.title||'';
@@ -75,34 +75,23 @@
   function sourceSection(song){
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);body.append(audio);void audio.play().catch(()=>{});return true;}
     if(!song.source_url)return false;
-    const label=platform(song.source_url),player=playerFor(song.source_url);
+    const label=platform(song.source_url);
+    if(label==='Apple Music'){body.append(directLink(song.source_url,'Open in Apple Music'));return true;}
+    const player=playerFor(song.source_url);
     if(player){attachPlayer(player,label,song.source_url);return true;}
     body.append(directLink(song.source_url,'Open in '+label));return true;
   }
-  async function findRecording(title,artist,current){
-    const status=node('p','listen-note','Looking for a recording…');(body.querySelector('.listen-artist')||body.querySelector('h3')).after(status);
-    try{
-      const query=new URL('https://itunes.apple.com/search');query.search=new URLSearchParams({term:[title,artist].filter(Boolean).join(' '),media:'music',entity:'song',country:'us',limit:'8'}).toString();
-      const response=await fetch(query,{mode:'cors',signal:AbortSignal.timeout(6500)});if(!response.ok)throw Error();
-      const data=await response.json();if(current!==request||!dialog.open)return;
-      const wanted=normal(title),by=normal(artist);
-      const score=item=>(normal(item.trackName)===wanted?8:normal(item.trackName).includes(wanted)?2:0)+(by&&normal(item.artistName)===by?5:0);
-      const matches=(data.results||[]).filter(item=>item.kind==='song'&&item.trackName&&item.trackViewUrl&&score(item)>=2).sort((a,b)=>score(b)-score(a)).slice(0,3);
-      if(!matches.length){status.textContent='No matching recording found. Search an app below.';return;}
-      status.textContent='Choose a recording:';
-      const choices=node('div','listen-choices');status.after(choices);
-      for(const item of matches){const button=node('button','listen-choice');button.type='button';button.append(node('strong','',item.trackName),node('span','',[item.artistName,item.collectionName].filter(Boolean).join(' · ')));button.addEventListener('click',()=>{choices.querySelectorAll('button').forEach(choice=>choice.classList.toggle('selected',choice===button));body.querySelector('.listen-player-stage,.listen-catalog-player')?.remove();body.querySelector('.listen-player-link')?.remove();const player=playerFor(item.trackViewUrl);if(player){player.classList.add('listen-catalog-player');attachPlayer(player,'Apple Music',item.trackViewUrl);}});choices.append(button);}
-    }catch{if(current===request&&dialog.open)status.textContent='Could not find a recording. Search an app below.';}
-  }
   function open(song){
-    const current=++request,title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
+    const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);openDock(song,audio);return;}
-    if(song.source_url){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
+    if(song.source_url&&platform(song.source_url)!=='Apple Music'){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
+    dialog.querySelector('h2').textContent='Where to listen';
     if(!dialog.open)dialog.showModal();
     const hasSource=sourceSection(song);
-    body.append(node('p','listen-source-label','Find it in another app'),searchLinks(title,artist));
-    if(!hasSource)void findRecording(title,artist,current);
+    if(!hasSource)body.append(node('p','listen-note','No playable recording was attached to this post. Choose a source below.'));
+    else if(platform(song.source_url)==='Apple Music')body.append(node('p','listen-note','This post links to Apple Music. Use the original link or find the song on another service.'));
+    body.append(node('p','listen-source-label','Find this song'),searchLinks(title,artist));
   }
   function openVideo(song){
     if(platform(song?.source_url)!=='YouTube')return;
@@ -114,6 +103,6 @@
     videoDialog.querySelector('#video-original').href=song.source_url;
     if(!videoDialog.open)videoDialog.showModal();
   }
-  dialog.addEventListener('close',()=>{++request;body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink};
+  dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
+  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,canPlayHere,actionLabel};
 })();

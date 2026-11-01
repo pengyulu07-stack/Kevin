@@ -36,12 +36,12 @@
   }
   function setupTitleSearch(form,linkReader){
     const title=form?.elements.title,artist=form?.elements.artist;if(!title||!artist)return;
-    const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Find artist & recording ↗';
+    const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Find artist & cover ↗';
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     const results=document.createElement('div');results.className='song-lookup-results';results.setAttribute('aria-label','Matching recordings');
     const preview=document.createElement('div');preview.className='catalog-cover-preview';preview.hidden=true;
     title.closest('label').after(button,status,preview,results);
-    let timer,sequence=0,suggestedUrl='',suggestedArtist='';
+    let timer,sequence=0,suggestedArtist='';
     const artwork=value=>{
       try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com'))?url.href:'';} catch{return '';}
     };
@@ -58,22 +58,18 @@
     const select=(row,automatic)=>{
       if(!automatic)title.value=row.trackName;
       if(!automatic||!artist.value.trim()){artist.value=row.artistName;suggestedArtist=row.artistName;}
-      const link=form.elements.url,selected=form.querySelector('input[name="source"]:checked');
-      if(!automatic && link && (!link.value.trim()||link.value===suggestedUrl) && selected?.value!=='file'){
-        link.value=row.trackViewUrl;suggestedUrl=row.trackViewUrl;const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));
-      }
       showCatalog(row);
-      status.replaceChildren(document.createTextNode((automatic?'Artist and cover found: ':'Recording selected: ')+row.trackName+' · '+row.artistName+(automatic?'. You can add a video link for playback. ':'. Check it before publishing. ')));
+      status.replaceChildren(document.createTextNode((automatic?'Artist and cover found: ':'Album details selected: ')+row.trackName+' · '+row.artistName+'. To let visitors play it here, add a playable link or audio file. '));
       const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='Open on Apple Music ↗';status.append(source);
       if(!automatic)results.replaceChildren();
     };
     title.addEventListener('input',()=>{
       clearTimeout(timer);++sequence;clearCatalog();
       if(suggestedArtist&&artist.value===suggestedArtist){artist.value='';suggestedArtist='';}
-      const link=form.elements.url;if(suggestedUrl&&link?.value===suggestedUrl){link.value='';suggestedUrl='';const radio=form.querySelector('input[name="source"][value="none"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));}
       const value=title.value.trim();if(value.length<3||/^https:\/\//i.test(value))return;
       timer=setTimeout(()=>void search(),950);
     });
+    artist.addEventListener('change',()=>{if(title.value.trim().length>=3)void search();});
     form.addEventListener('reset',clearCatalog);
     title.addEventListener('paste',()=>setTimeout(()=>{
       clearTimeout(timer);const value=title.value.trim();if(!value)return;
@@ -85,21 +81,32 @@
       clearTimeout(timer);const current=++sequence;
       const query=[title.value.trim(),artist.value.trim()].filter(Boolean).join(' ');results.replaceChildren();
       if(!title.value.trim()){status.textContent='Enter a song title first.';return;}
-      button.disabled=true;status.textContent='Searching recordings…';
+      button.disabled=true;status.textContent='Checking song details…';
       try{
-        const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:query,media:'music',entity:'song',country:'us',limit:'8'}).toString();
-        const response=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(8000)});if(!response.ok)throw Error('Search unavailable');
-        const data=await response.json();if(current!==sequence)return;
         const normal=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
         const wantedTitle=normal(title.value),wantedArtist=normal(artist.value);
         const score=row=>{const foundTitle=normal(row.trackName),foundArtist=normal(row.artistName);return (foundTitle===wantedTitle?6:foundTitle.includes(wantedTitle)?2:0)+(wantedArtist?(foundArtist===wantedArtist?5:foundArtist.includes(wantedArtist)?2:0):0);};
-        const tracks=(data.results||[]).filter(row=>row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).sort((a,b)=>score(b)-score(a)).slice(0,6);
+        const countries=/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(query)?['cn','us']:['us','cn'];
+        let tracks=[];
+        for(const country of countries){
+          const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:query,media:'music',entity:'song',country,limit:'12'}).toString();
+          const response=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(6500)});if(!response.ok)throw Error('Search unavailable');
+          const data=await response.json();if(current!==sequence)return;
+          tracks=(data.results||[]).filter(row=>row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).sort((a,b)=>score(b)-score(a)).slice(0,6);
+          if(tracks.some(row=>normal(row.trackName)===wantedTitle&&(!wantedArtist||normal(row.artistName)===wantedArtist)))break;
+        }
         if(!tracks.length){status.textContent='No clear match. Keep your own title and artist, or paste a music link.';return;}
-        const best=tracks[0];if(normal(best.trackName)===wantedTitle)select(best,true);
-        else status.textContent='Choose the right recording. Your title can also stay as written.';
+        const exact=tracks.filter(row=>normal(row.trackName)===wantedTitle);
+        const candidates=wantedArtist?exact.filter(row=>normal(row.artistName)===wantedArtist):exact;
+        const artists=new Set(candidates.map(row=>normal(row.artistName)));
+        if(candidates.length && artists.size===1)select(candidates[0],true);
+        else status.textContent='Choose the right artist and album. Your title can stay as written.';
         for(const row of tracks){
           const option=document.createElement('button');option.type='button';option.className='song-lookup-option';
+          const art=artwork(String(row.artworkUrl100||'').replace(/100x100(?:bb|-75)?/,'300x300bb'));
+          if(art){const image=document.createElement('img');image.src=art;image.alt='';image.loading='lazy';option.append(image);}
           const words=document.createElement('span');words.append(document.createElement('strong'),document.createElement('small'));words.firstChild.textContent=row.trackName;words.lastChild.textContent=[row.artistName,row.collectionName].filter(Boolean).join(' · ');option.append(words);
+          if(art&&form.dataset.catalogArtUrl===art)option.setAttribute('aria-pressed','true');
           option.addEventListener('click',()=>select(row,false));results.append(option);
         }
       }catch{if(current===sequence)status.textContent='Could not search right now. You can publish with just the title.';}

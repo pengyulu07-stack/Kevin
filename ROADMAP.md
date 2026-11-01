@@ -12,7 +12,11 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Add ten selectable baseline visual styles per music chart; each chart stores its own local choice.
 - [x] Two-finger horizontal gesture switches the whole daily room; vertical reading and the room selector's own scrolling stay independent.
 - [x] Add visible YouTube and Bilibili search links for every song on the daily spread, gallery, and full song cards.
-- [ ] Verify the above changes on the published GitHub Pages URL after this release.
+- [x] Verify the genre, chart design, and video search release on the published GitHub Pages URL.
+- [x] Keep album details separate from the playback source: selecting catalog metadata no longer silently creates an Apple Music listening link.
+- [x] Require an unambiguous title and artist match before automatic artist/cover selection; retry the Chinese storefront when the first storefront has no exact match.
+- [x] Make an unlinked song's listening options appear immediately; older Apple Music links open as a direct source instead of a slow preview frame.
+- [x] Label cover and card actions as "Play" only when this site has an embeddable source or uploaded audio; otherwise show "Find". Show cover thumbnails beside catalog matches before a contributor chooses one.
 
 ## Next product passes
 

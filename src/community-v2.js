@@ -77,7 +77,7 @@
     const scene = make('img', 'scene-image'); scene.src = rank === 1 ? photoScenes[1] : rank === 2 ? photoScenes[0] : photoScenes[2]; scene.alt = ''; scene.hidden = window.daytoneGenre !== 'all'; wrap.append(scene);
     const shade = make('div', 'scene-shade'); wrap.append(shade);
     const badge = make('span', 'record-rank', rank === 1 ? 'TOP 01' : 'TOP 0' + rank); wrap.append(badge);
-    const vinyl = make('button', 'vinyl' + (rank === 1 ? ' vinyl-main' : '')); vinyl.type = 'button'; vinyl.setAttribute('aria-label', song ? 'Listen to ' + song.title : 'No songs yet'); vinyl.disabled = !song;
+    const vinyl = make('button', 'vinyl' + (rank === 1 ? ' vinyl-main' : '')); vinyl.type = 'button'; vinyl.setAttribute('aria-label', song ? (window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title) : 'No songs yet'); vinyl.disabled = !song;
     const inner = make('span', 'vinyl-center');
     if (song?.cover_path) { const img = make('img'); img.src = imageUrl(song.cover_path); img.alt = song.title + ' cover'; inner.append(img); }
     else inner.append(make('span', '', 'DAYTONE'));

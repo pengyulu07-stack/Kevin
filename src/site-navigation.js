@@ -122,7 +122,7 @@
   }
   function songRow(song,rank,count,day,voteUsers){
     const row=node('article','day-preview-row'),art=node('button','day-preview-art');
-    art.type='button';art.title='Listen to '+song.title;art.setAttribute('aria-label','Listen to '+song.title);
+    art.type='button';art.title=window.DaytoneListen?.actionLabel(song)||'Find '+song.title;art.setAttribute('aria-label',art.title);
     art.addEventListener('click',()=>window.DaytoneListen?.open(song));
     const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';art.append(image);}else art.textContent='♫';
     const open=node('button','day-preview-open');open.type='button';open.append(node('small','',String(rank).padStart(2,'0')),node('strong','',song.title),node('span','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
@@ -148,7 +148,7 @@
     rows.slice(0,3).forEach((song,index)=>{
       const card=node('article','edition-gallery-card'+(index===0?' lead':''));
       const scene=node('img','edition-gallery-scene');scene.src=['music-2.png','music-1.png','music-3.png'][index];scene.alt='';scene.loading='lazy';card.append(scene);
-      const cover=node('button','edition-gallery-cover');cover.type='button';cover.setAttribute('aria-label','Listen to '+song.title);cover.title='Listen to '+song.title;
+      const cover=node('button','edition-gallery-cover');cover.type='button';cover.setAttribute('aria-label',window.DaytoneListen?.actionLabel(song)||'Find '+song.title);cover.title=cover.getAttribute('aria-label');
       const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';cover.append(image);}else cover.append(node('span','','♫'));
       cover.addEventListener('click',()=>window.DaytoneListen?.open(song));card.append(cover);
       const videoLinks=node('div','edition-gallery-video-links');
