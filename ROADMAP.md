@@ -22,7 +22,7 @@ This file tracks requested behavior separately from work that has been verified 
 
 ## Next product passes
 
-### November 6 local pass (pending public verification)
+### November 6 pass (published November 7)
 
 - [x] Threaded replies record the parent comment in song and forum discussion; a reply shows the person it addresses. @ inserts a visible mention in the composer.
 - [x] Song and forum comments have separate likes; a comment shows when the share's author liked it. Database tables and RLS were migrated.
@@ -32,7 +32,8 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] The first dark color pass uses warmer ink and room accents; the hero takes less vertical space, and the 44-chart follow form stays closed until requested.
 - [ ] Test the new comment and follow writes with two ordinary accounts; test reply notifications and deep links.
 - [ ] Audit responsive layout and design preferences with users. The ten designs are shared templates, not ten bespoke designs for each category.
-- [ ] Verify public GitHub Pages deployment and a fresh browser load for this pass.
+- [x] Verify public GitHub Pages deployment and a fresh browser load for this pass.
+- [x] Make Library covers open listening and titles open the discussion, with visible action labels.
 
 1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on DAYTONE and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
 2. **Navigation and interaction:** Test a Mac two-finger swipe on a physical trackpad. Tune gesture thresholds, animation, loading state, and focus behavior against vertical reading and horizontal selector scrolling. Keep shortcuts visible without repeating the same list in several places. Make notification items open their exact post or reply.

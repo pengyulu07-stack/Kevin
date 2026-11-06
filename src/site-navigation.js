@@ -49,9 +49,10 @@
     const cover=node('button','collection-cover');cover.type='button';cover.title=item.kind==='MUSIC'?(window.DaytoneListen?.actionLabel(item.raw)||'Find '+item.title):'Open '+item.title;
     cover.setAttribute('aria-label',cover.title);const imageUrl=item.cover;
     if(imageUrl){const image=node('img');image.src=imageUrl;image.alt='';image.loading='lazy';cover.append(image);}else cover.textContent=item.kind==='MUSIC'?'♫':'↗';
-    const open=()=>item.kind==='MUSIC'?window.DaytoneListen?.open(item.raw):void app.openHomePostDiscussion(item.raw.id);
-    cover.addEventListener('click',open);
-    const copy=node('div','collection-item-copy');copy.append(kind,title,details);copy.addEventListener('click',open);copy.tabIndex=0;copy.setAttribute('role','button');copy.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open();}});
+    const listen=()=>window.DaytoneListen?.open(item.raw);
+    const discuss=()=>item.kind==='MUSIC'?discussSong(item.raw,item.raw.day):void app.openHomePostDiscussion(item.raw.id);
+    cover.addEventListener('click',item.kind==='MUSIC'?listen:discuss);
+    const copy=node('div','collection-item-copy');copy.append(kind,title,details,node('small','collection-item-action',item.kind==='MUSIC'?'Read & discuss ↗':'Open discussion ↗'));copy.addEventListener('click',discuss);copy.tabIndex=0;copy.setAttribute('role','button');copy.setAttribute('aria-label',(item.kind==='MUSIC'?'Discuss ':'Open ')+item.title);copy.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();discuss();}});
     row.append(cover,copy);return row;
   }
   let collectionRequest=0,libraryView='likes',libraryLayout='grid';

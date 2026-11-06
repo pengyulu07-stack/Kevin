@@ -143,6 +143,8 @@ body,body[data-active-room="music"]{background:#101010;--room-veil:#1a1a1a}
 .library-grid .collection-item-copy{padding:9px 0 0}
 .library-grid .collection-item-copy strong{font:600 16px/1.35 system-ui,sans-serif;color:#f2f2f2}
 .library-grid .collection-item-copy small{color:#aaa}
+.collection-item-copy .collection-item-action{color:#d8a082;font:600 11px/1.35 system-ui,sans-serif;letter-spacing:0;text-transform:none}
+.collection-item-copy:hover .collection-item-action,.collection-item-copy:focus-visible .collection-item-action{text-decoration:underline}
 .library-list{display:grid;grid-template-columns:1fr;gap:4px}
 .library-list .collection-item{max-width:900px}
 .comment{padding:12px 0;border-bottom:1px solid #353535}
