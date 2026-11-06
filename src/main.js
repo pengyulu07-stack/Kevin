@@ -9,9 +9,9 @@ const audioTypes = { "audio/mpeg": "mp3", "audio/mp4": "m4a", "audio/x-m4a": "m4
 const imageTypes = { "image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif" };
 const musicGenreFamilies = [
   {name:"Popular & guitar", genres:[["pop","Pop"],["rock","Rock"],["alternative","Alternative"],["indie","Indie"],["punk","Punk"],["metal","Metal"],["kpop","K-Pop"],["jpop","J-Pop"],["citypop","City Pop"]]},
-  {name:"Beats & electronic", genres:[["hiphop","Hip-Hop & Rap"],["rnb","R&B / Soul"],["electronic","Electronic"],["dance","Dance"],["funk","Funk"],["ambient","Ambient"]]},
+  {name:"Beats & electronic", genres:[["hiphop","Hip-Hop & Rap"],["trap","Trap"],["rnb","R&B / Soul"],["electronic","Electronic"],["house","House"],["techno","Techno"],["dubstep","Dubstep"],["edm","EDM"],["dance","Dance"],["funk","Funk"],["ambient","Ambient"],["lofi","Lo-fi"]]},
   {name:"Acoustic & composed", genres:[["jazz","Jazz"],["blues","Blues"],["classical","Classical"],["piano","Piano"],["instrumental","Instrumental"],["folk","Folk"],["acoustic","Acoustic"],["singer_songwriter","Singer-Songwriter"],["country","Country"],["opera","Opera & Choral"]]},
-  {name:"Screen & across borders", genres:[["soundtrack","Soundtrack"],["anime","Anime"],["chinese","Chinese Music"],["latin","Latin"],["afrobeats","Afrobeats"],["reggae","Reggae"],["experimental","Experimental"],["gospel","Gospel"],["other","Other"]]}
+  {name:"Screen & across borders", genres:[["soundtrack","Soundtrack"],["anime","Anime"],["chinese","Chinese Music"],["mandopop","Mandopop"],["cantopop","Cantopop"],["latin","Latin"],["afrobeats","Afrobeats"],["reggae","Reggae"],["experimental","Experimental"],["gospel","Gospel"],["newage","New Age"],["other","Other"]]}
 ];
 const musicGenres = musicGenreFamilies.flatMap(family=>family.genres);
 for (const grid of document.querySelectorAll('#upload-form .genre-check-grid')) {
@@ -65,6 +65,7 @@ let songs = [];
 let reactions = new Map();
 let votes = new Map();
 let comments = new Map();
+let commentLikes = new Map();
 let user = null;
 let profile = null;
 let authMode = "signup";
@@ -78,9 +79,15 @@ function el(tag, className, content) {
   return node;
 }
 function status(message) { $("status").textContent = message; }
-function toast(message) {
+function toast(message, action) {
   const node = $("toast");
   node.textContent = message;
+  if (action) {
+    const button = el('button', 'toast-action', action.label);
+    button.type = 'button';
+    button.addEventListener('click', () => { node.classList.remove('show'); action.run(); });
+    node.append(button);
+  }
   node.classList.add("show");
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => node.classList.remove("show"), 4000);
@@ -244,13 +251,14 @@ async function loadSongs() {
     const nextReactions = new Map();
     const nextVotes = new Map();
     const nextComments = new Map();
+    const nextCommentLikes = new Map();
     if (nextSongs.length) {
       for (let start = 0; start < nextSongs.length; start += 50) {
         const ids = nextSongs.slice(start, start + 50).map((song) => song.id);
         const [reactionRows, voteRows, commentRows] = await Promise.all([
           fetchEveryRow(() => client.from("reactions").select("song_id,user_id,emoji").in("song_id", ids).order("song_id").order("user_id")),
           fetchEveryRow(() => client.from("song_votes").select("song_id,user_id").in("song_id", ids).order("song_id")),
-          fetchEveryRow(() => client.from("comments").select("id,song_id,user_id,nickname,body,image_path,created_at").in("song_id", ids).order("created_at", { ascending: true }).order("id"))
+          fetchEveryRow(() => client.from("comments").select("id,song_id,user_id,nickname,body,image_path,parent_id,created_at").in("song_id", ids).order("created_at", { ascending: true }).order("id"))
         ]);
         for (const row of voteRows) { const list = nextVotes.get(row.song_id) || []; list.push(row); nextVotes.set(row.song_id, list); }
         for (const row of reactionRows) {
@@ -263,6 +271,16 @@ async function loadSongs() {
           list.push(row);
           nextComments.set(row.song_id, list);
         }
+        for (let offset = 0; offset < commentRows.length; offset += 100) {
+          const commentIds = commentRows.slice(offset, offset + 100).map(row => row.id);
+          if (!commentIds.length) continue;
+          const likes = await fetchEveryRow(() => client.from('comment_likes').select('comment_id,user_id').in('comment_id', commentIds));
+          for (const like of likes) {
+            const list = nextCommentLikes.get(like.comment_id) || [];
+            list.push(like.user_id);
+            nextCommentLikes.set(like.comment_id, list);
+          }
+        }
       }
     }
     if (request !== loadRequest) return;
@@ -270,6 +288,7 @@ async function loadSongs() {
     reactions = nextReactions;
     votes = nextVotes;
     comments = nextComments;
+    commentLikes = nextCommentLikes;
     renderSongs();
     status(songs.length ? "Loaded " + day + " songs." : "No songs have been shared this day.");
     window.dispatchEvent(new Event("daytone:songs-loaded"));
@@ -401,7 +420,9 @@ function createCard(song, rank, discussion = false) {
   card.append(art);
   const meta = el("div", "song-meta");
   meta.append(el("h3", "", song.title));
-  meta.append(el("p", "song-byline", (song.artist ? song.artist + " · " : "") + song.nickname));
+  const byline=el('p','song-byline');
+  if(song.artist)byline.append(document.createTextNode(song.artist+' · '));
+  const member=el('button','member-link',song.nickname);member.type='button';member.title='See '+song.nickname+'’s shares and followers';member.addEventListener('click',()=>window.DaytoneSocial?.openProfile(song.owner_id,song.nickname));byline.append(member);meta.append(byline);
   const genreRow = el("div", "song-genre-row");
   for (const key of song.genres || [song.genre || "other"]) genreRow.append(el("span", "song-genre-tag", musicGenreName(key)));
   genreRow.append(el("span", "song-genre-tag language-tag", musicGenreName(song.language || "other_language")));
@@ -424,6 +445,7 @@ function createCard(song, rank, discussion = false) {
   listen.setAttribute('aria-label', window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title);
   listen.addEventListener('click', () => window.DaytoneListen?.open(song));
   meta.append(listen);
+  if(song.artist){const artistMore=el('button','artist-more','More from '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));meta.append(artistMore);}
   const videoSearch = el('div','song-video-search');
   videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song));
   meta.append(videoSearch);
@@ -473,9 +495,15 @@ function createCard(song, rank, discussion = false) {
   section.append(el("div", "comment-heading", "Comments · " + songComments.length));
   const commentList = el("div", "comment-list");
   if (!songComments.length) commentList.append(el("div", "comment-empty", "No comments yet. Be the first."));
+  const commentById = new Map(songComments.map(item => [item.id, item]));
   for (const item of songComments) {
-    const entry = el("div", "comment");
-    entry.append(el("strong", "", item.nickname), el("time", "", new Date(item.created_at).toLocaleString("en-US", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })));
+    const entry = el("div", "comment" + (item.parent_id ? " is-reply" : ""));
+    const head = el('div', 'comment-head');
+    const author=el('button','member-link',item.nickname);author.type='button';author.addEventListener('click',()=>window.DaytoneSocial?.openProfile(item.user_id,item.nickname));
+    head.append(author, el("time", "", new Date(item.created_at).toLocaleString("en-US", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" })));
+    entry.append(head);
+    const parent = commentById.get(item.parent_id);
+    if (parent) entry.append(el('span', 'comment-reply-context', '↳ @' + parent.nickname));
     if (item.body) entry.append(el("p", "", item.body));
     if (item.image_path) {
       const image = el("img");
@@ -484,11 +512,28 @@ function createCard(song, rank, discussion = false) {
       image.loading = "lazy";
       entry.append(image);
     }
-    if (item.user_id === user?.id) { const edit = el('button', 'author-edit-link', 'Edit reply'); edit.type = 'button'; edit.addEventListener('click', () => window.DaytoneAuthorTools?.openComment('comments', item, loadSongs)); entry.append(edit); }
+    const tools = el('div', 'comment-tools');
+    const reply = el('button', '', 'Reply'); reply.type = 'button';
+    reply.addEventListener('click', () => { if (!requireAccount()) return; form.dataset.parentId = item.id; replyLabel.textContent = 'Replying to @' + item.nickname; replyTarget.hidden = false; box.placeholder = 'Reply to @' + item.nickname + '…'; box.focus(); });
+    tools.append(reply);
+    const mention=el('button','','@ Mention');mention.type='button';mention.addEventListener('click',()=>{if(!requireAccount())return;box.value+=(box.value&& !/\s$/.test(box.value)?' ':'')+'@'+item.nickname+' ';box.focus();});tools.append(mention);
+    const likedBy = commentLikes.get(item.id) || [];
+    const like = el('button', 'comment-like' + (likedBy.includes(user?.id) ? ' chosen' : ''), '♡ ' + likedBy.length);
+    like.type = 'button'; like.setAttribute('aria-label', 'Like comment by ' + item.nickname); like.setAttribute('aria-pressed', String(likedBy.includes(user?.id)));
+    like.addEventListener('click', () => void toggleCommentLike(item.id, likedBy.includes(user?.id)));
+    tools.append(like);
+    if (likedBy.includes(song.owner_id)) tools.append(el('span', 'author-liked', '♥ Liked by ' + song.nickname));
+    if (item.user_id === user?.id) { const edit = el('button', 'author-edit-link', 'Edit'); edit.type = 'button'; edit.addEventListener('click', () => window.DaytoneAuthorTools?.openComment('comments', item, loadSongs)); tools.append(edit); }
+    entry.append(tools);
     commentList.append(entry);
   }
   section.append(commentList);
   const form = el("form", "comment-form");
+  const replyTarget = el('div', 'comment-reply-target'); replyTarget.hidden = true;
+  const replyLabel = el('span', '', ''); replyTarget.append(replyLabel);
+  const clearReply = el('button', '', '×'); clearReply.type = 'button'; clearReply.setAttribute('aria-label', 'Cancel reply');
+  clearReply.addEventListener('click', () => { delete form.dataset.parentId; replyTarget.hidden = true; box.placeholder = 'Write a comment, or just share a photo…'; });
+  replyTarget.append(clearReply);
   const box = el("textarea");
   box.name = "body";
   box.maxLength = 500;
@@ -506,7 +551,7 @@ function createCard(song, rank, discussion = false) {
   actions.append(image, submit);
   const error = el("div", "comment-error");
   error.setAttribute("role", "alert");
-  form.append(box, actions, error);
+  form.append(replyTarget, box, actions, error);
   form.addEventListener("submit", (event) => void publishComment(event, song.id, error, submit));
   section.append(form);
   meta.append(section);
@@ -526,7 +571,7 @@ async function react(songId, symbol, chosen) {
 }
 async function voteForSong(songId,chosen){
   if(!requireAccount())return;
-  try{const result=chosen?await client.from('song_votes').delete().eq('song_id',songId).eq('user_id',user.id):await client.from('song_votes').insert({song_id:songId,user_id:user.id});if(result.error)throw result.error;await loadSongs();window.dispatchEvent(new Event('daytone:vote'));}
+  try{const result=chosen?await client.from('song_votes').delete().eq('song_id',songId).eq('user_id',user.id):await client.from('song_votes').insert({song_id:songId,user_id:user.id});if(result.error)throw result.error;await loadSongs();window.dispatchEvent(new Event('daytone:vote'));if(!chosen)toast('Saved to your Library.',{label:'View Likes ↗',run:()=>window.DaytoneLibrary?.openLikes()});}
   catch(error){toast(error.message||'Could not save vote.');}
 }
 async function copyLink(path) {
@@ -579,7 +624,7 @@ async function prepareImage(file) {
 }
 async function catalogCoverFile(value) {
   const url = new URL(value);
-  if (url.protocol !== 'https:' || !(url.hostname === 'mzstatic.com' || url.hostname.endsWith('.mzstatic.com'))) throw new Error('Invalid catalog cover.');
+  if (url.protocol !== 'https:' || !(url.hostname === 'mzstatic.com' || url.hostname.endsWith('.mzstatic.com') || url.hostname === 'i1.sndcdn.com' || url.hostname === 'i2.sndcdn.com')) throw new Error('Invalid catalog cover.');
   const response = await fetch(url.href, { mode: 'cors', signal: AbortSignal.timeout(6000) });
   if (!response.ok) throw new Error('Catalog cover could not be loaded.');
   const blob = await response.blob();
@@ -683,16 +728,26 @@ async function publishComment(event, songId, errorNode, button) {
     const imagePath = await uploadFile("images", await prepareImage(file), imageTypes, 1024 * 1024);
     if (imagePath) uploaded.push({ bucket: "images", path: imagePath });
     const result = await client.from("comments").insert({
-      song_id: songId, user_id: user.id, nickname: profile.nickname, body, image_path: imagePath
+      song_id: songId, user_id: user.id, nickname: profile.nickname, body, image_path: imagePath, parent_id: form.dataset.parentId || null
     });
     if (result.error) throw result.error;
     form.reset();
+    delete form.dataset.parentId;
     await loadSongs();
     toast("Comment posted.");
   } catch (error) {
     await cleanUploads(uploaded);
     errorNode.textContent = error.message || "Could not post comment. Please try again.";
   } finally { button.disabled = false; button.textContent = "Post comment ↗"; }
+}
+async function toggleCommentLike(commentId, chosen) {
+  if (!requireAccount()) return;
+  try {
+    const query = client.from('comment_likes');
+    const result = chosen ? await query.delete().eq('comment_id', commentId).eq('user_id', user.id) : await query.insert({comment_id: commentId, user_id: user.id});
+    if (result.error) throw result.error;
+    await loadSongs();
+  } catch (error) { toast(error.message || 'Could not save like.'); }
 }
 
 $("date").value = selectedDay;

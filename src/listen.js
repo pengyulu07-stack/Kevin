@@ -27,19 +27,21 @@
   }
   function videoSearchLink(provider,song,extraClass=''){
     const name=provider==='bilibili'?'Bilibili':'YouTube';
-    const link=node('a','video-search-link '+extraClass,name+' ↗');
+    const link=node('a','video-search-link '+extraClass);
+    link.dataset.provider=provider;
+    link.innerHTML=provider==='bilibili'?'<svg viewBox="0 0 28 24" aria-hidden="true"><path d="M6 6 4 3m18 3 2-3M4 7h20v14H4z"/><path d="m10 11 4 3-4 3m8-6-4 3 4 3"/></svg>':'<svg viewBox="0 0 28 20" aria-hidden="true"><rect x="1" y="1" width="26" height="18" rx="5"/><path d="m12 6 7 4-7 4z"/></svg>';
     link.href=videoSearchUrl(provider,song);link.target='_blank';link.rel='noopener noreferrer';
-    link.title='Search '+name+' for '+song.title;link.setAttribute('aria-label',link.title);
+    link.title='Search '+(provider==='bilibili'?'B 站':name)+' for '+song.title;link.setAttribute('aria-label',link.title);
     return link;
   }
   function directLink(url,label){const link=node('a','listen-original',label+' ↗');link.href=url;link.target='_blank';link.rel='noopener noreferrer';return link;}
   function searchLinks(title,artist){
     const term=[title,artist].filter(Boolean).join(' '),links=node('div','listen-links');
     for(const [host,label] of [
-      ['https://y.qq.com/n/ryqq/search?w=','QQ Music'],
-      ['https://music.163.com/#/search/m/?s=','NetEase Music'],
-      ['https://search.bilibili.com/all?keyword=','Bilibili'],
       ['https://soundcloud.com/search?q=','SoundCloud'],
+      ['https://y.qq.com/n/ryqq/search?w=','QQ Music'],
+      ['https://music.163.com/#/search/m/?s=',localStorage.getItem('daytone-language')==='zh'?'网易云音乐':'NetEase Music'],
+      ['https://search.bilibili.com/all?keyword=','Bilibili'],
       ['https://www.youtube.com/results?search_query=','YouTube'],
       ['https://open.spotify.com/search/','Spotify'],
       ['https://music.apple.com/us/search?term=','Apple Music']

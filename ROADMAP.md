@@ -8,7 +8,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Home, Following, Library navigation; Film, Art, Books, Daily Life, and Forum can receive posts.
 - [x] Daily Top 5, monthly/weekly rankings, all-time chart, song gallery, all-song list, votes, six reactions, comments, and private groups.
 - [x] Title-only song sharing; audio or platform link and personal cover are optional.
-- [x] Expand built-in music genres from 14 to 34, grouped by family; publish form, follow controls, chart selection, and database validation share the same IDs.
+- [x] Expand built-in music genres to 44, grouped by family; publish form, follow controls, chart selection, and database validation share the same IDs.
 - [x] Add ten selectable baseline visual styles per music chart; each chart stores its own local choice.
 - [x] Two-finger horizontal gesture switches the whole daily room; vertical reading and the room selector's own scrolling stay independent.
 - [x] Add visible YouTube and Bilibili search links for every song on the daily spread, gallery, and full song cards.
@@ -21,6 +21,18 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Wait for a returning member's nickname to load before opening the song form, avoiding a mistaken nickname prompt on a fast click after refresh.
 
 ## Next product passes
+
+### November 6 local pass (pending public verification)
+
+- [x] Threaded replies record the parent comment in song and forum discussion; a reply shows the person it addresses. @ inserts a visible mention in the composer.
+- [x] Song and forum comments have separate likes; a comment shows when the share's author liked it. Database tables and RLS were migrated.
+- [x] Member profiles show public song/post history and follower counts; members can follow each other. Following lists followed members and their recent songs.
+- [x] Music discussion offers other DAYTONE shares by the same artist and in the same chart. The artist shortcut scrolls to those recommendations.
+- [x] Library distinguishes liked songs from all public shares, with a grid/list switch. Song votes link to Likes. Unconfirmed sources are labeled Find.
+- [x] The first dark color pass uses warmer ink and room accents; the hero takes less vertical space, and the 44-chart follow form stays closed until requested.
+- [ ] Test the new comment and follow writes with two ordinary accounts; test reply notifications and deep links.
+- [ ] Audit responsive layout and design preferences with users. The ten designs are shared templates, not ten bespoke designs for each category.
+- [ ] Verify public GitHub Pages deployment and a fresh browser load for this pass.
 
 1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on DAYTONE and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
 2. **Navigation and interaction:** Test a Mac two-finger swipe on a physical trackpad. Tune gesture thresholds, animation, loading state, and focus behavior against vertical reading and horizontal selector scrolling. Keep shortcuts visible without repeating the same list in several places. Make notification items open their exact post or reply.

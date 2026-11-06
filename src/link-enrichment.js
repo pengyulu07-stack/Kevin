@@ -32,7 +32,7 @@
     }
     const row=data.results?.find(item=>String(item.trackId||item.collectionId)===target.id)||data.results?.[0];
     if(!row)return null;
-    return {title:row.trackName||row.collectionName||'',artist:row.artistName||'',album:row.collectionName||'',art:(row.artworkUrl100||'').replace(/100x100bb/,'300x300bb'),url:row.trackViewUrl||'',platform:target.platform};
+    return {title:row.trackName||row.collectionName||'',artist:row.artistName||'',album:row.collectionName||'',art:(row.artworkUrl100||'').replace(/100x100bb/,'300x300bb'),url:row.trackViewUrl||'',genre:row.primaryGenreName||'',platform:target.platform};
   }
   function setupTitleSearch(form,linkReader){
     const title=form?.elements.title,artist=form?.elements.artist;if(!title||!artist)return;
@@ -52,7 +52,20 @@
     updateSources();title.addEventListener('input',updateSources);artist.addEventListener('input',updateSources);
     let timer,sequence=0,suggestedArtist='';
     const artwork=value=>{
-      try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com'))?url.href:'';} catch{return '';}
+      try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com')||url.hostname==='i1.sndcdn.com'||url.hostname==='i2.sndcdn.com')?url.href:'';} catch{return '';}
+    };
+    const genreFor=value=>{
+      const genre=String(value||'').toLowerCase();
+      const rules=[[/hip.hop|rap/, 'hiphop'],[/trap/, 'trap'],[/r&b|soul/, 'rnb'],[/metal/, 'metal'],[/punk/, 'punk'],[/alternative/, 'alternative'],[/indie/, 'indie'],[/rock/, 'rock'],[/house/, 'house'],[/techno/, 'techno'],[/dubstep/, 'dubstep'],[/electronic|electronica/, 'electronic'],[/dance/, 'dance'],[/jazz/, 'jazz'],[/blues/, 'blues'],[/classical/, 'classical'],[/soundtrack|film score/, 'soundtrack'],[/folk/, 'folk'],[/country/, 'country'],[/reggae/, 'reggae'],[/latin/, 'latin'],[/k.pop/, 'kpop'],[/j.pop/, 'jpop'],[/mandopop/, 'mandopop'],[/cantopop/, 'cantopop'],[/chinese/, 'chinese'],[/pop/, 'pop']];
+      return rules.find(([pattern])=>pattern.test(genre))?.[1]||'';
+    };
+    const suggestGenre=row=>{
+      const key=genreFor(row.primaryGenreName||row.genre);
+      if(!key)return;
+      const choices=[...form.querySelectorAll('input[name="genres"]')];
+      if(choices.some(choice=>choice.checked&&choice.value!=='other'))return;
+      for(const choice of choices)choice.checked=choice.value===key;
+      form.querySelector('.upload-genres')?.setAttribute('open','');
     };
     const clearCatalog=()=>{delete form.dataset.catalogArtUrl;delete form.dataset.catalogUrl;preview.replaceChildren();preview.hidden=true;};
     const showCatalog=row=>{
@@ -67,9 +80,10 @@
     const select=(row,automatic)=>{
       if(!automatic)title.value=row.trackName;
       if(!automatic||!artist.value.trim()){artist.value=row.artistName;suggestedArtist=row.artistName;}
+      suggestGenre(row);
       updateSources();
       showCatalog(row);
-      status.replaceChildren(document.createTextNode((automatic?'Artist and cover found: ':'Album details selected: ')+row.trackName+' · '+row.artistName+'. To let visitors play it here, add a playable link or audio file. '));
+      status.replaceChildren(document.createTextNode((automatic?'Artist and cover found: ':'Album details selected: ')+row.trackName+' · '+row.artistName+'. Check the suggested category and cover before publishing. '));
       const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='Open on Apple Music ↗';status.append(source);
       if(!automatic)results.replaceChildren();
     };
@@ -123,7 +137,7 @@
       finally{if(current===sequence)button.disabled=false;}
     }
     button.addEventListener('click',()=>void search());
-    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);updateSources();});
+    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);if(row)suggestGenre(row);updateSources();});
   }
   function setup(form,input,title,artist,playlist=false){
     if(!form||!input||!title)return;

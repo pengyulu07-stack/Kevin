@@ -16,7 +16,7 @@
   window.daytoneSpan = query.get('period') === 'all' ? 'all' : 'today';
   window.daytoneGroupPeriod = window.daytoneSpan;
   let monthCursor = day.slice(0, 7);
-  let posts = [], postReactions = new Map(), postComments = new Map();
+  let posts = [], postReactions = new Map(), postComments = new Map(), postCommentLikes = new Map();
   let selectedPostId = null, selectedSongId = null, loadId = 0;
   const screens = { welcome: 'welcome', following:'following-screen', explore:'explore-screen', lobby: 'taxi-lobby', 'music-hub': 'music-hub', playlists: 'playlists-screen', music: 'music-gallery', 'music-all': 'today', group: 'group-screen', forum: 'forum-rank', 'forum-all': 'generic-feed', 'daily-all':'generic-feed', 'film-all':'generic-feed', 'art-all':'generic-feed', 'books-all':'generic-feed' };
   const photoScenes = ['music-1.png', 'music-2.png', 'music-3.png'];
@@ -110,7 +110,26 @@
   }
   function openMusicDiscussion(id) { const song = songs.find(x => x.id === id) || (window.DaytoneMusicRooms?.allTimePublicSongs() || []).find(x => x.id === id); if (!song) return;
     if (window.daytoneSpan === 'all') { const handler = () => { window.removeEventListener('daytone:songs-loaded', handler); openMusicDiscussion(id); }; window.addEventListener('daytone:songs-loaded', handler); window.daytoneSpan = 'today'; setChosenDay(song.day); show('music-all'); if (selectedDay === song.day) void loadSongs(); return; }
-    selectedSongId = id; const rank = sortedSongs().findIndex(x => x.id === id) + 1; $v('music-discussion-body').replaceChildren(createCard(song, rank, true)); showDialog('music-discussion-dialog'); }
+    selectedSongId = id; const rank = sortedSongs().findIndex(x => x.id === id) + 1; $v('music-discussion-body').replaceChildren(createCard(song, rank, true)); showDialog('music-discussion-dialog'); void renderSongConnections(song); }
+  async function renderSongConnections(song){
+    if(!client)return;
+    const host=$v('music-discussion-body'),section=make('section','song-connections');section.append(make('h3','','Keep listening'));
+    const content=make('div','song-connections-content');content.append(make('p','','Finding other shares…'));section.append(content);host.append(section);
+    try{
+      const genre=(song.genres||[song.genre]).find(key=>key&&key!=='other');
+      const [sameArtist,similar]=await Promise.all([
+        song.artist?client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,created_at').eq('artist',song.artist).neq('id',song.id).order('created_at',{ascending:false}).limit(6):Promise.resolve({data:[],error:null}),
+        genre?client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,created_at').contains('genres',[genre]).neq('id',song.id).order('created_at',{ascending:false}).limit(12):Promise.resolve({data:[],error:null})
+      ]);
+      if(sameArtist.error||similar.error)throw sameArtist.error||similar.error;
+      if(!section.isConnected||selectedSongId!==song.id)return;
+      content.replaceChildren();
+      const artistRows=sameArtist.data||[],suggestions=(similar.data||[]).filter(row=>row.artist!==song.artist).slice(0,4);
+      const addGroup=(title,rows)=>{if(!rows.length)return;const group=make('div','song-connection-group');group.append(make('h4','',title));for(const row of rows){const item=make('div','song-connection-item'),play=make('button','song-connection-play','▶');play.type='button';play.setAttribute('aria-label','Play '+row.title);play.addEventListener('click',()=>window.DaytoneListen?.open(row));const detail=make('button','song-connection-detail');detail.type='button';detail.append(make('strong','',row.title),make('small','',[row.artist,row.nickname].filter(Boolean).join(' · ')));detail.addEventListener('click',()=>{location.href='?space=music&day='+encodeURIComponent(row.day)+'&view=all#song-'+encodeURIComponent(row.id);});item.append(play,detail);group.append(item);}content.append(group);};
+      addGroup('More by '+song.artist,artistRows);addGroup('In the same chart',suggestions);
+      if(!content.childElementCount)content.append(make('p','song-connections-empty','No other shares here yet.'));
+    }catch{if(section.isConnected)content.replaceChildren(make('p','song-connections-empty','Other songs are unavailable right now.'));}
+  }
   function forumScore(post) { return (postComments.get(post.id) || []).length * 2 + (postReactions.get(post.id) || []).length; }
   function rankedPosts() { return [...posts].sort((a, b) => forumScore(b) - forumScore(a) || b.created_at.localeCompare(a.created_at) || a.id.localeCompare(b.id)); }
   async function loadPosts() {
@@ -118,18 +137,19 @@
     const category=postSpace(screen),request = ++loadId, loadingDay = day; $v('generic-status').textContent = 'Loading '+postNames[category]+'…';
     try {
       const next = await fetchEveryRow(() => client.from('posts').select('id,owner_id,day,category,post_type,title,creator,body,nickname,image_path,source_url,created_at').eq('category', category).eq('day', loadingDay).order('created_at', { ascending: false }).order('id'));
-      const rMap = new Map(), cMap = new Map();
+      const rMap = new Map(), cMap = new Map(), lMap = new Map();
       for (let start = 0; start < next.length; start += 50) {
         const ids = next.slice(start, start + 50).map(x => x.id);
         const [rr, cc] = await Promise.all([
           fetchEveryRow(() => client.from('post_reactions').select('post_id,user_id,emoji').in('post_id', ids).order('post_id').order('user_id')),
-          fetchEveryRow(() => client.from('post_comments').select('id,post_id,user_id,nickname,body,image_path,created_at').in('post_id', ids).order('created_at').order('id'))
+          fetchEveryRow(() => client.from('post_comments').select('id,post_id,user_id,nickname,body,image_path,parent_id,created_at').in('post_id', ids).order('created_at').order('id'))
         ]);
         for (const row of rr) { const list = rMap.get(row.post_id) || []; list.push(row); rMap.set(row.post_id, list); }
         for (const row of cc) { const list = cMap.get(row.post_id) || []; list.push(row); cMap.set(row.post_id, list); }
+        for(let offset=0;offset<cc.length;offset+=100){const commentIds=cc.slice(offset,offset+100).map(item=>item.id);const likes=await fetchEveryRow(()=>client.from('post_comment_likes').select('comment_id,user_id').in('comment_id',commentIds));for(const like of likes){const list=lMap.get(like.comment_id)||[];list.push(like.user_id);lMap.set(like.comment_id,list);}}
       }
       if (request !== loadId || loadingDay !== day || postSpace(screen)!==category) return;
-      posts = next; postReactions = rMap; postComments = cMap; $v('generic-status').textContent = next.length ? '' : category==='books'?'No books shared yet today.':'No '+postNames[category]+' posts yet today.';
+      posts = next; postReactions = rMap; postComments = cMap; postCommentLikes = lMap; $v('generic-status').textContent = next.length ? '' : category==='books'?'No books shared yet today.':'No '+postNames[category]+' posts yet today.';
       if (screen === 'forum') renderForumTop(); else renderForumAll();
       window.dispatchEvent(new Event('daytone:forums-loaded'));
       if ($v('generic-discussion-dialog').open && selectedPostId) { const selected = posts.find(x => x.id === selectedPostId); if (selected) renderDiscussion(selected); else $v('generic-discussion-dialog').close(); }
@@ -150,7 +170,8 @@
     photo.addEventListener('click', () => openDiscussion(post.id)); card.append(photo);
     const body = make('div', featured ? 'forum-feature-body' : 'generic-card-body');
     body.append(make('small', 'forum-card-rank', featured ? 'NO. 0' + rank + ' / ' + forumScore(post) + '  replies and reactions' : new Date(post.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })));
-    body.append(make('h3', '', post.title), make('p', 'byline', '@' + post.nickname + (post.category==='forum'?' · '+({ question: 'Question', discussion: 'Discussion', debate: 'Debate' }[post.post_type] || 'Discussion') : post.creator?' · '+post.creator:'')));
+    body.append(make('h3', '', post.title));
+    const byline=make('p','byline'),member=make('button','member-link','@'+post.nickname);member.type='button';member.addEventListener('click',()=>window.DaytoneSocial?.openProfile(post.owner_id,post.nickname));byline.append(member,document.createTextNode(post.category==='forum'?' · '+({ question: 'Question', discussion: 'Discussion', debate: 'Debate' }[post.post_type] || 'Discussion') : post.creator?' · '+post.creator:''));body.append(byline);
     if (post.body) body.append(make('p', 'summary', post.body.length > 180 ? post.body.slice(0, 180) + '…' : post.body));
     const actions = make('div', 'card-actions'); addReactionButtons(actions, post); actions.append(copyButton(post.title, 'Copy title')); if(post.owner_id===user?.id){const edit=make('button','author-edit-link','Edit post');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openPost(post));actions.append(edit);} const discuss = make('button', 'discussion-open', 'Discussion ' + (postComments.get(post.id) || []).length + ' ↗'); discuss.type = 'button'; discuss.addEventListener('click', () => openDiscussion(post.id)); actions.append(discuss); body.append(actions); card.append(body); return card;
   }
@@ -175,27 +196,45 @@
       if(result.error)throw result.error;
       const [reactions,comments]=await Promise.all([
         fetchEveryRow(()=>client.from('post_reactions').select('post_id,user_id,emoji').eq('post_id',id).order('user_id')),
-        fetchEveryRow(()=>client.from('post_comments').select('id,post_id,user_id,nickname,body,image_path,created_at').eq('post_id',id).order('created_at').order('id'))
+        fetchEveryRow(()=>client.from('post_comments').select('id,post_id,user_id,nickname,body,image_path,parent_id,created_at').eq('post_id',id).order('created_at').order('id'))
       ]);
-      posts=[result.data];postReactions=new Map([[id,reactions]]);postComments=new Map([[id,comments]]);openDiscussion(id);
+      const likeRows=comments.length?await fetchEveryRow(()=>client.from('post_comment_likes').select('comment_id,user_id').in('comment_id',comments.map(item=>item.id))):[];
+      const likes=new Map();for(const like of likeRows){const list=likes.get(like.comment_id)||[];list.push(like.user_id);likes.set(like.comment_id,list);}
+      posts=[result.data];postReactions=new Map([[id,reactions]]);postComments=new Map([[id,comments]]);postCommentLikes=likes;openDiscussion(id);
     }catch(error){toast(error.message||'Could not open this discussion.');}
   }
   function renderDiscussion(post) {
     const host = $v('generic-discussion-body'); host.replaceChildren();
     if (post.image_path) { const img = make('img', 'discussion-photo'); img.src = imageUrl(post.image_path); img.alt = post.title + ' photo'; host.append(img); }
-    const heading = make('h2', '', post.title); heading.id = 'discussion-title'; host.append(heading, make('p', 'byline', '@' + post.nickname));
+    const heading = make('h2', '', post.title); heading.id = 'discussion-title'; host.append(heading);
+    const byline=make('p','byline'),member=make('button','member-link','@'+post.nickname);member.type='button';member.addEventListener('click',()=>window.DaytoneSocial?.openProfile(post.owner_id,post.nickname));byline.append(member);host.append(byline);
     if (post.body) host.append(make('p', '', post.body));
     if (post.source_url) { const link = make('a', 'open-link', 'Open related link ↗'); link.href = post.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; host.append(link); }
     host.append(copyButton(post.title, 'Copy forum title'));
     if(post.owner_id===user?.id){const edit=make('button','author-edit-link','Edit forum');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openPost(post));host.append(edit);}
     const actions = make('div', 'card-actions'); addReactionButtons(actions, post); host.append(actions);
     const list = make('div', 'comment-list'), items = postComments.get(post.id) || []; list.append(make('h3', 'publisher-heading', 'Discussion · ' + items.length));
-    for (const item of items) { const line = make('div', 'comment'); line.append(make('strong', '', item.nickname), make('time', '', new Date(item.created_at).toLocaleString('en-US', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }))); if (item.body) line.append(make('p', '', item.body)); if (item.image_path) { const img = make('img'); img.src = imageUrl(item.image_path); img.alt = item.nickname + ' photo'; img.loading = 'lazy'; line.append(img); } if(item.user_id===user?.id){const edit=make('button','author-edit-link','Edit reply');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openComment('post_comments',item));line.append(edit);} list.append(line); } host.append(list);
+    const byId=new Map(items.map(item=>[item.id,item]));
+    for (const item of items) {
+      const line=make('div','comment'+(item.parent_id?' is-reply':'')),head=make('div','comment-head');
+      const author=make('button','member-link',item.nickname);author.type='button';author.addEventListener('click',()=>window.DaytoneSocial?.openProfile(item.user_id,item.nickname));head.append(author,make('time','',new Date(item.created_at).toLocaleString('en-US',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})));line.append(head);
+      const parent=byId.get(item.parent_id);if(parent)line.append(make('span','comment-reply-context','↳ @'+parent.nickname));
+      if(item.body)line.append(make('p','',item.body));
+      if(item.image_path){const img=make('img');img.src=imageUrl(item.image_path);img.alt=item.nickname+' photo';img.loading='lazy';line.append(img);}
+      const tools=make('div','comment-tools'),reply=make('button','','Reply');reply.type='button';
+      reply.addEventListener('click',()=>{if(!requireAccount())return;form.dataset.parentId=item.id;replyLabel.textContent='Replying to @'+item.nickname;replyTarget.hidden=false;textarea.placeholder='Reply to @'+item.nickname+'…';textarea.focus();});tools.append(reply);
+      const mention=make('button','','@ Mention');mention.type='button';mention.addEventListener('click',()=>{if(!requireAccount())return;textarea.value+=(textarea.value&&!/\s$/.test(textarea.value)?' ':'')+'@'+item.nickname+' ';textarea.focus();});tools.append(mention);
+      const likedBy=postCommentLikes.get(item.id)||[],like=make('button','comment-like'+(likedBy.includes(user?.id)?' chosen':''),'♡ '+likedBy.length);like.type='button';like.setAttribute('aria-label','Like reply by '+item.nickname);like.setAttribute('aria-pressed',String(likedBy.includes(user?.id)));like.addEventListener('click',()=>void togglePostCommentLike(item.id,post.id,likedBy.includes(user?.id)));tools.append(like);
+      if(likedBy.includes(post.owner_id))tools.append(make('span','author-liked','♥ Liked by '+post.nickname));
+      if(item.user_id===user?.id){const edit=make('button','author-edit-link','Edit');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openComment('post_comments',item));tools.append(edit);}line.append(tools);list.append(line);
+    }host.append(list);
     const form = make('form', 'comment-form'), textarea = make('textarea'); textarea.name = 'body'; textarea.maxLength = 800; textarea.rows = 3; textarea.placeholder = 'Ask a question, share a thought, or just post a photo…';
+    const replyTarget=make('div','comment-reply-target');replyTarget.hidden=true;const replyLabel=make('span','','');replyTarget.append(replyLabel);const clearReply=make('button','','×');clearReply.type='button';clearReply.setAttribute('aria-label','Cancel reply');clearReply.addEventListener('click',()=>{delete form.dataset.parentId;replyTarget.hidden=true;textarea.placeholder='Ask a question, share a thought, or just post a photo…';});replyTarget.append(clearReply);form.append(replyTarget);
     const upload = make('input'); upload.type = 'file'; upload.name = 'image'; upload.accept = 'image/jpeg,image/png,image/webp,image/gif'; upload.setAttribute('aria-label', 'Comment photo or meme');
     const submit = make('button', '', 'Post reply ↗'); submit.type = 'submit'; const row = make('div', 'comment-actions'), error = make('div', 'comment-error'); error.setAttribute('role', 'alert'); row.append(upload, submit); form.append(textarea, row, error); form.addEventListener('submit', event => void publishComment(event, post.id, error, submit)); host.append(form);
   }
-  async function publishComment(event, id, errorNode, button) { event.preventDefault(); if (!requireAccount()) return; const form = event.currentTarget, body = form.elements.body.value.trim(), file = form.elements.image.files[0]; errorNode.textContent = ''; if (!body && !file) { errorNode.textContent = 'Write a reply or choose a photo.'; return; } button.disabled = true; button.textContent = 'Posting…'; const uploaded = []; try { const path = await uploadFile('images', await prepareImage(file), imageTypes, 1024 * 1024); if (path) uploaded.push({ bucket: 'images', path }); const result = await client.from('post_comments').insert({ post_id: id, user_id: user.id, nickname: profile.nickname, body, image_path: path }); if (result.error) throw result.error; if(['welcome','following','explore'].includes(screen))await openHomePostDiscussion(id);else await loadPosts(); toast('Reply posted.'); } catch (error) { await cleanUploads(uploaded); errorNode.textContent = error.message || 'Could not publish. Please try again.'; } finally { button.disabled = false; button.textContent = 'Post reply ↗'; } }
+  async function publishComment(event, id, errorNode, button) { event.preventDefault(); if (!requireAccount()) return; const form = event.currentTarget, body = form.elements.body.value.trim(), file = form.elements.image.files[0]; errorNode.textContent = ''; if (!body && !file) { errorNode.textContent = 'Write a reply or choose a photo.'; return; } button.disabled = true; button.textContent = 'Posting…'; const uploaded = []; try { const path = await uploadFile('images', await prepareImage(file), imageTypes, 1024 * 1024); if (path) uploaded.push({ bucket: 'images', path }); const result = await client.from('post_comments').insert({ post_id: id, user_id: user.id, nickname: profile.nickname, body, image_path: path, parent_id: form.dataset.parentId || null }); if (result.error) throw result.error; if(['welcome','following','explore'].includes(screen))await openHomePostDiscussion(id);else await loadPosts(); toast('Reply posted.'); } catch (error) { await cleanUploads(uploaded); errorNode.textContent = error.message || 'Could not publish. Please try again.'; } finally { button.disabled = false; button.textContent = 'Post reply ↗'; } }
+  async function togglePostCommentLike(commentId,postId,chosen){if(!requireAccount())return;try{const query=client.from('post_comment_likes'),result=chosen?await query.delete().eq('comment_id',commentId).eq('user_id',user.id):await query.insert({comment_id:commentId,user_id:user.id});if(result.error)throw result.error;if(['welcome','following','explore'].includes(screen))await openHomePostDiscussion(postId);else await loadPosts();}catch(error){toast(error.message||'Could not save like.');}}
   function openForumPost() { if (!requireAccount()) return; const category=postSpace(screen)||'forum';$v('generic-post-title').textContent = category==='forum'?'Start a forum':category==='books'?'Share a book':'Share '+postNames[category];$v('generic-type-field').classList.toggle('hidden',category!=='forum');$v('generic-title-label').textContent = category==='forum'?'Forum title':category==='daily'?'Title / thought':category==='film'?'Film title':category==='books'?'Book title':'Artwork title';$v('generic-creator-label').textContent=category==='books'?'Author (optional)':'Creator (optional)';$v('generic-post-dialog').querySelector('.dialog-intro').textContent='Up to three posts here each day. Only the title is required; a photo and note are optional.';$v('generic-post-error').textContent = ''; showDialog('generic-post-dialog'); }
   async function publishPost(event) {
     event.preventDefault(); if (!requireAccount()) return;
@@ -235,7 +274,7 @@
   $v('music-post').addEventListener('click', openUpload);
   $v('show-top-songs').addEventListener('click', () => show('music'));
   $v('show-all-songs').addEventListener('click', () => show('music-all'));
-  window.addEventListener('daytone:songs-loaded', () => { if (screen === 'music') renderMusicGallery(); if (selectedSongId && $v('music-discussion-dialog').open) { const song = songs.find(x => x.id === selectedSongId); if (song) $v('music-discussion-body').replaceChildren(createCard(song, sortedSongs().findIndex(x => x.id === song.id) + 1, true)); } });
+  window.addEventListener('daytone:songs-loaded', () => { if (screen === 'music') renderMusicGallery(); if (selectedSongId && $v('music-discussion-dialog').open) { const song = songs.find(x => x.id === selectedSongId); if (song) { $v('music-discussion-body').replaceChildren(createCard(song, sortedSongs().findIndex(x => x.id === song.id) + 1, true)); void renderSongConnections(song); } } });
   window.addEventListener('daytone:open-music-discussion', event => openMusicDiscussion(event.detail.id));
   window.addEventListener('daytone:profile', () => { $v('welcome-name').textContent = profile?.nickname || user?.user_metadata?.nickname || 'friend'; window.DaytoneMusicRooms?.refreshAccount(); });
   window.addEventListener('daytone:forum-edited',()=>{if(postSpace(screen))void loadPosts();});

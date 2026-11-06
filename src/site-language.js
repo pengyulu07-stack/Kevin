@@ -34,6 +34,10 @@
     'MAKE YOURSELF AT HOME':'把入口布置成喜欢的样子','Your entrance':'你的入口','Close settings':'关闭设置','Your background and room menu, just for you. Your account keeps these choices on other devices.':'背景与选项位置由你决定；登录后换设备也会保留。','Background':'背景','Daily cinema':'每日电影画面','A different frame each day, from 20 film stills.':'从 20 张电影画面中每天轮换一张。','Keep a favorite':'固定一张','Choose one frame from the collection.':'从图库中选一张喜欢的。','Upload my own':'上传自己的照片','A private photo, visible only to you.':'私人照片，只有你自己能看见。','Browse the 20-frame collection':'浏览 20 张图库照片','Room menu position':'空间菜单位置','Automatic · suit the image':'自动适应照片','Left side':'左侧','Right side':'右侧','Room menu layout':'空间菜单排列','Automatic':'自动','Vertical list':'竖排列表','Two-column grid':'两列排列','The date sits on the opposite side. On small screens, the menu moves below the image so everything stays readable.':'日期显示在另一侧；小屏幕上菜单会移到图片下方，方便阅读。','Keep the right side quiet, or let the bell hold new activity.':'右侧可以保持安静，也可以让铃铛收纳新动态。','Show':'显示范围','Followed charts, groups & replies to my posts':'关注的榜单、小组，以及自己帖子的回复','All public and joined-group activity':'所有公开内容及已加入小组的动态','Display':'显示方式','Bell only':'仅铃铛','Right-side text':'右侧文字','Bell and right-side text':'铃铛与右侧文字','Changes save to your account.':'设置会保存到你的账号。','Your entrance preview':'入口预览','Reset':'重置','Save my entrance ↗':'保存我的入口 ↗'
   };
   Object.assign(zh,{
+    'YOUR MUSIC & THE WHOLE COLLECTION':'我的音乐与全部分享','Keep the songs you like, and browse every public share.':'保存喜欢的歌，也能浏览全部公开分享。',
+    '♡ Likes':'♡ 喜欢','All shares':'全部分享','Songs you like':'喜欢的歌曲','Heart a song to keep it here.':'点击歌曲的爱心，就能在这里找到它。','Log in to keep songs you like.':'登录后可以保存喜欢的歌曲。','Saved to your Library.':'已加入资料库。','View Likes ↗':'查看喜欢 ↗','Grid view':'网格视图','List view':'列表视图',
+    'Trap':'陷阱说唱','House':'浩室','Techno':'科技舞曲','Dubstep':'回响贝斯','EDM':'电子舞曲','Lo-fi':'低保真','Mandopop':'国语流行','Cantopop':'粤语流行','New Age':'新世纪',
+    'NetEase Music':'网易云音乐','NetEase Music ↗':'网易云音乐 ↗','Choose the right artist and album. Your title can stay as written.':'请选择正确的歌手和专辑；歌名可以保持原样。',
     'Find artist & cover ↗':'查找歌手与封面 ↗','Find artist & cover':'查找歌手与封面','Album cover found':'已找到专辑封面','Where to listen':'选择收听方式','Find this song':'查找这首歌','No playable recording was attached to this post. Choose a source below.':'这条分享没有可在本站播放的音源。请从下方选择平台。','This post links to Apple Music. Use the original link or find the song on another service.':'这条分享附有 Apple Music 链接，也可以在其他平台查找。','▷ Play here':'▷ 立即播放','↗ Find song':'↗ 查找歌曲','Find a playable version':'寻找可播放版本','Open a search, check the version, then paste its link into Music or video link below.':'打开搜索，确认正确版本，再把链接粘贴到下方的“音乐或视频链接”。',
     'Home':'首页','Following':'关注','Explore all':'全部内容','Library':'资料库','Main sections':'主栏目',
     'YOUR DAYTONE':'你的 DAYTONE','The music charts and private groups you chose.':'你关注的音乐榜单和加入的私人小组。',
@@ -65,6 +69,15 @@
     'Popular & guitar':'流行与吉他','Beats & electronic':'节拍与电子','Acoustic & composed':'原声与作曲','Screen & across borders':'影像与世界','Language charts':'语言榜','Community categories':'社区分类',
     'Alternative':'另类','Punk':'朋克','Metal':'金属','J-Pop':'日系流行','City Pop':'城市流行','Dance':'舞曲','Funk':'放克','Ambient':'氛围','Blues':'蓝调','Piano':'钢琴','Acoustic':'原声','Singer-Songwriter':'创作歌手','Country':'乡村','Opera & Choral':'歌剧与合唱','Anime':'动漫','Latin':'拉丁','Afrobeats':'非洲节拍','Reggae':'雷鬼','Experimental':'实验','Gospel':'福音',
     'Bilibili ↗':'B 站 ↗','Swipe left or right over this page to change spaces.':'在这个页面横向滑动，可切换栏目。'
+  });
+  Object.assign(zh,{
+    'People and charts you follow, with your own posts below.':'你关注的人和榜单，以及你自己的分享。',
+    'People you follow':'关注的用户','Shared by people you follow':'关注用户的新分享','Their new songs will appear here.':'他们的新歌会显示在这里。',
+    'Keep listening':'继续发现','Finding other shares…':'正在查找更多分享…','No other shares here yet.':'暂时没有其他相关分享。','Other songs are unavailable right now.':'暂时无法加载相关歌曲。',
+    'In the same chart':'同榜更多歌曲','@ Mention':'@ 提及','Cancel reply':'取消回复','Opening member…':'正在打开用户主页…',
+    'DAYTONE / MEMBER':'DAYTONE / 用户','Close profile':'关闭用户主页','＋ Follow':'＋ 关注','Following ✓':'已关注 ✓',
+    'Shared songs':'分享的歌曲','Other shares':'其他分享','No public songs yet.':'还没有公开分享的歌曲。','Could not open this member.':'暂时无法打开这位用户。',
+    'All public shares':'全部公开分享','Songs you like':'喜欢的歌曲'
   });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;

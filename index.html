@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#11191d">
+  <meta name="theme-color" content="#130f0e">
   <meta name="description" content="DAYTONE：Share music and conversations today.">
   <title>DAYTONE</title>
   <link rel="stylesheet" href="src/style.css?v=20261029a">
@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="src/listen.css?v=20261101b">
   <link rel="stylesheet" href="src/editorial.css?v=20261101a">
   <link rel="stylesheet" href="src/dark.css?v=20261101c">
-  <link rel="stylesheet" href="src/ink.css?v=20261101e">
+  <link rel="stylesheet" href="src/ink.css?v=20261106a">
   <link rel="stylesheet" href="src/chart-presets.css?v=20261101b">
 </head>
 <body>
@@ -26,7 +26,7 @@
       <nav aria-label="Main navigation"><button id="space-select" class="nav-space" type="button">Back to entrance</button><span id="current-space-label">DAYTONE</span></nav>
       <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button><button class="quiet-action" id="chart-design-open" type="button">Design</button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
     </header>
-    <nav id="site-quick-nav" class="site-quick-nav" aria-label="Main sections"><button type="button" data-go="welcome">Today</button><button type="button" data-go="following">Following</button><button type="button" data-go="explore">Library</button></nav>
+    <nav id="site-quick-nav" class="site-quick-nav" aria-label="Main sections"><button type="button" data-go="welcome">Today</button><button type="button" data-go="following">Following</button><button type="button" data-go="explore">♡ Library</button></nav>
 
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-copy">
@@ -43,8 +43,8 @@
 
     <section id="welcome" class="welcome" aria-labelledby="welcome-title"><div class="welcome-heading"><p class="welcome-eyebrow">DAYTONE · A DAY TO SHARE</p><h1 id="welcome-title">Welcome, <span id="welcome-name">friend</span>.</h1><p>Choose a date, then browse what people shared.</p><button id="jump-to-songs" class="jump-to-songs" type="button">See Music ↓</button><div class="display-mode-switch" role="group" aria-label="Choose display style"><span>VIEW THE DAY</span><button type="button" data-layout-choice="edition" aria-pressed="true">Edition</button><button type="button" data-layout-choice="scenes" aria-pressed="false">Scenes</button></div></div><div class="calendar-layout"><aside id="follow-chart-left" class="follow-chart-side" aria-label="First followed chart"></aside><div class="paper-calendar"><div class="paper-calendar-head"><button id="calendar-prev" type="button" aria-label="Previous month">←</button><div><small>DAYTONE / CALENDAR</small><h2 id="calendar-month"></h2></div><button id="calendar-next" type="button" aria-label="Next month">→</button></div><div id="calendar-grid" class="calendar-grid" aria-label="Choose a date"></div><div class="calendar-foot"><span>A day, held on paper</span><span id="calendar-picked"></span></div></div><aside id="follow-chart-right" class="follow-chart-side" aria-label="Second followed chart"></aside></div><div id="calendar-day-preview" class="calendar-day-preview" aria-live="polite"></div><details id="calendar-follow-controls" class="calendar-follow-controls"></details><button id="calendar-feedback" class="calendar-feedback" type="button">✎ Leave feedback</button><button id="start-day" class="start-day" type="button">Explore the rooms <span>↗</span></button></section>
     <section id="taxi-lobby" class="taxi-lobby" aria-label="Choose a room" hidden><img src="taxi-driver.png" alt="Taxi Driver film still" class="taxi-image"><div class="taxi-shade"></div><div class="taxi-date"><small>DAYTONE / TODAY</small><strong id="lobby-date"></strong></div><div class="taxi-mirror"><small>CHOOSE A ROOM</small><button type="button" data-space="music">Music <span>Charts &amp; private groups ↗</span></button><button type="button" data-space="forum">Forum <span>FORUM ↗</span></button><button type="button" data-space="daily">Daily Life <span>Open the diary ↗</span></button><button type="button" data-space="film">Film <span>Open the screen ↗</span></button><button type="button" data-space="art">Art <span>Open the studio ↗</span></button><button type="button" data-space="books">Books <span>Open the shelf ↗</span></button></div><button id="lobby-settings" class="lobby-settings" type="button">⚙ Your entrance</button><div id="lobby-frame-credit" class="lobby-frame-credit"></div><button id="lobby-back" type="button" class="lobby-back">← Back to calendar</button></section>
-    <section id="following-screen" class="collection-screen" aria-labelledby="following-title" hidden><div class="collection-heading"><small>YOUR DAYTONE</small><h1 id="following-title">Following</h1><p>New songs from your charts and groups, with your own posts below.</p></div><div id="following-content" class="collection-content"></div></section>
-    <section id="explore-screen" class="collection-screen" aria-labelledby="explore-title" hidden><div class="collection-heading"><small>THE WHOLE COLLECTION</small><h1 id="explore-title">Library</h1><p>Browse everything shared publicly.</p></div><div id="explore-content" class="collection-content"></div></section>
+    <section id="following-screen" class="collection-screen" aria-labelledby="following-title" hidden><div class="collection-heading"><small>YOUR DAYTONE</small><h1 id="following-title">Following</h1><p>People and charts you follow, with your own posts below.</p></div><div id="following-content" class="collection-content"></div></section>
+    <section id="explore-screen" class="collection-screen" aria-labelledby="explore-title" hidden><div class="collection-heading"><small>YOUR MUSIC & THE WHOLE COLLECTION</small><h1 id="explore-title">Library</h1><p>Keep the songs you like, and browse every public share.</p></div><div id="explore-content" class="collection-content"></div></section>
     <section id="music-hub" class="music-hub" aria-labelledby="music-hub-title" hidden><div class="music-hub-heading"><div><small>MUSIC / THE INDEX</small><h1 id="music-hub-title">Music charts &amp; groups.</h1><p id="music-hub-date"></p><div class="music-hub-help">Open All Music, explore a category, or create a private group for your friends.</div></div><div class="hub-actions"><button id="hub-back" type="button">← Back to rooms</button><button id="hub-create-category" type="button">＋ New category</button><button id="hub-create-group" type="button">＋ Create a private group</button><button id="hub-join-group" type="button">Join with code ↗</button></div></div><div id="music-hub-total" class="music-hub-total"></div><div class="hub-middle-grid"><div id="music-hub-follows" class="music-hub-follows"></div><div id="music-hub-playlist" class="music-hub-playlist"></div></div><div id="music-hub-groups" class="music-hub-groups"></div><details id="music-hub-categories" class="music-hub-categories"><summary>Explore all music categories <span>＋</span></summary><div id="music-hub-category-grid" class="music-hub-category-grid"></div></details></section>
     <section id="playlists-screen" class="playlists-screen" aria-labelledby="playlists-title" hidden>
       <div class="playlist-heading"><div><small>DAYTONE / THE LONG PLAY</small><h1 id="playlists-title">Playlists stay.</h1><p>A collection for more than one day. Find a list, then copy any song into your own app.</p></div><div class="playlist-heading-actions"><button id="playlists-back" type="button">← Music charts</button><button id="playlist-create" type="button">＋ Share a playlist</button></div></div>
@@ -85,19 +85,20 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="config.js"></script>
   <script defer src="vendor/supabase.js"></script>
-  <script defer src="src/main.js?v=20261101f"></script>
-  <script defer src="src/listen.js?v=20261101h"></script>
-  <script defer src="src/link-enrichment.js?v=20261101f"></script>
-  <script defer src="src/community-v2.js?v=20261101d"></script>
-  <script defer src="src/music-rooms.js?v=20261031b"></script>
+  <script defer src="src/main.js?v=20261106a"></script>
+  <script defer src="src/listen.js?v=20261106a"></script>
+  <script defer src="src/link-enrichment.js?v=20261106a"></script>
+  <script defer src="src/community-v2.js?v=20261106a"></script>
+  <script defer src="src/social.js?v=20261106a"></script>
+  <script defer src="src/music-rooms.js?v=20261106a"></script>
   <script defer src="src/appearance.js?v=20261031j"></script>
   <script defer src="src/playlists.js?v=20261030a"></script>
   <script defer src="src/notifications.js?v=20261030a"></script>
   <script defer src="src/categories.js?v=20261029f"></script>
   <script defer src="src/author-tools.js?v=20261029f"></script>
-  <script defer src="src/site-language.js?v=20261101f"></script>
+  <script defer src="src/site-language.js?v=20261106a"></script>
   <script defer src="src/site-guide.js?v=20261029f"></script>
-  <script defer src="src/site-navigation.js?v=20261101e"></script>
+  <script defer src="src/site-navigation.js?v=20261106a"></script>
   <script defer src="src/chart-presets.js?v=20261101b"></script>
 </body>
 </html>
