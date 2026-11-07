@@ -1,0 +1,188 @@
+/* DAYTONE's default palette. Keep room identity in small accents; keep reading surfaces neutral. */
+:root{
+  --dt-bg:#111214;
+  --dt-surface:#191b1d;
+  --dt-raised:#232527;
+  --dt-hover:#2b2d30;
+  --dt-rule:#424449;
+  --dt-text:#f0ede7;
+  --dt-muted:#b4b0aa;
+  --dt-soft:#908d89;
+  --dt-accent:#d69270;
+  --dt-accent-hover:#e9a987;
+  --dt-paper:#d9d2c6;
+  --dt-paper-ink:#302c2a;
+  --bg:var(--dt-bg);
+  --paper:var(--dt-surface);
+  --wine:var(--dt-text);
+  --red:var(--dt-accent);
+  --accent:var(--dt-accent);
+  --accent2:var(--dt-accent);
+  --ink-raised:var(--dt-raised);
+  --ink-line:var(--dt-rule);
+  --ink-muted:var(--dt-muted);
+  color-scheme:dark;
+}
+body,body[data-active-room="music"]{background:var(--dt-bg);color:var(--dt-text);--room-accent:var(--dt-accent);--room-veil:var(--dt-surface)}
+body[data-active-room="film"]{--room-accent:#aebbc4;--room-veil:var(--dt-surface)}
+body[data-active-room="art"]{--room-accent:#c5a4a8;--room-veil:var(--dt-surface)}
+body[data-active-room="books"]{--room-accent:#b9c0a7;--room-veil:var(--dt-surface)}
+body[data-active-room="daily"]{--room-accent:#cbb49c;--room-veil:var(--dt-surface)}
+body[data-active-room="forum"]{--room-accent:#a9b9b6;--room-veil:var(--dt-surface)}
+body a:focus-visible,body button:focus-visible,body input:focus-visible,body textarea:focus-visible{outline-color:var(--dt-accent)}
+
+/* A calm frame around the day's content. */
+.site-shell,.header,.site-quick-nav.site-quick-nav,.welcome.welcome{background:var(--dt-bg);color:var(--dt-text)}
+.header,.site-quick-nav.site-quick-nav,.welcome:before{border-color:var(--dt-rule)}
+.brand,.header nav a,.quiet-action,.header-actions .quiet-action,.header-actions .notification-bell{color:var(--dt-text)}
+.brand-mark{color:var(--dt-accent);border-color:#806452}
+.site-quick-nav button{color:var(--dt-muted);background:transparent;border-color:transparent}
+.site-quick-nav button:hover,.site-quick-nav button.active{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text);box-shadow:inset 0 -2px var(--dt-accent)}
+.header-actions .site-language select,.display-mode-switch button{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.display-mode-switch button.selected{background:#332b28;border-color:var(--dt-accent);color:var(--dt-text)}
+.welcome-eyebrow,.welcome-heading>p:last-child,.display-mode-switch span,.room-swipe-hint{color:var(--dt-muted)}
+.welcome h1,.welcome-heading h1{color:var(--dt-text)}
+.welcome .jump-to-songs,.calendar-feedback,.follow-controls-summary{color:var(--dt-accent);border-color:var(--dt-rule)}
+
+/* The one paper object is the calendar. Its ink uses a separate light palette. */
+.paper-calendar{background:var(--dt-paper);color:var(--dt-paper-ink);border-color:#c5b7a3;box-shadow:5px 7px 0 #08090a}
+.paper-calendar *{color-scheme:light}
+.paper-calendar-head small,.paper-calendar .calendar-weekday,.paper-calendar .calendar-foot{color:#554a41}
+.paper-calendar-head h2,.paper-calendar-head button{color:var(--dt-paper-ink)}
+.paper-calendar .calendar-day{color:var(--dt-paper-ink)}
+.paper-calendar .calendar-day.selected{color:#ad3d30}
+.welcome .start-day{background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule)}
+.welcome .start-day:hover{background:var(--dt-hover);border-color:var(--dt-accent);color:var(--dt-text)}
+
+/* Room cards are chapter tabs, not competing posters. */
+.room-switcher,.room-shelf,.edition-gallery,.calendar-follow-controls,.follow-rail-row,.follow-rail-block,.follow-rail-title{border-color:var(--dt-rule)}
+.room-shelf-head h3,.edition-gallery-head h3{color:var(--dt-text)}
+.room-shelf-head small{color:var(--room-accent)}
+.room-shelf-controls button{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.room-switcher .room-shelf-card,.room-switcher .room-shelf-card.music-hub,
+body[data-layout="scenes"] .room-switcher .room-shelf-card,
+body[data-layout="scenes"] .room-switcher .room-shelf-card.music-hub,
+body[data-layout="scenes"] .room-shelf-card.daily-all,
+body[data-layout="scenes"] .room-shelf-card.forum-all,
+body[data-layout="scenes"] .room-shelf-card.film-all,
+body[data-layout="scenes"] .room-shelf-card.art-all,
+body[data-layout="scenes"] .room-shelf-card.books-all{
+  background:var(--dt-raised);color:var(--dt-text)!important;border:1px solid var(--dt-rule);box-shadow:none;
+}
+.room-switcher .room-shelf-card:hover,.room-switcher .room-shelf-card.selected{background:var(--dt-hover);color:var(--dt-text)!important;border-color:var(--room-accent);box-shadow:inset 0 -3px var(--room-accent)}
+.room-switcher .room-shelf-card span,.room-switcher .room-shelf-card em{color:var(--dt-muted)}
+
+/* Selected day, rankings and the archive share one reading surface. */
+.calendar-day-preview,.welcome .calendar-day-preview,
+.calendar-day-preview[data-room="film"],.calendar-day-preview[data-room="art"],.calendar-day-preview[data-room="books"],.calendar-day-preview[data-room="daily"],.calendar-day-preview[data-room="forum"]{
+  background:var(--dt-surface);color:var(--dt-text);border-color:var(--dt-rule);box-shadow:5px 7px 0 #08090a;
+}
+.calendar-day-preview .day-preview-head{border-bottom-color:var(--dt-rule)}
+.day-preview-head,.day-preview-main,.day-preview-periodic,.month-archive,.forum-after-music,.room-content-intro{border-color:var(--dt-rule)}
+.day-preview-head>small,.day-preview-open span,.day-preview-forum span,.day-preview-empty,.day-preview-loading,.period-caption,.month-day summary small,.room-content-copy p{color:var(--dt-muted)}
+.day-preview-section h3,.forum-after-head h3,.day-preview-open,.day-preview-forum,.month-day summary,.room-content-intro h3{color:var(--dt-text)}
+.day-preview-head .kicker,.room-content-copy small,.day-preview-open small,.day-preview-forum small{color:var(--room-accent)}
+.day-preview-row,.day-preview-forum,.month-day,.room-content-intro{border-color:var(--dt-rule)}
+.room-content-intro p,.room-content-intro span{color:var(--dt-muted)}
+.day-preview-row:hover,.day-preview-forum:hover,.collection-item:hover{background:var(--dt-hover)}
+.day-preview-periodic,.room-content-card{background:var(--dt-raised);border-color:var(--dt-rule)}
+.day-preview-art,.collection-cover{background:#303136;color:var(--dt-text)}
+.period-tabs button{color:var(--dt-muted)}.period-tabs button.active{color:var(--dt-text);border-color:var(--dt-accent)}
+.day-preview-action,.day-preview-actions button,.outline-button,.listen-action,.hub-actions button,.music-hub-categories summary{
+  background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text);
+}
+.day-preview-action:hover,.day-preview-actions button:hover,.outline-button:hover,.listen-action:hover,.hub-actions button:hover{background:var(--dt-hover);border-color:#8c8e91;color:#fff}
+.day-preview-vote.chosen{background:#553d34;border-color:var(--dt-accent);color:var(--dt-text)}
+.day-preview-actions button:last-child,.primary-button,.day-tile.selected{background:#a65b3e;border-color:#bd7555;color:#fff}
+.primary-button:hover{background:#aa603f;color:#fff}
+.day-tile small{color:var(--dt-muted)}
+.day-tile.selected small{color:#fff}
+.status,.song-card .comment-empty{color:var(--dt-muted)}
+.follow-chart-side,.follow-controls-head,.follow-note,.follow-controls-head p,.follow-rail-open,.follow-rail-title,.follow-rail-none,.follow-rail-empty p{color:var(--dt-muted)}
+.follow-chip,.collection-link{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.follow-chip:hover,.collection-link:hover{background:var(--dt-hover)}
+.follow-chip.chosen,.collection-link[aria-pressed="true"]{background:#553d34;border-color:var(--dt-accent);color:var(--dt-text)}
+.follow-family{border-color:var(--dt-rule)}.follow-family h3{color:var(--dt-muted)}
+
+/* Data cards and forms stay neutral so artwork carries the colour. */
+.music-hub,.playlists-screen,.content-layout,.generic-feed,.forum-rank,.collection-screen,.music-gallery,
+body[data-space="daily"] #generic-feed,body[data-space="film"] #generic-feed,body[data-space="art"] #generic-feed,body[data-space="books"] #generic-feed{
+  background:var(--dt-bg);color:var(--dt-text);
+}
+.kicker{color:var(--room-accent)}
+.feed-toolbar,.generic-toolbar{color:var(--dt-muted)}
+.week-rail{background:var(--dt-surface);border-color:var(--dt-rule)}
+.music-hub-heading,.playlist-heading,.collection-heading,.forum-rank,.generic-feed,.feed-toolbar,.sidebar,.rule,.how,footer{border-color:var(--dt-rule)}
+.music-hub-heading p,.music-hub-help,.playlist-heading p,.collection-heading p,.collection-status,.forum-feature .byline,.forum-list-card .byline,.forum-feature .summary,.song-meta p,.song-meta small,.song-note{color:var(--dt-muted)}
+.hub-total-card{background:var(--dt-raised);color:var(--dt-text);box-shadow:5px 6px 0 #08090a}
+.hub-category-card,.hub-group-card{filter:saturate(.8)}
+.forum-feature,.forum-list-card,.generic-card,.generic-empty,.forum-top-empty,.song-card,.collection-item,
+body[data-space="film"] #generic-feed .generic-card{background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule);box-shadow:none}
+.empty,.generic-empty{background:var(--dt-surface);color:var(--dt-text);border-color:var(--dt-rule)}
+.empty h3,.empty p,.generic-empty h3,.generic-empty p{color:var(--dt-text)}
+.forum-feature h3,.generic-card h3,.song-meta h3{color:var(--dt-text)}
+.song-meta .song-byline,.song-meta .member-link,.song-card .artist-more{color:var(--dt-muted)}
+.song-meta .member-link:hover,.song-card .artist-more:hover{color:var(--dt-accent-hover)}
+.song-genre-tag{color:var(--dt-text);border-color:var(--dt-rule)}
+.song-art:not(.has-image){background:linear-gradient(135deg,#30383a,#59615b);color:#fff;border-color:var(--dt-rule)}
+.song-art:not(.has-image):hover{background:linear-gradient(135deg,#3b4446,#6b756d)}
+.song-card .copy-name,.song-card .song-vote,.song-card .reaction,.song-card .comment-form button{
+  background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule);
+}
+.song-card .copy-name:hover,.song-card .song-vote:hover,.song-card .reaction:hover,.song-card .comment-form button:hover{
+  background:var(--dt-hover);color:#fff;border-color:var(--dt-accent);
+}
+.song-card .song-vote.chosen,.song-card .reaction.chosen{background:#49392f;color:#fff;border-color:var(--dt-accent)}
+.song-card .comment-form textarea{background:#141618;color:var(--dt-text);border-color:var(--dt-rule)}
+.song-card .comment-form textarea::placeholder{color:var(--dt-muted)}
+.song-card .comment-heading{color:var(--dt-text);border-color:var(--dt-rule)}
+.forum-feature .card-actions button,.forum-list-card .card-actions button,.date-actions button,.date-actions input,.day-tile,.collection-search{background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule)}
+.date-actions button:hover,.day-tile:hover{background:var(--dt-hover)}
+.music-extra{background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule)}
+.music-extra span:first-child{color:var(--dt-accent)}
+.sidebar .side-card,.side-card.subtle{background:var(--dt-surface);color:var(--dt-text)}
+.sidebar .side-card p,.sidebar .side-heading span{color:var(--dt-muted)}
+.sidebar .side-card .outline-button{background:var(--dt-raised);color:var(--dt-text);border-color:var(--dt-rule)}
+.sidebar .side-card .outline-button:hover{background:var(--dt-hover);color:#fff;border-color:var(--dt-accent)}
+.collection-item:hover{border-color:#8c8e91}.collection-item-copy small{color:var(--dt-accent)}.collection-item-copy span{color:var(--dt-muted)}
+.library-tabs{border-color:var(--dt-rule)}.library-tabs .collection-link{color:var(--dt-muted)}
+.library-tabs .collection-link[aria-pressed="true"]{background:transparent;border-color:var(--dt-accent);color:var(--dt-text)}
+.library-grid .collection-item{background:transparent;border:0}.library-grid .collection-cover{background:#303136}
+
+.listen-dialog,dialog:not(.discussion-dialog),.listen-shell,.daytone-video-dialog,.member-dialog,.chart-design-dialog{
+  background:var(--dt-surface);color:var(--dt-text);border-color:var(--dt-rule);box-shadow:8px 12px 0 #08090a;
+}
+.listen-top,.listen-source-label,.chart-design-head,.comment,.song-connections,.song-connection-item,.member-stats,.member-song{border-color:var(--dt-rule)}
+.listen-top button,.listen-top h2,.listen-original,.listen-choice,.listen-provider,.song-connections h3,.member-shell h2{color:var(--dt-text)}
+.listen-artist,.listen-note,.listen-source-label,.chart-design-head p,.song-connection-group h4,.song-connection-detail small,.song-connections-empty,.member-stats,.member-status{color:var(--dt-muted)}
+.listen-choice,.listen-provider,.song-lookup-option,.chart-design-tile,.chart-design-shell>label select{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.listen-choice.selected,.listen-choice:hover,.listen-provider:hover,.song-lookup-option:hover,.chart-design-tile:hover{background:var(--dt-hover);border-color:var(--dt-accent);color:var(--dt-text)}
+dialog:not(.discussion-dialog) input,dialog:not(.discussion-dialog) textarea,dialog:not(.discussion-dialog) select{background:#121416;color:var(--dt-text);border-color:var(--dt-rule)}
+.comment-head strong,.song-connection-detail,.member-song-title{color:var(--dt-text)}
+.comment-head time,.comment-reply-context,.comment-tools button,.comment-reply-target button{color:var(--dt-muted)}
+.comment-tools button:hover,.comment-like.chosen,.comment-reply-context,.author-liked,.member-link:hover,.artist-more:hover,.toast-action{color:var(--dt-accent-hover)}
+.comment.is-reply{border-left-color:#77706c}.comment-reply-target{background:var(--dt-raised);color:var(--dt-text);border-left-color:var(--dt-accent)}
+.member-follow{background:#a65b3e;border-color:#bd7555;color:#fff}.member-follow.chosen{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.song-connection-play,.member-play{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.video-search-link{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.video-search-link:hover,.video-search-link:focus-visible{background:var(--dt-hover);border-color:#8c8e91;color:#fff}
+.edition-gallery-video-links .video-search-link{background:#1a1b1de8}
+.daytone-player-dock,.daytone-player-dock.video{background:#1c1e20;border-top-color:var(--dt-rule);color:var(--dt-text)}
+.player-dock-status{background:var(--dt-raised);color:var(--dt-muted)}
+.daytone-video-dialog::backdrop,dialog::backdrop{background:#060708d9}
+.youtube-publish-preview:not([hidden]){background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.video-dialog-foot button,.video-dialog-foot a{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+.video-dialog-foot button:hover,.video-dialog-foot a:hover{background:var(--dt-hover)}
+.toast{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
+
+/* Keep uploaded cover art true to the upload; tint only surrounding frames. */
+.edition-gallery-card{border-color:#73706a;box-shadow:3px 5px 0 #08090a}
+.edition-gallery-caption{background:linear-gradient(transparent,#101113ee 24%)}
+body[data-chart-design="ink"]{--chart-ground:#191b1d;--chart-panel:#252729;--chart-highlight:#d8ae96;--chart-rule:#76706b}
+body[data-chart-design="ink"] #music-gallery[data-genre]{background:var(--chart-ground)}
+body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--chart-panel);border-color:var(--chart-rule)}
+.chart-design-specimen{background:var(--dt-raised);color:var(--dt-accent);border-color:var(--dt-rule)}
+.chart-design-dialog{border-color:var(--dt-rule)}
+.chart-design-head small,.chart-design-tile[aria-pressed="true"]{color:var(--dt-accent)}
+.chart-design-tile[aria-pressed="true"]{outline-color:var(--dt-accent)}
+.chart-design-tile small{color:var(--dt-muted)}
