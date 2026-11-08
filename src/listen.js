@@ -50,6 +50,22 @@
     link.title='Find '+song.title+' on '+service.name;link.setAttribute('aria-label',link.title);
     return link;
   }
+  function musicServiceLinks(song){
+    const links=document.createDocumentFragment();
+    for(const key of ['soundcloud','qq','netease']){
+      const service=preferredServices[key];
+      const link=node('a','video-search-link music-service-link',key==='netease'?'网易':key==='qq'?'QQ':service.mark);
+      link.dataset.provider=key;
+      link.href=platform(song?.source_url)===service.name?song.source_url:service.base+encodeURIComponent([song?.title,song?.artist].filter(Boolean).join(' '));
+      link.target='_blank';link.rel='noopener noreferrer';
+      const displayName=key==='netease'&&localStorage.getItem('daytone-language')==='zh'?'网易云音乐':service.name;
+      link.title=(platform(song?.source_url)===service.name?'Open shared version on ':'Find on ')+displayName;
+      link.setAttribute('aria-label',link.title);
+      links.append(link);
+    }
+    if(!['soundcloud','qq','netease'].includes(preferredPlatform()))links.append(preferredSearchLink(song));
+    return links;
+  }
   function directLink(url,label){const link=node('a','listen-original',label+' ↗');link.href=url;link.target='_blank';link.rel='noopener noreferrer';return link;}
   function searchLinks(title,artist){
     const term=[title,artist].filter(Boolean).join(' '),links=node('div','listen-links');
@@ -122,5 +138,5 @@
     if(!videoDialog.open)videoDialog.showModal();
   }
   dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,canPlayHere,actionLabel};
+  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,musicServiceLinks,canPlayHere,actionLabel};
 })();

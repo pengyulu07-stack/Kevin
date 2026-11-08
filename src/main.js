@@ -419,6 +419,7 @@ function createCard(song, rank, discussion = false) {
     art.append(image);
   } else art.append(el("b", "", song.title.slice(0, 2)));
   if (!discussion) {
+    art.classList.add(window.DaytoneListen?.canPlayHere(song) ? 'can-play' : 'find-only');
     art.setAttribute("role", "button"); art.tabIndex = 0;
     art.setAttribute("aria-label", window.DaytoneListen?.actionLabel(song) || "Find " + song.title);
     art.addEventListener("click", () => window.DaytoneListen?.open(song));
@@ -454,7 +455,7 @@ function createCard(song, rank, discussion = false) {
   meta.append(listen);
   if(song.artist){const artistMore=el('button','artist-more','More from '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));meta.append(artistMore);}
   const videoSearch = el('div','song-video-search');
-  videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.preferredSearchLink(song));
+  videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
   meta.append(videoSearch);
   if (youtubeVideoId(song.source_url)) {
     const video=el('button','listen-youtube','▶ YouTube video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');
@@ -713,7 +714,12 @@ async function publish(event) {
     if (!saved) throw new Error("No room for another song today.");
     form.reset();
     $("upload-dialog").close();
-    setDay(day);
+    selectedDay = day;
+    $("date").value = day;
+    renderWeek();
+    window.DaytoneCommunity?.setDay(day);
+    await loadSongs();
+    window.dispatchEvent(new CustomEvent('daytone:share-published',{detail:{kind:'music',id:song.id,day}}));
     toast(coverUnavailable ? 'Song shared. The catalog cover could not be added; you can edit it later.' : 'Song shared.');
   } catch (error) {
     await cleanUploads(uploaded);
@@ -741,6 +747,7 @@ async function publishComment(event, songId, errorNode, button) {
     form.reset();
     delete form.dataset.parentId;
     await loadSongs();
+    window.dispatchEvent(new CustomEvent('daytone:music-comment-changed',{detail:{id:songId}}));
     toast("Comment posted.");
   } catch (error) {
     await cleanUploads(uploaded);

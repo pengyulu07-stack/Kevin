@@ -181,6 +181,11 @@ body,body[data-active-room="music"]{background:#101010;--room-veil:#1a1a1a}
 .video-search-link[data-provider="youtube"] svg rect{fill:#e62626;stroke:#e62626}
 .video-search-link[data-provider="youtube"] svg path{fill:#fff;stroke:#fff}
 .video-search-link[data-provider="bilibili"] svg{color:#37a9df}
+.video-search-link.music-service-link{font:700 15px/1 system-ui,sans-serif;letter-spacing:0;border-left:1px solid #555}
+.video-search-link.music-service-link[data-provider="soundcloud"]{color:#dfa57d}
+.video-search-link.music-service-link[data-provider="qq"]{color:#a9cfaf}
+.video-search-link.music-service-link[data-provider="netease"]{color:#e9aaa2}
+.video-search-link.music-service-link[data-provider="qq"],.video-search-link.music-service-link[data-provider="netease"]{font-size:11px;min-width:39px}
 .toast{display:flex;align-items:center;gap:13px;pointer-events:auto;background:#292929;color:#fff;border:1px solid #555;font:13px system-ui,sans-serif}
 .toast-action{border:0;background:transparent;color:#f59869;text-decoration:underline;white-space:nowrap}
 @media(max-width:850px){.library-grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}.library-view-controls{margin-left:0}}

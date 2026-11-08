@@ -5,7 +5,7 @@ This file tracks requested behavior separately from work that has been verified 
 ## Current release goals
 
 - [x] Main page opens on Music with the paper calendar and other rooms available in the same daily spread.
-- [x] Home and Library navigation; Library contains Likes, Following, Your shares, and All shares. Film, Art, Books, Daily Life, and Forum can receive posts.
+- [x] Home, Following, Library navigation; Film, Art, Books, Daily Life, and Forum can receive posts.
 - [x] Daily Top 5, monthly/weekly rankings, all-time chart, song gallery, all-song list, votes, six reactions, comments, and private groups.
 - [x] Title-only song sharing; audio or platform link and personal cover are optional.
 - [x] Expand built-in music genres to 44, grouped by family; publish form, follow controls, chart selection, and database validation share the same IDs.
@@ -20,25 +20,23 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Add source search shortcuts to the publish form, using the entered song and artist; the contributor can review and paste a specific YouTube, Bilibili, or SoundCloud version.
 - [x] Wait for a returning member's nickname to load before opening the song form, avoiding a mistaken nickname prompt on a fast click after refresh.
 
-## November 8 pass — prepared for release
-
-- [x] Keep the song discussion in a modal over the current page, including when the song is from another date.
-- [x] Bring Likes, Following, Your shares, and All shares under one Library; show music and non-music posts in Your shares.
-- [x] Let each member choose a preferred music service; show its shortcut beside YouTube and Bilibili in the daily spread and gallery.
-- [x] Use a consistent dark reading surface in the song discussion and adjust controls and hover contrast.
-- [x] Rename the visible site to AILLEURS and shorten the most repetitive home copy.
-- [x] Update an author nickname across older shares and comments through an authenticated database function.
-- [x] Fetch independent Library data concurrently so tab opening waits for fewer sequential round trips.
-- [ ] Verify these interactions in a fresh public browser after deployment.
-
 ## Next product passes
+
+### November 8 pass
+
+- [x] Put SoundCloud, QQ Music, and NetEase Cloud Music search or source shortcuts beside songs on the daily chart, gallery, and full song cards.
+- [x] Separate a cover that can play on this site from a title-only share that must be found on a music service; verify a stored audio share opens the in-page dock.
+- [x] Refresh the daily spread and Library after a member publishes a song, post, reply, reaction, or author edit, without requiring a manual browser refresh. Refresh cached daily data when a visitor returns to the tab.
+- [x] Keep expanded archive dates open when the daily spread refreshes.
+- [ ] Test posting and commenting with two signed-in accounts on the public release. Same-page refresh is implemented, but active cross-user realtime updates are not yet implemented.
+- [ ] Automatic title-to-exact-recording matching and in-page playback for QQ Music / NetEase Cloud Music still require supported source access and version confirmation; search shortcuts do not imply playback.
 
 ### November 6 pass (published November 7)
 
 - [x] Threaded replies record the parent comment in song and forum discussion; a reply shows the person it addresses. @ inserts a visible mention in the composer.
 - [x] Song and forum comments have separate likes; a comment shows when the share's author liked it. Database tables and RLS were migrated.
 - [x] Member profiles show public song/post history and follower counts; members can follow each other. Following lists followed members and their recent songs.
-- [x] Music discussion offers other AILLEURS shares by the same artist and in the same chart. The artist shortcut scrolls to those recommendations.
+- [x] Music discussion offers other DAYTONE shares by the same artist and in the same chart. The artist shortcut scrolls to those recommendations.
 - [x] Library distinguishes liked songs from all public shares, with a grid/list switch. Song votes link to Likes. Unconfirmed sources are labeled Find.
 - [x] The first dark color pass uses warmer ink and room accents; the hero takes less vertical space, and the 44-chart follow form stays closed until requested.
 - [ ] Test the new comment and follow writes with two ordinary accounts; test reply notifications and deep links.
@@ -46,7 +44,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Verify public GitHub Pages deployment and a fresh browser load for this pass.
 - [x] Make Library covers open listening and titles open the discussion, with visible action labels.
 
-1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on AILLEURS and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
+1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on DAYTONE and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
 2. **Navigation and interaction:** Test a Mac two-finger swipe on a physical trackpad. Tune gesture thresholds, animation, loading state, and focus behavior against vertical reading and horizontal selector scrolling. Keep shortcuts visible without repeating the same list in several places. Make notification items open their exact post or reply.
 3. **Visual design:** Research and document specific album, cinema, print, and editorial references. Build ten genuinely distinct designs for each music category, including chart, calendar, gallery, type, and accent choices; the present ten designs are shared base templates, not this finished library. Let visitors choose a default design and room display mode, with an accessible high-contrast option.
 4. **Community and discovery:** Improve playlist imports and long-term lists; category browse, language charts, Following, private groups, replies, saves, search, and user profiles. Preserve per-category daily publishing limits and edit rights. Evaluate which features help a visitor find and discuss a song instead of adding redundant controls.

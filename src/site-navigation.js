@@ -47,6 +47,7 @@
   function collectionItem(item){
     const row=node('article','collection-item'),kind=node('small','',item.kind),title=node('strong','',item.title),details=node('span','',item.details);
     const cover=node('button','collection-cover');cover.type='button';cover.title=item.kind==='MUSIC'?(window.DaytoneListen?.actionLabel(item.raw)||'Find '+item.title):'Open '+item.title;
+    if(item.kind==='MUSIC')cover.classList.add(window.DaytoneListen?.canPlayHere(item.raw)?'can-play':'find-only');
     cover.setAttribute('aria-label',cover.title);const imageUrl=item.cover;
     if(imageUrl){const image=node('img');image.src=imageUrl;image.alt='';image.loading='lazy';cover.append(image);}else cover.textContent=item.kind==='MUSIC'?'♫':'↗';
     const listen=()=>window.DaytoneListen?.open(item.raw);
@@ -145,7 +146,7 @@
   function discussSong(song){app.openMusicDiscussion(song);}
   function songRow(song,rank,count,day,voteUsers){
     const row=node('article','day-preview-row'),art=node('button','day-preview-art');
-    art.type='button';art.title=window.DaytoneListen?.actionLabel(song)||'Find '+song.title;art.setAttribute('aria-label',art.title);
+    art.type='button';art.classList.add(window.DaytoneListen?.canPlayHere(song)?'can-play':'find-only');art.title=window.DaytoneListen?.actionLabel(song)||'Find '+song.title;art.setAttribute('aria-label',art.title);
     art.addEventListener('click',()=>window.DaytoneListen?.open(song));
     const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';art.append(image);}else art.textContent='♫';
     const open=node('button','day-preview-open');open.type='button';open.append(node('small','',String(rank).padStart(2,'0')),node('strong','',song.title),node('span','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
@@ -158,7 +159,7 @@
     const discuss=node('button','day-preview-action day-preview-discuss');discuss.type='button';discuss.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10.5h8"/></svg>';discuss.title='Discuss '+song.title;discuss.setAttribute('aria-label','Discuss '+song.title);discuss.addEventListener('click',()=>discussSong(song,day));
     const copy=node('button','paper-copy');copy.type='button';copy.title='Copy song title';copy.setAttribute('aria-label','Copy song title');const icon=node('span','paper-copy-icon');icon.setAttribute('aria-hidden','true');copy.append(icon);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(song.title);toast('Copied: '+song.title);}catch{toast('Select the title to copy it.');}});actions.append(vote,discuss,copy);
     const videoLinks=node('span','day-preview-video-links');
-    videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.preferredSearchLink(song));
+    videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
     actions.append(videoLinks);
     row.append(art,open,actions);return row;
   }
@@ -171,11 +172,11 @@
     rows.slice(0,3).forEach((song,index)=>{
       const card=node('article','edition-gallery-card'+(index===0?' lead':''));
       const scene=node('img','edition-gallery-scene');scene.src=['music-2.png','music-1.png','music-3.png'][index];scene.alt='';scene.loading='lazy';card.append(scene);
-      const cover=node('button','edition-gallery-cover');cover.type='button';cover.setAttribute('aria-label',window.DaytoneListen?.actionLabel(song)||'Find '+song.title);cover.title=cover.getAttribute('aria-label');
+      const cover=node('button','edition-gallery-cover');cover.type='button';cover.classList.add(window.DaytoneListen?.canPlayHere(song)?'can-play':'find-only');cover.setAttribute('aria-label',window.DaytoneListen?.actionLabel(song)||'Find '+song.title);cover.title=cover.getAttribute('aria-label');
       const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';cover.append(image);}else cover.append(node('span','','♫'));
       cover.addEventListener('click',()=>window.DaytoneListen?.open(song));card.append(cover);
       const videoLinks=node('div','edition-gallery-video-links');
-      videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.preferredSearchLink(song));card.append(videoLinks);
+      videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));card.append(videoLinks);
       const caption=node('div','edition-gallery-caption');caption.append(node('small','',String(index+1).padStart(2,'0')+' / '+(counts.get(song.id)||0)+((counts.get(song.id)||0)===1?' vote':' votes')),node('h4','',song.title),node('p','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
       const discuss=node('button','edition-gallery-discuss','Discuss ↗');discuss.type='button';discuss.addEventListener('click',()=>discussSong(song,day));caption.append(discuss);card.append(caption);wall.append(card);
     });host.append(wall);
@@ -252,6 +253,7 @@
     }catch(error){if(current!==request)return;host.replaceChildren(node('p','day-preview-empty','Could not load '+title+'. Please try again.'));}
   }
   async function render(){
+    const openArchiveDates=new Set([...host.querySelectorAll('.month-day[open] summary span')].map(item=>item.textContent));
     const current=++request,day=app.getDay(),{music,periodic,gallery,archive,roomContent}=previewFrame(day);
     if(roomContent){if(client)void renderRoomContent(roomContent,day,activeRoom,current);else roomContent.append(node('p','day-preview-empty','The shared database is unavailable.'));return;}
     music.append(node('p','day-preview-loading','Loading today’s music…'));periodic.append(node('p','day-preview-loading','Loading the chart…'));archive.append(node('p','day-preview-loading','Opening the month…'));
@@ -271,13 +273,19 @@
       if(!leaders.length)periodic.append(node('p','day-preview-empty','The chart is waiting for its first song.'));
       else leaders.forEach((item,i)=>periodic.append(songRow(item.song,i+1,counts.get(item.song.id)||0,item.song.day,voteUsers)));
       renderArchive(archive,songs,counts,voteUsers,day);
+      for(const summary of archive.querySelectorAll('.month-day summary'))if(openArchiveDates.has(summary.querySelector('span')?.textContent))summary.parentElement.open=true;
       setTimeout(()=>{if(client)void getRoomPosts('film',day).catch(()=>{});},300);
     }catch(error){if(current!==request)return;music.querySelector('.day-preview-loading')?.remove();periodic.querySelector('.day-preview-loading')?.remove();archive.replaceChildren();music.append(node('p','day-preview-empty','Could not load this month. Please try again.'));}
   }
   window.addEventListener('daytone:calendar-day',()=>void render());
   window.addEventListener('daytone:screen-changed',event=>{navState(event.detail.screen);if(event.detail.screen==='welcome')void render();else if(['following','explore'].includes(event.detail.screen))void renderCollection(event.detail.screen);else roomCache.clear();});
-  window.addEventListener('daytone:vote',()=>{monthCache=null;if(app.getScreen()==='welcome')void render();});
-  window.addEventListener('daytone:songs-loaded',()=>{monthCache=null;});
+  window.addEventListener('daytone:songs-loaded',()=>{monthCache=null;if(app.getScreen()==='welcome')void render();else if(app.getScreen()==='explore')void renderCollection('explore');});
+  window.addEventListener('daytone:posts-changed',()=>{roomCache.clear();if(app.getScreen()==='welcome')void render();else if(app.getScreen()==='explore')void renderCollection('explore');});
+  window.addEventListener('daytone:forum-edited',()=>{roomCache.clear();if(app.getScreen()==='welcome')void render();else if(app.getScreen()==='explore')void renderCollection('explore');});
+  let lastFocusRefresh=0;
+  const refreshOnReturn=()=>{if(document.hidden||Date.now()-lastFocusRefresh<15000)return;lastFocusRefresh=Date.now();monthCache=null;roomCache.clear();const screen=app.getScreen();if(screen==='welcome')void render();else if(screen==='explore')void renderCollection('explore');};
+  window.addEventListener('focus',refreshOnReturn);
+  document.addEventListener('visibilitychange',refreshOnReturn);
   let gestureAmount=0,gestureTimer=0,gestureLockedUntil=0;
   const gestureSurface=document.getElementById('welcome');
   const gestureExcluded='input,select,textarea,summary,dialog,.room-shelf-track,.calendar-follow-controls,[contenteditable],audio,video,iframe';

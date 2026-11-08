@@ -94,6 +94,8 @@ body[data-layout="scenes"] .welcome{display:flex;flex-direction:column;align-ite
 @media(max-width:900px){body[data-layout="scenes"] .day-preview-grid{grid-template-columns:1fr}body[data-layout="scenes"] .edition-gallery-wall{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.day-preview-row{flex-wrap:wrap}.day-preview-row-actions{margin-left:auto}.day-preview-open{flex-basis:calc(100% - 65px)}body[data-layout="scenes"] .edition-gallery-wall{grid-template-columns:1fr}body[data-layout="scenes"] .room-shelf-card{flex-basis:82vw}}
 @media(prefers-reduced-motion:reduce){.day-preview-art:after,.edition-gallery-cover:after{transition:none}}
+.day-preview-art.find-only:after,.edition-gallery-cover.find-only:after{content:'⌕'}
+.song-art.find-only[role=button]:hover:after{content:'⌕'}
 #music-discussion-dialog .song-art{width:82px;height:82px;float:left;margin:0 16px 10px 0;border:1px solid #c5ad91}#music-discussion-dialog .song-rank{display:none}#music-discussion-dialog .song-meta{padding-top:0}#music-discussion-dialog .song-meta h3{white-space:normal}#music-discussion-dialog .comment-section{clear:both;border-top:1px solid #ccb69d;margin-top:16px;padding-top:15px}#music-discussion-dialog .song-player{max-width:380px}#music-discussion-dialog .song-card{background:transparent;border:0;padding:3px}
 
 /* A room changes the whole daily spread. The selector is a control, not a second feed. */
