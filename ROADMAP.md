@@ -24,6 +24,12 @@ This file tracks requested behavior separately from work that has been verified 
 
 ### November 9 pass
 
+- [x] Search several relevant Apple Music storefronts together, then try MusicBrainz recording metadata when no exact title/artist match is found. Keep the fallback within its documented request rate.
+- [x] Show up to six artist/album candidates for ambiguous song names; choosing one fills the artist and previews its cover. A clear title/artist match can fill automatically.
+- [x] Filter unrelated search hits, clear the previous cover and results when a title changes, and keep title-only publishing available when neither catalog knows the song. Checked common, ambiguous, and unmatched names in a browser.
+- [ ] Publicly verify this title/cover lookup after the new release. It is metadata matching, not guaranteed full-track audio; catalog gaps remain, especially for regional releases.
+
+The lookup follows the [iTunes Search API](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/) for storefront results, [MusicBrainz recording search](https://musicbrainz.org/doc/MusicBrainz_API/Search) for a second catalog, and the [Cover Art Archive API](https://musicbrainz.org/doc/Cover_Art_Archive/API) for release artwork. The fallback is throttled according to [MusicBrainz rate guidance](https://musicbrainz.org/doc/MusicBrainz_API/Rate_Limiting). These sources provide metadata and artwork; they do not promise a playable recording.
 - [x] Keep a small player on the page for uploaded audio and confirmed SoundCloud tracks or sets, with previous/next controls and a playable-list queue. Verified an older uploaded track plays on the local site.
 - [x] Show Play only for a confirmed in-site source; SoundCloud search URLs are labeled Find. Show Play available only when a chart or list has at least one playable item.
 - [x] Let a playlist be shared with a source link and title before its tracks are entered. SoundCloud set links can use the in-site player; other platform links open their source.

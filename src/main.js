@@ -632,7 +632,7 @@ async function prepareImage(file) {
 }
 async function catalogCoverFile(value) {
   const url = new URL(value);
-  if (url.protocol !== 'https:' || !(url.hostname === 'mzstatic.com' || url.hostname.endsWith('.mzstatic.com') || url.hostname === 'i1.sndcdn.com' || url.hostname === 'i2.sndcdn.com')) throw new Error('Invalid catalog cover.');
+  if (url.protocol !== 'https:' || !(url.hostname === 'mzstatic.com' || url.hostname.endsWith('.mzstatic.com') || url.hostname === 'i1.sndcdn.com' || url.hostname === 'i2.sndcdn.com' || url.hostname === 'coverartarchive.org')) throw new Error('Invalid catalog cover.');
   const response = await fetch(url.href, { mode: 'cors', signal: AbortSignal.timeout(6000) });
   if (!response.ok) throw new Error('Catalog cover could not be loaded.');
   const blob = await response.blob();
