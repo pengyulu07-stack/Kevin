@@ -21,7 +21,7 @@
       const songRows=songsResult.data||[],postRows=postsResult.data||[];
       const name=knownName||songRows[0]?.nickname||postRows[0]?.nickname||'Member';
       shell.replaceChildren();
-      const top=make('div','member-top'),close=make('button','member-close','×');close.type='button';close.setAttribute('aria-label','Close profile');close.addEventListener('click',()=>dialog.close());top.append(make('small','','DAYTONE / MEMBER'),close);shell.append(top);
+      const top=make('div','member-top'),close=make('button','member-close','×');close.type='button';close.setAttribute('aria-label','Close profile');close.addEventListener('click',()=>dialog.close());top.append(make('small','','AILLEURS / MEMBER'),close);shell.append(top);
       shell.append(make('h2','',name));
       const stats=make('div','member-stats');stats.append(make('span','',songRows.length+' songs'),make('span','',postRows.length+' other shares'),make('span','',(countResult.count||0)+' followers'));shell.append(stats);
       if(id!==user?.id){

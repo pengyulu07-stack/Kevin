@@ -63,7 +63,7 @@
       const art = make("div", "space-card-art" + (key === "music" ? " music-art" : ""));
       if (key === "music") for (const src of musicImages) { const img = make("img"); img.src = src; img.alt = ""; art.append(img); }
       else { art.classList.add("room-color","room-color-"+key); art.append(make("span","room-watermark",room.gallery)); }
-      art.append(make("span", "space-card-number", room.number + " / DAYTONE"));
+      art.append(make("span", "space-card-number", room.number + " / AILLEURS"));
       const meta = make("div", "space-card-meta");
       meta.append(make("b", "", room.label), make("small", "", room.gallery), make("i", "", "↗"));
       button.append(art, meta);
@@ -93,7 +93,7 @@
     host.className = "category-cover cover-" + space;
     host.replaceChildren();
     const art = make("div", "cover-image"); addBackground(art, room);
-    art.append(make("span", "cover-label", "DAYTONE / " + room.number + " / " + room.label));
+    art.append(make("span", "cover-label", "AILLEURS / " + room.number + " / " + room.label));
     art.append(make("span", "cover-side", "TODAY ON DISPLAY"));
     const winner = topForCover();
     if (winner) {

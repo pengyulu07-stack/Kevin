@@ -2,16 +2,16 @@
 (() => {
   const dialog=document.createElement('dialog');
   dialog.id='listen-dialog';dialog.className='listen-dialog';
-  dialog.innerHTML='<div class="listen-shell"><div class="listen-top"><div><small>DAYTONE / LISTEN</small><h2>Listen</h2></div><button type="button" aria-label="Close player">×</button></div><div id="listen-body"></div></div>';
+  dialog.innerHTML='<div class="listen-shell"><div class="listen-top"><div><small>AILLEURS / LISTEN</small><h2>Listen</h2></div><button type="button" aria-label="Close player">×</button></div><div id="listen-body"></div></div>';
   document.body.append(dialog);
   const body=dialog.querySelector('#listen-body');
   dialog.querySelector('button').addEventListener('click',()=>dialog.close());
   const dock=document.createElement('section');dock.id='daytone-player-dock';dock.className='daytone-player-dock';dock.hidden=true;
-  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / DAYTONE</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
+  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / AILLEURS</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
   document.body.append(dock);
   const dockContent=dock.querySelector('#player-dock-content');
   const videoDialog=document.createElement('dialog');videoDialog.id='daytone-video-dialog';videoDialog.className='daytone-video-dialog';
-  videoDialog.innerHTML='<div class="video-dialog-shell"><div class="video-dialog-head"><div><small>DAYTONE / VIDEO</small><h2 id="video-dialog-title"></h2><p id="video-dialog-artist"></p></div><button type="button" class="video-dialog-close" aria-label="Close video">×</button></div><div id="video-dialog-player" class="video-dialog-player"></div><div class="video-dialog-foot"><span>Shared version</span><div><button type="button" id="video-fullscreen">⛶ Full screen</button><a id="video-original" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div></div></div>';
+  videoDialog.innerHTML='<div class="video-dialog-shell"><div class="video-dialog-head"><div><small>AILLEURS / VIDEO</small><h2 id="video-dialog-title"></h2><p id="video-dialog-artist"></p></div><button type="button" class="video-dialog-close" aria-label="Close video">×</button></div><div id="video-dialog-player" class="video-dialog-player"></div><div class="video-dialog-foot"><span>Shared version</span><div><button type="button" id="video-fullscreen">⛶ Full screen</button><a id="video-original" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div></div></div>';
   document.body.append(videoDialog);
   const videoStage=videoDialog.querySelector('#video-dialog-player');
   videoDialog.querySelector('.video-dialog-close').addEventListener('click',()=>videoDialog.close());
@@ -32,6 +32,22 @@
     link.innerHTML=provider==='bilibili'?'<svg viewBox="0 0 28 24" aria-hidden="true"><path d="M6 6 4 3m18 3 2-3M4 7h20v14H4z"/><path d="m10 11 4 3-4 3m8-6-4 3 4 3"/></svg>':'<svg viewBox="0 0 28 20" aria-hidden="true"><rect x="1" y="1" width="26" height="18" rx="5"/><path d="m12 6 7 4-7 4z"/></svg>';
     link.href=videoSearchUrl(provider,song);link.target='_blank';link.rel='noopener noreferrer';
     link.title='Search '+(provider==='bilibili'?'B 站':name)+' for '+song.title;link.setAttribute('aria-label',link.title);
+    return link;
+  }
+  const preferredServices={
+    soundcloud:{name:'SoundCloud',mark:'☁',base:'https://soundcloud.com/search?q='},
+    qq:{name:'QQ Music',mark:'Q',base:'https://y.qq.com/n/ryqq/search?w='},
+    netease:{name:'NetEase Music',mark:'♫',base:'https://music.163.com/#/search/m/?s='},
+    spotify:{name:'Spotify',mark:'≋',base:'https://open.spotify.com/search/'},
+    apple:{name:'Apple Music',mark:'♪',base:'https://music.apple.com/us/search?term='}
+  };
+  function preferredPlatform(){const saved=localStorage.getItem('daytone-preferred-platform');return preferredServices[saved]?saved:'soundcloud';}
+  function setPreferredPlatform(value){const key=preferredServices[value]?value:'soundcloud';localStorage.setItem('daytone-preferred-platform',key);window.dispatchEvent(new Event('daytone:playback-preference'));}
+  function preferredSearchLink(song){
+    const key=preferredPlatform(),service=preferredServices[key],link=node('a','video-search-link preferred-service-link',service.mark);
+    link.href=service.base+encodeURIComponent([song?.title,song?.artist].filter(Boolean).join(' '));
+    link.target='_blank';link.rel='noopener noreferrer';link.dataset.provider=key;
+    link.title='Find '+song.title+' on '+service.name;link.setAttribute('aria-label',link.title);
     return link;
   }
   function directLink(url,label){const link=node('a','listen-original',label+' ↗');link.href=url;link.target='_blank';link.rel='noopener noreferrer';return link;}
@@ -106,5 +122,5 @@
     if(!videoDialog.open)videoDialog.showModal();
   }
   dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,canPlayHere,actionLabel};
+  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,canPlayHere,actionLabel};
 })();

@@ -1,0 +1,12 @@
+# AILLEURS interface pass — 2026-11-08
+
+This note distinguishes references from implemented behavior. It is not a claim that every request in the work ledger is complete.
+
+| Reference | Observed design or technical point | Applied here |
+| --- | --- | --- |
+| [SoundCloud Library & Feed](https://help.soundcloud.com/hc/en-us/articles/115003566308-Your-Library-Feed) and [Likes & Playlists](https://help.soundcloud.com/hc/en-us/articles/115003568968-Your-Likes-Playlists) | Likes, followed accounts, and saved collections belong in a personal Library; the Feed is a different view. | The top navigation now has Today and Library. Library tabs hold Likes, Following, Your shares, and All shares, so related content is found in one place. |
+| [SoundCloud official Widget API repository](https://github.com/soundcloud/Widget-JS-API) | The service has an official embeddable player interface; that does not guarantee every track is playable. | A member can choose SoundCloud as a preferred search shortcut beside YouTube and Bilibili. The site's existing official SoundCloud embed remains available for shared SoundCloud URLs. The Widget JS API itself was not added. |
+| [MDN dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog) | A modal can keep the reader on the current page and return them to it when closed. | Discussion buttons in the calendar preview and Library open a discussion modal without routing away from the page. |
+| [WCAG 2.2](https://www.w3.org/TR/WCAG22/) | Text and controls need sufficient contrast, including in overlays and interactive states. | Music discussion surfaces, body text, input fields, controls, and hover states now use the same dark palette. Visual browser review remains required. |
+| [Supabase managing user data](https://supabase.com/docs/guides/auth/managing-user-data) | Auth user metadata and a public profile are distinct stores. | Editing a nickname updates the signed-in profile and older authored content through a restricted database function, then refreshes the current song list. Preferred music service also saves in Auth metadata. |
+| [MDN Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) | Independent requests can start together to reduce sequential waiting. | Library loads independent songs, posts, follows, groups, and votes concurrently; unnecessary queries are skipped for tabs that do not use them. |

@@ -20,7 +20,7 @@
   const shell=document.createElement('div');shell.className='chart-design-shell';
   const head=document.createElement('div');head.className='chart-design-head';
   const copy=document.createElement('div'),eyebrow=document.createElement('small'),title=document.createElement('h2'),intro=document.createElement('p'),close=document.createElement('button');
-  eyebrow.textContent='DAYTONE / DESIGN';title.textContent='Choose a listening room';intro.textContent='Choose a look for each music chart. Your choice is saved on this device.';
+  eyebrow.textContent='AILLEURS / DESIGN';title.textContent='Choose a listening room';intro.textContent='Choose a look for each music chart. Your choice is saved on this device.';
   copy.append(eyebrow,title,intro);close.type='button';close.textContent='×';close.setAttribute('aria-label','Close design choices');close.addEventListener('click',()=>dialog.close());head.append(copy,close);
   const selectLabel=document.createElement('label');selectLabel.textContent='Music chart';
   const chartSelect=document.createElement('select');chartSelect.setAttribute('aria-label','Music chart for design');selectLabel.append(chartSelect);
@@ -49,7 +49,7 @@
     for(const [id,name,description] of designs){
       const tile=document.createElement('button');tile.type='button';tile.className='chart-design-tile';tile.dataset.design=id;
       tile.setAttribute('aria-pressed',String(id===selected));tile.setAttribute('aria-label',name+' for '+categoryName(category));
-      const specimen=document.createElement('span');specimen.className='chart-design-specimen';specimen.textContent='DAYTONE';
+      const specimen=document.createElement('span');specimen.className='chart-design-specimen';specimen.textContent='AILLEURS';
       const nameNode=document.createElement('strong');nameNode.textContent=name;
       const detail=document.createElement('small');detail.textContent=description;
       tile.append(specimen,nameNode,detail);

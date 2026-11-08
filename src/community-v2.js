@@ -1,4 +1,4 @@
-/* DAYTONE: a paper calendar, one music room, and a chronological forum. */
+/* AILLEURS: a paper calendar, one music room, and a chronological forum. */
 (() => {
   const $v = id => document.getElementById(id);
   const make = (tag, className = '', content) => el(tag, className, content);
@@ -17,7 +17,7 @@
   window.daytoneGroupPeriod = window.daytoneSpan;
   let monthCursor = day.slice(0, 7);
   let posts = [], postReactions = new Map(), postComments = new Map(), postCommentLikes = new Map();
-  let selectedPostId = null, selectedSongId = null, loadId = 0;
+  let selectedPostId = null, selectedSongId = null, selectedSong = null, loadId = 0;
   const screens = { welcome: 'welcome', following:'following-screen', explore:'explore-screen', lobby: 'taxi-lobby', 'music-hub': 'music-hub', playlists: 'playlists-screen', music: 'music-gallery', 'music-all': 'today', group: 'group-screen', forum: 'forum-rank', 'forum-all': 'generic-feed', 'daily-all':'generic-feed', 'film-all':'generic-feed', 'art-all':'generic-feed', 'books-all':'generic-feed' };
   const photoScenes = ['music-1.png', 'music-2.png', 'music-3.png'];
   const dateLabel = value => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long', timeZone: 'UTC' }).format(new Date(value + 'T12:00:00Z'));
@@ -28,7 +28,7 @@
   function show(next, push = true) {
     screen = next; document.body.dataset.screen = next; document.body.dataset.space = next.startsWith('music') || next==='playlists' ? 'music' : postSpace(next) || (next === 'group' ? 'group' : 'none');
     for (const id of new Set(Object.values(screens))) $v(id).hidden = id !== screens[next];
-    $v('current-space-label').textContent = next==='following'?'FOLLOWING':next==='explore'?'LIBRARY':next.startsWith('music') || next === 'group' || next==='playlists' ? 'MUSIC' : postSpace(next) ? postNames[postSpace(next)].toUpperCase() : 'DAYTONE';
+    $v('current-space-label').textContent = next==='following'?'FOLLOWING':next==='explore'?'LIBRARY':next.startsWith('music') || next === 'group' || next==='playlists' ? 'MUSIC' : postSpace(next) ? postNames[postSpace(next)].toUpperCase() : 'AILLEURS';
     $v('floating-post').hidden = next !== 'music-all' && !postSpace(next);
     if (next === 'welcome') renderCalendar();
     if (next === 'lobby') renderLobby();
@@ -80,7 +80,7 @@
     const vinyl = make('button', 'vinyl' + (rank === 1 ? ' vinyl-main' : '')); vinyl.type = 'button'; vinyl.setAttribute('aria-label', song ? (window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title) : 'No songs yet'); vinyl.disabled = !song;
     const inner = make('span', 'vinyl-center');
     if (song?.cover_path) { const img = make('img'); img.src = imageUrl(song.cover_path); img.alt = song.title + ' cover'; inner.append(img); }
-    else inner.append(make('span', '', 'DAYTONE'));
+    else inner.append(make('span', '', 'AILLEURS'));
     vinyl.append(inner); if (song) vinyl.addEventListener('click', () => window.DaytoneListen?.open(song)); wrap.append(vinyl);
     const info = make('div', 'record-info');
     if (song) { info.append(make('small', '', '@' + song.nickname + ' · ' + gallerySupport(song) + ' supporters'), make('h3', '', song.title)); if (song.artist) info.append(make('p', '', song.artist)); info.append(copyButton(song.title, 'Copy song title')); }
@@ -94,7 +94,7 @@
     const palette=window.DaytoneMusicRooms?.genrePalette(genre);
     if(palette){$v('music-gallery').style.setProperty('--genre-ink',palette[0]);$v('music-gallery').style.setProperty('--genre-paper',palette[1]);}
     $v('music-gallery-title').textContent = genre === 'all' ? 'MUSIC SO GOOD,\nEVEN DEVIL MAY CRY' : musicGenreName(genre).toUpperCase() + '\nIN ROTATION';
-    $v('music-gallery').querySelector('.gallery-heading small').textContent = genre === 'all' ? 'MUSIC / DAYTONE' : 'MUSIC / ' + musicGenreName(genre).toUpperCase();
+    $v('music-gallery').querySelector('.gallery-heading small').textContent = genre === 'all' ? 'MUSIC / AILLEURS' : 'MUSIC / ' + musicGenreName(genre).toUpperCase();
     $v('music-gallery-date').textContent = window.daytoneSpan === 'all' ? 'ALL-TIME TOP 5 / EVERY DAY SO FAR' : dateLabel(day) + ' / TODAY’S TOP 5';
     $v('music-period-today').classList.toggle('selected', window.daytoneSpan === 'today');
     $v('music-period-all').classList.toggle('selected', window.daytoneSpan === 'all');
@@ -108,9 +108,30 @@
       row.append(open, copyButton(song.title, 'Copy song title')); rest.append(row);
     }
   }
-  function openMusicDiscussion(id) { const song = songs.find(x => x.id === id) || (window.DaytoneMusicRooms?.allTimePublicSongs() || []).find(x => x.id === id); if (!song) return;
-    if (window.daytoneSpan === 'all') { const handler = () => { window.removeEventListener('daytone:songs-loaded', handler); openMusicDiscussion(id); }; window.addEventListener('daytone:songs-loaded', handler); window.daytoneSpan = 'today'; setChosenDay(song.day); show('music-all'); if (selectedDay === song.day) void loadSongs(); return; }
-    selectedSongId = id; const rank = sortedSongs().findIndex(x => x.id === id) + 1; $v('music-discussion-body').replaceChildren(createCard(song, rank, true)); showDialog('music-discussion-dialog'); void renderSongConnections(song); }
+  async function openMusicDiscussion(value) {
+    const id=typeof value==='object'?value.id:value;
+    const song=songs.find(x=>x.id===id)||(window.DaytoneMusicRooms?.allTimePublicSongs()||[]).find(x=>x.id===id)||(typeof value==='object'?value:null);
+    if(!song)return;
+    selectedSongId=id;selectedSong=song;
+    const host=$v('music-discussion-body');
+    if(!songs.some(x=>x.id===id)&&client){
+      host.replaceChildren(make('p','collection-status','Loading discussion…'));
+      showDialog('music-discussion-dialog');
+      try{
+        const [voteRows,reactionRows,commentRows]=await Promise.all([
+          fetchEveryRow(()=>client.from('song_votes').select('song_id,user_id').eq('song_id',id)),
+          fetchEveryRow(()=>client.from('reactions').select('song_id,user_id,emoji').eq('song_id',id)),
+          fetchEveryRow(()=>client.from('comments').select('id,song_id,user_id,nickname,body,image_path,parent_id,created_at').eq('song_id',id).order('created_at',{ascending:true}))
+        ]);
+        if(selectedSongId!==id||!$v('music-discussion-dialog').open)return;
+        votes.set(id,voteRows);reactions.set(id,reactionRows);comments.set(id,commentRows);
+        if(commentRows.length){const likes=await fetchEveryRow(()=>client.from('comment_likes').select('comment_id,user_id').in('comment_id',commentRows.map(row=>row.id)));for(const row of commentRows)commentLikes.set(row.id,likes.filter(like=>like.comment_id===row.id).map(like=>like.user_id));}
+      }catch(error){if(selectedSongId===id)host.replaceChildren(make('p','collection-status','Could not load this discussion.'));return;}
+    }
+    if(selectedSongId!==id)return;
+    const rank=sortedSongs().findIndex(x=>x.id===id)+1;
+    host.replaceChildren(createCard(song,rank,true));showDialog('music-discussion-dialog');void renderSongConnections(song);
+  }
   async function renderSongConnections(song){
     if(!client)return;
     const host=$v('music-discussion-body'),section=make('section','song-connections');section.append(make('h3','','Keep listening'));
@@ -274,7 +295,7 @@
   $v('music-post').addEventListener('click', openUpload);
   $v('show-top-songs').addEventListener('click', () => show('music'));
   $v('show-all-songs').addEventListener('click', () => show('music-all'));
-  window.addEventListener('daytone:songs-loaded', () => { if (screen === 'music') renderMusicGallery(); if (selectedSongId && $v('music-discussion-dialog').open) { const song = songs.find(x => x.id === selectedSongId); if (song) { $v('music-discussion-body').replaceChildren(createCard(song, sortedSongs().findIndex(x => x.id === song.id) + 1, true)); void renderSongConnections(song); } } });
+  window.addEventListener('daytone:songs-loaded', () => { if (screen === 'music') renderMusicGallery(); if (selectedSongId && $v('music-discussion-dialog').open) { const song = songs.find(x => x.id === selectedSongId) || selectedSong; if (song) void openMusicDiscussion(song); } });
   window.addEventListener('daytone:open-music-discussion', event => openMusicDiscussion(event.detail.id));
   window.addEventListener('daytone:profile', () => { $v('welcome-name').textContent = profile?.nickname || user?.user_metadata?.nickname || 'friend'; window.DaytoneMusicRooms?.refreshAccount(); });
   window.addEventListener('daytone:forum-edited',()=>{if(postSpace(screen))void loadPosts();});

@@ -134,7 +134,7 @@ function showDialog(id) {
 function switchAuth(mode) {
   authMode = mode;
   const signup = mode === "signup";
-  $("auth-title").textContent = signup ? "Join DAYTONE" : "Welcome back";
+  $("auth-title").textContent = signup ? "Join AILLEURS" : "Welcome back";
   $("nickname-field").classList.toggle("hidden", !signup);
   $("auth-form").elements.nickname.required = signup;
   $("auth-form").elements.password.autocomplete = signup ? "new-password" : "current-password";
@@ -151,6 +151,7 @@ function openAuth(mode = "signup") {
 function openProfile() {
   if (!user) { openAuth("signin"); return; }
   $("profile-form").elements.nickname.value = profile?.nickname || user.user_metadata?.nickname || "";
+  $("profile-form").elements.preferred_platform.value = window.DaytoneListen?.preferredPlatform() || "soundcloud";
   $("profile-error").textContent = "";
   showDialog("profile-dialog");
 }
@@ -160,9 +161,10 @@ function requireAccount() {
   if (!profile) { openProfile(); toast("Save your nickname first."); return false; }
   return true;
 }
+let profileRevision = 0;
 async function hydrateProfile() {
   if (!client || !user) return;
-  const actor = user;
+  const actor = user, revision = profileRevision;
   let result = await client.from("profiles").select("nickname").eq("user_id", actor.id).maybeSingle();
   if (result.error) { toast("Could not load your nickname. Please try again."); return; }
   if (!result.data) {
@@ -173,8 +175,9 @@ async function hydrateProfile() {
       else result = await client.from("profiles").select("nickname").eq("user_id", actor.id).maybeSingle();
     }
   }
-  if (user?.id !== actor.id) return;
+  if (user?.id !== actor.id || revision !== profileRevision) return;
   profile = result.data || null;
+  if (actor.user_metadata?.preferred_platform) window.DaytoneListen?.setPreferredPlatform(actor.user_metadata.preferred_platform);
   updateAccount();
   if (!profile) openProfile();
 }
@@ -216,18 +219,22 @@ async function submitProfile(event) {
   event.preventDefault();
   if (!user) { openAuth("signin"); return; }
   const nickname = String($("profile-form").elements.nickname.value).trim();
+  const preferredPlatform = $("profile-form").elements.preferred_platform.value;
   if (!nickname || nickname.length > 30) { $("profile-error").textContent = "Nickname must be 1–30 characters."; return; }
   const button = $("save-profile");
   button.disabled = true;
   try {
-    const { error } = await client.from("profiles").upsert({
-      user_id: user.id, nickname, updated_at: new Date().toISOString()
-    }, { onConflict: "user_id" });
+    const { error } = await client.rpc("set_my_nickname", { new_nickname: nickname });
     if (error) throw error;
+    profileRevision++;
     profile = { nickname };
+    window.DaytoneListen?.setPreferredPlatform(preferredPlatform);
+    const accountUpdate = await client.auth.updateUser({ data: { nickname, preferred_platform: preferredPlatform } });
+    if (accountUpdate.data?.user) user = accountUpdate.data.user;
     $("profile-dialog").close();
     updateAccount();
-    toast("Nickname saved.");
+    toast(accountUpdate.error ? "Nickname saved. Music service saved on this device." : "Profile saved.");
+    void loadSongs();
   } catch (error) { $("profile-error").textContent = error.message || "Could not save nickname."; }
   finally { button.disabled = false; }
 }
@@ -401,7 +408,7 @@ function musicEmbed(sourceUrl) {
 function createCard(song, rank, discussion = false) {
   const card = el("article", "song-card");
   if (!discussion) card.id = "song-" + song.id;
-  card.append(el("div", "song-rank", "#" + rank + " · " + supportCount(song) + (supportCount(song)===1 ? " vote" : " votes")));
+  card.append(el("div", "song-rank", (rank > 0 ? "#" + rank + " · " : "") + supportCount(song) + (supportCount(song)===1 ? " vote" : " votes")));
   const coverUrl = songCoverUrl(song);
   const art = el("div", "song-art tone-" + (song.title.length % 4) + (coverUrl ? " has-image" : ""));
   if (coverUrl) {
@@ -447,7 +454,7 @@ function createCard(song, rank, discussion = false) {
   meta.append(listen);
   if(song.artist){const artistMore=el('button','artist-more','More from '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));meta.append(artistMore);}
   const videoSearch = el('div','song-video-search');
-  videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song));
+  videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.preferredSearchLink(song));
   meta.append(videoSearch);
   if (youtubeVideoId(song.source_url)) {
     const video=el('button','listen-youtube','▶ YouTube video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');

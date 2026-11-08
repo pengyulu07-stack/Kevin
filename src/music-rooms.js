@@ -184,7 +184,7 @@
     if(artPath){const background=el('img','group-card-backdrop');background.alt='Group artwork';card.append(background);void setPrivateMedia(background,artPath);}
     card.append(el('small','group-rank-label','TOP 0'+rank));
     const disc=el('button','group-disc');disc.type='button';disc.disabled=!song;disc.setAttribute('aria-label',song?'Open '+song.title+' discussion':'No song yet');
-    const center=el('span','group-disc-center');if(song?.cover_path){const image=el('img');image.alt=song.title+' cover';center.append(image);void setPrivateMedia(image,song.cover_path);}else center.append(el('span','','DAYTONE'));
+    const center=el('span','group-disc-center');if(song?.cover_path){const image=el('img');image.alt=song.title+' cover';center.append(image);void setPrivateMedia(image,song.cover_path);}else center.append(el('span','','AILLEURS'));
     disc.append(center);if(song)disc.addEventListener('click',()=>openGroupDiscussion(song.id));card.append(disc);
     const info=el('div','group-card-info');if(song){info.append(el('small','', '@'+song.nickname+' · '+groupSongScore(song)+' supporters'),el('h3','',song.title));if(song.artist)info.append(el('p','',song.artist));info.append(smallCopy(song.title));}
     else info.append(el('h3','',rank===1?'The first record is yours.':'A place for the next song.'));card.append(info);return card;

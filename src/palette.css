@@ -175,6 +175,32 @@ dialog:not(.discussion-dialog) input,dialog:not(.discussion-dialog) textarea,dia
 .video-dialog-foot button:hover,.video-dialog-foot a:hover{background:var(--dt-hover)}
 .toast{background:var(--dt-raised);border-color:var(--dt-rule);color:var(--dt-text)}
 
+/* A discussion keeps the reading palette of the page beneath it. */
+dialog.discussion-dialog,dialog.discussion-dialog .discussion-dialog-shell{
+  background:var(--dt-surface);color:var(--dt-text);border-color:var(--dt-rule);
+}
+dialog.discussion-dialog{box-shadow:8px 12px 0 #08090a}
+dialog.discussion-dialog .song-card,dialog.discussion-dialog .generic-discussion,
+dialog.discussion-dialog .song-connections,dialog.discussion-dialog .song-connection-item{
+  background:var(--dt-surface);color:var(--dt-text);border-color:var(--dt-rule);box-shadow:none;
+}
+dialog.discussion-dialog h2,dialog.discussion-dialog h3,dialog.discussion-dialog strong,
+dialog.discussion-dialog .song-meta h3,dialog.discussion-dialog .comment-head strong,
+dialog.discussion-dialog .song-connections h3{color:var(--dt-text)}
+dialog.discussion-dialog p,dialog.discussion-dialog small,dialog.discussion-dialog time,
+dialog.discussion-dialog .song-note,dialog.discussion-dialog .comment-empty,
+dialog.discussion-dialog .song-connection-detail small{color:var(--dt-muted)}
+dialog.discussion-dialog .discussion-close{background:var(--dt-raised);color:var(--dt-text);border:1px solid var(--dt-rule)}
+dialog.discussion-dialog .discussion-close:hover{background:var(--dt-hover);border-color:var(--dt-accent)}
+dialog.discussion-dialog textarea,dialog.discussion-dialog input,dialog.discussion-dialog select{
+  background:#121416;color:var(--dt-text);border-color:var(--dt-rule);color-scheme:dark;
+}
+dialog.discussion-dialog textarea::placeholder,dialog.discussion-dialog input::placeholder{color:var(--dt-muted)}
+dialog.discussion-dialog .comment-form input[type=file]{background:transparent;color:var(--dt-muted)}
+dialog.discussion-dialog .comment-form input[type=file]::file-selector-button{background:var(--dt-raised);color:var(--dt-text);border:1px solid var(--dt-rule);padding:6px 10px;margin-right:10px}
+dialog.discussion-dialog button:not(.discussion-close):not(.song-art):not(.song-connection-play):not(.member-link){color:var(--dt-text)}
+dialog.discussion-dialog .comment-reply-context,dialog.discussion-dialog .author-liked{color:var(--dt-accent-hover)}
+
 /* Keep uploaded cover art true to the upload; tint only surrounding frames. */
 .edition-gallery-card{border-color:#73706a;box-shadow:3px 5px 0 #08090a}
 .edition-gallery-caption{background:linear-gradient(transparent,#101113ee 24%)}

@@ -1,4 +1,4 @@
-/* A concise guide that follows the actual DAYTONE screens. */
+/* A concise guide that follows the actual AILLEURS screens. */
 (() => {
   const dialog = el('dialog','site-guide');dialog.id='site-guide';dialog.setAttribute('data-no-translate','');document.body.append(dialog);
   const content = {
@@ -21,7 +21,7 @@
       ['07','查看通知','右上角铃铛显示通知。设置中可调整通知范围及入口背景。']
     ]
   };
-  function render(){const lang=window.DaytoneLanguage?.get()||'en';dialog.replaceChildren();const shell=el('div','site-guide-shell'),head=el('div','dialog-head'),titles=el('div');titles.append(el('p','kicker',lang==='zh'?'DAYTONE / 使用教程':'DAYTONE / A SHORT GUIDE'),el('h2','',lang==='zh'?'从今天开始':'Start with today'));const close=el('button','','×');close.type='button';close.setAttribute('aria-label',lang==='zh'?'关闭':'Close');close.addEventListener('click',()=>dialog.close());head.append(titles,close);shell.append(head);const list=el('div','site-guide-steps');for(const [number,title,body] of content[lang]){const step=el('section','site-guide-step');step.append(el('small','',number),el('h3','',title),el('p','',body));list.append(step);}shell.append(list);dialog.append(shell);}
+  function render(){const lang=window.DaytoneLanguage?.get()||'en';dialog.replaceChildren();const shell=el('div','site-guide-shell'),head=el('div','dialog-head'),titles=el('div');titles.append(el('p','kicker',lang==='zh'?'AILLEURS / 使用教程':'AILLEURS / A SHORT GUIDE'),el('h2','',lang==='zh'?'从今天开始':'Start with today'));const close=el('button','','×');close.type='button';close.setAttribute('aria-label',lang==='zh'?'关闭':'Close');close.addEventListener('click',()=>dialog.close());head.append(titles,close);shell.append(head);const list=el('div','site-guide-steps');for(const [number,title,body] of content[lang]){const step=el('section','site-guide-step');step.append(el('small','',number),el('h3','',title),el('p','',body));list.append(step);}shell.append(list);dialog.append(shell);}
   document.getElementById('site-guide-open').addEventListener('click',()=>{render();dialog.showModal();});
   window.addEventListener('daytone:language',()=>{if(dialog.open)render();});
 })();
