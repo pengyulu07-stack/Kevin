@@ -361,7 +361,7 @@ function youtubeVideoId(value) {
 function songCoverUrl(song) { const id=youtubeVideoId(song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
 function soundCloudTrackUrl(value) {
   try { const url=new URL(value);if(url.protocol!=='https:'||!['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname))return '';
-    const parts=url.pathname.split('/').filter(Boolean);if(parts.length!==2||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
+    const parts=url.pathname.split('/').filter(Boolean);if(!(parts.length===2||parts.length===3&&parts[1]==='sets')||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
     return 'https://soundcloud.com/'+parts.map(encodeURIComponent).join('/');
   } catch{return '';}
 }

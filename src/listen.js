@@ -7,7 +7,7 @@
   const body=dialog.querySelector('#listen-body');
   dialog.querySelector('button').addEventListener('click',()=>dialog.close());
   const dock=document.createElement('section');dock.id='daytone-player-dock';dock.className='daytone-player-dock';dock.hidden=true;
-  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / AILLEURS</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
+  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / AILLEURS</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><span id="player-dock-position" hidden></span><button type="button" id="player-dock-previous" hidden aria-label="Previous song">⏮</button><button type="button" id="player-dock-next" hidden aria-label="Next song">⏭</button><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
   document.body.append(dock);
   const dockContent=dock.querySelector('#player-dock-content');
   const videoDialog=document.createElement('dialog');videoDialog.id='daytone-video-dialog';videoDialog.className='daytone-video-dialog';
@@ -17,7 +17,10 @@
   videoDialog.querySelector('.video-dialog-close').addEventListener('click',()=>videoDialog.close());
   videoDialog.addEventListener('close',()=>videoStage.replaceChildren());
   videoDialog.querySelector('#video-fullscreen').addEventListener('click',()=>videoStage.querySelector('iframe')?.requestFullscreen?.());
-  dock.querySelector('#player-dock-close').addEventListener('click',()=>{dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
+  let queue=null;
+  dock.querySelector('#player-dock-close').addEventListener('click',()=>{queue=null;dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
+  dock.querySelector('#player-dock-previous').addEventListener('click',()=>advance(-1));
+  dock.querySelector('#player-dock-next').addEventListener('click',()=>advance(1));
   const node=(tag,className,value)=>{const item=document.createElement(tag);item.className=className;if(value!=null)item.textContent=value;return item;};
   function platform(value){try{const host=new URL(value).hostname;return ['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(host)?'SoundCloud':['bilibili.com','www.bilibili.com','m.bilibili.com'].includes(host)?'Bilibili':['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com','youtu.be'].includes(host)?'YouTube':['c6.y.qq.com','y.qq.com','i.y.qq.com'].includes(host)?'QQ Music':['music.163.com','y.music.163.com'].includes(host)?'NetEase Music':host==='open.spotify.com'?'Spotify':host==='music.apple.com'?'Apple Music':'Original link';}catch{return 'Original link';}}
   function videoSearchUrl(provider,song){
@@ -56,10 +59,11 @@
       const service=preferredServices[key];
       const link=node('a','video-search-link music-service-link',key==='netease'?'网易':key==='qq'?'QQ':service.mark);
       link.dataset.provider=key;
-      link.href=platform(song?.source_url)===service.name?song.source_url:service.base+encodeURIComponent([song?.title,song?.artist].filter(Boolean).join(' '));
+      const direct=platform(song?.source_url)===service.name&&(key!=='soundcloud'||Boolean(soundCloudTrackUrl(song?.source_url)));
+      link.href=direct?song.source_url:service.base+encodeURIComponent([song?.title,song?.artist].filter(Boolean).join(' '));
       link.target='_blank';link.rel='noopener noreferrer';
       const displayName=key==='netease'&&localStorage.getItem('daytone-language')==='zh'?'网易云音乐':service.name;
-      link.title=(platform(song?.source_url)===service.name?'Open shared version on ':'Find on ')+displayName;
+      link.title=(direct?'Open shared version on ':'Find on ')+displayName;
       link.setAttribute('aria-label',link.title);
       links.append(link);
     }
@@ -83,6 +87,28 @@
   function playerFor(url){const player=typeof musicEmbed==='function'?musicEmbed(url):null;if(player){player.classList.add('listen-player');if(player.tagName==='IFRAME')player.loading='eager';}return player;}
   function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && platform(song.source_url)!=='Apple Music' && playerFor(song.source_url)));}
   function actionLabel(song){return (canPlayHere(song)?'Play ':'Find ') + String(song?.title||'song');}
+  function updateQueueControls(){
+    const active=Boolean(queue),position=dock.querySelector('#player-dock-position');
+    position.hidden=!active;position.textContent=active?(queue.index+1)+' / '+queue.items.length:'';
+    for(const [id,enabled] of [['player-dock-previous',active&&queue.index>0],['player-dock-next',active&&queue.index<queue.items.length-1]]){
+      const button=dock.querySelector('#'+id);button.hidden=!active;button.disabled=!enabled;
+    }
+  }
+  function advance(step){if(!queue)return;const next=queue.index+step;if(next<0||next>=queue.items.length)return;queue.index=next;open(queue.items[next],true);}
+  function playQueue(items){const seen=new Set(),playable=(items||[]).filter(song=>{if(!canPlayHere(song))return false;const key=song.id||song.source_url||song.audio_path;if(seen.has(key))return false;seen.add(key);return true;});if(!playable.length){return false;}queue={items:playable,index:0};open(playable[0],true);return true;}
+  let soundCloudApi;
+  function onSoundCloudFinish(frame,song){
+    if(!queue||!frame.src.startsWith('https://w.soundcloud.com/player/')||/\/sets\//.test(song?.source_url||''))return;
+    soundCloudApi ||= new Promise((resolve,reject)=>{
+      if(window.SC?.Widget){resolve(window.SC);return;}
+      const script=document.createElement('script');script.src='https://w.soundcloud.com/player/api.js';script.onload=()=>resolve(window.SC);script.onerror=reject;document.head.append(script);
+    });
+    void soundCloudApi.then(api=>{
+      if(!frame.isConnected||!queue||!api?.Widget)return;
+      const widget=api.Widget(frame);
+      widget.bind(api.Widget.Events.FINISH,()=>{if(frame.isConnected&&queue)advance(1);});
+    }).catch(()=>{});
+  }
   function openDock(song,player){
     dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();
     dock.querySelector('#player-dock-title').textContent=song.title||'';
@@ -90,12 +116,13 @@
     const link=dock.querySelector('#player-dock-source');link.hidden=!song.source_url;if(song.source_url){link.href=song.source_url;link.textContent='Open on '+platform(song.source_url)+' ↗';}
     dock.classList.toggle('video',player.classList.contains('video-player'));
     dock.classList.toggle('soundcloud',platform(song.source_url)==='SoundCloud');
+    updateQueueControls();
     if(player.tagName==='IFRAME'){
       const url=new URL(player.src);url.searchParams.set(url.hostname==='w.soundcloud.com'?'auto_play':'autoplay',url.hostname==='w.soundcloud.com'?'true':'1');player.src=url.href;
       const status=node('p','player-dock-status','Opening '+platform(song.source_url)+'…');dockContent.append(status,player);
       const timer=setTimeout(()=>{if(status.isConnected)status.textContent='Still loading? Use the original link above.';},6000);
-      player.addEventListener('load',()=>{clearTimeout(timer);status.remove();},{once:true});
-    }else{dockContent.append(player);if(player.tagName==='AUDIO')void player.play().catch(()=>{});}
+      player.addEventListener('load',()=>{clearTimeout(timer);status.remove();onSoundCloudFinish(player,song);},{once:true});
+    }else{dockContent.append(player);if(player.tagName==='AUDIO'){player.addEventListener('ended',()=>{if(queue)advance(1);},{once:true});void player.play().catch(()=>{});}}
     dock.hidden=false;document.body.classList.add('player-dock-open');if(dialog.open)dialog.close();
   }
   function attachPlayer(player,label,sourceUrl){
@@ -115,8 +142,9 @@
     if(player){attachPlayer(player,label,song.source_url);return true;}
     body.append(directLink(song.source_url,'Open in '+label));return true;
   }
-  function open(song){
+  function open(song,fromQueue=false){
     const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
+    if(!fromQueue)queue=null;
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);openDock(song,audio);return;}
     if(song.source_url&&platform(song.source_url)!=='Apple Music'){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
@@ -138,5 +166,5 @@
     if(!videoDialog.open)videoDialog.showModal();
   }
   dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,musicServiceLinks,canPlayHere,actionLabel};
+  window.DaytoneListen={open,openVideo,playQueue,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,musicServiceLinks,canPlayHere,actionLabel};
 })();

@@ -22,6 +22,16 @@ This file tracks requested behavior separately from work that has been verified 
 
 ## Next product passes
 
+### November 9 pass
+
+- [x] Keep a small player on the page for uploaded audio and confirmed SoundCloud tracks or sets, with previous/next controls and a playable-list queue. Verified an older uploaded track plays on the local site.
+- [x] Show Play only for a confirmed in-site source; SoundCloud search URLs are labeled Find. Show Play available only when a chart or list has at least one playable item.
+- [x] Let a playlist be shared with a source link and title before its tracks are entered. SoundCloud set links can use the in-site player; other platform links open their source.
+- [x] Show genre, same-artist, and related DAYTONE shares from a song card; connect Following to liked artists and their songs.
+- [x] Add small tilted poster images to each room's daily header, with separate room colors and shorter empty-state text.
+- [ ] Verify this release on the public GitHub Pages URL after publication.
+- [ ] Automatic title-only artist/cover lookup and exact-version playback remain incomplete. Playlist links are not yet expanded automatically into individual songs.
+
 ### November 8 pass
 
 - [x] Put SoundCloud, QQ Music, and NetEase Cloud Music search or source shortcuts beside songs on the daily chart, gallery, and full song cards.

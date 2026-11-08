@@ -12,6 +12,14 @@
     {key:'daily',screen:'daily-all',number:'04',name:'Daily Life',line:'Notes from today.'},
     {key:'forum',screen:'forum-all',number:'05',name:'Forum',line:'Questions and discussion.'}
   ];
+  const roomPosters={
+    music:['music-1.png','music-2.png','music-3.png'],
+    film:['backgrounds/eight-1.jpg','backgrounds/paris-2.jpg','backgrounds/odyssey-1.jpg'],
+    art:['backgrounds/paris-4.jpg','backgrounds/eight-3.jpg','backgrounds/mood-2.jpg'],
+    books:['backgrounds/eight-2.jpg','backgrounds/paris-5.jpg','backgrounds/mood-3.jpg'],
+    daily:['taxi-cab.png','backgrounds/paris-6.jpg','backgrounds/mood-1.jpg'],
+    forum:['taxi-cinema.png','backgrounds/eight-4.jpg','backgrounds/paris-7.jpg']
+  };
   const layoutKey='daytone-display-mode';
   let layoutMode=localStorage.getItem(layoutKey)==='scenes'?'scenes':'edition';
   function setLayout(mode){
@@ -56,7 +64,7 @@
     const copy=node('div','collection-item-copy');copy.append(kind,title,details,node('small','collection-item-action',item.kind==='MUSIC'?'Read & discuss ↗':'Open discussion ↗'));copy.addEventListener('click',discuss);copy.tabIndex=0;copy.setAttribute('role','button');copy.setAttribute('aria-label',(item.kind==='MUSIC'?'Discuss ':'Open ')+item.title);copy.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();discuss();}});
     row.append(cover,copy);return row;
   }
-  let collectionRequest=0,libraryView='likes',libraryLayout='grid';
+  let collectionRequest=0,libraryView='likes',libraryLayout='grid',collectionSearchSeed='';
   function openLibrary(view){libraryView=view;if(app.getScreen()==='explore')void renderCollection('explore');else app.show('explore');}
   window.DaytoneLibrary={openLikes(){openLibrary('likes');},openAll(){openLibrary('all');},openFollowing(){openLibrary('following');},openMine(){openLibrary('mine');}};
   async function renderCollection(screen){
@@ -70,7 +78,7 @@
         following&&user?client.from('music_groups').select('id,name').order('created_at',{ascending:false}):{data:[],error:null},
         fetchEveryRow(()=>client.from('songs').select('id,owner_id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,created_at').order('created_at',{ascending:false})),
         following?[]:fetchEveryRow(()=>client.from('posts').select('id,owner_id,day,category,title,creator,nickname,image_path,created_at').order('created_at',{ascending:false})),
-        libraryView==='likes'&&user?fetchEveryRow(()=>client.from('song_votes').select('song_id').eq('user_id',user.id)):[]
+        (libraryView==='likes'||following)&&user?fetchEveryRow(()=>client.from('song_votes').select('song_id').eq('user_id',user.id)):[]
       ]);
       if(followed.error)throw followed.error;
       if(groupResult.error)throw groupResult.error;
@@ -88,6 +96,19 @@
         if(current!==collectionRequest||app.getScreen()!==screen)return;
         const memberIds=new Set((memberResult.data||[]).map(row=>row.followed_id));
         const keys=new Set((followed.data||[]).map(row=>row.genre));
+        const likedIds=new Set(ownVotes.map(vote=>vote.song_id));
+        const likedSongs=publicSongs.filter(song=>likedIds.has(song.id));
+        const likedArtists=new Set(likedSongs.map(song=>song.artist?.trim().toLocaleLowerCase()).filter(Boolean));
+        if(likedArtists.size){
+          const artists=node('div','collection-section');artists.append(node('h2','','Artists from your likes'));
+          const names=node('div','collection-categories');
+          for(const name of [...new Set(likedSongs.map(song=>song.artist?.trim()).filter(Boolean))].slice(0,12)){
+            names.append(collectionButton(name+' ↗',()=>{collectionSearchSeed=name;openLibrary('all');}));
+          }
+          artists.append(names);root.append(artists);
+          const byArtists=publicSongs.filter(song=>!likedIds.has(song.id)&&likedArtists.has(song.artist?.trim().toLocaleLowerCase())).slice(0,24);
+          if(byArtists.length){const section=node('div','collection-section');section.append(node('h2','','More by artists you like'));const list=node('div','collection-list');byArtists.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);root.append(section);}
+        }
         const intro=node('div','collection-section');intro.append(node('h2','','Your choices'));
         const choices=node('div','collection-categories');
         for(const key of keys)choices.append(collectionButton(musicGenreName(key)+' ↗',()=>app.openGenre(key)));
@@ -106,10 +127,11 @@
           else feed.append(node('p','collection-status','Their new songs will appear here.'));
           root.append(feed);
         }
-        const recent=publicSongs.filter(song=>[...keys].some(key=>songInChart(song,key)));
+        const likedGenres=new Set(likedSongs.flatMap(song=>song.genres?.length?song.genres:[song.genre]).filter(Boolean));
+        const recent=publicSongs.filter(song=>!likedIds.has(song.id)&&([...keys].some(key=>songInChart(song,key))||[...likedGenres].some(key=>songInChart(song,key)))).slice(0,30);
         const section=node('div','collection-section');section.append(node('h2','','New in your charts'));
         if(!recent.length)section.append(node('p','collection-status','New songs from followed charts will appear here.'));
-        else {const list=node('div','collection-list');recent.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);}
+        else {section.querySelector('h2').textContent='New near your likes and charts';const list=node('div','collection-list');recent.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);}
         root.append(section);
         return;
       }
@@ -119,7 +141,12 @@
       const latest=node('div','collection-section');
       const title=node('h2','',libraryView==='likes'?'Songs you like':libraryView==='mine'?'Your shares':'All public shares');latest.append(title);
       const controls=node('div','collection-library-controls'),filters=node('div','collection-categories'),search=node('input','collection-search');
+      const playAll=collectionButton('▶ Play available',()=>{
+        const visible=items.filter(item=>item.kind==='MUSIC'&&(libraryView==='all'||libraryView==='mine'&&user&&item.raw.owner_id===user.id||libraryView==='likes'&&likedIds.has(item.raw.id))&&(selected==='ALL'||selected==='MUSIC')&&(!search.value.trim()||[item.title,item.details].join(' ').toLocaleLowerCase().includes(search.value.trim().toLocaleLowerCase()))).map(item=>item.raw);
+        if(!window.DaytoneListen?.playQueue(visible))toast('No in-site recordings in this list yet.');
+      },'play-all');
       search.type='search';search.placeholder='Search titles and artists';search.setAttribute('aria-label','Search public shares');
+      search.value=collectionSearchSeed;collectionSearchSeed='';
       let selected='ALL';const buttons=[];
       const list=node('div','collection-list library-grid');
       const update=()=>{
@@ -131,6 +158,7 @@
         list.replaceChildren();
         if(!shown.length)list.append(node('p','collection-status',libraryView==='likes'?(user?'Heart a song to keep it here.':'Log in to keep songs you like.'):libraryView==='mine'?(user?'Your posts will appear here.':'Log in to see your posts.'):'No matching shares.'));
         else shown.forEach(item=>list.append(collectionItem(item)));
+        playAll.hidden=!shown.some(item=>item.kind==='MUSIC'&&window.DaytoneListen?.canPlayHere(item.raw));
         buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.filter===selected)));
       };
       for(const [key,label] of [['ALL','All'],['MUSIC','Music'],['FILM','Film'],['ART','Art'],['BOOKS','Books'],['DAILY','Daily Life'],['FORUM','Forum']]){
@@ -139,7 +167,7 @@
       filters.append(collectionButton('Playlists ↗',()=>navigate('playlists'),'muted'));
       const layouts=node('div','library-view-controls');
       for(const [key,label] of [['grid','▦'],['list','☷']]){const button=collectionButton(label,()=>{libraryLayout=key;update();});button.title=key==='grid'?'Grid view':'List view';button.setAttribute('aria-label',button.title);layouts.append(button);}
-      search.addEventListener('input',update);controls.append(filters,layouts,search);latest.append(controls,list);update();
+      search.addEventListener('input',update);controls.append(filters,layouts,search,playAll);latest.append(controls,list);update();
       root.append(latest);
     }catch(error){console.warn('Collection load failed',JSON.stringify(error));if(current===collectionRequest)root.replaceChildren(node('p','collection-status','Could not load this collection. Please try again.'));}
   }
@@ -211,6 +239,8 @@
     host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf());const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', activeRoom==='music'?'Music on this day':rooms.find(room=>room.key===activeRoom).name+' on this day'));
+    const posters=node('div','room-poster-corners');posters.setAttribute('aria-hidden','true');
+    for(const src of roomPosters[activeRoom]){const frame=node('span','room-poster-frame'),image=node('img');image.src=src;image.alt='';image.loading='lazy';frame.append(image);posters.append(frame);}head.append(posters);
     host.append(head);
     if(activeRoom!=='music'){
       const roomContent=node('section','room-content');host.append(roomContent);return {roomContent};
@@ -241,8 +271,8 @@
       const posts=cached&&Date.now()-cached.at<90000?cached.rows:await getRoomPosts(room,day);
       if(current!==request||room!==activeRoom||day!==app.getDay())return;
       host.replaceChildren();
-      const intro=node('div','room-content-intro');intro.append(node('p','kicker',room==='forum'?'FORUM / DISCUSSION':title.toUpperCase()+' / SHARED'),node('h3','',room==='forum'?'Discussions on this date':title+' on this date'),node('p','',rooms.find(item=>item.key===room).line));host.append(intro);
-      if(!posts.length)host.append(node('p','day-preview-empty','No posts here for this date yet.'));
+      const intro=node('div','room-content-intro');intro.append(node('p','kicker',room==='forum'?'FORUM / DISCUSSION':title.toUpperCase()+' / SHARED'),node('h3','',room==='forum'?'Discussions on this date':title+' on this date'));host.append(intro);
+      if(!posts.length)host.append(node('p','day-preview-empty',room==='forum'?'No discussions started on this date.':'No '+title.toLowerCase()+' shared on this date.'));
       const list=node('div','room-content-list');posts.forEach(post=>{
         const card=node('article','room-content-card'),open=node('button','room-content-open');open.type='button';open.setAttribute('aria-label','Open '+post.title);
         if(post.image_path){const image=node('img','room-content-image');image.src=publicFile('images',post.image_path);image.alt='';image.loading='lazy';open.append(image);}
@@ -267,11 +297,12 @@
       else todayRows.forEach((song,i)=>music.append(songRow(song,i+1,counts.get(song.id)||0,day,voteUsers)));
       renderGallery(gallery,todayRows,counts,day);
       const musicActions=node('div','day-preview-actions'),allMusic=node('button','','See every song ↗'),share=node('button','','＋ Share a song');
-      allMusic.type=share.type='button';allMusic.addEventListener('click',()=>{app.setDay(day);app.show('music-all');});share.addEventListener('click',openUpload);musicActions.append(allMusic,share);music.append(musicActions);
+      allMusic.type=share.type='button';allMusic.addEventListener('click',()=>{app.setDay(day);app.show('music-all');});share.addEventListener('click',openUpload);if(todayRows.some(song=>window.DaytoneListen?.canPlayHere(song))){const playToday=node('button','play-available','▶ Play available');playToday.type='button';playToday.addEventListener('click',()=>window.DaytoneListen?.playQueue(todayRows));musicActions.append(playToday);}musicActions.append(allMusic,share);music.append(musicActions);
       const {weekStart,weekEnd}=boundaries(day),periodRows=songs.filter(song=>period==='month'||song.day>=weekStart&&song.day<weekEnd),leaders=periodRank(periodRows,counts,voteUsers).slice(0,5);
       periodic.append(node('p','period-caption',period==='month'?'Most supported songs shared this month.':'Most supported songs shared this week.'));
       if(!leaders.length)periodic.append(node('p','day-preview-empty','The chart is waiting for its first song.'));
       else leaders.forEach((item,i)=>periodic.append(songRow(item.song,i+1,counts.get(item.song.id)||0,item.song.day,voteUsers)));
+      if(leaders.some(item=>window.DaytoneListen?.canPlayHere(item.song))){const playChart=node('button','play-available','▶ Play available');playChart.type='button';playChart.addEventListener('click',()=>window.DaytoneListen?.playQueue(leaders.map(item=>item.song)));periodic.append(playChart);}
       renderArchive(archive,songs,counts,voteUsers,day);
       for(const summary of archive.querySelectorAll('.month-day summary'))if(openArchiveDates.has(summary.querySelector('span')?.textContent))summary.parentElement.open=true;
       setTimeout(()=>{if(client)void getRoomPosts('film',day).catch(()=>{});},300);

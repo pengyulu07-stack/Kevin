@@ -93,6 +93,9 @@ dialog:not(.discussion-dialog) .source-choice,dialog:not(.discussion-dialog) .gh
 .player-dock-head strong{font:18px Georgia,serif;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .player-dock-head span{font:12px Georgia,serif;color:#bda890;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .player-dock-actions{display:flex;align-items:center;gap:15px;flex:none}
+.player-dock-actions #player-dock-position{color:#d4c2b5;font:12px system-ui,sans-serif;white-space:nowrap}
+.player-dock-actions #player-dock-previous,.player-dock-actions #player-dock-next{font:19px/1 system-ui,sans-serif;min-width:28px;min-height:28px;cursor:pointer}
+.player-dock-actions button:disabled{opacity:.35;cursor:default}
 .player-dock-actions a{font:12px Georgia,serif;color:#e9b28f;border-bottom:1px solid #9d6d52}
 .player-dock-actions button{border:0;background:transparent;color:#f6e7d4;font:29px/1 Georgia,serif}
 #player-dock-content{position:relative;min-height:43px}

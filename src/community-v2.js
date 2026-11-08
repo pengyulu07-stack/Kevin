@@ -137,17 +137,25 @@
     const host=$v('music-discussion-body'),section=make('section','song-connections');section.append(make('h3','','Keep listening'));
     const content=make('div','song-connections-content');content.append(make('p','','Finding other shares…'));section.append(content);host.append(section);
     try{
-      const genre=(song.genres||[song.genre]).find(key=>key&&key!=='other');
+      const songGenres=new Set((song.genres?.length?song.genres:[song.genre]).filter(key=>key&&key!=='other'));
       const [sameArtist,similar]=await Promise.all([
-        song.artist?client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,created_at').eq('artist',song.artist).neq('id',song.id).order('created_at',{ascending:false}).limit(6):Promise.resolve({data:[],error:null}),
-        genre?client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,created_at').contains('genres',[genre]).neq('id',song.id).order('created_at',{ascending:false}).limit(12):Promise.resolve({data:[],error:null})
+        song.artist?client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,note,created_at').eq('artist',song.artist).neq('id',song.id).order('created_at',{ascending:false}).limit(12):Promise.resolve({data:[],error:null}),
+        client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,note,created_at').neq('id',song.id).order('created_at',{ascending:false}).limit(120)
       ]);
       if(sameArtist.error||similar.error)throw sameArtist.error||similar.error;
       if(!section.isConnected||selectedSongId!==song.id)return;
       content.replaceChildren();
-      const artistRows=sameArtist.data||[],suggestions=(similar.data||[]).filter(row=>row.artist!==song.artist).slice(0,4);
+      const artistRows=sameArtist.data||[];
+      const words=value=>new Set(String(value||'').toLocaleLowerCase().match(/[\p{L}]{3,}/gu)||[]);
+      const noteWords=words(song.note);
+      const suggestions=(similar.data||[]).filter(row=>row.artist!==song.artist).map(row=>{
+        const genres=row.genres?.length?row.genres:[row.genre];
+        const overlap=genres.filter(key=>songGenres.has(key)).length;
+        const sharedWords=[...words(row.note)].filter(word=>noteWords.has(word)).length;
+        return {row,score:overlap*4+(song.language&&row.language===song.language?2:0)+Math.min(sharedWords,3)};
+      }).filter(item=>item.score>=4).sort((a,b)=>b.score-a.score||b.row.created_at.localeCompare(a.row.created_at)).slice(0,4).map(item=>item.row);
       const addGroup=(title,rows)=>{if(!rows.length)return;const group=make('div','song-connection-group');group.append(make('h4','',title));for(const row of rows){const item=make('div','song-connection-item'),play=make('button','song-connection-play','▶');play.type='button';play.setAttribute('aria-label','Play '+row.title);play.addEventListener('click',()=>window.DaytoneListen?.open(row));const detail=make('button','song-connection-detail');detail.type='button';detail.append(make('strong','',row.title),make('small','',[row.artist,row.nickname].filter(Boolean).join(' · ')));detail.addEventListener('click',()=>{location.href='?space=music&day='+encodeURIComponent(row.day)+'&view=all#song-'+encodeURIComponent(row.id);});item.append(play,detail);group.append(item);}content.append(group);};
-      addGroup('More by '+song.artist,artistRows);addGroup('In the same chart',suggestions);
+      if(song.artist)addGroup('More by '+song.artist,artistRows);addGroup('Related by tags and language',suggestions);
       if(!content.childElementCount)content.append(make('p','song-connections-empty','No other shares here yet.'));
     }catch{if(section.isConnected)content.replaceChildren(make('p','song-connections-empty','Other songs are unavailable right now.'));}
   }
