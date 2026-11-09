@@ -165,15 +165,19 @@
         const social=alsoLiked.has(row.id);
         const language=Boolean(song.language&&song.language===row.language&&song.language!=='other_language');
         const score=(social?12:0)+Math.min(sharedTerms,3)*4+Math.min(overlap,2)*2+(language?1:0);
-        const reason=social?'Liked by listeners of this song':sharedTerms?'Shared words in the notes':overlap&&language?'Same category and language':overlap?'Same category':'';
-        return {row,score,reason};
-      }).filter(item=>item.score>=2).sort((a,b)=>b.score-a.score||b.row.created_at.localeCompare(a.row.created_at)).slice(0,6);
+        const reason=sharedTerms?'Shared words in the notes':overlap&&language?'Same category and language':overlap?'Same category':'Liked by listeners of this song';
+        return {row,score,reason,social,sharedTerms,overlap,language};
+      }).filter(item=>item.score>=2).sort((a,b)=>b.score-a.score||b.row.created_at.localeCompare(a.row.created_at));
+      const related=ranked.filter(item=>item.sharedTerms>=2||(item.sharedTerms>=1&&item.overlap>0)||(item.overlap>0&&item.language)).slice(0,6);
+      const relatedIds=new Set(related.map(item=>item.row.id));
+      const listenerPicks=ranked.filter(item=>item.social&&!relatedIds.has(item.row.id)).slice(0,5).map(item=>({...item,reason:'Liked by listeners of this song'}));
       const addGroup=(title,items)=>{if(!items.length)return;const group=make('div','song-connection-group');group.append(make('h4','',title));for(const {row,reason} of items){const item=make('article','song-connection-item'),art=make('button','song-connection-art'),cover=songCoverUrl(row);art.type='button';art.title=window.DaytoneListen?.actionLabel(row)||'Play '+row.title;art.setAttribute('aria-label',art.title);if(cover){const image=make('img');image.src=cover;image.alt='';image.loading='lazy';art.append(image);}else art.textContent='♫';art.addEventListener('click',()=>window.DaytoneListen?.open(row));const detail=make('button','song-connection-detail');detail.type='button';detail.append(make('strong','',row.title),make('small','',[row.artist,row.nickname].filter(Boolean).join(' · ')));if(reason)detail.append(make('em','',reason));detail.addEventListener('click',()=>openMusicDiscussion(row));item.append(art,detail);group.append(item);}content.append(group);};
       addGroup('More by '+song.artist,sameArtist.map(row=>({row,reason:'Same artist'})));
-      addGroup('Related songs',ranked);
-      if(!sameArtist.length&&!ranked.length)addGroup('Recent shares',distinctRows.slice(0,5).map(row=>({row,reason:'Recently shared'})));
-      const artistNames=[...new Set(ranked.map(item=>item.row.artist).filter(Boolean))].slice(0,5);
-      if(artistNames.length){const artists=make('div','song-related-artists');artists.append(make('h4','','Artists in these shares'));for(const name of artistNames){const match=ranked.find(item=>item.row.artist===name);const button=make('button','',name);button.type='button';button.addEventListener('click',()=>openMusicDiscussion(match.row));artists.append(button);}content.append(artists);}
+      addGroup('Related songs',related);
+      addGroup('Listeners also supported',listenerPicks);
+      if(!sameArtist.length&&!related.length&&!listenerPicks.length)addGroup('Recent shares',distinctRows.slice(0,5).map(row=>({row,reason:'Recently shared'})));
+      const artistNames=[...new Set(related.map(item=>item.row.artist).filter(Boolean))].slice(0,5);
+      if(artistNames.length){const artists=make('div','song-related-artists');artists.append(make('h4','','Artists in related shares'));for(const name of artistNames){const match=related.find(item=>item.row.artist===name);const button=make('button','',name);button.type='button';button.addEventListener('click',()=>openMusicDiscussion(match.row));artists.append(button);}content.append(artists);}
       if(!content.childElementCount)content.append(make('p','song-connections-empty','No related shares yet. Try another song.'));
     }catch{if(section.isConnected)content.replaceChildren(make('p','song-connections-empty','Other songs are unavailable right now.'));}
   }

@@ -87,9 +87,9 @@
     'Could not load this discussion.':'暂时无法加载讨论。','Loading discussion…':'正在加载讨论…'
   });
   Object.assign(zh,{
-    '⚙ Preferences':'⚙ 偏好设置','Make AILLEURS yours':'调整你的页面','Appearance & layout':'外观与布局','Chart designs':'榜单设计','Account & playback':'账号与播放',
+    '⚙ Preferences':'⚙ 偏好设置','Settings':'设置','Appearance & layout':'外观与布局','Chart designs':'榜单设计','Account & playback':'账号与播放',
     'Find related songs ↗':'发现相关歌曲 ↗','More like this ↗':'发现相近歌曲 ↗','Finding other songs…':'正在寻找相关歌曲…',
-    'Related songs':'相关歌曲','Artists in these shares':'相关歌手','Same artist':'同一歌手','Recent shares':'最近分享','Recently shared':'最近发布',
+    'Related songs':'相关歌曲','Listeners also supported':'听众也支持','Artists in related shares':'相关分享中的歌手','Same artist':'同一歌手','Recent shares':'最近分享','Recently shared':'最近发布',
     'Liked by listeners of this song':'喜欢这首歌的人也支持','Shared words in the notes':'分享文字有共同词语',
     'Same category and language':'同一分类和语言','Same category':'同一分类',
     'No related shares yet. Try another song.':'暂无相关分享，换首歌看看。','Recommended songs':'推荐歌曲',

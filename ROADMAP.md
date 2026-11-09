@@ -26,7 +26,7 @@ This file tracks requested behavior separately from work that has been verified 
 
 - [x] Put appearance, chart designs, language, account/playback, and help under one clear Preferences menu. Keep notifications and account visible.
 - [x] Add a visible related-song entry beside songs on the daily spread and full feed; open the existing discussion without a second page.
-- [x] In song discussion, show other shares by the same artist first, then score related shares by listener overlap, shared note words, genre and language. Explain each connection.
+- [x] In song discussion, show other shares by the same artist first. Put songs with shared note, genre and language signals under Related songs; put co-liked songs under Listeners also supported so a common voter alone is not presented as proof of musical similarity.
 - [x] Avoid duplicate title-and-artist entries in related lists. When no reliable relationship exists, label the fallback Recent shares rather than calling it a recommendation.
 - [x] In Following, recommend songs using liked artists, co-likes and share notes, deduplicate versions, and keep followed-chart new songs separate.
 - [x] Verify the public GitHub Pages release shows Preferences, the daily-spread discovery link, and a related-song list with reasons. No browser errors were observed.
