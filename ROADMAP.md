@@ -29,7 +29,8 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] In song discussion, show other shares by the same artist first, then score related shares by listener overlap, shared note words, genre and language. Explain each connection.
 - [x] Avoid duplicate title-and-artist entries in related lists. When no reliable relationship exists, label the fallback Recent shares rather than calling it a recommendation.
 - [x] In Following, recommend songs using liked artists, co-likes and share notes, deduplicate versions, and keep followed-chart new songs separate.
-- [ ] Verify these changes on the public GitHub Pages release after publication. Test Following with a signed-in member who has likes.
+- [x] Verify the public GitHub Pages release shows Preferences, the daily-spread discovery link, and a related-song list with reasons. No browser errors were observed.
+- [ ] Test Following recommendations with a signed-in member who has likes and followed charts; this personalized path has not had a live member check.
 - [ ] Recommendations still use shares and votes on this site. Cross-platform catalog recommendations, full audio matching, and a complete artist discography are not built.
 
 ### November 9 pass
