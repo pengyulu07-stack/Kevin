@@ -238,3 +238,34 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .playlist-card-play:hover,.playlist-detail-play:hover{filter:brightness(1.12);transform:translateY(-1px)}
 .playlist-card-play:focus-visible,.playlist-detail-play:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media(max-width:930px){.day-preview-head{padding-right:0;min-height:0}.room-poster-corners{position:static;margin:17px 0 0;justify-content:flex-start}.day-preview-head{display:block}}
+
+/* One clear preferences entry keeps the page header readable. */
+.header{position:relative;z-index:20}
+.site-preferences{position:relative;color:var(--dt-text);font:600 12px/1.3 system-ui,sans-serif}
+.site-preferences>summary{list-style:none;cursor:pointer;border:1px solid var(--dt-rule);background:var(--dt-raised);padding:10px 13px;white-space:nowrap;min-height:38px}
+.site-preferences>summary::-webkit-details-marker{display:none}
+.site-preferences>summary:hover,.site-preferences[open]>summary{background:var(--dt-hover);border-color:var(--dt-accent);color:#fff}
+.site-preferences>summary:focus-visible{outline:2px solid var(--dt-accent);outline-offset:2px}
+.site-preferences-panel{position:absolute;right:0;top:calc(100% + 8px);width:245px;padding:12px;background:#202123;border:1px solid #66615d;box-shadow:0 16px 36px #0009;display:grid;gap:2px;z-index:21}
+.site-preferences-panel>strong{font:600 11px/1.3 system-ui,sans-serif;color:var(--dt-accent);padding:5px 9px 9px}
+.header-actions .site-preferences-panel .quiet-action{display:block;text-align:left;width:100%;white-space:normal;padding:10px 9px;border:0;background:none;color:var(--dt-text);font:500 13px/1.3 system-ui,sans-serif}
+.header-actions .site-preferences-panel .quiet-action:hover,.header-actions .site-preferences-panel .quiet-action:focus-visible{background:#36312e;color:#fff}
+#appearance-open{color:var(--dt-text);border:0;padding:10px 9px}
+#appearance-open:hover,#appearance-open:focus-visible{color:#fff;background:#36312e}
+.site-preferences-panel .site-language{margin:5px 0;padding:8px 9px;border-top:1px solid #444;justify-content:space-between;color:var(--dt-text);font:500 12px system-ui,sans-serif}
+.site-preferences-panel .site-language select{max-width:none;padding:5px 7px}
+.song-connection-item{display:grid;grid-template-columns:54px minmax(0,1fr);gap:12px;padding:10px 0}
+.song-connection-art{width:54px;height:54px;border:1px solid var(--dt-rule);background:var(--dt-raised);color:var(--dt-text);font-size:24px;display:grid;place-items:center;padding:0;overflow:hidden}
+.song-connection-art img{display:block;width:100%;height:100%;object-fit:cover}
+.song-connection-art:hover{border-color:var(--dt-accent);filter:brightness(1.12)}
+.song-connection-detail{width:100%;cursor:pointer}
+.song-connection-detail em{color:var(--dt-accent);font:500 11px/1.3 system-ui,sans-serif;font-style:normal}
+.song-related-artists{border-top:1px solid var(--dt-rule);padding-top:13px;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.song-related-artists h4{width:100%;margin:0 0 4px;color:var(--dt-muted);font:600 11px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em}
+.song-related-artists button{background:var(--dt-raised);border:1px solid var(--dt-rule);color:var(--dt-text);padding:6px 10px;font:500 12px system-ui,sans-serif}
+.song-related-artists button:hover{border-color:var(--dt-accent);background:var(--dt-hover)}
+.day-preview-discover{border:0;background:transparent;color:var(--dt-accent);padding:7px 2px;font:600 11px/1.3 system-ui,sans-serif;white-space:nowrap}
+.day-preview-discover:hover,.day-preview-discover:focus-visible{color:#fff;text-decoration:underline}
+.song-card .related-open{margin-left:14px}
+.collection-item-reason{display:block;margin-top:5px;color:var(--dt-accent);font:500 11px/1.35 system-ui,sans-serif;font-style:normal}
+@media(max-width:700px){.site-preferences-panel{right:-55px;width:min(245px,calc(100vw - 24px))}.header-actions .site-preferences-panel .quiet-action{font-size:13px}.day-preview-discover{width:100%;text-align:left}}

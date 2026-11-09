@@ -2,6 +2,11 @@
 (() => {
   const app=window.DaytoneCommunity, host=document.getElementById('calendar-day-preview');
   const nav=document.getElementById('site-quick-nav');
+  const preferences=document.getElementById('site-preferences');
+  document.getElementById('preferences-account')?.addEventListener('click',()=>document.getElementById('account-button')?.click());
+  preferences?.addEventListener('click',event=>{if(event.target.closest('button'))preferences.open=false;});
+  document.addEventListener('click',event=>{if(preferences?.open&&!preferences.contains(event.target))preferences.open=false;});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&preferences?.open)preferences.open=false;});
   let request=0,period='month',monthCache=null,activeRoom='music';
   const roomCache=new Map(),roomPending=new Map();
   const rooms=[
@@ -61,7 +66,7 @@
     const listen=()=>window.DaytoneListen?.open(item.raw);
     const discuss=()=>item.kind==='MUSIC'?discussSong(item.raw,item.raw.day):void app.openHomePostDiscussion(item.raw.id);
     cover.addEventListener('click',item.kind==='MUSIC'?listen:discuss);
-    const copy=node('div','collection-item-copy');copy.append(kind,title,details,node('small','collection-item-action',item.kind==='MUSIC'?'Read & discuss ↗':'Open discussion ↗'));copy.addEventListener('click',discuss);copy.tabIndex=0;copy.setAttribute('role','button');copy.setAttribute('aria-label',(item.kind==='MUSIC'?'Discuss ':'Open ')+item.title);copy.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();discuss();}});
+    const copy=node('div','collection-item-copy');copy.append(kind,title,details);if(item.reason)copy.append(node('em','collection-item-reason',item.reason));copy.append(node('small','collection-item-action',item.kind==='MUSIC'?'Read & discuss ↗':'Open discussion ↗'));copy.addEventListener('click',discuss);copy.tabIndex=0;copy.setAttribute('role','button');copy.setAttribute('aria-label',(item.kind==='MUSIC'?'Discuss ':'Open ')+item.title);copy.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();discuss();}});
     row.append(cover,copy);return row;
   }
   let collectionRequest=0,libraryView='likes',libraryLayout='grid',collectionSearchSeed='';
@@ -76,7 +81,7 @@
       const [followed,groupResult,publicSongs,publicPosts,ownVotes]=await Promise.all([
         following&&user?client.from('user_chart_follows').select('genre').eq('user_id',user.id):{data:[],error:null},
         following&&user?client.from('music_groups').select('id,name').order('created_at',{ascending:false}):{data:[],error:null},
-        fetchEveryRow(()=>client.from('songs').select('id,owner_id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,created_at').order('created_at',{ascending:false})),
+        fetchEveryRow(()=>client.from('songs').select('id,owner_id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,note,created_at').order('created_at',{ascending:false})),
         following?[]:fetchEveryRow(()=>client.from('posts').select('id,owner_id,day,category,title,creator,nickname,image_path,created_at').order('created_at',{ascending:false})),
         (libraryView==='likes'||following)&&user?fetchEveryRow(()=>client.from('song_votes').select('song_id').eq('user_id',user.id)):[]
       ]);
@@ -98,17 +103,32 @@
         const keys=new Set((followed.data||[]).map(row=>row.genre));
         const likedIds=new Set(ownVotes.map(vote=>vote.song_id));
         const likedSongs=publicSongs.filter(song=>likedIds.has(song.id));
-        const likedArtists=new Set(likedSongs.map(song=>song.artist?.trim().toLocaleLowerCase()).filter(Boolean));
-        if(likedArtists.size){
-          const artists=node('div','collection-section');artists.append(node('h2','','Artists from your likes'));
-          const names=node('div','collection-categories');
-          for(const name of [...new Set(likedSongs.map(song=>song.artist?.trim()).filter(Boolean))].slice(0,12)){
-            names.append(collectionButton(name+' ↗',()=>{collectionSearchSeed=name;openLibrary('all');}));
-          }
-          artists.append(names);root.append(artists);
-          const byArtists=publicSongs.filter(song=>!likedIds.has(song.id)&&likedArtists.has(song.artist?.trim().toLocaleLowerCase())).slice(0,24);
-          if(byArtists.length){const section=node('div','collection-section');section.append(node('h2','','More by artists you like'));const list=node('div','collection-list');byArtists.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);root.append(section);}
+        const normalizeArtist=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/\b(feat\.?|ft\.?|featuring)\b.*$/i,'').replace(/[\s.,·&/()\[\]_-]+/g,'');
+        const likedArtists=new Set(likedSongs.map(song=>normalizeArtist(song.artist)).filter(Boolean));
+        const likedGenres=new Set(likedSongs.flatMap(song=>song.genres?.length?song.genres:[song.genre]).filter(Boolean));
+        const likedWords=new Set(likedSongs.flatMap(song=>(String(song.note||'').toLocaleLowerCase().match(/[a-zà-ÿ]{4,}|[\p{Script=Han}]{2,}/gu)||[])));
+        const coLiked=new Map();
+        if(likedSongs.length){
+          const likedVotes=await client.from('song_votes').select('user_id').in('song_id',likedSongs.slice(0,30).map(song=>song.id)).limit(1000);
+          const peers=[...new Set((likedVotes.data||[]).map(vote=>vote.user_id).filter(id=>id&&id!==user?.id))].slice(0,60);
+          if(peers.length){const peerVotes=await client.from('song_votes').select('song_id,user_id').in('user_id',peers).limit(1000);for(const vote of peerVotes.data||[])coLiked.set(vote.song_id,(coLiked.get(vote.song_id)||0)+1);}
         }
+        if(current!==collectionRequest||app.getScreen()!==screen)return;
+        const ranked=publicSongs.filter(song=>!likedIds.has(song.id)).map(song=>{
+          const sameArtist=likedArtists.has(normalizeArtist(song.artist));
+          const peers=coLiked.get(song.id)||0;
+          const words=(String(song.note||'').toLocaleLowerCase().match(/[a-zà-ÿ]{4,}|[\p{Script=Han}]{2,}/gu)||[]).filter(word=>likedWords.has(word)).length;
+          const genres=(song.genres?.length?song.genres:[song.genre]).filter(key=>likedGenres.has(key)).length;
+          const score=(sameArtist?16:0)+Math.min(peers,3)*5+Math.min(words,3)*3+Math.min(genres,2);
+          const reason=sameArtist?'More by an artist you like':peers?'Liked by people with similar picks':words?'Similar notes':genres?'From a chart you like':'';
+          return {song,score,reason};
+        }).filter(entry=>entry.score>=3).sort((a,b)=>b.score-a.score||b.song.created_at.localeCompare(a.song.created_at));
+        const songKey=song=>String(song.title||'').normalize('NFKC').toLocaleLowerCase().replace(/\s+/g,' ').trim()+'|'+normalizeArtist(song.artist);
+        const seenRecommendations=new Set(likedSongs.map(songKey));
+        const recommendations=[];
+        for(const entry of ranked){const key=songKey(entry.song);if(seenRecommendations.has(key))continue;seenRecommendations.add(key);recommendations.push(entry);if(recommendations.length===8)break;}
+        const recommendedIds=new Set(recommendations.map(entry=>entry.song.id));
+        if(recommendations.length){const section=node('div','collection-section');section.append(node('h2','','Recommended songs'));const list=node('div','collection-list');for(const {song,reason} of recommendations)list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song,reason}));section.append(list);root.append(section);}
         const intro=node('div','collection-section');intro.append(node('h2','','Your choices'));
         const choices=node('div','collection-categories');
         for(const key of keys)choices.append(collectionButton(musicGenreName(key)+' ↗',()=>app.openGenre(key)));
@@ -127,8 +147,9 @@
           else feed.append(node('p','collection-status','Their new songs will appear here.'));
           root.append(feed);
         }
-        const likedGenres=new Set(likedSongs.flatMap(song=>song.genres?.length?song.genres:[song.genre]).filter(Boolean));
-        const recent=publicSongs.filter(song=>!likedIds.has(song.id)&&([...keys].some(key=>songInChart(song,key))||[...likedGenres].some(key=>songInChart(song,key)))).slice(0,30);
+        const seenRecent=new Set(seenRecommendations);
+        const recent=[];
+        for(const song of publicSongs){const key=songKey(song);if(likedIds.has(song.id)||recommendedIds.has(song.id)||seenRecent.has(key)||![...keys].some(chart=>songInChart(song,chart)))continue;seenRecent.add(key);recent.push(song);if(recent.length===12)break;}
         const section=node('div','collection-section');section.append(node('h2','','New in your charts'));
         if(!recent.length)section.append(node('p','collection-status','New songs from followed charts will appear here.'));
         else {section.querySelector('h2').textContent='New near your likes and charts';const list=node('div','collection-list');recent.forEach(song=>list.append(collectionItem({kind:'MUSIC',title:song.title,details:[song.artist,song.nickname].filter(Boolean).join(' · '),cover:songCoverUrl(song),raw:song})));section.append(list);}
@@ -189,6 +210,7 @@
     const videoLinks=node('span','day-preview-video-links');
     videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
     actions.append(videoLinks);
+    const discover=node('button','day-preview-discover','More like this ↗');discover.type='button';discover.title='More by this artist and related songs';discover.addEventListener('click',()=>discussSong(song,day));actions.append(discover);
     row.append(art,open,actions);return row;
   }
   function renderGallery(host,rows,counts,day){

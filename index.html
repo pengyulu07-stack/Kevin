@@ -18,14 +18,14 @@
   <link rel="stylesheet" href="src/dark.css?v=20261101c">
   <link rel="stylesheet" href="src/ink.css?v=20261107a">
   <link rel="stylesheet" href="src/chart-presets.css?v=20261101b">
-<link rel="stylesheet" href="src/palette.css?v=20261109a">
+<link rel="stylesheet" href="src/palette.css?v=20261109c">
 </head>
 <body>
   <div class="site-shell">
     <header class="header">
       <a class="brand" href="./" aria-label="AILLEURS home"><span class="brand-mark">♫</span><span>AILLEURS</span></a>
       <nav aria-label="Main navigation"><button id="space-select" class="nav-space" type="button">Back to entrance</button><span id="current-space-label">AILLEURS</span></nav>
-      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button><button class="quiet-action" id="chart-design-open" type="button">Design</button><button class="quiet-action" id="appearance-open" type="button">Settings</button><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
+      <div class="header-actions"><button class="notification-bell" id="notification-bell" type="button" aria-label="Notifications" title="Notifications"><span aria-hidden="true">♩</span><b id="notification-count" hidden>0</b></button><details class="site-preferences" id="site-preferences"><summary>⚙ Preferences</summary><div class="site-preferences-panel"><strong>Make AILLEURS yours</strong><button class="quiet-action" id="appearance-open" type="button">Appearance &amp; layout</button><button class="quiet-action" id="chart-design-open" type="button">Chart designs</button><button class="quiet-action" id="preferences-account" type="button">Account &amp; playback</button><label class="site-language">Language <select id="site-language" aria-label="Website language"><option value="en">English</option><option value="zh">中文</option></select></label><button class="quiet-action" id="site-guide-open" type="button">How to use</button></div></details><button class="quiet-action" id="account-button" type="button">Log in / Sign up</button><button class="quiet-action" id="share-site" type="button">↗ <span>Invite friends</span></button></div>
     </header>
     <nav id="site-quick-nav" class="site-quick-nav" aria-label="Main sections"><button type="button" data-go="welcome">Today</button><button type="button" data-go="explore">♡ Library</button></nav>
 
@@ -86,10 +86,10 @@
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="config.js"></script>
   <script defer src="vendor/supabase.js"></script>
-  <script defer src="src/main.js?v=20261109b"></script>
+  <script defer src="src/main.js?v=20261109c"></script>
   <script defer src="src/listen.js?v=20261109a"></script>
   <script defer src="src/link-enrichment.js?v=20261109b"></script>
-  <script defer src="src/community-v2.js?v=20261109a"></script>
+  <script defer src="src/community-v2.js?v=20261109c"></script>
   <script defer src="src/social.js?v=20261106a"></script>
   <script defer src="src/music-rooms.js?v=20261106a"></script>
   <script defer src="src/appearance.js?v=20261031j"></script>
@@ -97,9 +97,9 @@
   <script defer src="src/notifications.js?v=20261030a"></script>
   <script defer src="src/categories.js?v=20261029f"></script>
   <script defer src="src/author-tools.js?v=20261029f"></script>
-  <script defer src="src/site-language.js?v=20261108a"></script>
+  <script defer src="src/site-language.js?v=20261109c"></script>
   <script defer src="src/site-guide.js?v=20261029f"></script>
-  <script defer src="src/site-navigation.js?v=20261109a"></script>
+  <script defer src="src/site-navigation.js?v=20261109c"></script>
   <script defer src="src/chart-presets.js?v=20261101b"></script>
 </body>
 </html>

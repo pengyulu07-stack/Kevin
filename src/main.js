@@ -453,7 +453,8 @@ function createCard(song, rank, discussion = false) {
   listen.setAttribute('aria-label', window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title);
   listen.addEventListener('click', () => window.DaytoneListen?.open(song));
   meta.append(listen);
-  if(song.artist){const artistMore=el('button','artist-more','More from '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));meta.append(artistMore);}
+  if(song.artist){const artistMore=el('button','artist-more','More by '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>{if(!discussion){window.DaytoneCommunity?.openMusicDiscussion(song);return;}document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});});meta.append(artistMore);}
+  if(!discussion){const related=el('button','artist-more related-open','Find related songs ↗');related.type='button';related.addEventListener('click',()=>window.DaytoneCommunity?.openMusicDiscussion(song));meta.append(related);}
   const videoSearch = el('div','song-video-search');
   videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
   meta.append(videoSearch);

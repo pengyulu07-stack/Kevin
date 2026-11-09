@@ -86,6 +86,17 @@
     'Your shares':'我的分享','Your posts will appear here.':'你发布的内容会显示在这里。','Log in to see your posts.':'登录后查看自己的分享。','Songs you like':'喜欢的歌曲','All shares':'全部分享',
     'Could not load this discussion.':'暂时无法加载讨论。','Loading discussion…':'正在加载讨论…'
   });
+  Object.assign(zh,{
+    '⚙ Preferences':'⚙ 偏好设置','Make AILLEURS yours':'调整你的页面','Appearance & layout':'外观与布局','Chart designs':'榜单设计','Account & playback':'账号与播放',
+    'Find related songs ↗':'发现相关歌曲 ↗','More like this ↗':'发现相近歌曲 ↗','Finding other songs…':'正在寻找相关歌曲…',
+    'Related songs':'相关歌曲','Artists in these shares':'相关歌手','Same artist':'同一歌手','Recent shares':'最近分享','Recently shared':'最近发布',
+    'Liked by listeners of this song':'喜欢这首歌的人也支持','Shared words in the notes':'分享文字有共同词语',
+    'Same category and language':'同一分类和语言','Same category':'同一分类',
+    'No related shares yet. Try another song.':'暂无相关分享，换首歌看看。','Recommended songs':'推荐歌曲',
+    'More by an artist you like':'来自你喜欢的歌手','Liked by people with similar picks':'相近听众也喜欢',
+    'Similar notes':'分享文字相近','From a chart you like':'来自你喜欢的榜单',
+    'Other songs are unavailable right now.':'暂时无法加载其他歌曲。'
+  });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;
   const select = document.getElementById('site-language'); select.value = language;

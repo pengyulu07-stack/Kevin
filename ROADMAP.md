@@ -22,6 +22,16 @@ This file tracks requested behavior separately from work that has been verified 
 
 ## Next product passes
 
+### November 9 discovery and navigation pass
+
+- [x] Put appearance, chart designs, language, account/playback, and help under one clear Preferences menu. Keep notifications and account visible.
+- [x] Add a visible related-song entry beside songs on the daily spread and full feed; open the existing discussion without a second page.
+- [x] In song discussion, show other shares by the same artist first, then score related shares by listener overlap, shared note words, genre and language. Explain each connection.
+- [x] Avoid duplicate title-and-artist entries in related lists. When no reliable relationship exists, label the fallback Recent shares rather than calling it a recommendation.
+- [x] In Following, recommend songs using liked artists, co-likes and share notes, deduplicate versions, and keep followed-chart new songs separate.
+- [ ] Verify these changes on the public GitHub Pages release after publication. Test Following with a signed-in member who has likes.
+- [ ] Recommendations still use shares and votes on this site. Cross-platform catalog recommendations, full audio matching, and a complete artist discography are not built.
+
 ### November 9 pass
 
 - [x] Search several relevant Apple Music storefronts together, then try MusicBrainz recording metadata when no exact title/artist match is found. Throttle repeated fallback requests within each visitor's browser.
