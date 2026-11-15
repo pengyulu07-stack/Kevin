@@ -9,7 +9,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Daily Top 5, monthly/weekly rankings, all-time chart, song gallery, all-song list, votes, six reactions, comments, and private groups.
 - [x] Title-only song sharing; audio or platform link and personal cover are optional.
 - [x] Expand built-in music genres to 44, grouped by family; publish form, follow controls, chart selection, and database validation share the same IDs.
-- [x] Add ten selectable baseline visual styles per music chart; each chart stores its own local choice.
+- [x] Build ten chart-style experiments; retire their settings entry because the changes were hard to notice in the main reading path.
 - [x] Two-finger horizontal gesture switches the whole daily room; vertical reading and the room selector's own scrolling stay independent.
 - [x] Add visible YouTube and Bilibili search links for every song on the daily spread, gallery, and full song cards.
 - [x] Verify the genre, chart design, and video search release on the published GitHub Pages URL.
@@ -24,14 +24,17 @@ This file tracks requested behavior separately from work that has been verified 
 
 ### November 9 discovery and navigation pass
 
-- [x] Put appearance, chart designs, language, account/playback, and help under one clear Preferences menu. Keep notifications and account visible.
+- [x] Keep language, account/playback, and help under Preferences. Remove the two low-value design entries; the cinema entrance still has its own background control when opened.
 - [x] Add a visible related-song entry beside songs on the daily spread and full feed; open the existing discussion without a second page.
 - [x] In song discussion, show other shares by the same artist first. Put songs with shared note, genre and language signals under Related songs; put co-liked songs under Listeners also supported so a common voter alone is not presented as proof of musical similarity.
 - [x] Avoid duplicate title-and-artist entries in related lists. When no reliable relationship exists, label the fallback Recent shares rather than calling it a recommendation.
 - [x] In Following, recommend songs using liked artists, co-likes and share notes, deduplicate versions, and keep followed-chart new songs separate.
 - [x] Verify the public GitHub Pages release shows Preferences, the daily-spread discovery link, and a related-song list with reasons. No browser errors were observed.
 - [ ] Test Following recommendations with a signed-in member who has likes and followed charts; this personalized path has not had a live member check.
-- [ ] Recommendations still use shares and votes on this site. Cross-platform catalog recommendations, full audio matching, and a complete artist discography are not built.
+- [x] Add a clearly labelled external same-artist shelf from the Apple Music catalog, with direct catalog links and a separate SoundCloud search shortcut. It does not claim that a SoundCloud result is an exact match or that the song plays here.
+- [ ] Music similarity still uses shares and votes on this site. External related-artist discovery, full audio matching, and a complete discography are not built.
+- [x] Replace the indistinct daily header backdrop with three tilted, individually visible prints. Prefer shared album covers or post images; use sourced film posters and stills as dated fallbacks. Each calendar date selects a different fallback combination, and each image exposes its title/source.
+- [ ] Check the new print layout and remote poster loading on desktop and mobile after publication; the local preview browser could not reach the temporary server.
 
 ### November 9 pass
 

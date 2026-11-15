@@ -213,14 +213,20 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .chart-design-tile[aria-pressed="true"]{outline-color:var(--dt-accent)}
 .chart-design-tile small{color:var(--dt-muted)}
 
-/* Three small, tilted prints belong to the edition header, not to the room switcher. */
-.day-preview-head{position:relative;min-height:135px;padding-right:240px}
-.day-preview-head>small{position:relative;z-index:2}
-.room-poster-corners{position:absolute;right:8px;bottom:17px;display:flex;align-items:center;gap:5px;pointer-events:none}
-.room-poster-frame{display:block;width:63px;height:78px;padding:4px;background:#d6c8b6;border:1px solid #7e736c;box-shadow:2px 4px 8px #0009;transform:rotate(-10deg)}
-.room-poster-frame:nth-child(2){transform:translateY(-8px) rotate(7deg);width:69px;height:84px}
-.room-poster-frame:nth-child(3){transform:rotate(-5deg)}
-.room-poster-frame img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.74)}
+/* The date header holds a small, changing stack of actual covers, posters and stills. */
+.day-preview-head{position:relative;min-height:230px;padding-right:360px;isolation:isolate;overflow:hidden}
+.day-preview-head>div:first-child,.day-preview-head>small{position:relative;z-index:1}
+.room-poster-corners{position:absolute;right:38px;top:20px;width:310px;height:185px;z-index:2}
+.room-poster-frame{position:absolute;display:block;width:110px;height:154px;padding:5px;background:#eee7dc;border:1px solid #8c8276;box-shadow:5px 8px 13px #0009;transform:rotate(-12deg);transition:transform .18s ease,box-shadow .18s ease;overflow:hidden}
+.room-poster-frame:nth-child(1){left:10px;top:12px;z-index:2}
+.room-poster-frame:nth-child(2){left:105px;top:0;z-index:3;transform:rotate(7deg)}
+.room-poster-frame:nth-child(3){left:203px;top:15px;z-index:1;transform:rotate(-6deg)}
+.room-poster-frame.album{height:116px;top:37px}
+.room-poster-frame.still{width:132px;height:97px;top:45px}
+.room-poster-frame img{display:block;width:100%;height:100%;object-fit:contain;background:#171719}
+.room-print-caption{position:absolute;bottom:4px;left:4px;right:4px;padding:4px 5px;background:#111d;color:#fff;font:600 10px/1.2 system-ui,sans-serif;opacity:0;transition:opacity .18s ease}
+.room-poster-frame:is(:hover,:focus-visible){transform:translateY(-8px) rotate(0deg);z-index:5;box-shadow:7px 12px 20px #000b;outline:2px solid var(--room-accent);outline-offset:2px}
+.room-poster-frame:is(:hover,:focus-visible) .room-print-caption{opacity:1}
 .calendar-day-preview[data-room="music"]{--room-paper:#25201f;--room-accent:#df9b76}
 .calendar-day-preview[data-room="film"]{--room-paper:#1d252b;--room-accent:#bacada}
 .calendar-day-preview[data-room="art"]{--room-paper:#292127;--room-accent:#d4adb7}
@@ -237,7 +243,7 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .playlist-detail-play{margin:0 0 20px}
 .playlist-card-play:hover,.playlist-detail-play:hover{filter:brightness(1.12);transform:translateY(-1px)}
 .playlist-card-play:focus-visible,.playlist-detail-play:focus-visible{outline:2px solid #fff;outline-offset:2px}
-@media(max-width:930px){.day-preview-head{padding-right:0;min-height:0}.room-poster-corners{position:static;margin:17px 0 0;justify-content:flex-start}.day-preview-head{display:block}}
+@media(max-width:930px){.day-preview-head{padding-right:0;min-height:355px}.room-poster-corners{top:auto;bottom:24px;right:auto;left:20px;max-width:calc(100% - 36px)}}
 
 /* One clear preferences entry keeps the page header readable. */
 .header{position:relative;z-index:20}
@@ -260,6 +266,11 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .song-connection-art:hover{border-color:var(--dt-accent);filter:brightness(1.12)}
 .song-connection-detail{width:100%;cursor:pointer}
 .song-connection-detail em{color:var(--dt-accent);font:500 11px/1.3 system-ui,sans-serif;font-style:normal}
+.external-catalog{border-top:1px solid var(--dt-rule);padding-top:15px}
+.external-catalog-note{margin:0 0 6px;color:var(--dt-muted);font:12px/1.5 system-ui,sans-serif}
+.external-catalog-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.external-catalog-links a{color:var(--dt-accent);font:600 11px/1.5 system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px}
+.external-catalog-links a:hover,.external-catalog-links a:focus-visible{color:#fff}
 .song-related-artists{border-top:1px solid var(--dt-rule);padding-top:13px;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
 .song-related-artists h4{width:100%;margin:0 0 4px;color:var(--dt-muted);font:600 11px system-ui,sans-serif;text-transform:uppercase;letter-spacing:.1em}
 .song-related-artists button{background:var(--dt-raised);border:1px solid var(--dt-rule);color:var(--dt-text);padding:6px 10px;font:500 12px system-ui,sans-serif}

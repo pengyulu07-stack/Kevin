@@ -17,14 +17,36 @@
     {key:'daily',screen:'daily-all',number:'04',name:'Daily Life',line:'Notes from today.'},
     {key:'forum',screen:'forum-all',number:'05',name:'Forum',line:'Questions and discussion.'}
   ];
-  const roomPosters={
-    music:['music-1.png','music-2.png','music-3.png'],
-    film:['backgrounds/eight-1.jpg','backgrounds/paris-2.jpg','backgrounds/odyssey-1.jpg'],
-    art:['backgrounds/paris-4.jpg','backgrounds/eight-3.jpg','backgrounds/mood-2.jpg'],
-    books:['backgrounds/eight-2.jpg','backgrounds/paris-5.jpg','backgrounds/mood-3.jpg'],
-    daily:['taxi-cab.png','backgrounds/paris-6.jpg','backgrounds/mood-1.jpg'],
-    forum:['taxi-cinema.png','backgrounds/eight-4.jpg','backgrounds/paris-7.jpg']
-  };
+  // Editorial fallback: sourced film posters and stills. Shared cover art takes priority below.
+  const filmPrints=[
+    {src:'posters/caligari-1920.jpg',title:'The Cabinet of Dr. Caligari · 1920 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Cabinet_of_Doctor_Caligari_Movie_poster.jpg'},
+    {src:'posters/metropolis-1927.jpg',title:'Metropolis · 1927 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Boris_Bilinski_-_Filmplakat_f%C3%BCr_Metropolis.jpg'},
+    {src:'posters/the-general-1926.png',title:'The General · 1926 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_General_(1926)_-_Movie_Poster.png'},
+    {src:'backgrounds/eight-1.jpg',title:'8½ · film still',kind:'still',source:'https://www.criterion.com/films/150-8'},
+    {src:'backgrounds/paris-2.jpg',title:'Paris, Texas · film still',kind:'still',source:'https://www.criterion.com/films/1502-paris-texas'},
+    {src:'backgrounds/mood-3.jpg',title:'In the Mood for Love · film still',kind:'still',source:'https://www.criterion.com/films/198-in-the-mood-for-love'},
+    {src:'backgrounds/odyssey-1.jpg',title:'2001: A Space Odyssey · film still',kind:'still',source:'https://www.bfi.org.uk/features/gallery-2001-space-odyssey-then-now'}
+  ];
+  const dayNumber=day=>Math.floor(Date.parse(day+'T12:00:00Z')/86400000);
+  function fallbackPrints(day){
+    const start=((dayNumber(day)%filmPrints.length)+filmPrints.length)%filmPrints.length;
+    return [0,2,4].map(offset=>filmPrints[(start+offset)%filmPrints.length]);
+  }
+  function showCornerPrints(head,day,shared=[]){
+    const corners=head.querySelector('.room-poster-corners');if(!corners)return;
+    const unique=new Set(),items=[];
+    for(const print of [...shared.slice(0,2),...fallbackPrints(day),...filmPrints]){
+      if(!print?.src||unique.has(print.src))continue;
+      unique.add(print.src);items.push(print);if(items.length===3)break;
+    }
+    corners.replaceChildren();
+    for(const print of items){
+      const frame=node(print.source?'a':'span','room-poster-frame '+(print.kind||'still'));
+      if(print.source){frame.href=print.source;frame.target='_blank';frame.rel='noopener noreferrer';frame.setAttribute('aria-label',print.title+' · image source');}
+      const image=node('img');image.src=print.src;image.alt=print.title;image.loading='lazy';
+      frame.append(image,node('span','room-print-caption',print.title));corners.append(frame);
+    }
+  }
   const layoutKey='daytone-display-mode';
   let layoutMode=localStorage.getItem(layoutKey)==='scenes'?'scenes':'edition';
   function setLayout(mode){
@@ -261,8 +283,7 @@
     host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf());const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', activeRoom==='music'?'Music on this day':rooms.find(room=>room.key===activeRoom).name+' on this day'));
-    const posters=node('div','room-poster-corners');posters.setAttribute('aria-hidden','true');
-    for(const src of roomPosters[activeRoom]){const frame=node('span','room-poster-frame'),image=node('img');image.src=src;image.alt='';image.loading='lazy';frame.append(image);posters.append(frame);}head.append(posters);
+    head.append(node('div','room-poster-corners'));showCornerPrints(head,day);
     host.append(head);
     if(activeRoom!=='music'){
       const roomContent=node('section','room-content');host.append(roomContent);return {roomContent};
@@ -292,6 +313,7 @@
     try{
       const posts=cached&&Date.now()-cached.at<90000?cached.rows:await getRoomPosts(room,day);
       if(current!==request||room!==activeRoom||day!==app.getDay())return;
+      showCornerPrints(host.querySelector('.day-preview-head'),day,posts.filter(post=>post.image_path).map(post=>({src:publicFile('images',post.image_path),title:post.title+' · shared image',kind:'shared'})));
       host.replaceChildren();
       const intro=node('div','room-content-intro');intro.append(node('p','kicker',room==='forum'?'FORUM / DISCUSSION':title.toUpperCase()+' / SHARED'),node('h3','',room==='forum'?'Discussions on this date':title+' on this date'));host.append(intro);
       if(!posts.length)host.append(node('p','day-preview-empty',room==='forum'?'No discussions started on this date.':'No '+title.toLowerCase()+' shared on this date.'));
@@ -315,6 +337,8 @@
       if(current!==request||day!==app.getDay())return;
       music.querySelector('.day-preview-loading')?.remove();periodic.querySelector('.day-preview-loading')?.remove();
       const todayRows=ranked(songs.filter(song=>song.day===day),counts).slice(0,5);
+      const coverRows=[...todayRows,...songs.filter(song=>song.day!==day).sort((a,b)=>Math.abs(dayNumber(a.day)-dayNumber(day))-Math.abs(dayNumber(b.day)-dayNumber(day)))];
+      showCornerPrints(host.querySelector('.day-preview-head'),day,coverRows.filter(song=>song.cover_path).map(song=>({src:songCoverUrl(song),title:song.title+' · '+(song.artist||'shared album cover'),kind:'album'})));
       if(!todayRows.length)music.append(node('p','day-preview-empty','No songs yet. Share the first one.'));
       else todayRows.forEach((song,i)=>music.append(songRow(song,i+1,counts.get(song.id)||0,day,voteUsers)));
       renderGallery(gallery,todayRows,counts,day);

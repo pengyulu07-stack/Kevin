@@ -132,6 +132,19 @@
     const rank=sortedSongs().findIndex(x=>x.id===id)+1;
     host.replaceChildren(createCard(song,rank,true));showDialog('music-discussion-dialog');void renderSongConnections(song);
   }
+  const externalArtistCache=new Map();
+  async function externalArtistTracks(artist){
+    const key=artist.normalize('NFKC').toLocaleLowerCase().trim(),cached=externalArtistCache.get(key);
+    if(cached&&Date.now()-cached.at<300000)return cached.rows;
+    const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[\s.,·&/()\[\]_-]+/g,'').trim();
+    let rows=[];
+    for(const country of ['CN','US']){
+      const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:artist,media:'music',entity:'song',attribute:'artistTerm',country,limit:'25'}).toString();
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),6500);
+      try{const response=await fetch(url,{signal:controller.signal});if(!response.ok)continue;const body=await response.json();rows=(body.results||[]).filter(row=>row.kind==='song'&&normalize(row.artistName)===normalize(artist)&&/^https:\/\/music\.apple\.com\//.test(row.trackViewUrl||''));if(rows.length)break;}catch{}finally{clearTimeout(timer);}
+    }
+    externalArtistCache.set(key,{at:Date.now(),rows});return rows;
+  }
   async function renderSongConnections(song){
     if(!client)return;
     const host=$v('music-discussion-body'),section=make('section','song-connections');section.append(make('h3','','Discover more'));
@@ -178,7 +191,15 @@
       if(!sameArtist.length&&!related.length&&!listenerPicks.length)addGroup('Recent shares',distinctRows.slice(0,5).map(row=>({row,reason:'Recently shared'})));
       const artistNames=[...new Set(related.map(item=>item.row.artist).filter(Boolean))].slice(0,5);
       if(artistNames.length){const artists=make('div','song-related-artists');artists.append(make('h4','','Artists in related shares'));for(const name of artistNames){const match=related.find(item=>item.row.artist===name);const button=make('button','',name);button.type='button';button.addEventListener('click',()=>openMusicDiscussion(match.row));artists.append(button);}content.append(artists);}
-      if(!content.childElementCount)content.append(make('p','song-connections-empty','No related shares yet. Try another song.'));
+      if(artistSearch&&artistSearch.length>=2){
+        const catalog=await externalArtistTracks(artistSearch);
+        if(!section.isConnected||selectedSongId!==song.id)return;
+        const onSite=new Set([song,...distinctRows].map(row=>normalize(row.title)));
+        const found=new Set(),tracks=catalog.filter(row=>{const title=normalize(row.trackName);if(!title||onSite.has(title)||found.has(title))return false;found.add(title);return true;}).slice(0,5);
+        if(tracks.length){const zh=document.documentElement.lang.startsWith('zh');const group=make('div','song-connection-group external-catalog');group.append(make('h4','',zh?'站外发现 · 同一位歌手':'Beyond this site · same artist'));group.append(make('p','external-catalog-note',zh?'来自 Apple Music 曲库；点击封面查看对应版本。':'From the Apple Music catalog. Open a track to check the version.'));
+          for(const track of tracks){const item=make('article','song-connection-item'),cover=make('a','song-connection-art'),detail=make('div','song-connection-detail');cover.href=track.trackViewUrl;cover.target='_blank';cover.rel='noopener noreferrer';cover.setAttribute('aria-label',(zh?'在 Apple Music 查看 ':'Open on Apple Music: ')+track.trackName);if(track.artworkUrl100){const image=make('img');image.src=track.artworkUrl100.replace(/100x100bb/,'200x200bb');image.alt='';image.loading='lazy';cover.append(image);}else cover.textContent='♫';detail.append(make('strong','',track.trackName),make('small','',[track.artistName,track.collectionName].filter(Boolean).join(' · ')));const links=make('div','external-catalog-links'),apple=make('a','',zh?'Apple Music ↗':'Apple Music ↗'),soundcloud=make('a','',zh?'在 SoundCloud 搜索 ↗':'Search SoundCloud ↗');apple.href=track.trackViewUrl;apple.target=soundcloud.target='_blank';apple.rel=soundcloud.rel='noopener noreferrer';soundcloud.href='https://soundcloud.com/search?q='+encodeURIComponent(track.trackName+' '+track.artistName);links.append(apple,soundcloud);detail.append(links);item.append(cover,detail);group.append(item);}content.append(group);}
+      }
+      if(!content.childElementCount)content.append(make('p','song-connections-empty','No other songs found for this share.'));
     }catch{if(section.isConnected)content.replaceChildren(make('p','song-connections-empty','Other songs are unavailable right now.'));}
   }
   function forumScore(post) { return (postComments.get(post.id) || []).length * 2 + (postReactions.get(post.id) || []).length; }
