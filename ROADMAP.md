@@ -34,7 +34,8 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Add a clearly labelled external same-artist shelf from the Apple Music catalog, with direct catalog links and a separate SoundCloud search shortcut. It does not claim that a SoundCloud result is an exact match or that the song plays here.
 - [ ] Music similarity still uses shares and votes on this site. External related-artist discovery, full audio matching, and a complete discography are not built.
 - [x] Replace the indistinct daily header backdrop with three tilted, individually visible prints. Prefer shared album covers or post images; use sourced film posters and stills as dated fallbacks. Each calendar date selects a different fallback combination, and each image exposes its title/source.
-- [ ] Check the new print layout and remote poster loading on desktop and mobile after publication; the local preview browser could not reach the temporary server.
+- [x] On the public desktop page, checked that shared covers and the sourced fallback images load, the corner arrangement is legible, and selecting the next calendar date changes the poster. No browser errors appeared in this check.
+- [ ] Check the corner arrangement on a narrow/mobile screen and with more than two new shares on one date.
 
 ### November 9 pass
 
