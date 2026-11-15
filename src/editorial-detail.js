@@ -7,7 +7,7 @@
   const make=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!=null)el.textContent=text;return el;};
   const link=(label,url,cls='')=>{const a=make('a',cls,label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;};
   const textValue=v=>typeof v==='string'?v:typeof v?.value==='string'?v.value:'';
-  const sourceName=room=>({music:'Apple Music',film:'Film source',art:'Cleveland Museum of Art',books:'Open Library'})[room];
+  const sourceName=room=>({music:'Apple Music',film:t('海报／截图出处','Poster or frame source'),art:'Cleveland Museum of Art',books:'Open Library'})[room];
   const search=(query,site)=>'https://www.google.com/search?q='+encodeURIComponent((site?'site:'+site+' ':'')+query);
   const titleOnly=print=>print.title.split(' · ')[0];
   const paragraph=(root,content)=>{if(content)root.append(make('p','',content));};
@@ -58,7 +58,7 @@
   async function bookContent(print,body,id){
     const context=section(body,t('这本书','About the book'));paragraph(context,t('正在读取书目…','Loading book record…'));
     try{const key=new URL(print.source).pathname;const response=await fetch('https://openlibrary.org'+key+'.json');if(!response.ok)throw Error('book');const work=await response.json();if(id!==generation)return;context.replaceChildren(make('h3','',t('这本书','About the book')));const desc=textValue(work.description);if(desc)paragraph(context,desc.slice(0,550));else paragraph(context,t('这条书目没有简介。','This catalog record has no description.'));addSource(context,t('版本、借阅与馆藏','Editions, reading and libraries'),print.source);
-      const reading=section(body,t('阅读与作者','Read and explore'));paragraph(reading,t('不同版本的试读或借阅情况请以书目页为准。只有得到授权的正文，才会在这里直接展开。','Preview and borrowing availability depend on the edition. Full text appears here only when its rights are clear.'));addSource(reading,t('查找作者资料','Find the author'),search(print.artist+' author books','openlibrary.org'));addSource(reading,t('查找书评','Find reviews'),search(titleOnly(print)+' '+print.artist+' review','theguardian.com'));
+      const reading=section(body,t('阅读与作者','Read and explore'));if(titleOnly(print)==='The Picture of Dorian Gray'){const excerpt=make('details','editorial-book-excerpt');excerpt.append(make('summary','',t('展开一小段原文','Read a short passage')));excerpt.append(make('blockquote','', 'There is no such thing as a moral or an immoral book. Books are well written, or badly written.'));addSource(excerpt,t('在古腾堡计划继续阅读','Read the original at Project Gutenberg'),'https://www.gutenberg.org/ebooks/174');reading.append(excerpt);}else paragraph(reading,t('不同版本的试读或借阅情况请以书目页为准。只有得到授权的正文，才会在这里直接展开。','Preview and borrowing availability depend on the edition. Full text appears here only when its rights are clear.'));addSource(reading,t('查找作者资料','Find the author'),search(print.artist+' author books','openlibrary.org'));addSource(reading,t('查找书评','Find reviews'),search(titleOnly(print)+' '+print.artist+' review','theguardian.com'));
     }catch{if(id===generation){context.replaceChildren(make('h3','',t('这本书','About the book')));paragraph(context,t('书目暂时无法读取。','The catalog record is temporarily unavailable.'));addSource(context,'Open Library',print.source);}}
   }
   function filmContent(print,body){
@@ -84,8 +84,8 @@
     const list=make('div','editorial-comments-list');members.append(list);
     const form=make('form','editorial-comment-form');const input=make('textarea');input.name='body';input.maxLength=1000;input.required=true;input.rows=3;input.placeholder=t('写下你的想法…','What stayed with you?');const send=make('button','',t('发布评论','Post comment'));send.type='submit';form.append(input,send);members.append(form);
     reading.append(make('h4','',t('站外观点','Published perspectives')));
-    if(room==='music'&&print.source.includes('/1558162066'))addSource(reading,'Pitchfork · MM..FOOD','https://pitchfork.com/reviews/albums/5255-mmfood/');
-    if(room==='film'&&print.title.includes('Caligari'))addSource(reading,'BFI · Caligari','https://www.bfi.org.uk/features/100-years-cabinet-dr-caligari/');
+    if(room==='music'&&print.source.includes('/1558162066')){paragraph(reading,t('Nick Sylvester 特别欣赏 DOOM 的妙语和制作，同时认为唱片中段连续的拼贴短曲打断了整张播放的节奏。','Nick Sylvester praises DOOM’s one-liners and production, but argues that the run of sound-collage skits interrupts the album’s flow.'));addSource(reading,'Pitchfork · Nick Sylvester','https://pitchfork.com/reviews/albums/5255-mmfood/');}
+    if(room==='film'&&print.title.includes('Caligari')){paragraph(reading,t('Alex Barrett 认为倾斜的布景、演员动作与充满歧义的结尾，共同构成这部电影持续影响恐怖电影的原因。','Alex Barrett connects the slanted sets and actors’ movements with an ambiguous ending that keeps the film influential.'));addSource(reading,'BFI · Alex Barrett','https://www.bfi.org.uk/features/100-years-cabinet-dr-caligari/');}
     addSource(reading,t('查找更多评论','Find more writing'),search(titleOnly(print)+' '+(print.artist||'')+' review'));
     if(!client){list.textContent=t('评论暂不可用。','Discussion is unavailable.');heart.disabled=true;form.hidden=true;return;}
     async function refresh(){const [likesResult,commentsResult]=await Promise.all([client.from('editorial_likes').select('user_id').eq('work_key',key),client.from('editorial_comments').select('id,user_id,nickname,body,created_at').eq('work_key',key).order('created_at',{ascending:false}).limit(40)]);if(id!==generation)return;
