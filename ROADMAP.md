@@ -28,6 +28,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Repair the Film/Art/Books/Daily/Forum daily-list renderer so updating its corner prints does not make the whole list show an error.
 - [x] Localize the new six-print heading, and the space hint and daily room empty states, in the Chinese interface.
 - [x] Verify the published page shows all six Music covers and all six Film prints on November 15, with loaded images; selecting November 16 changes the six Film picks. Check the dark desktop layout and the three-column narrow grid without horizontal overflow. The Film list now shows its normal empty state instead of an error.
+- [x] Verify the enlarged November 16 Film selection uses six different posters from November 15 and all six images load on the public page. Switch the public site to Chinese to verify the new dated print heading and room hint, then restore the previous English setting.
 - [ ] These curated visual picks are not yet personalized music/film recommendations or proof of in-page playback. Check the enlarged Film pool and several later dates on the published page and a real phone before calling long-term artwork availability verified.
 
 - [x] Keep language, account/playback, and help under Preferences. Remove the two low-value design entries; the cinema entrance still has its own background control when opened.
