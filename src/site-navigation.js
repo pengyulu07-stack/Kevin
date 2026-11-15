@@ -57,7 +57,7 @@
     corners.replaceChildren();
     for(const print of items){
       const frame=node(print.source?'a':'span','room-poster-frame '+(print.kind||'still'));
-      if(print.source){frame.href=print.source;frame.target='_blank';frame.rel='noopener noreferrer';frame.setAttribute('aria-label',print.title+(activeRoom==='music'?' · open album catalog':' · image source'));}
+      if(print.source){frame.href=print.source;frame.setAttribute('aria-label',print.title+' · open details');frame.addEventListener('click',event=>{event.preventDefault();window.AilleursEditorial?.open(print,activeRoom);});}
       const image=node('img');image.src=print.src;image.alt=print.title;image.loading='lazy';
       frame.append(image,node('span','room-print-caption',print.title));corners.append(frame);
     }
@@ -302,7 +302,7 @@
       heading.append(node('small','',isZh?dateLabel+' · '+zhTitle:enTitle+' / '+dateLabel),node('span','',isZh?zhDetail:enDetail));
       const list=node('div','room-daily-prints-list');
       for(const [index,print] of editorialPrints(day,activeRoom).entries()){
-        const card=node('a','room-daily-print '+(print.kind||'album'));card.href=print.source;card.target='_blank';card.rel='noopener noreferrer';
+        const card=node('a','room-daily-print '+(print.kind||'album'));card.href=print.source;card.addEventListener('click',event=>{event.preventDefault();window.AilleursEditorial?.open(print,activeRoom);});
         card.setAttribute('aria-label',(index+1)+' of 6: '+print.title+(print.artist?' by '+print.artist:'')+' · '+(activeRoom==='music'?'Apple Music':activeRoom==='art'?'Cleveland Museum of Art':activeRoom==='books'?'Open Library':'image source'));
         const image=node('img');image.src=print.src;image.alt='';image.loading=index<3?'eager':'lazy';image.decoding='async';
         const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||(isZh?'馆藏资料':'Museum record')));

@@ -22,6 +22,14 @@ This file tracks requested behavior separately from work that has been verified 
 
 ## Next product passes
 
+### November 15 source-led work details
+
+- [x] Open the six daily Music, Film, Art and Books cards inside the site instead of immediately leaving for their source pages. Keep the verified source as an explicit link in the detail view.
+- [x] For albums, load the catalog track list when available and give each track Copy title and YouTube search actions. For Art and Books, read their museum/work record with a source link; Film shows the verified poster or frame and further search paths.
+- [ ] Curate sourced background and cover-design stories for each work, plus 2–3 verified film stills by default and 5–6 images when expanded. Do not label repeated sizes of one image as process photos.
+- [ ] Add persistent likes and member comments for these editorial works, then place selected, attributable outside criticism beside member discussion. Check quotation rights and source context for book excerpts and reviews.
+- [ ] Verify the published detail view in all four rooms, including album tracks, image loading, close behavior, Chinese text, and narrow screens.
+
 ### November 9 discovery and navigation pass
 
 - [x] Add six visible, source-linked album covers for each selected Music date and six film posters/stills for each Film date in the space selector. The Music pool contains 20 confirmed album catalog entries, including MF DOOM; the Film pool has 17 distinct films. A seven-position daily step gives neighboring dates six different cards in either room. Keep shared images in the separate date header.
