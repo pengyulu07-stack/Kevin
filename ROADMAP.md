@@ -29,7 +29,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Cache source-checked text for the twenty Art works because the museum's live API did not return in the published browser. Add a sourced cover story and review entry for MM..FOOD as the first researched album example.
 - [x] For The Cabinet of Dr. Caligari, add a BFI-grounded production/design note, the poster and two Commons film stills by default, and three more stills behind an expand control. Each additional still links to its own source record.
 - [ ] Curate sourced background and cover-design stories for each work, plus 2–3 verified film stills by default and 5–6 images when expanded. Do not label repeated sizes of one image as process photos.
-- [x] Add persistent likes and member comments for editorial works; refresh their counts and discussion in place. Put sourced Pitchfork and BFI perspectives next to discussion in the two researched examples.
+- [x] Add persistent likes and member comments for editorial works; refresh their counts and discussion in place, and sync their bylines when a member changes nickname. Put sourced Pitchfork and BFI perspectives next to discussion in the two researched examples. Public UI confirmed the like/unlike count; comment submission awaits a non-public test account.
 - [ ] Curate attributable criticism for the other works and check quotation rights and source context for book excerpts and reviews. Search links are discovery tools, not curated criticism.
 - [ ] Verify the published detail view in all four rooms, including album tracks, image loading, close behavior, Chinese text, and narrow screens.
 
