@@ -25,14 +25,16 @@ This file tracks requested behavior separately from work that has been verified 
 ### November 15 source-led work details
 
 - [x] Open the six daily Music, Film, Art and Books cards inside the site instead of immediately leaving for their source pages. Keep the verified source as an explicit link in the detail view.
-- [x] For albums, load the catalog track list when available and give each track Copy title and YouTube search actions. For Art and Books, read their museum/work record with a source link; Film shows the verified poster or frame and further search paths.
+- [x] For albums, load the catalog track list when available. In the detail view, three verified MM..FOOD videos play in place and other catalog tracks use an in-page preview only when the catalog supplies one. Keep copying a song title as a compact option. Art and Books show their museum/work records in the detail view.
 - [x] Cache source-checked text for the twenty Art works because the museum's live API did not return in the published browser. Add a sourced cover story and review entry for MM..FOOD as the first researched album example.
-- [x] For The Cabinet of Dr. Caligari, add a BFI-grounded production/design note, the poster and two Commons film stills by default, and three more stills behind an expand control. Each additional still links to its own source record.
-- [x] Show short attributed readings of the Pitchfork and BFI criticism next to member discussion; give the public-domain Dorian Gray a short, expandable preface passage with the full Project Gutenberg record.
+- [x] For The Cabinet of Dr. Caligari, add a BFI-grounded production/design note, the poster and two Commons film stills by default, and three more stills behind an expand control. Show the images in the detail view with a local enlarge control; collect their source record in the top More about menu.
+- [x] Show short attributed readings of the Pitchfork and BFI criticism next to member discussion; give the public-domain Dorian Gray a short, expandable preface passage, with source links in the top More about menu.
+- [x] Rework the detail layout so the cover, proportionate title, on-page sections, images, tracks and discussion are the main path. Put outside sources under a category-specific More about menu. Show three verified MF DOOM video choices on the page and use an embedded player after a click.
+- [x] Add one-photo member comments to editorial works using the existing restricted image bucket; allow a photo with or without text, preview it before posting and refresh discussion after posting. The database migration is applied; a full signed-in upload-and-display check is still pending.
 - [ ] Curate sourced background and cover-design stories for each work, plus 2–3 verified film stills by default and 5–6 images when expanded. Do not label repeated sizes of one image as process photos.
 - [x] Add persistent likes and member comments for editorial works; refresh their counts and discussion in place, and sync their bylines when a member changes nickname. Put sourced Pitchfork and BFI perspectives next to discussion in the two researched examples. Public UI confirmed the like/unlike count; comment submission awaits a non-public test account.
 - [ ] Curate attributable criticism for the other works and check quotation rights and source context for book excerpts and reviews. Search links are discovery tools, not curated criticism.
-- [ ] Verify the published detail view in all four rooms, including album tracks, image loading, close behavior, Chinese text, and narrow screens.
+- [ ] Verify the published detail view in all four rooms, including album tracks, embedded playback, photo loading, close behavior, Chinese text, and narrow screens. A signed-in photo upload and a second visitor's read have not yet been verified.
 
 ### November 9 discovery and navigation pass
 
