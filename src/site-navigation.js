@@ -303,10 +303,10 @@
       const list=node('div','room-daily-prints-list');
       for(const [index,print] of editorialPrints(day,activeRoom).entries()){
         const card=node('a','room-daily-print '+(print.kind||'album'));card.href=print.source;card.addEventListener('click',event=>{event.preventDefault();window.AilleursEditorial?.open(print,activeRoom);});
-        card.setAttribute('aria-label',(index+1)+' of 6: '+print.title+(print.artist?' by '+print.artist:'')+' · '+(activeRoom==='music'?'Apple Music':activeRoom==='art'?'Cleveland Museum of Art':activeRoom==='books'?'Open Library':'image source'));
+        card.setAttribute('aria-label',(index+1)+' of 6: '+print.title+(print.artist?' by '+print.artist:'')+' · '+(isZh?'查看站内详情':'Open details here'));
         const image=node('img');image.src=print.src;image.alt='';image.loading=index<3?'eager':'lazy';image.decoding='async';
         const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||(activeRoom==='film'?(isZh?'电影图像':'Film image'):(isZh?'馆藏资料':'Museum record'))));
-        caption.append(node('em','',activeRoom==='music'?'Apple Music ↗':activeRoom==='art'?(isZh?'博物馆 ↗':'Museum ↗'):activeRoom==='books'?'Open Library ↗':isZh?'查看来源 ↗':'View source ↗'));
+        caption.append(node('em','',isZh?'查看详情':'View details'));
         card.append(image,caption);list.append(card);
       }
       section.append(heading,list);shelf.append(section);
