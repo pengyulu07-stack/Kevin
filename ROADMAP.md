@@ -26,7 +26,8 @@ This file tracks requested behavior separately from work that has been verified 
 
 - [x] Add six visible, source-linked album covers for each selected Music date and six film posters/stills for each Film date in the space selector, with different date rotations. The Music pool contains 20 confirmed album catalog entries, including MF DOOM; the Film pool has nine distinct films. Keep shared images in the separate date header.
 - [x] Repair the Film/Art/Books/Daily/Forum daily-list renderer so updating its corner prints does not make the whole list show an error.
-- [ ] Verify the six-card strip, rotation, image loading, contrast, and narrow layout on the published page. These curated visual picks are not yet personalized music/film recommendations or proof of in-page playback.
+- [x] Verify the published page shows all six Music covers and all six Film prints on November 15, with loaded images; selecting November 16 changes the six Film picks. Check the dark desktop layout and the three-column narrow grid without horizontal overflow. The Film list now shows its normal empty state instead of an error.
+- [ ] These curated visual picks are not yet personalized music/film recommendations or proof of in-page playback. Check all nine Film image links and the new selection with several later dates on a real phone before calling long-term artwork availability verified.
 
 - [x] Keep language, account/playback, and help under Preferences. Remove the two low-value design entries; the cinema entrance still has its own background control when opened.
 - [x] Add a visible related-song entry beside songs on the daily spread and full feed; open the existing discussion without a second page.
