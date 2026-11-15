@@ -18,7 +18,11 @@
   async function albumContent(print,body,id){
     const albumId=print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1];
     const context=section(body,t('专辑资料','About this album'));
-    paragraph(context,t('曲目、发行日期和风格以唱片目录为准。封面构思尚无可靠来源时，这里不会代作者解释。','Tracks, release date and genre come from the album catalog. Cover intentions are shown only when a source can support them.'));
+    if(albumId==='1558162066'){
+      paragraph(context,t('这张封面由 Jason Jägel 绘制、Jeff Jank 参与设计。唱片的食物意象从名字延伸到插画和曲名；创作者对原版封面的经过，可以读 Stones Throw 的记录。','Jason Jägel painted the cover, with Jeff Jank involved in its design. Food runs through the artwork, title and track names; Stones Throw documents how the original sleeve was made.'));
+      addSource(context,t('封面创作记录','Cover story'),'https://www.stonesthrow.com/news/mf-doom-hoe-cakes-poster/');
+      addSource(context,t('阅读乐评','Read a review'),'https://pitchfork.com/reviews/albums/5255-mmfood/');
+    }else paragraph(context,t('曲目和发行资料来自唱片目录。','Track and release details from the album catalog.'));
     addSource(context,t('查看专辑记录','Album record'),print.source);
     const tracks=section(body,t('曲目','Tracks'));
     if(!albumId){paragraph(tracks,t('暂无可读取的曲目目录。','No track listing is available.'));return;}
@@ -36,6 +40,15 @@
   }
   async function artContent(print,body,id){
     const context=section(body,t('作品与创作背景','The work and its context'));
+    const accession=print.source.split('/art/')[1],cached=window.AilleursArtNotes?.[accession];
+    if(cached){
+      paragraph(context,[cached.creation_date,cached.technique,cached.culture].filter(Boolean).join(' · '));
+      paragraph(context,cached.description||t('馆藏未提供作品说明。','The museum record has no description.'));
+      addSource(context,t('查看完整馆藏记录','Full museum record'),print.source);
+      const extra=section(body,t('继续查找','Explore further'));
+      addSource(extra,t('同一艺术家的其他作品','More by this artist'),search(print.artist+' artworks','clevelandart.org'));
+      return;
+    }
     paragraph(context,t('正在读取馆藏说明…','Loading museum record…'));
     try{const accession=print.source.split('/art/')[1];const response=await fetch('https://openaccess-api.clevelandart.org/api/artworks/?accession_number='+encodeURIComponent(accession));if(!response.ok)throw Error('museum');const json=await response.json();if(id!==generation)return;const work=json.data?.find(x=>x.url===print.source)||json.data?.[0];context.replaceChildren(make('h3','',t('作品与创作背景','The work and its context')));if(!work)throw Error('missing');
       paragraph(context,[work.creation_date,work.technique,work.culture?.[0]].filter(Boolean).join(' · '));const desc=textValue(work.wall_description)||textValue(work.artlens_description)||textValue(work.description);if(desc)paragraph(context,desc.slice(0,700));else paragraph(context,t('馆藏未提供可核对的创作过程说明。','The museum record has no verified account of the making process.'));addSource(context,t('查看完整馆藏记录','Full museum record'),print.source);
