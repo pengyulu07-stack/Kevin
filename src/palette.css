@@ -222,6 +222,8 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .room-poster-frame:nth-child(2){left:105px;top:0;z-index:3;transform:rotate(7deg)}
 .room-poster-frame:nth-child(3){left:203px;top:15px;z-index:1;transform:rotate(-6deg)}
 .room-poster-frame.album{height:116px;top:37px}
+.room-poster-frame.art{width:122px;height:122px;top:29px}
+.room-poster-frame.book{height:154px}
 .room-poster-frame.still{width:132px;height:97px;top:45px}
 .room-poster-frame img{display:block;width:100%;height:100%;object-fit:contain;background:#171719}
 .room-print-caption{position:absolute;bottom:4px;left:4px;right:4px;padding:4px 5px;background:#111d;color:#fff;font:600 10px/1.2 system-ui,sans-serif;opacity:0;transition:opacity .18s ease}
@@ -237,6 +239,8 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .room-daily-print:nth-child(3n){transform:translateY(3px) rotate(-3deg)}
 .room-daily-print img{display:block;width:100%;aspect-ratio:1;object-fit:cover;background:var(--dt-raised);border:4px solid #ece6db;box-shadow:3px 5px 0 #08080899}
 .room-daily-print.poster img{aspect-ratio:3/4}.room-daily-print.still img{aspect-ratio:3/4;object-fit:cover}
+.room-daily-print.art img{aspect-ratio:1;object-fit:contain;background:#e9e1d3}
+.room-daily-print.book img{aspect-ratio:3/4;object-fit:contain;background:#e9e1d3}
 .room-daily-print-caption{display:block;padding:9px 1px 0;font:11px/1.25 system-ui,sans-serif}
 .room-daily-print-caption strong,.room-daily-print-caption small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .room-daily-print-caption strong{color:var(--dt-text);font-weight:650}.room-daily-print-caption small{margin-top:3px;color:var(--dt-muted)}

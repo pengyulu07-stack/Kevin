@@ -121,3 +121,291 @@ window.AilleursMusicCovers = [
     "source": "https://music.apple.com/us/album/the-velvet-underground-nico-45th-anniversary-edition/1440851613"
   }
 ];
+
+// Selected CC0 works, with images and records from the Cleveland Museum of Art.
+window.AilleursArtWorks = [
+  {
+    "title": "South Wind, Clear Sky, from Thirty-Six Views of Mount Fuji",
+    "artist": "Katsushika Hokusai",
+    "src": "https://openaccess-cdn.clevelandart.org/1930.189/1930.189_web.jpg",
+    "source": "https://clevelandart.org/art/1930.189",
+    "kind": "art"
+  },
+  {
+    "title": "Sudden Shower over Shin-Ōhashi Bridge and Atake, from One Hundred Famous Views of Edo",
+    "artist": "Utagawa Hiroshige",
+    "src": "https://openaccess-cdn.clevelandart.org/1921.318/1921.318_web.jpg",
+    "source": "https://clevelandart.org/art/1921.318",
+    "kind": "art"
+  },
+  {
+    "title": "Water Lilies (Agapanthus)",
+    "artist": "Claude Monet",
+    "src": "https://openaccess-cdn.clevelandart.org/1960.81/1960.81_web.jpg",
+    "source": "https://clevelandart.org/art/1960.81",
+    "kind": "art"
+  },
+  {
+    "title": "The Large Plane Trees (Road Menders at Saint-Rémy)",
+    "artist": "Vincent van Gogh",
+    "src": "https://openaccess-cdn.clevelandart.org/1947.209/1947.209_web.jpg",
+    "source": "https://clevelandart.org/art/1947.209",
+    "kind": "art"
+  },
+  {
+    "title": "After the Bath",
+    "artist": "Mary Cassatt",
+    "src": "https://openaccess-cdn.clevelandart.org/1920.379/1920.379_web.jpg",
+    "source": "https://clevelandart.org/art/1920.379",
+    "kind": "art"
+  },
+  {
+    "title": "Orpheus",
+    "artist": "Odilon Redon",
+    "src": "https://openaccess-cdn.clevelandart.org/1926.25/1926.25_web.jpg",
+    "source": "https://clevelandart.org/art/1926.25",
+    "kind": "art"
+  },
+  {
+    "title": "Tightrope Walker",
+    "artist": "Paul Klee",
+    "src": "https://openaccess-cdn.clevelandart.org/1961.154/1961.154_web.jpg",
+    "source": "https://clevelandart.org/art/1961.154",
+    "kind": "art"
+  },
+  {
+    "title": "Landscape after Guo Zhongshu",
+    "artist": "Bada Shanren",
+    "src": "https://openaccess-cdn.clevelandart.org/1955.36/1955.36_web.jpg",
+    "source": "https://clevelandart.org/art/1955.36",
+    "kind": "art"
+  },
+  {
+    "title": "Rustam's seventh course: He kills the White Div, folio 124 from a Shah-nama (Book of Kings) of Firdausi (Persian, about 934–1020)",
+    "artist": "Mir Musavvir",
+    "src": "https://openaccess-cdn.clevelandart.org/1988.96/1988.96_web.jpg",
+    "source": "https://clevelandart.org/art/1988.96",
+    "kind": "art"
+  },
+  {
+    "title": "Buffalo Mask",
+    "artist": "Burkina Faso · Bwa tradition",
+    "src": "https://openaccess-cdn.clevelandart.org/1969.2/1969.2_web.jpg",
+    "source": "https://clevelandart.org/art/1969.2",
+    "kind": "art"
+  },
+  {
+    "title": "Crown (adéńlá)",
+    "artist": "Nigeria · Yorùbá tradition",
+    "src": "https://openaccess-cdn.clevelandart.org/1995.22/1995.22_web.jpg",
+    "source": "https://clevelandart.org/art/1995.22",
+    "kind": "art"
+  },
+  {
+    "title": "Statue of Heqat, the Frog Goddess",
+    "artist": "Ancient Egypt",
+    "src": "https://openaccess-cdn.clevelandart.org/1976.5/1976.5_web.jpg",
+    "source": "https://clevelandart.org/art/1976.5",
+    "kind": "art"
+  },
+  {
+    "title": "Tile Spandrel with Floral Sprays",
+    "artist": "İznik · Ottoman period",
+    "src": "https://openaccess-cdn.clevelandart.org/2004.70/2004.70_web.jpg",
+    "source": "https://clevelandart.org/art/2004.70",
+    "kind": "art"
+  },
+  {
+    "title": "Scolopendrium Vulgare",
+    "artist": "Anna Atkins",
+    "src": "https://openaccess-cdn.clevelandart.org/1995.26/1995.26_web.jpg",
+    "source": "https://clevelandart.org/art/1995.26",
+    "kind": "art"
+  },
+  {
+    "title": "Muse with Violin Screen",
+    "artist": "Paul Fehér",
+    "src": "https://openaccess-cdn.clevelandart.org/2020.216/2020.216_web.jpg",
+    "source": "https://clevelandart.org/art/2020.216",
+    "kind": "art"
+  },
+  {
+    "title": "St. Matthew",
+    "artist": "William Blake",
+    "src": "https://openaccess-cdn.clevelandart.org/2017.4/2017.4_web.jpg",
+    "source": "https://clevelandart.org/art/2017.4",
+    "kind": "art"
+  },
+  {
+    "title": "Early Morning After a Storm at Sea",
+    "artist": "Winslow Homer",
+    "src": "https://openaccess-cdn.clevelandart.org/1924.195/1924.195_web.jpg",
+    "source": "https://clevelandart.org/art/1924.195",
+    "kind": "art"
+  },
+  {
+    "title": "The Burning of the Houses of Lords and Commons, 16 October 1834",
+    "artist": "Joseph Mallord William Turner",
+    "src": "https://openaccess-cdn.clevelandart.org/1942.647/1942.647_web.jpg",
+    "source": "https://clevelandart.org/art/1942.647",
+    "kind": "art"
+  },
+  {
+    "title": "Frieze of Dancers",
+    "artist": "Edgar Degas",
+    "src": "https://openaccess-cdn.clevelandart.org/1946.83/1946.83_web.jpg",
+    "source": "https://clevelandart.org/art/1946.83",
+    "kind": "art"
+  },
+  {
+    "title": "Hinds House Window",
+    "artist": "Tiffany Glass & Decorating Company",
+    "src": "https://openaccess-cdn.clevelandart.org/1966.432/1966.432_web.jpg",
+    "source": "https://clevelandart.org/art/1966.432",
+    "kind": "art"
+  }
+];
+
+// Selected edition covers, linked to their Open Library work records.
+window.AilleursBookCovers = [
+  {
+    "title": "The Great Gatsby",
+    "artist": "F. Scott Fitzgerald",
+    "src": "https://covers.openlibrary.org/b/id/10590366-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL468431W",
+    "kind": "book"
+  },
+  {
+    "title": "The Waves",
+    "artist": "Virginia Woolf",
+    "src": "https://covers.openlibrary.org/b/id/119517-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL39316W",
+    "kind": "book"
+  },
+  {
+    "title": "Norwegian Wood",
+    "artist": "村上春樹",
+    "src": "https://covers.openlibrary.org/b/id/2237620-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL2625457W",
+    "kind": "book"
+  },
+  {
+    "title": "The Left Hand of Darkness",
+    "artist": "Ursula K. Le Guin",
+    "src": "https://covers.openlibrary.org/b/id/10618463-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL59800W",
+    "kind": "book"
+  },
+  {
+    "title": "The Master and Margarita",
+    "artist": "Михаил Афанасьевич Булгаков",
+    "src": "https://covers.openlibrary.org/b/id/15013644-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL36999384W",
+    "kind": "book"
+  },
+  {
+    "title": "The Color Purple",
+    "artist": "Alice Walker",
+    "src": "https://covers.openlibrary.org/b/id/8564628-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL273644W",
+    "kind": "book"
+  },
+  {
+    "title": "Beloved",
+    "artist": "Toni Morrison",
+    "src": "https://covers.openlibrary.org/b/id/8261367-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL50548W",
+    "kind": "book"
+  },
+  {
+    "title": "The Tale of Genji",
+    "artist": "Murasaki Shikibu",
+    "src": "https://covers.openlibrary.org/b/id/313084-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL7910145W",
+    "kind": "book"
+  },
+  {
+    "title": "Journey to the West, Volume 1 (Journey to the West)",
+    "artist": "Anthony C. Yu",
+    "src": "https://covers.openlibrary.org/b/id/143649-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL2623880W",
+    "kind": "book"
+  },
+  {
+    "title": "The Dream of The Red Chamber",
+    "artist": "Tsʻao, Hsüeh-chʻin.",
+    "src": "https://covers.openlibrary.org/b/id/10458623-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL22427641W",
+    "kind": "book"
+  },
+  {
+    "title": "The Handmaid's Tale",
+    "artist": "Margaret Atwood",
+    "src": "https://covers.openlibrary.org/b/id/8231851-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL675783W",
+    "kind": "book"
+  },
+  {
+    "title": "The Picture of Dorian Gray",
+    "artist": "Oscar Wilde",
+    "src": "https://covers.openlibrary.org/b/id/14314858-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL8193416W",
+    "kind": "book"
+  },
+  {
+    "title": "If on a Winter's Night a Traveler",
+    "artist": "Italo Calvino",
+    "src": "https://covers.openlibrary.org/b/id/12007967-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL21784995W",
+    "kind": "book"
+  },
+  {
+    "title": "The Night Circus",
+    "artist": "Erin Morgenstern",
+    "src": "https://covers.openlibrary.org/b/id/8773134-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL16086747W",
+    "kind": "book"
+  },
+  {
+    "title": "The Dispossessed",
+    "artist": "Ursula K. Le Guin",
+    "src": "https://covers.openlibrary.org/b/id/6979680-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL59863W",
+    "kind": "book"
+  },
+  {
+    "title": "The Odyssey",
+    "artist": "Ὅμηρος",
+    "src": "https://covers.openlibrary.org/b/id/8100018-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL17812254W",
+    "kind": "book"
+  },
+  {
+    "title": "Pachinko",
+    "artist": "Min Jin Lee",
+    "src": "https://covers.openlibrary.org/b/id/8044605-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL17762217W",
+    "kind": "book"
+  },
+  {
+    "title": "The God of Small Things",
+    "artist": "Arundhati Roy",
+    "src": "https://covers.openlibrary.org/b/id/10513792-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL1052133W",
+    "kind": "book"
+  },
+  {
+    "title": "A Room of One's Own",
+    "artist": "Virginia Woolf",
+    "src": "https://covers.openlibrary.org/b/id/6559057-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL39379W",
+    "kind": "book"
+  },
+  {
+    "title": "The Bluest Eye",
+    "artist": "Toni Morrison",
+    "src": "https://covers.openlibrary.org/b/id/15152696-M.jpg?default=false",
+    "source": "https://openlibrary.org/works/OL50565W",
+    "kind": "book"
+  }
+];
