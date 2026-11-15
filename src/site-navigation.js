@@ -27,14 +27,22 @@
     {src:'backgrounds/mood-3.jpg',title:'In the Mood for Love · film still',kind:'still',source:'https://www.criterion.com/films/198-in-the-mood-for-love'},
     {src:'backgrounds/odyssey-1.jpg',title:'2001: A Space Odyssey · film still',kind:'still',source:'https://www.bfi.org.uk/features/gallery-2001-space-odyssey-then-now'},
     {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Gold_rush_poster.jpg/500px-Gold_rush_poster.jpg',title:'The Gold Rush · 1925 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Gold_rush_poster.jpg'},
-    {src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Sunrise_-_A_Song_of_Two_Humans.jpg',title:'Sunrise: A Song of Two Humans · 1927 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Sunrise_-_A_Song_of_Two_Humans.jpg'}
+    {src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Sunrise_-_A_Song_of_Two_Humans.jpg',title:'Sunrise: A Song of Two Humans · 1927 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Sunrise_-_A_Song_of_Two_Humans.jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/Vertigomovie_restoration.jpg/500px-Vertigomovie_restoration.jpg',title:'Vertigo · 1958 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Vertigomovie_restoration.jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/The_Kid_%281921%29_poster.jpg/500px-The_Kid_%281921%29_poster.jpg',title:'The Kid · 1921 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Kid_(1921)_poster.jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/The_Passion_of_Joan_of_Arc_%281928%29_English_Poster_%28cropped%29.png/500px-The_Passion_of_Joan_of_Arc_%281928%29_English_Poster_%28cropped%29.png',title:'The Passion of Joan of Arc · 1928 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Passion_of_Joan_of_Arc_(1928)_English_Poster_(cropped).png'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/8/85/Vintage_Potemkin.jpg/500px-Vintage_Potemkin.jpg',title:'Battleship Potemkin · 1925 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Vintage_Potemkin.jpg'},
+    {src:'https://upload.wikimedia.org/wikipedia/commons/f/fa/Trip-to-moon-1902.jpg',title:'A Trip to the Moon · 1902 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Trip-to-moon-1902.jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Safety_last_poster.jpg/500px-Safety_last_poster.jpg',title:'Safety Last! · 1923 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Safety_last_poster.jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/The_Third_Man_%281949_American_theatrical_poster%29.jpg/500px-The_Third_Man_%281949_American_theatrical_poster%29.jpg',title:'The Third Man · 1949 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Third_Man_(1949_American_theatrical_poster).jpg'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/The_Night_of_the_Hunter_%281955_poster%29.jpg/500px-The_Night_of_the_Hunter_%281955_poster%29.jpg',title:'The Night of the Hunter · 1955 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Night_of_the_Hunter_(1955_poster).jpg'}
   ];
   const dayNumber=day=>Math.floor(Date.parse(day+'T12:00:00Z')/86400000);
   function editorialPrints(day,room){
     const pool=room==='music'?(window.AilleursMusicCovers||[]):filmPrints;
     if(!pool.length)return [];
     const dateOffset=dayNumber(day)-dayNumber('2026-11-15');
-    const stride=room==='music'?3:2;
+    const stride=7;
     const start=((dateOffset*stride)%pool.length+pool.length)%pool.length;
     return Array.from({length:Math.min(6,pool.length)},(_,index)=>pool[(start+index)%pool.length]);
   }
@@ -287,14 +295,16 @@
     if(activeRoom==='music'||activeRoom==='film'){
       const section=node('section','room-daily-prints '+activeRoom);
       const heading=node('div','room-daily-prints-heading');
-      heading.append(node('small','',activeRoom==='music'?'SIX ALBUMS / '+format(day):'SIX FILMS / '+format(day)),node('span','',activeRoom==='music'?'Album covers worth seeing':'Posters & frames worth seeing'));
+      const isZh=window.DaytoneLanguage?.get()==='zh';
+      const dateLabel=isZh?`${day.slice(0,4)}年${Number(day.slice(5,7))}月${Number(day.slice(8))}日`:format(day);
+      heading.append(node('small','',isZh?dateLabel+' · '+(activeRoom==='music'?'六张专辑':'六部电影'):(activeRoom==='music'?'SIX ALBUMS / ':'SIX FILMS / ')+dateLabel),node('span','',isZh?(activeRoom==='music'?'值得一看的专辑封面':'值得一看的海报与剧照'):(activeRoom==='music'?'Album covers worth seeing':'Posters & frames worth seeing')));
       const list=node('div','room-daily-prints-list');
       for(const [index,print] of editorialPrints(day,activeRoom).entries()){
         const card=node('a','room-daily-print '+(print.kind||'album'));card.href=print.source;card.target='_blank';card.rel='noopener noreferrer';
         card.setAttribute('aria-label',(index+1)+' of 6: '+print.title+(print.artist?' by '+print.artist:'')+(activeRoom==='music'?' · Apple Music album':' · image source'));
         const image=node('img');image.src=print.src;image.alt='';image.loading=index<3?'eager':'lazy';image.decoding='async';
-        const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||'Film source'));
-        caption.append(node('em','',activeRoom==='music'?'Apple Music ↗':'View source ↗'));
+        const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||(isZh?'电影资料':'Film source')));
+        caption.append(node('em','',activeRoom==='music'?'Apple Music ↗':isZh?'查看来源 ↗':'View source ↗'));
         card.append(image,caption);list.append(card);
       }
       section.append(heading,list);shelf.append(section);
@@ -377,6 +387,7 @@
     }catch(error){if(current!==request)return;music.querySelector('.day-preview-loading')?.remove();periodic.querySelector('.day-preview-loading')?.remove();archive.replaceChildren();music.append(node('p','day-preview-empty','Could not load this month. Please try again.'));}
   }
   window.addEventListener('daytone:calendar-day',()=>void render());
+  window.addEventListener('daytone:language',()=>{if(app.getScreen()==='welcome')void render();});
   window.addEventListener('daytone:screen-changed',event=>{navState(event.detail.screen);if(event.detail.screen==='welcome')void render();else if(['following','explore'].includes(event.detail.screen))void renderCollection(event.detail.screen);else roomCache.clear();});
   window.addEventListener('daytone:songs-loaded',()=>{monthCache=null;if(app.getScreen()==='welcome')void render();else if(app.getScreen()==='explore')void renderCollection('explore');});
   window.addEventListener('daytone:posts-changed',()=>{roomCache.clear();if(app.getScreen()==='welcome')void render();else if(app.getScreen()==='explore')void renderCollection('explore');});
