@@ -17,7 +17,7 @@
     {key:'daily',screen:'daily-all',number:'04',name:'Daily Life',line:'Notes from today.'},
     {key:'forum',screen:'forum-all',number:'05',name:'Forum',line:'Questions and discussion.'}
   ];
-  // Editorial fallback: sourced film posters and stills. Shared cover art takes priority below.
+  // Curated source-linked discoveries are separate from members' daily shares.
   const filmPrints=[
     {src:'posters/caligari-1920.jpg',title:'The Cabinet of Dr. Caligari · 1920 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:The_Cabinet_of_Doctor_Caligari_Movie_poster.jpg'},
     {src:'posters/metropolis-1927.jpg',title:'Metropolis · 1927 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Boris_Bilinski_-_Filmplakat_f%C3%BCr_Metropolis.jpg'},
@@ -25,24 +25,30 @@
     {src:'backgrounds/eight-1.jpg',title:'8½ · film still',kind:'still',source:'https://www.criterion.com/films/150-8'},
     {src:'backgrounds/paris-2.jpg',title:'Paris, Texas · film still',kind:'still',source:'https://www.criterion.com/films/1502-paris-texas'},
     {src:'backgrounds/mood-3.jpg',title:'In the Mood for Love · film still',kind:'still',source:'https://www.criterion.com/films/198-in-the-mood-for-love'},
-    {src:'backgrounds/odyssey-1.jpg',title:'2001: A Space Odyssey · film still',kind:'still',source:'https://www.bfi.org.uk/features/gallery-2001-space-odyssey-then-now'}
+    {src:'backgrounds/odyssey-1.jpg',title:'2001: A Space Odyssey · film still',kind:'still',source:'https://www.bfi.org.uk/features/gallery-2001-space-odyssey-then-now'},
+    {src:'https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Gold_rush_poster.jpg/500px-Gold_rush_poster.jpg',title:'The Gold Rush · 1925 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Gold_rush_poster.jpg'},
+    {src:'https://upload.wikimedia.org/wikipedia/commons/2/27/Sunrise_-_A_Song_of_Two_Humans.jpg',title:'Sunrise: A Song of Two Humans · 1927 poster',kind:'poster',source:'https://commons.wikimedia.org/wiki/File:Sunrise_-_A_Song_of_Two_Humans.jpg'}
   ];
   const dayNumber=day=>Math.floor(Date.parse(day+'T12:00:00Z')/86400000);
-  function fallbackPrints(day){
-    const start=((dayNumber(day)%filmPrints.length)+filmPrints.length)%filmPrints.length;
-    return [0,2,4].map(offset=>filmPrints[(start+offset)%filmPrints.length]);
+  function editorialPrints(day,room){
+    const pool=room==='music'?(window.AilleursMusicCovers||[]):filmPrints;
+    if(!pool.length)return [];
+    const dateOffset=dayNumber(day)-dayNumber('2026-11-15');
+    const stride=room==='music'?3:2;
+    const start=((dateOffset*stride)%pool.length+pool.length)%pool.length;
+    return Array.from({length:Math.min(6,pool.length)},(_,index)=>pool[(start+index)%pool.length]);
   }
   function showCornerPrints(head,day,shared=[]){
     const corners=head.querySelector('.room-poster-corners');if(!corners)return;
     const unique=new Set(),items=[];
-    for(const print of [...shared.slice(0,2),...fallbackPrints(day),...filmPrints]){
+    for(const print of [...shared.slice(0,2),...editorialPrints(day,activeRoom)]){
       if(!print?.src||unique.has(print.src))continue;
       unique.add(print.src);items.push(print);if(items.length===3)break;
     }
     corners.replaceChildren();
     for(const print of items){
       const frame=node(print.source?'a':'span','room-poster-frame '+(print.kind||'still'));
-      if(print.source){frame.href=print.source;frame.target='_blank';frame.rel='noopener noreferrer';frame.setAttribute('aria-label',print.title+' · image source');}
+      if(print.source){frame.href=print.source;frame.target='_blank';frame.rel='noopener noreferrer';frame.setAttribute('aria-label',print.title+(activeRoom==='music'?' · open album catalog':' · image source'));}
       const image=node('img');image.src=print.src;image.alt=print.title;image.loading='lazy';
       frame.append(image,node('span','room-print-caption',print.title));corners.append(frame);
     }
@@ -269,7 +275,7 @@
     selectRoom.motionTimer=setTimeout(()=>delete host.dataset.roomMotion,360);
   }
   function stepRoom(direction){const index=rooms.findIndex(room=>room.key===activeRoom);selectRoom(rooms[(index+direction+rooms.length)%rooms.length].key);}
-  function roomShelf(){
+  function roomShelf(day){
     const shelf=node('section','room-shelf room-switcher'),head=node('div','room-shelf-head');
     head.append(node('div','', ''));head.firstChild.append(node('small','','AILLEURS / SPACES'),node('h3','','Browse the spaces'),node('span','room-swipe-hint','Swipe left or right to change spaces.'));
     const controls=node('div','room-shelf-controls'),previous=node('button','','←'),next=node('button','','→');
@@ -277,10 +283,25 @@
     const track=node('div','room-shelf-track');track.setAttribute('aria-label','Choose a room');
     for(const room of rooms){const card=node('button','room-shelf-card '+room.screen+(room.key===activeRoom?' selected':''));card.type='button';card.setAttribute('aria-pressed',String(room.key===activeRoom));card.append(node('small','',room.number+' / AILLEURS'),node('strong','',room.name),node('span','',room.line),node('em','',room.key===activeRoom?'In this room':'Show this room ↗'));card.addEventListener('click',()=>selectRoom(room.key));track.append(card);}shelf.append(track);
     previous.addEventListener('click',()=>stepRoom(-1));next.addEventListener('click',()=>stepRoom(1));
+    if(activeRoom==='music'||activeRoom==='film'){
+      const section=node('section','room-daily-prints '+activeRoom);
+      const heading=node('div','room-daily-prints-heading');
+      heading.append(node('small','',activeRoom==='music'?'SIX ALBUMS / '+format(day):'SIX FILMS / '+format(day)),node('span','',activeRoom==='music'?'Album covers worth seeing':'Posters & frames worth seeing'));
+      const list=node('div','room-daily-prints-list');
+      for(const [index,print] of editorialPrints(day,activeRoom).entries()){
+        const card=node('a','room-daily-print '+(print.kind||'album'));card.href=print.source;card.target='_blank';card.rel='noopener noreferrer';
+        card.setAttribute('aria-label',(index+1)+' of 6: '+print.title+(print.artist?' by '+print.artist:'')+(activeRoom==='music'?' · Apple Music album':' · image source'));
+        const image=node('img');image.src=print.src;image.alt='';image.loading=index<3?'eager':'lazy';image.decoding='async';
+        const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||'Film source'));
+        caption.append(node('em','',activeRoom==='music'?'Apple Music ↗':'View source ↗'));
+        card.append(image,caption);list.append(card);
+      }
+      section.append(heading,list);shelf.append(section);
+    }
     return shelf;
   }
   function previewFrame(day){
-    host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf());const head=node('div','day-preview-head');
+    host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf(day));const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', activeRoom==='music'?'Music on this day':rooms.find(room=>room.key===activeRoom).name+' on this day'));
     head.append(node('div','room-poster-corners'));showCornerPrints(head,day);

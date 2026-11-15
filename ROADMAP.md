@@ -24,6 +24,9 @@ This file tracks requested behavior separately from work that has been verified 
 
 ### November 9 discovery and navigation pass
 
+- [x] Add six visible, source-linked album covers for each selected Music date and six film posters/stills for each Film date in the space selector, with different date rotations. The Music pool contains 20 confirmed album catalog entries, including MF DOOM; the Film pool has nine distinct films. Keep shared images in the separate date header.
+- [ ] Verify the six-card strip, rotation, image loading, contrast, and narrow layout on the published page. These curated visual picks are not yet personalized music/film recommendations or proof of in-page playback.
+
 - [x] Keep language, account/playback, and help under Preferences. Remove the two low-value design entries; the cinema entrance still has its own background control when opened.
 - [x] Add a visible related-song entry beside songs on the daily spread and full feed; open the existing discussion without a second page.
 - [x] In song discussion, show other shares by the same artist first. Put songs with shared note, genre and language signals under Related songs; put co-liked songs under Listeners also supported so a common voter alone is not presented as proof of musical similarity.
