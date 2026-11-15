@@ -35,7 +35,8 @@ This file tracks requested behavior separately from work that has been verified 
 - [ ] Curate sourced background and cover-design stories for each work, plus 2–3 verified film stills by default and 5–6 images when expanded. Do not label repeated sizes of one image as process photos.
 - [x] Add persistent likes and member comments for editorial works; refresh their counts and discussion in place, and sync their bylines when a member changes nickname. Put sourced Pitchfork and BFI perspectives next to discussion in the two researched examples. Public UI confirmed the like/unlike count; comment submission awaits a non-public test account.
 - [ ] Curate attributable criticism for the other works and check quotation rights and source context for book excerpts and reviews. Search links are discovery tools, not curated criticism.
-- [ ] Verify the published detail view in all four rooms, including album tracks, embedded playback, photo loading, close behavior, Chinese text, and narrow screens. A signed-in photo upload and a second visitor's read have not yet been verified.
+- [x] On the public site, open Music, Film, Art and Books detail views. Confirm the album track list, three MF DOOM choices, actual YouTube playback, film still loading and enlargement, close stopping playback, Chinese copy, and the narrow source menu.
+- [ ] Test a signed-in comment with a photo through upload, public display and deletion, then read it from a second visitor session. The form, database constraint and storage path policy are in place, but this end-to-end check has not been done.
 
 ### November 9 discovery and navigation pass
 
