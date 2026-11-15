@@ -39,6 +39,7 @@
     return Array.from({length:Math.min(6,pool.length)},(_,index)=>pool[(start+index)%pool.length]);
   }
   function showCornerPrints(head,day,shared=[]){
+    if(!head)return;
     const corners=head.querySelector('.room-poster-corners');if(!corners)return;
     const unique=new Set(),items=[];
     for(const print of [...shared.slice(0,2),...editorialPrints(day,activeRoom)]){
@@ -334,7 +335,7 @@
     try{
       const posts=cached&&Date.now()-cached.at<90000?cached.rows:await getRoomPosts(room,day);
       if(current!==request||room!==activeRoom||day!==app.getDay())return;
-      showCornerPrints(host.querySelector('.day-preview-head'),day,posts.filter(post=>post.image_path).map(post=>({src:publicFile('images',post.image_path),title:post.title+' · shared image',kind:'shared'})));
+      showCornerPrints(host.parentElement?.querySelector('.day-preview-head'),day,posts.filter(post=>post.image_path).map(post=>({src:publicFile('images',post.image_path),title:post.title+' · shared image',kind:'shared'})));
       host.replaceChildren();
       const intro=node('div','room-content-intro');intro.append(node('p','kicker',room==='forum'?'FORUM / DISCUSSION':title.toUpperCase()+' / SHARED'),node('h3','',room==='forum'?'Discussions on this date':title+' on this date'));host.append(intro);
       if(!posts.length)host.append(node('p','day-preview-empty',room==='forum'?'No discussions started on this date.':'No '+title.toLowerCase()+' shared on this date.'));
