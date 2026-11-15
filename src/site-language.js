@@ -97,6 +97,12 @@
     'Similar notes':'分享文字相近','From a chart you like':'来自你喜欢的榜单',
     'Other songs are unavailable right now.':'暂时无法加载其他歌曲。'
   });
+  Object.assign(zh,{
+    'Swipe left or right to change spaces.':'左右滑动切换空间。',
+    'FILM / SHARED':'电影 / 分享','ART / SHARED':'艺术 / 分享','BOOKS / SHARED':'书籍 / 分享','DAILY LIFE / SHARED':'日常 / 分享','FORUM / DISCUSSION':'论坛 / 讨论',
+    'Film on this date':'这一天的电影','Art on this date':'这一天的艺术','Books on this date':'这一天的书籍','Daily Life on this date':'这一天的日常',
+    'No film shared on this date.':'这一天还没有电影分享。','No art shared on this date.':'这一天还没有艺术分享。','No books shared on this date.':'这一天还没有书籍分享。','No daily life shared on this date.':'这一天还没有日常分享。'
+  });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;
   const select = document.getElementById('site-language'); select.value = language;
