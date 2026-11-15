@@ -75,8 +75,30 @@
     else paragraph(images,t('目前只核对到这张图片。','This is the only image currently checked against a source.'));
     addSource(images,t('查找更多剧照','Find more film stills'),search(titleOnly(print)+' film stills'));addSource(images,t('查找幕后照片','Find production photos'),search(titleOnly(print)+' behind the scenes'));
   }
+  async function memberDiscussion(root,print,room,id){
+    const key=room+'|'+(room==='film'?titleOnly(print):print.source);
+    const wrap=make('div','editorial-community');root.append(wrap);
+    const members=make('div','editorial-member-comments'),reading=make('aside','editorial-criticism');wrap.append(members,reading);
+    members.append(make('h4','',t('读者讨论','Member discussion')));
+    const heart=make('button','editorial-heart',t('♡ 喜欢','♡ Like'));heart.type='button';members.append(heart);
+    const list=make('div','editorial-comments-list');members.append(list);
+    const form=make('form','editorial-comment-form');const input=make('textarea');input.name='body';input.maxLength=1000;input.required=true;input.rows=3;input.placeholder=t('写下你的想法…','What stayed with you?');const send=make('button','',t('发布评论','Post comment'));send.type='submit';form.append(input,send);members.append(form);
+    reading.append(make('h4','',t('站外观点','Published perspectives')));
+    if(room==='music'&&print.source.includes('/1558162066'))addSource(reading,'Pitchfork · MM..FOOD','https://pitchfork.com/reviews/albums/5255-mmfood/');
+    if(room==='film'&&print.title.includes('Caligari'))addSource(reading,'BFI · Caligari','https://www.bfi.org.uk/features/100-years-cabinet-dr-caligari/');
+    addSource(reading,t('查找更多评论','Find more writing'),search(titleOnly(print)+' '+(print.artist||'')+' review'));
+    if(!client){list.textContent=t('评论暂不可用。','Discussion is unavailable.');heart.disabled=true;form.hidden=true;return;}
+    async function refresh(){const [likesResult,commentsResult]=await Promise.all([client.from('editorial_likes').select('user_id').eq('work_key',key),client.from('editorial_comments').select('id,user_id,nickname,body,created_at').eq('work_key',key).order('created_at',{ascending:false}).limit(40)]);if(id!==generation)return;
+      if(likesResult.error||commentsResult.error){list.textContent=t('暂时无法读取讨论。','Discussion is temporarily unavailable.');heart.disabled=true;form.hidden=true;return;}
+      const likes=likesResult.data||[],comments=commentsResult.data||[];const mine=likes.some(row=>row.user_id===user?.id);heart.textContent=(mine?'♥':'♡')+' '+t('喜欢','Like')+' · '+likes.length;heart.setAttribute('aria-pressed',String(mine));
+      list.replaceChildren();if(!comments.length)paragraph(list,t('还没有评论。','No comments yet.'));for(const row of comments){const item=make('article','editorial-comment');item.append(make('strong','',row.nickname||t('读者','Member')),make('time','',new Date(row.created_at).toLocaleDateString(zh()?'zh-CN':'en-US')),make('p','',row.body));list.append(item);}
+    }
+    heart.addEventListener('click',async()=>{if(!user){dialog.close();document.getElementById('account-button')?.click();return;}heart.disabled=true;const mine=heart.getAttribute('aria-pressed')==='true';const result=mine?await client.from('editorial_likes').delete().eq('work_key',key).eq('user_id',user.id):await client.from('editorial_likes').insert({work_key:key,user_id:user.id});heart.disabled=false;if(result.error){list.prepend(make('p','editorial-error',t('未能保存喜欢。','Could not save your like.')));return;}await refresh();});
+    form.addEventListener('submit',async event=>{event.preventDefault();if(!user){dialog.close();document.getElementById('account-button')?.click();return;}const body=input.value.trim();if(!body)return;send.disabled=true;const identity=await client.from('profiles').select('nickname').eq('user_id',user.id).maybeSingle();if(identity.error||!identity.data?.nickname){send.disabled=false;list.prepend(make('p','editorial-error',t('请先设置昵称。','Please set your nickname first.')));return;}const result=await client.from('editorial_comments').insert({work_key:key,user_id:user.id,nickname:identity.data.nickname,body});send.disabled=false;if(result.error){list.prepend(make('p','editorial-error',t('评论未能发布。','Could not post comment.')));return;}input.value='';await refresh();});
+    await refresh();
+  }
   function open(print,room){const id=++generation;dialog.replaceChildren();const header=make('header','editorial-detail-header');const close=make('button','editorial-close','×');close.type='button';close.setAttribute('aria-label',t('关闭','Close'));close.addEventListener('click',()=>dialog.close());header.append(make('small','',('AILLEURS / '+room).toUpperCase()),close);dialog.append(header);const hero=make('div','editorial-detail-hero');const picture=make('div','editorial-detail-cover');addImage(picture,print.src,print.title);const info=make('div','editorial-detail-intro');info.append(make('h2','',titleOnly(print)),make('p','',print.artist||sourceName(room)));const links=make('div','editorial-detail-links');links.append(link(sourceName(room)+' ↗',print.source));if(room==='music')links.append(link('YouTube ↗','https://www.youtube.com/results?search_query='+encodeURIComponent(titleOnly(print)+' '+print.artist)));info.append(links);hero.append(picture,info);dialog.append(hero);const body=make('div','editorial-detail-body');dialog.append(body);dialog.showModal();if(room==='music')void albumContent(print,body,id);else if(room==='art')void artContent(print,body,id);else if(room==='books')void bookContent(print,body,id);else filmContent(print,body);
-    const discussion=section(body,t('继续了解','Continue exploring'));addSource(discussion,t('查找有出处的评论','Find published criticism'),search(titleOnly(print)+' '+(print.artist||'')+' review'));
+    const discussion=section(body,t('喜欢与讨论','Likes and discussion'));void memberDiscussion(discussion,print,room,id);
   }
   dialog.addEventListener('close',()=>generation++);
   window.AilleursEditorial={open};
