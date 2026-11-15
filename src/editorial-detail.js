@@ -43,6 +43,12 @@
     { name: 'Hoe Cakes', id: 'Mv6kY_-zt-4' },
     { name: 'Rapp Snitch Knishes', id: 'dERcdvcXuE0' }
   ];
+  const doomTrackVideo = name => {
+    if (name === 'Beef Rap') return doomVideos[0];
+    if (name === 'Hoe Cakes') return doomVideos[1];
+    if (name.startsWith('Rapp Snitch Knishes (feat.')) return doomVideos[2];
+    return null;
+  };
 
   function sourceMenu(print, room) {
     const more = make('details', 'editorial-more-about');
@@ -175,7 +181,7 @@
         const item = make('li');
         const name = make('strong', '', song.trackName); item.append(name);
         const actions = make('span', 'editorial-track-actions');
-        const verified = isDoom(print) && doomVideos.find(video => song.trackName.toLowerCase().includes(video.name.toLowerCase()));
+        const verified = isDoom(print) && doomTrackVideo(song.trackName);
         if (verified) {
           const play = make('button', 'editorial-track-play', t('▶ 播放', '▶ Play')); play.type = 'button';
           play.addEventListener('click', () => { const player = watch.querySelector('.editorial-video-player'); const heading = watch.querySelector('.editorial-playing'); if (player && heading) startVideo(verified, player, heading); });
@@ -379,7 +385,8 @@
     const comments = section(body, t('喜欢与讨论', 'Likes and discussion'), 'discussion');
     void discussion(comments, print, room, id);
   }
-  dialog.addEventListener('close', () => { generation++; if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; } dialog.querySelectorAll('iframe').forEach(frame => frame.remove()); });
+  dialog.addEventListener('close', () => { generation++; if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; } dialog.querySelectorAll('iframe').forEach(frame => frame.remove()); dialog.querySelectorAll('audio').forEach(audio => { audio.pause(); audio.removeAttribute('src'); }); });
+  dialog.addEventListener('cancel', event => { const veil = dialog.querySelector('.editorial-lightbox'); if (veil) { event.preventDefault(); veil.remove(); } });
   dialog.addEventListener('keydown', event => { if (event.key === 'Escape' && dialog.querySelector('.editorial-lightbox')) { event.preventDefault(); dialog.querySelector('.editorial-lightbox').remove(); } });
   window.AilleursEditorial = { open };
 })();
