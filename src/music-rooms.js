@@ -92,7 +92,7 @@
     const request=++chartRequest,day=app.getDay();
     left.replaceChildren();right.replaceChildren();
     try {
-      const {data,error}=await client.from('songs').select('id,title,nickname,genre,genres,language,created_at').eq('day',day).order('created_at',{ascending:false}).limit(500);
+      const {data,error}=await client.from('songs').select('id,title,nickname,genre,genres,language,created_at').eq('day',day).gte('day','2026-11-18').order('created_at',{ascending:false}).limit(500);
       if(error)throw error;const rows=data||[],ids=rows.map(x=>x.id);let votesForDay=[];
       for(let i=0;i<ids.length;i+=100){const result=await client.from('song_votes').select('song_id').in('song_id',ids.slice(i,i+100));if(result.error)throw result.error;votesForDay.push(...(result.data||[]));}
       if(request!==chartRequest || day!==app.getDay())return;

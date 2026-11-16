@@ -155,8 +155,8 @@
       const artistKey=normalize(song.artist);
       const artistSearch=String(song.artist||'').split(/\s*(?:,|&|·|\/| feat\.? | ft\.? )\s*/i)[0]?.trim();
       const [artistResult,recentResult]=await Promise.all([
-        artistSearch&&artistSearch.length>=2?client.from('songs').select(columns).ilike('artist','%'+artistSearch.replace(/[%_]/g,'')+'%').neq('id',song.id).limit(60):Promise.resolve({data:[],error:null}),
-        client.from('songs').select(columns).neq('id',song.id).order('created_at',{ascending:false}).limit(350)
+        artistSearch&&artistSearch.length>=2?client.from('songs').select(columns).gte('day','2026-11-18').ilike('artist','%'+artistSearch.replace(/[%_]/g,'')+'%').neq('id',song.id).limit(60):Promise.resolve({data:[],error:null}),
+        client.from('songs').select(columns).gte('day','2026-11-18').neq('id',song.id).order('created_at',{ascending:false}).limit(350)
       ]);
       if(artistResult.error||recentResult.error)throw artistResult.error||recentResult.error;
       if(!section.isConnected||selectedSongId!==song.id)return;

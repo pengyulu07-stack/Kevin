@@ -123,6 +123,19 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [ ] Curate the remaining music albums, films, art and books one by one. Catalog metadata alone does not fulfill the researched-detail requirement; do not generate an unverified creative history from a search result.
 - [ ] Provide confirmed full-song or video versions for more music shares at publication, with contributor review of the exact recording. A title match and an iTunes preview are only partial listening access.
 
+### November 16 evening continuation
+
+- [x] Correct the News room button's accidental page-wide `.welcome` styling so it stays beside Daily Life.
+- [x] Set the edition boundary: curated covers begin November 8, while public music shares begin November 18. Hide the 40 earlier song rows from public song lists, charts, library, member profiles and related-song queries. Preserve their 24 votes and 15 comments for owner review in the database.
+- [x] Add Politics and Technology to News, alongside Music, Film, Art, Books, Earth and Space. Add a daily source brief list above the edited long reads.
+- [x] Collect 2–4 current source briefs per topic from dated RSS, retaining publisher, date, image and original URL. Do not call an RSS excerpt a full edited story.
+- [x] Add a signed-in reader link suggestion form. Submissions go privately to the existing owner feedback inbox, with category, URL and optional note.
+- [x] Add a scheduled morning collector and document the editorial gate in `NEWS_PIPELINE.md`. The page shows the last successful edition date if today's collection is not available.
+- [x] Local browser check: News sits directly beside Daily Life; eight topic tabs appear; Space has two source briefs, and one opens in a site dialog; November 7 shows no cover cards, November 8 shows six; November 16 has no public songs.
+- [ ] Observe the first scheduled GitHub Actions run on November 17 and confirm its new edition is visible on the published site. Scheduled jobs can be delayed and cannot be guaranteed in advance.
+- [ ] Write and check more 300–450-word original articles, two to four per topic per day. The automatic source briefs are deliberately shorter and do not satisfy the full editorial article target.
+- [ ] Complete the remaining deep work pages, contributor-confirmed playback, richer recommendations, calendar and gesture polish, responsive and signed-in end-to-end QA from the existing backlog.
+
 1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on AILLEURS and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
 2. **Navigation and interaction:** Test a Mac two-finger swipe on a physical trackpad. Tune gesture thresholds, animation, loading state, and focus behavior against vertical reading and horizontal selector scrolling. Keep shortcuts visible without repeating the same list in several places. Make notification items open their exact post or reply.
 3. **Visual design:** Research and document specific album, cinema, print, and editorial references. Build ten genuinely distinct designs for each music category, including chart, calendar, gallery, type, and accent choices; the present ten designs are shared base templates, not this finished library. Let visitors choose a default design and room display mode, with an accessible high-contrast option.

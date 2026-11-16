@@ -51,6 +51,8 @@ const isLanguageChart = (key) => musicLanguages.some(([id]) => id === key);
 const songInChart = (song, key) => key === "all" || (isLanguageChart(key) ? song.language === key : (song.genres || [song.genre]).includes(key));
 const musicGenreName = (key) => musicCharts.find(([id]) => id === key)?.[1] || "All Music";
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+const PUBLIC_LAUNCH_DAY = "2026-11-18";
+window.AilleursLaunchDay = PUBLIC_LAUNCH_DAY;
 const validDay = (value) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const time = Date.parse(value + "T00:00:00Z");
@@ -254,7 +256,7 @@ async function loadSongs() {
   const day = selectedDay;
   status("Loading songs for this date…");
   try {
-    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,language,audio_path,source_url,cover_path,created_at").eq("day", day).order("created_at", { ascending: false }).order("id"));
+    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,language,audio_path,source_url,cover_path,created_at").eq("day", day).gte("day", PUBLIC_LAUNCH_DAY).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
     const nextVotes = new Map();
     const nextComments = new Map();
@@ -297,7 +299,7 @@ async function loadSongs() {
     comments = nextComments;
     commentLikes = nextCommentLikes;
     renderSongs();
-    status(songs.length ? "Loaded " + day + " songs." : "No songs have been shared this day.");
+    status(songs.length ? "Loaded " + day + " songs." : day < PUBLIC_LAUNCH_DAY ? "Public music sharing begins November 18." : "No songs have been shared this day.");
     window.dispatchEvent(new Event("daytone:songs-loaded"));
   } catch (error) {
     if (request !== loadRequest) return;
@@ -681,6 +683,7 @@ async function publish(event) {
   const uploaded = [];
   try {
     const day = today();
+    if (day < PUBLIC_LAUNCH_DAY) throw new Error("Music sharing opens on November 18.");
     const usedResult = await client.from("songs").select("daily_slot,genres,language").eq("owner_id", user.id).eq("day", day);
     if (usedResult.error) throw usedResult.error;
     const used = new Set((usedResult.data || []).map((item) => item.daily_slot));

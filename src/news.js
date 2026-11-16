@@ -87,12 +87,73 @@
       ]
     }
   ];
-  const categories = [['all','全部','All'], ['music','音乐','Music'], ['film','电影','Film'], ['art','艺术','Art'], ['books','书籍','Books'], ['earth','地球','Earth'], ['space','宇宙','Space']];
+  const categories = [['all','全部','All'], ['music','音乐','Music'], ['film','电影','Film'], ['art','艺术','Art'], ['books','书籍','Books'], ['politics','政治','Politics'], ['technology','科技','Technology'], ['earth','地球','Earth'], ['space','宇宙','Space']];
   const zh = () => window.DaytoneLanguage?.get() === 'zh';
   const word = pair => pair[zh() ? 0 : 1];
   const el = (tag, cls = '', text = '') => { const node = document.createElement(tag); if (cls) node.className = cls; if (text) node.textContent = text; return node; };
   const dialog = el('dialog', 'ailleurs-news-dialog'); document.body.append(dialog);
-  let category = 'all', visible = 3;
+  let category = 'all', visible = 4, feed = null, feedCheckDay = '', feedLoading = false, activeHost = null;
+  const todayInShanghai = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+  function loadFeed(){
+    const date=todayInShanghai();
+    if(feedLoading||feedCheckDay===date)return;
+    feedCheckDay=date;feedLoading=true;
+    void fetch('news-feed.json?edition='+date,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('feed unavailable');return response.json();}).then(value=>{
+      if(value?.kind==='source_briefs'&&value?.categories)feed=value;
+    }).catch(()=>{}).finally(()=>{feedLoading=false;if(activeHost?.isConnected)render(activeHost);});
+  }
+  function openBrief(item){
+    dialog.replaceChildren();
+    const close=el('button','ailleurs-news-close','×');close.type='button';close.setAttribute('aria-label',word(['关闭','Close']));close.onclick=()=>dialog.close();
+    const date=new Date(item.published_at).toLocaleString(zh()?'zh-CN':'en-US',{timeZone:'Asia/Shanghai',year:'numeric',month:'short',day:'numeric'});
+    const head=el('div','ailleurs-news-article-head');head.append(close,el('small','',item.source+' · '+date),el('h2','',item.title));
+    dialog.append(head);
+    if(item.image){const figure=el('figure'),image=el('img');image.src=item.image;image.alt='';figure.append(image,el('figcaption','',item.source));dialog.append(figure);}
+    const content=el('div','ailleurs-news-article-body');
+    content.append(el('p','',item.summary||word(['这个来源没有提供摘要；标题和发布时间已核对到原始页面。','This source did not provide a usable excerpt. The title and publication time link to the original page.'])));
+    content.append(el('p','ailleurs-news-brief-note',word(['这是来源短讯，不是本站的完整报道。阅读原文可核对详情。','This is a source brief, not a full AILLEURS article. Open the original to check the details.'])));
+    const links=el('div','ailleurs-news-links'),original=el('a','',word(['阅读原始报道 ↗','Read the original ↗']));
+    original.href=item.url;original.target='_blank';original.rel='noopener noreferrer';links.append(original);dialog.append(content,links);dialog.showModal();
+  }
+  const suggestDialog=el('dialog','ailleurs-news-suggest');
+  suggestDialog.innerHTML='<form><button type="button" class="ailleurs-news-close" aria-label="Close">×</button><small>AILLEURS / NEWS</small><h2>Suggest a story</h2><p>Paste a source link. An editor checks it before anything appears in News.</p><label>Category<select name="category"></select></label><label>Source URL<input name="url" type="url" required placeholder="https://…"></label><label>What caught your attention? <span>(optional)</span><textarea name="note" maxlength="500" rows="4"></textarea></label><p class="ailleurs-news-suggest-error" role="alert"></p><button type="submit">Send for review ↗</button></form>';
+  document.body.append(suggestDialog);
+  suggestDialog.querySelector('.ailleurs-news-close').onclick=()=>suggestDialog.close();
+  for(const [key,cn,en] of categories.filter(item=>item[0]!=='all')){const option=el('option','',zh()?cn:en);option.value=key;suggestDialog.querySelector('select').append(option);}
+  suggestDialog.querySelector('form').addEventListener('submit',async event=>{
+    event.preventDefault();if(!requireAccount())return;
+    const form=event.currentTarget,error=form.querySelector('.ailleurs-news-suggest-error'),button=form.querySelector('button[type="submit"]');
+    error.textContent='';
+    let url;
+    try{url=new URL(form.elements.url.value.trim());if(url.protocol!=='https:')throw Error();}catch{error.textContent=word(['请输入有效的 https 链接。','Enter a valid https link.']);return;}
+    const note=form.elements.note.value.trim();
+    const message=['[NEWS SUGGESTION]', 'Category: '+form.elements.category.value, 'URL: '+url.href, note?'Reader note: '+note:''].filter(Boolean).join('\n');
+    if(message.length>1000){error.textContent=word(['文字太长，请缩短说明。','Please shorten your note.']);return;}
+    button.disabled=true;
+    try{
+      const day=today(),used=await client.from('feedback').select('daily_slot').eq('user_id',user.id).eq('day',day);
+      if(used.error)throw used.error;
+      const occupied=new Set((used.data||[]).map(item=>item.daily_slot));
+      let saved=false;
+      for(const slot of [1,2,3]){
+        if(occupied.has(slot))continue;
+        const result=await client.from('feedback').insert({user_id:user.id,day,daily_slot:slot,message});
+        if(!result.error){saved=true;break;}
+        if(result.error.code!=='23505')throw result.error;
+      }
+      if(!saved)throw Error(word(['今天已提交三条建议。','You have sent three suggestions today.']));
+      form.reset();suggestDialog.close();toast(word(['链接已送交编辑核对。','Your link was sent for review.']));
+    }catch(cause){error.textContent=cause.message||word(['提交失败，请重试。','Could not send the link.']);}
+    finally{button.disabled=false;}
+  });
+  function openSuggestion(){
+    if(!requireAccount())return;
+    suggestDialog.querySelector('h2').textContent=word(['推荐一条新闻','Suggest a story']);
+    suggestDialog.querySelector('p').textContent=word(['粘贴原始报道链接。核对后才会出现在新闻中。','Paste a source link. An editor checks it before anything appears in News.']);
+    for(const option of suggestDialog.querySelector('select').options){const entry=categories.find(item=>item[0]===option.value);if(entry)option.textContent=zh()?entry[1]:entry[2];}
+    suggestDialog.querySelector('.ailleurs-news-suggest-error').textContent='';
+    suggestDialog.showModal();
+  }
   function open(article) {
     dialog.replaceChildren();
     const close = el('button', 'ailleurs-news-close', '×'); close.type = 'button'; close.setAttribute('aria-label', word(['关闭','Close'])); close.onclick = () => dialog.close();
@@ -105,12 +166,38 @@
     dialog.append(header, figure, content, links); dialog.showModal();
   }
   function render(host) {
-    host.replaceChildren();
-    const head = el('div', 'ailleurs-news-head'); head.append(el('small', '', word(['持续阅读 / 经核对的来源','READING / CHECKED SOURCES'])), el('h3', '', word(['新近发生','Recent stories'])), el('p', '', word(['从原始报道整理的新近故事。日期标示原始发布或重新介绍的时间。','Recent stories drawn from original sources. Dates mark publication or a new feature of the story.']))); host.append(head);
-    const filters = el('div', 'ailleurs-news-filters'); for (const [key,cn,en] of categories) { const button = el('button', key === category ? 'active' : '', zh() ? cn : en); button.type = 'button'; button.setAttribute('aria-pressed', String(key === category)); button.onclick = () => { category = key; visible = 3; render(host); }; filters.append(button); } host.append(filters);
-    const sorted = [...articles].filter(item => category === 'all' || item.category === category).sort((a,b) => b.date.localeCompare(a.date));
-    const list = el('div', 'ailleurs-news-list'); for (const article of sorted.slice(0, visible)) { const card = el('button', 'ailleurs-news-card'); card.type = 'button'; const image = el('img'); image.src = article.image; image.alt = ''; image.loading = 'lazy'; const copy = el('span'); copy.append(el('small', '', article.source + ' · ' + article.date), el('strong', '', word(article.title)), el('em', '', word(article.deck)), el('b', '', word(['在这里阅读','Read here']))); card.append(image, copy); card.onclick = () => open(article); list.append(card); } host.append(list);
-    if (visible < sorted.length) { const more = el('button', 'ailleurs-news-more', word(['继续往下看 ↓','Show more ↓'])); more.type = 'button'; more.onclick = () => { visible += 3; render(host); }; host.append(more); }
+    activeHost=host;loadFeed();host.replaceChildren();
+    const head=el('div','ailleurs-news-head');
+    head.append(el('small','',word(['每日新闻 / 亚洲上海时间','DAILY NEWS / SHANGHAI TIME'])),el('h3','',word(['今天的新闻','Today’s news'])),el('p','',word(['每天早晨更新来源短讯；深入文章由编辑核对后发布。','Source briefs refresh each morning. Longer features appear after editorial review.'])));
+    const suggest=el('button','ailleurs-news-suggest-button',word(['＋ 推荐新闻链接','＋ Suggest a story']));suggest.type='button';suggest.onclick=openSuggestion;head.append(suggest);host.append(head);
+    const filters=el('div','ailleurs-news-filters');
+    for(const [key,cn,en] of categories){const button=el('button',key===category?'active':'',zh()?cn:en);button.type='button';button.setAttribute('aria-pressed',String(key===category));button.onclick=()=>{category=key;visible=4;render(host);};filters.append(button);}
+    host.append(filters);
+    const status=el('p','ailleurs-news-edition');
+    if(feed){const fresh=feed.edition_date===todayInShanghai();status.textContent=fresh?word(['今天的来源短讯 · '+feed.edition_date,'Source briefs for '+feed.edition_date]):word(['最近一次更新：'+feed.edition_date+'；今天的内容仍在等待更新。','Last update: '+feed.edition_date+'. Today’s edition is still pending.']);}
+    else status.textContent=feedLoading?word(['正在读取新闻来源…','Loading sources…']):word(['暂时无法读取每日新闻。','Daily news is temporarily unavailable.']);
+    host.append(status);
+    const sourceRows=feed?.categories?Object.entries(feed.categories).flatMap(([key,items])=>(items||[]).map(item=>({...item,category:key}))):[];
+    const visibleRows=sourceRows.filter(item=>category==='all'||item.category===category).sort((a,b)=>b.published_at.localeCompare(a.published_at));
+    const list=el('div','ailleurs-news-list');
+    for(const item of visibleRows.slice(0,visible)){
+      const card=el('button','ailleurs-news-card');card.type='button';
+      if(item.image){const image=el('img');image.src=item.image;image.alt='';image.loading='lazy';card.append(image);}
+      else card.append(el('div','ailleurs-news-no-image',item.source));
+      const copy=el('span');copy.append(el('small','',item.source+' · '+item.published_at.slice(0,10)),el('strong','',item.title));
+      if(item.summary)copy.append(el('em','',item.summary));copy.append(el('b','',word(['在这里看短讯','Read source brief'])));card.append(copy);card.onclick=()=>openBrief(item);list.append(card);
+    }
+    if(!visibleRows.length&&!feedLoading)list.append(el('p','ailleurs-news-empty',word(['这个分类暂时没有近期来源短讯。','No recent source brief in this category yet.'])));
+    host.append(list);
+    if(visible<visibleRows.length){const more=el('button','ailleurs-news-more',word(['继续往下看 ↓','Show more ↓']));more.type='button';more.onclick=()=>{visible+=4;render(host);};host.append(more);}
+    const feature=el('section','ailleurs-news-features');
+    feature.append(el('small','',word(['编辑阅读','EDITORIAL READING'])),el('h3','',word(['深入了解','Read further'])));
+    const edited=[...articles].filter(item=>category==='all'||item.category===category).sort((a,b)=>b.date.localeCompare(a.date));
+    const featureList=el('div','ailleurs-news-feature-list');
+    for(const article of edited){const card=el('button','ailleurs-news-feature');card.type='button';card.append(el('small','',article.source+' · '+article.date),el('strong','',word(article.title)),el('span','',word(article.deck)));card.onclick=()=>open(article);featureList.append(card);}
+    if(!edited.length)featureList.append(el('p','ailleurs-news-empty',word(['这个分类还没有经过编辑的长文章。','No edited long article in this category yet.'])));
+    feature.append(featureList);host.append(feature);
   }
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&activeHost?.isConnected){feedCheckDay='';loadFeed();}});
   window.AilleursNews = { render, open };
 })();
