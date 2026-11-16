@@ -38,6 +38,24 @@
   const cleanCatalogText = value => textValue(value).replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\*([^*]+)\*/g, '$1');
   const isDoom = print => print.source.includes('/1558162066');
   const isCaligari = print => titleOnly(print).includes('Caligari');
+  const storyFor = (print, room) => {
+    const key = room === 'music' ? 'music:' + print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1]
+      : room === 'art' ? 'art:' + print.source.split('/art/')[1]
+      : room === 'books' ? 'books:' + titleOnly(print)
+      : 'film:' + (isCaligari(print) ? 'Caligari' : titleOnly(print));
+    return window.AilleursWorkStories?.[key];
+  };
+  function addStory(root, story) {
+    paragraph(root, t(...story.intro));
+    const deep = make('details', 'editorial-deep-read');
+    deep.append(make('summary', '', t('展开：创作与作品细节', 'Read more: making and context')));
+    const chapters = make('div', 'editorial-deep-chapters'); deep.append(chapters);
+    for (const chapter of story.chapters) {
+      const part = make('section'); part.append(make('h4', '', t(...chapter.title)));
+      paragraph(part, t(...chapter.body)); part.append(external(chapter.source + ' ↗', chapter.url)); chapters.append(part);
+    }
+    root.append(deep);
+  }
   const doomVideos = [
     { name: 'Beef Rapp', id: 'XvKDFX00tsU' },
     { name: 'Hoe Cakes', id: 'Mv6kY_-zt-4' },
@@ -54,7 +72,10 @@
     more.append(make('summary', '', t('更多资料', 'More about')));
     const panel = make('div', 'editorial-more-panel');
     panel.append(make('strong', '', t('值得继续读', 'Further reading')));
-    if (room === 'music') {
+    const story = storyFor(print, room);
+    if (story?.readings) {
+      for (const item of story.readings) longRead(panel, t(...item.title), t(...item.description), item.url);
+    } else if (room === 'music') {
       if (isDoom(print)) {
         longRead(panel, t('食物、文字游戏和唱片结构', 'Food, wordplay and album structure'), t('Nick Sylvester 的 2004 年乐评；尤其留意他对中段拼贴的保留。', 'Nick Sylvester’s 2004 review, including a dissent on the middle stretch.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/');
         longRead(panel, t('另一种听法：轻快的声音拼贴', 'A different hearing of the collages'), t('AllMusic 的 David Jeffries 对中段有相反评价。', 'David Jeffries at AllMusic hears the middle stretch differently.'), 'https://www.allmusic.com/album/mmfood-mw0000674548');
@@ -157,8 +178,10 @@
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
       gallery.append(images);
     } else {
-      paragraph(about, t('下方先列出这个版本的发行资料与曲目。封面创作、录音背景和评论仍需逐项核对，暂不把目录信息写成创作故事。', 'The catalog facts and tracks for this edition appear below. Its cover, recording history and criticism still need source-by-source research.'));
-      paragraph(watch, t('目录中若提供试听片段，可直接在曲目旁播放。', 'If the catalog supplies a preview, play it from the track list below.'));
+      const story = storyFor(print, 'music');
+      if (story) addStory(about, story);
+      else paragraph(about, t('下方先列出这个版本的发行资料与曲目。封面创作、录音背景和评论仍需逐项核对，暂不把目录信息写成创作故事。', 'The catalog facts and tracks for this edition appear below. Its cover, recording history and criticism still need source-by-source research.'));
+      paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
       const images = make('div', 'editorial-photo-grid'); photo(images, print.src, t('唱片封面', 'Album cover')); gallery.append(images);
     }
     paragraph(tracks, t('正在读取曲目…', 'Loading tracks…'));
@@ -215,33 +238,37 @@
 
   async function artContent(print, body, id) {
     const context = section(body, t('作品与创作背景', 'Work and context'), 'about');
+    const story = storyFor(print, 'art');
+    if (story) addStory(context, story);
     const images = section(body, t('作品图像', 'The image'), 'images');
     const gallery = make('div', 'editorial-photo-grid'); photo(gallery, print.src, titleOnly(print), print.artist); images.append(gallery);
     const accession = print.source.split('/art/')[1];
     const cached = window.AilleursArtNotes?.[accession];
     if (cached) {
       paragraph(context, [cached.creation_date, cached.technique, cached.culture].filter(Boolean).join(' · '), 'editorial-meta');
-      paragraph(context, cached.description || t('馆藏记录未提供说明。', 'The museum record has no description.'));
+      if (!story) paragraph(context, cached.description || t('馆藏记录未提供说明。', 'The museum record has no description.'));
       paragraph(images, t('馆藏目前只有这件作品的图像；没有核对到创作过程照片。', 'The catalog supplies this work image, but no verified process photographs.'));
       return;
     }
-    paragraph(context, t('正在读取馆藏记录…', 'Loading museum record…'));
+    if (!story) paragraph(context, t('正在读取馆藏记录…', 'Loading museum record…'));
     try {
       const response = await fetch('https://openaccess-api.clevelandart.org/api/artworks/?accession_number=' + encodeURIComponent(accession));
       if (!response.ok) throw Error('museum');
       const json = await response.json(); if (id !== generation) return;
       const work = json.data?.[0];
-      context.replaceChildren(make('h3', '', t('作品与创作背景', 'Work and context')));
+      if (!story) context.replaceChildren(make('h3', '', t('作品与创作背景', 'Work and context')));
       if (!work) throw Error('missing');
       paragraph(context, [work.creation_date, work.technique, work.culture?.[0]].filter(Boolean).join(' · '), 'editorial-meta');
-      paragraph(context, cleanCatalogText(work.wall_description) || cleanCatalogText(work.artlens_description) || cleanCatalogText(work.description) || t('馆藏记录没有作品说明。', 'The museum record has no description.'));
-    } catch { if (id === generation) { context.replaceChildren(make('h3', '', t('作品与创作背景', 'Work and context'))); paragraph(context, t('馆藏记录暂时无法读取。', 'The museum record is temporarily unavailable.')); } }
+      if (!story) paragraph(context, cleanCatalogText(work.wall_description) || cleanCatalogText(work.artlens_description) || cleanCatalogText(work.description) || t('馆藏记录没有作品说明。', 'The museum record has no description.'));
+    } catch { if (id === generation && !story) { context.replaceChildren(make('h3', '', t('作品与创作背景', 'Work and context'))); paragraph(context, t('馆藏记录暂时无法读取。', 'The museum record is temporarily unavailable.')); } }
   }
 
   async function bookContent(print, body, id) {
     const context = section(body, t('这本书', 'The book'), 'about');
+    const story = storyFor(print, 'books');
+    if (story) addStory(context, story);
     const reading = section(body, t('翻开几页', 'Read a little'), 'reading');
-    paragraph(context, t('正在读取书目…', 'Loading book record…'));
+    if (!story) paragraph(context, t('正在读取书目…', 'Loading book record…'));
     paragraph(reading, print.artist + ' · ' + titleOnly(print), 'editorial-meta');
     if (titleOnly(print) === 'The Picture of Dorian Gray') {
       const excerpt = make('details', 'editorial-book-excerpt'); excerpt.append(make('summary', '', t('展开一小段原文', 'Read a short passage')));
@@ -252,16 +279,20 @@
       const key = new URL(print.source).pathname;
       const response = await fetch('https://openlibrary.org' + key + '.json'); if (!response.ok) throw Error('book');
       const work = await response.json(); if (id !== generation) return;
-      context.replaceChildren(make('h3', '', t('这本书', 'The book')));
-      paragraph(context, cleanCatalogText(work.description).slice(0, 750) || t('书目尚无介绍。', 'The catalog has no description.'));
-      paragraph(context, t('以上为 Open Library 书目资料；创作经过与专业评论仍需单独核对。', 'The text above comes from the Open Library record. Writing history and criticism need separate verification.'), 'editorial-source-note');
-    } catch { if (id === generation) { context.replaceChildren(make('h3', '', t('这本书', 'The book'))); paragraph(context, t('书目暂时无法读取。', 'The catalog record is temporarily unavailable.')); } }
+      if (!story) {
+        context.replaceChildren(make('h3', '', t('这本书', 'The book')));
+        paragraph(context, cleanCatalogText(work.description).slice(0, 750) || t('书目尚无介绍。', 'The catalog has no description.'));
+        paragraph(context, t('以上为 Open Library 书目资料；创作经过与专业评论仍需单独核对。', 'The text above comes from the Open Library record. Writing history and criticism need separate verification.'), 'editorial-source-note');
+      }
+    } catch { if (id === generation && !story) { context.replaceChildren(make('h3', '', t('这本书', 'The book'))); paragraph(context, t('书目暂时无法读取。', 'The catalog record is temporarily unavailable.')); } }
   }
 
   function filmContent(print, body) {
     const context = section(body, t('影片与主创', 'Film and creators'), 'about');
     const images = section(body, t('画面', 'Frames'), 'images');
-    if (isCaligari(print)) {
+    const story = storyFor(print, 'film');
+    if (story) addStory(context, story);
+    else if (isCaligari(print)) {
       paragraph(context, t('罗伯特·维内执导的《卡里加里博士的小屋》于 1920 年问世。它把德国表现主义的倾斜街道、锯齿般的室内空间与演员动作连在一起，让不安直接成为可见的布景。', 'Robert Wiene’s 1920 film makes unease visible. Slanted streets, jagged interiors and the performers’ movements are joined into an expressionist world.'));
       paragraph(context, t('BFI 的 Alex Barrett 把这种风格放回战后德国的情绪、制作条件与电影发行的背景中，也指出结尾的框架故事没有把真实与幻觉彻底分开。下面的画面是影片截图，不是拍摄现场照片。', 'BFI writer Alex Barrett connects this style to postwar Germany, the film’s production and its release. He also notes that the framing story leaves reality and delusion unresolved. The images below are frames from the film, not behind-the-scenes photographs.'));
     } else paragraph(context, t('这张原海报或截图已核对出处。主创与拍摄资料仍需逐片补写。', 'The poster or frame has a checked source. Credits and production history still need film-by-film research.'));
@@ -301,6 +332,10 @@
       const views = make('div', 'editorial-review-links');
       views.append(external('David Jeffries · AllMusic ↗', 'https://www.allmusic.com/album/mmfood-mw0000674548'), external('Nick Sylvester · Pitchfork ↗', 'https://pitchfork.com/reviews/albums/5255-mmfood/'));
       reading.append(views);
+    } else if (storyFor(print, room)?.perspective) {
+      const view = storyFor(print, room).perspective;
+      paragraph(reading, t(...view.text));
+      reading.append(external(view.by + ' ↗', view.url));
     } else if (room === 'film' && isCaligari(print)) {
       paragraph(reading, t('Alex Barrett 注意到扭曲的布景如何与演员身体结合，而结尾保留的疑问让它远不止是一场视觉实验。', 'Alex Barrett connects the distorted sets with the performers’ bodies and reads the unsettled ending as more than a visual trick.'));
       paragraph(reading, 'Alex Barrett · BFI, 2020', 'editorial-attribution');
