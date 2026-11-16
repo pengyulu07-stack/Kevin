@@ -10,7 +10,7 @@
 ## Automatic morning sequence
 
 1. GitHub Actions runs `.github/workflows/news.yml` at 06:17 and 10:17 Asia/Shanghai, plus on manual dispatch. The second run gives a recovery opportunity if a source or the first run is delayed. GitHub does not guarantee exact minute execution.
-2. `scripts/refresh_news.py` retrieves section RSS from The Guardian and BBC News, and NASA's feed. It accepts only HTTPS story URLs with a valid publication date in the preceding 48 hours, deduplicates by URL, and keeps at most four per topic.
+2. `scripts/refresh_news.py` retrieves section RSS from The Guardian and BBC News, plus NASA's astronomy picture feed. It accepts only HTTPS story URLs with a valid publication date in the preceding 48 hours, filters live blogs and low-signal formats, deduplicates by URL, and keeps at most four per topic.
 3. If fewer than six topics yield any item, the job fails and leaves the previous edition untouched. Successful results replace `news-feed.json` and commit only when changed.
 4. A `GITHUB_TOKEN` commit does not trigger a branch-based GitHub Pages rebuild. The browser therefore reads `news-feed.json` directly from the repository's raw file URL, with the deployed Pages snapshot as a fallback. GitHub's raw file cache can add several minutes before a new edition appears. News checks again after ten minutes or when the tab becomes visible.
 5. The owner checks the feed and feedback inbox for misclassification, broken images, changed headlines, claims requiring correction, and candidates for a 300–450-word article.

@@ -30,23 +30,27 @@ FEEDS = {
     "books": [("The Guardian", "https://www.theguardian.com/books/rss")],
     "politics": [
         ("BBC News", "https://feeds.bbci.co.uk/news/politics/rss.xml"),
-        ("The Guardian", "https://www.theguardian.com/world/rss"),
+        ("The Guardian", "https://www.theguardian.com/politics/rss"),
     ],
     "technology": [
         ("BBC News", "https://feeds.bbci.co.uk/news/technology/rss.xml"),
         ("The Guardian", "https://www.theguardian.com/technology/rss"),
     ],
     "earth": [("The Guardian", "https://www.theguardian.com/environment/rss")],
-    "space": [("NASA", "https://www.nasa.gov/feed/")],
+    "space": [("NASA APOD", "https://science.nasa.gov/feed/apod-basic/")],
 }
 MEDIA = "{http://search.yahoo.com/mrss/}"
 TAG = re.compile(r"<[^>]*>")
+LOW_SIGNAL = re.compile(r"\b(review|cartoon|letters|live blog|live updates)\b|\blive:|\blive$|(?:^|\s)[–—-]\s*live\b|\bin pictures\b|^share your thoughts\b", re.I)
 
 
 def clean(value: str, limit: int) -> str:
     value = html.unescape(TAG.sub(" ", value or ""))
     value = re.sub(r"\s+", " ", value).strip()
-    return value[:limit].rstrip()
+    value = re.split(r"\b(?:Continue reading|Sign up for the)\b", value, maxsplit=1, flags=re.I)[0].strip()
+    if len(value) <= limit:
+        return value
+    return value[:limit].rsplit(" ", 1)[0].rstrip(" ,;:") + "…"
 
 
 def safe_url(value: str) -> str:
@@ -75,7 +79,7 @@ def read_feed(category: str, source: str, url: str) -> list[dict]:
         except (TypeError, ValueError):
             continue
         age = (NOW - published).total_seconds() / 3600
-        if not title or not link or not -1 <= age <= 48:
+        if not title or not link or not -1 <= age <= 48 or LOW_SIGNAL.search(title):
             continue
         image = ""
         for media in item.findall(MEDIA + "content"):
@@ -86,9 +90,9 @@ def read_feed(category: str, source: str, url: str) -> list[dict]:
         if not image:
             media = item.find(MEDIA + "thumbnail")
             image = safe_url(media.attrib.get("url", "")) if media is not None else ""
+        if not image and source == "NASA APOD":
+            image = safe_url(item.findtext("{https://science.nasa.gov/apod/}hdurl", ""))
         summary = clean(item.findtext("description", ""), 260)
-        if source == "NASA" and ("APOD Science APOD" in summary or len(summary) > 240):
-            summary = ""
         items.append(
             {
                 "category": category,
