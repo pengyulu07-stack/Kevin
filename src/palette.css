@@ -163,6 +163,9 @@ body[data-space="film"] #generic-feed .generic-card{background:var(--dt-raised);
 .listen-preview-choice:hover,.listen-preview-choice:focus-visible{background:var(--dt-hover);border-color:var(--dt-accent)}
 .listen-preview-choice small{color:var(--dt-muted)}
 .listen-preview-choice b{background:var(--dt-accent);color:#171719}
+.listen-search{border-color:var(--dt-rule)}
+.listen-search summary{color:var(--dt-text)}
+.listen-search summary:hover,.listen-search summary:focus-visible{color:var(--dt-accent-hover)}
 dialog:not(.discussion-dialog) input,dialog:not(.discussion-dialog) textarea,dialog:not(.discussion-dialog) select{background:#121416;color:var(--dt-text);border-color:var(--dt-rule)}
 .comment-head strong,.song-connection-detail,.member-song-title{color:var(--dt-text)}
 .comment-head time,.comment-reply-context,.comment-tools button,.comment-reply-target button{color:var(--dt-muted)}

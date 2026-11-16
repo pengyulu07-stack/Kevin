@@ -113,11 +113,13 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [ ] Expand researched work histories, reviews, and useful further reads beyond *Mm..Food* to other albums, films, art, books and member shares. Six curated examples per room are only the cover selection, not six fully researched work pages.
 - [ ] Verify the refreshed site in an actual desktop and mobile browser, including media loading, category controls, modal keyboard navigation and a signed-in photo comment.
 
-### November 16 continuation (awaiting public browser verification)
+### November 16 continuation (published and checked in the public browser)
 
 - [x] Add a version-checking catalog preview step to every music share without an embedded player. Search the Apple catalog for the same title in CN and US, display up to three recording choices with artist and album, and play a selected 30-second sample on site. A search match is not treated as the contributor's chosen version or a full track.
 - [x] Add researched, expandable work histories to *Homogenic* and *Kind of Blue*, with titled further reading and a sourced outside interpretation. Their full catalog tracklists and 30-second cover previews remain on the same page.
 - [x] Add source-linked depth beyond music: Hokusai's *South Wind, Clear Sky*, *The Picture of Dorian Gray*, and *The Cabinet of Dr. Caligari*. Preserve the original image or film frames, on-site discussion and clear edition/source limits.
+- [x] Public browser checks: *Homogenic* loaded 10 tracks and its Hunter preview actually played; *Kind of Blue*, Hokusai, Wilde, and *Caligari* opened their new chapters; the film retained six frames. A user-shared Benny Goodman song returned three distinct version-labeled catalog previews, and clicking one played it in the site dock.
+- [x] Keep the contributor's chosen original service link visible in the listening dialog, but fold other-service search shortcuts under one expandable control. The catalog returned no matching preview for the Chinese shares *寄我浮生* and *传奇* in this check; those entries still need an authorized playable version chosen by the contributor.
 - [ ] Curate the remaining music albums, films, art and books one by one. Catalog metadata alone does not fulfill the researched-detail requirement; do not generate an unverified creative history from a search result.
 - [ ] Provide confirmed full-song or video versions for more music shares at publication, with contributor review of the exact recording. A title match and an iTunes preview are only partial listening access.
 
