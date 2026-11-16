@@ -591,6 +591,7 @@ async function copyLink(path) {
   catch { toast("Could not copy. Please copy the URL from your browser."); }
 }
 async function openUpload() {
+  if (today() < PUBLIC_LAUNCH_DAY) { toast("音乐分享将于 11 月 18 日开放。"); return; }
   if (user && !profile) await hydrateProfile();
   if (!requireAccount()) return;
   $("form-error").textContent = "";

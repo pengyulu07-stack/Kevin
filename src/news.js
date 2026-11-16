@@ -92,13 +92,18 @@
   const word = pair => pair[zh() ? 0 : 1];
   const el = (tag, cls = '', text = '') => { const node = document.createElement(tag); if (cls) node.className = cls; if (text) node.textContent = text; return node; };
   const dialog = el('dialog', 'ailleurs-news-dialog'); document.body.append(dialog);
-  let category = 'all', visible = 4, feed = null, feedCheckDay = '', feedLoading = false, activeHost = null;
+  let category = 'all', visible = 4, feed = null, feedCheckDay = '', feedLastCheck = 0, feedLoading = false, activeHost = null;
   const todayInShanghai = () => new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   function loadFeed(){
     const date=todayInShanghai();
-    if(feedLoading||feedCheckDay===date)return;
-    feedCheckDay=date;feedLoading=true;
-    void fetch('news-feed.json?edition='+date,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('feed unavailable');return response.json();}).then(value=>{
+    if(feedLoading||(feedCheckDay===date&&Date.now()-feedLastCheck<10*60*1000))return;
+    feedCheckDay=date;feedLastCheck=Date.now();feedLoading=true;
+    // The scheduled GITHUB_TOKEN commit does not trigger a branch-based Pages build.
+    // Read the committed edition directly, then fall back to the deployed snapshot.
+    void fetch('https://raw.githubusercontent.com/pengyulu07-stack/Kevin/main/news-feed.json?edition='+date,{cache:'no-store'})
+      .then(response=>{if(!response.ok)throw Error('feed unavailable');return response.json();})
+      .catch(()=>fetch('news-feed.json?edition='+date,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('feed unavailable');return response.json();}))
+      .then(value=>{
       if(value?.kind==='source_briefs'&&value?.categories)feed=value;
     }).catch(()=>{}).finally(()=>{feedLoading=false;if(activeHost?.isConnected)render(activeHost);});
   }
@@ -150,6 +155,12 @@
     if(!requireAccount())return;
     suggestDialog.querySelector('h2').textContent=word(['推荐一条新闻','Suggest a story']);
     suggestDialog.querySelector('p').textContent=word(['粘贴原始报道链接。核对后才会出现在新闻中。','Paste a source link. An editor checks it before anything appears in News.']);
+    const labels=suggestDialog.querySelectorAll('label');
+    labels[0].firstChild.textContent=word(['分类','Category']);
+    labels[1].firstChild.textContent=word(['报道链接','Source URL']);
+    labels[2].firstChild.textContent=word(['推荐理由 ','What caught your attention? ']);
+    labels[2].querySelector('span').textContent=word(['（选填）','(optional)']);
+    suggestDialog.querySelector('button[type="submit"]').textContent=word(['提交审核 ↗','Send for review ↗']);
     for(const option of suggestDialog.querySelector('select').options){const entry=categories.find(item=>item[0]===option.value);if(entry)option.textContent=zh()?entry[1]:entry[2];}
     suggestDialog.querySelector('.ailleurs-news-suggest-error').textContent='';
     suggestDialog.showModal();
