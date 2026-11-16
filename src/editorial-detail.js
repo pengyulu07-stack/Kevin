@@ -43,43 +43,32 @@
     { name: 'Hoe Cakes', id: 'Mv6kY_-zt-4' },
     { name: 'Rapp Snitch Knishes', id: 'dERcdvcXuE0' }
   ];
-  const doomTrackVideo = name => {
-    if (name === 'Beef Rap') return doomVideos[0];
-    if (name === 'Hoe Cakes') return doomVideos[1];
-    if (name.startsWith('Rapp Snitch Knishes (feat.')) return doomVideos[2];
-    return null;
+  const longRead = (root, title, description, url) => {
+    const item = external(title, url);
+    item.append(make('small', '', description));
+    root.append(item);
   };
 
   function sourceMenu(print, room) {
     const more = make('details', 'editorial-more-about');
     more.append(make('summary', '', t('更多资料', 'More about')));
     const panel = make('div', 'editorial-more-panel');
-    panel.append(make('strong', '', t('资料与原始页面', 'Sources and original pages')));
+    panel.append(make('strong', '', t('值得继续读', 'Further reading')));
     if (room === 'music') {
-      panel.append(external(t('专辑目录', 'Album catalog'), print.source));
       if (isDoom(print)) {
-        panel.append(external(t('DOOM 谈专辑概念', 'DOOM on the album'), 'https://exclaim.ca/music/article/mf_doom_2004_interview_madvillainy'));
-        panel.append(external(t('Jägel 谈封面创作', 'Jägel on the cover'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659'));
-        panel.append(external(t('Stones Throw 封面资料', 'Stones Throw artwork record'), 'https://www.stonesthrow.com/news/mf-doom-hoe-cakes-poster/'));
-        panel.append(external(t('Pitchfork 乐评', 'Pitchfork review'), 'https://pitchfork.com/reviews/albums/5255-mmfood/'));
-        panel.append(external(t('YouTube 观看这些视频', 'Watch on YouTube'), 'https://www.youtube.com/watch?v=XvKDFX00tsU'));
-        panel.append(external(t('2005 年演出照片：shrtstck｜CC BY 2.0', '2005 performance photo: shrtstck | CC BY 2.0'), 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg'));
-        panel.append(external(t('2011 年演出照片：possan｜CC BY 2.0', '2011 performance photo: possan | CC BY 2.0'), 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg'));
-      } else panel.append(external(t('查找准确视频版本', 'Find a specific video version'), 'https://www.youtube.com/results?search_query=' + encodeURIComponent(titleOnly(print) + ' ' + print.artist)));
+        longRead(panel, t('食物、文字游戏和唱片结构', 'Food, wordplay and album structure'), t('Nick Sylvester 的 2004 年乐评；尤其留意他对中段拼贴的保留。', 'Nick Sylvester’s 2004 review, including a dissent on the middle stretch.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/');
+        longRead(panel, t('Jason Jägel 如何画出封面', 'How Jason Jägel painted the sleeve'), t('画家回忆试听、草图与 DOOM 对成品的反应。', 'The artist recalls the demo, sketch and DOOM’s response.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659');
+        longRead(panel, t('Hoe Cakes 的单曲画作', 'The Hoe Cakes single artwork'), t('Stones Throw 展示唱片画面的延续。', 'Stones Throw documents the related single artwork.'), 'https://www.stonesthrow.com/news/mf-doom-hoe-cakes-poster/');
+      } else longRead(panel, t('查看这个版本的曲目与发行资料', 'Track list and release details'), t('目录资料；创作背景仍需单独核对。', 'Catalog information; creative history still needs checking.'), print.source);
     } else if (room === 'film') {
-      panel.append(external(t('海报或截图出处', 'Poster or frame source'), print.source));
       if (isCaligari(print)) {
-        panel.append(external(t('BFI 影片分析', 'BFI film essay'), 'https://www.bfi.org.uk/features/100-years-cabinet-dr-caligari/'));
-        panel.append(external(t('影片截图来源', 'Film still records'), 'https://commons.wikimedia.org/wiki/Category:Das_Cabinet_des_Dr._Caligari_(film_screenshots)'));
-      }
-      panel.append(external(t('查找更多电影资料', 'Find more film material'), sourceQuery(titleOnly(print) + ' production film stills')));
+        longRead(panel, t('表现主义如何进入银幕', 'How Expressionism reached the screen'), t('BFI 梳理战后背景、布景、演员动作与片尾的歧义。', 'BFI on postwar context, sets, performance and the ambiguous ending.'), 'https://www.bfi.org.uk/features/100-years-cabinet-dr-caligari/');
+      } else longRead(panel, t('海报与影片资料', 'Poster and film record'), t('查看原始资料页面。', 'Open the original record.'), print.source);
     } else if (room === 'art') {
-      panel.append(external(t('博物馆馆藏记录', 'Museum record'), print.source));
-      panel.append(external(t('查找艺术家的其他作品', 'More by the artist'), sourceQuery(print.artist + ' artworks', 'clevelandart.org')));
+      longRead(panel, t('博物馆的作品研究', 'Museum research on the work'), t('年代、材料、馆藏记录与可用说明。', 'Date, materials, accession and the museum’s interpretation.'), print.source);
     } else if (room === 'books') {
-      panel.append(external(t('书目与可借阅版本', 'Catalog and editions'), print.source));
-      if (titleOnly(print) === 'The Picture of Dorian Gray') panel.append(external(t('古腾堡计划全文', 'Full text at Project Gutenberg'), 'https://www.gutenberg.org/ebooks/174'));
-      panel.append(external(t('查找作者资料', 'About the author'), sourceQuery(print.artist + ' author books', 'openlibrary.org')));
+      if (titleOnly(print) === 'The Picture of Dorian Gray') longRead(panel, t('阅读《道林·格雷的画像》全文', 'Read The Picture of Dorian Gray'), t('古腾堡计划收录的公版全文。', 'The public-domain edition at Project Gutenberg.'), 'https://www.gutenberg.org/ebooks/174');
+      longRead(panel, t('书目与版本', 'Work and editions'), t('Open Library 的书目与可借阅版本。', 'Open Library’s catalog and editions.'), print.source);
     }
     more.append(panel);
     more.addEventListener('toggle', () => { if (more.open) dialog.querySelectorAll('.editorial-more-about').forEach(other => { if (other !== more) other.open = false; }); });
@@ -100,7 +89,7 @@
     dialog.append(veil);
     close.focus();
   }
-  function photo(root, src, caption, credit = '') {
+  function photo(root, src, caption, credit = '', creditUrl = '') {
     const figure = make('figure', 'editorial-photo');
     const button = make('button', 'editorial-photo-open');
     button.type = 'button';
@@ -109,7 +98,9 @@
     image.onerror = () => figure.remove();
     button.append(image, make('span', '', '⛶'));
     button.addEventListener('click', () => lightbox(src, caption));
-    figure.append(button, make('figcaption', '', caption + (credit ? ' · ' + credit : '')));
+    const figcaption = make('figcaption', '', caption);
+    if (credit) figcaption.append(document.createTextNode(' · '), creditUrl ? external(credit, creditUrl) : make('span', '', credit));
+    figure.append(button, figcaption);
     root.append(figure);
   }
   function startVideo(video, player, heading) {
@@ -138,9 +129,16 @@
     const gallery = section(body, t('画面', 'Images'), 'images');
     const albumId = print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1];
     if (isDoom(print)) {
-      paragraph(about, t('2004 年接受采访时，DOOM 说 MM..FOOD 把自己的名字重新排列成标题，用食物的名字谈生活中的事。食物不是一层装饰；双关、人物与日常场景都从这个想法生长出来。', 'In a 2004 interview, DOOM said he reversed the letters of his name for MM..FOOD and used food names as analogies for life. The food theme runs through the wordplay, characters and ordinary situations, rather than merely decorating the title.'));
-      paragraph(about, t('封面的绘画由 Jason Jägel 完成。Jägel 回忆，Jeff Jank 把唱片的试听 CD 交给他，他一边循环播放，一边先画一张铅笔草图，再完成画作；DOOM 和妻子 Jasmine 喜欢成品，随后请他继续画封底和《Hoe Cakes》的单曲封面。这是原版封面的创作经过；页面所列的 Deluxe Edition 是后来收录的版本。', 'Jason Jägel painted the original cover. He recalled listening repeatedly to a demo CD from Jeff Jank, making one pencil sketch, then completing the painting. After DOOM and Jasmine liked it, they asked him to make the back cover and the Hoe Cakes single art. This account concerns the original sleeve; the catalog shown here lists a later Deluxe Edition.'));
-      paragraph(about, t('这张画把戴面具的人物放进热闹而略显奇异的食物场景。它与歌曲里反复出现的食物、漫画和拼贴声音相呼应；这层联系是本站对画面与唱片的解读。', 'The painting places the masked figure in a busy, slightly strange food scene. Its relation to the record’s food imagery, comic-book references and sound collages is this site’s reading of the work.'));
+      paragraph(about, t('2004 年发行的《Mm..Food》把食物变成整张唱片的语言：歌名、双关和日常故事互相牵连。它的封面也不是随手配的插图；画家 Jason Jägel 听着唱片试播带完成了画作。', 'Released in 2004, Mm..Food builds an album-wide language from food: titles, double meanings and everyday stories connect. Its sleeve is equally deliberate: Jason Jägel made the painting while listening to a demo of the record.'));
+      const deep = make('details', 'editorial-deep-read');
+      deep.append(make('summary', '', t('展开：概念、制作、封面与评价', 'Read more: concept, production, sleeve and reception')));
+      const chapters = make('div', 'editorial-deep-chapters'); deep.append(chapters);
+      const chapter = (title, copy, url, source) => { const part = make('section'); part.append(make('h4', '', title)); paragraph(part, copy); part.append(external(source, url)); chapters.append(part); };
+      chapter(t('食物怎么成为概念', 'Food as a concept'), t('标题重新排列了 MF DOOM 的名字。食物词汇在歌里承担多重意思：它既可以是真实的吃食，也可以指向友情、同行、名声和自嘲。Pitchfork 的首发乐评指出，专辑并没有机械地把每一句歌词都写成食物谜题，主题更像是把普通生活收拢到同一种语言里。', 'The title rearranges MF DOOM’s name. Food language carries several meanings at once: literal meals, friendships, other rappers, fame and self-mockery. Pitchfork’s contemporary review observes that the record does not force every line into a food riddle; the theme draws everyday subjects into a shared vocabulary.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · 2004 ↗');
+      chapter(t('谁制作了这些声音', 'Who made the music'), t('DOOM 制作了唱片的大部分音乐，但并非全部。《Potholderz》由 Count Bass D 制作；《One Beer》来自 Madlib，原本与《Madvillainy》的创作有关；《Kon Queso》由 PNS 制作，早先以《Yee Haw》之名出现。中间几段连续的声音拼贴，也让这张唱片听起来像在切换广播频道。', 'DOOM produced most, but not all, of the record. Count Bass D made Potholderz; Madlib’s One Beer came from the Madvillainy period; PNS produced Kon Queso, previously heard as Yee Haw. A run of sound collages in the middle makes the sequence feel like changing radio stations.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · credits and review ↗');
+      chapter(t('封面的创作经过', 'How the sleeve was made'), t('美术指导 Jeff Jank 把试播 CD 交给 Jason Jägel。画家回忆自己反复听它，先画铅笔草图，再完成绘画。DOOM 与 Jasmine 喜欢结果，因此又请他继续做封底和《Hoe Cakes》的单曲画面。这里谈的是 2004 年原版封面；页面显示的 Deluxe Edition 是后来的发行版本。', 'Art director Jeff Jank gave Jason Jägel a demo CD. Jägel recalled playing it repeatedly, drawing a pencil sketch and then making the painting. DOOM and Jasmine liked the result and asked him to work on the back sleeve and Hoe Cakes single art. This account concerns the original 2004 sleeve; the Deluxe Edition shown here is a later release.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659', 'Artnet · interview with Jägel ↗');
+      chapter(t('为什么评价并不一致', 'Why listeners disagree'), t('这张唱片广受后来听众喜爱，但首发时并非所有评论都毫无保留。Nick Sylvester 在《Pitchfork》里称赞文字游戏、制作以及《Potholderz》的低音，却认为连续四段拼贴拖慢了中段。他的疑问是：一个极有能力的说唱者，是否把自己的目标设得太轻？这是一个具体的听法，而非对唱片的定论。', 'Later listeners have embraced the record, but its initial reception was not unreserved. In Pitchfork, Nick Sylvester praised the wordplay, production and bass on Potholderz, yet argued that four consecutive collages slow the middle. His question was whether a gifted rapper had set his ambitions too low. This is one argued reading, not a verdict.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · Nick Sylvester ↗');
+      about.append(deep);
       const chooser = make('div', 'editorial-video-choices');
       const playing = make('p', 'editorial-playing', t('选择一个版本，在页面内播放。', 'Choose a recording to play here.'));
       const player = make('div', 'editorial-video-player');
@@ -154,8 +152,8 @@
       }
       const images = make('div', 'editorial-photo-grid');
       photo(images, print.src, t('唱片封面', 'Album sleeve'), 'Jason Jägel / Jeff Jank');
-      photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | icnt.mx / CC BY 2.0');
-      photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan / CC BY 2.0');
+      photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg');
+      photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
       gallery.append(images);
     } else {
       paragraph(about, t('下方先列出这个版本的发行资料与曲目。封面创作、录音背景和评论仍需逐项核对，暂不把目录信息写成创作故事。', 'The catalog facts and tracks for this edition appear below. Its cover, recording history and criticism still need source-by-source research.'));
@@ -174,23 +172,37 @@
       const songs = (data.results || []).filter(item => item.wrapperType === 'track' && String(item.collectionId) === albumId).sort((a, b) => (a.discNumber || 0) - (b.discNumber || 0) || (a.trackNumber || 0) - (b.trackNumber || 0));
       if (!songs.length) { paragraph(tracks, t('目录暂未返回曲目。', 'The catalog has no track listing.')); return; }
       const list = make('ol', 'editorial-track-list');
-      const audio = make('audio', 'editorial-audio'); audio.controls = true; audio.hidden = true;
-      const playing = make('p', 'editorial-audio-title');
-      tracks.append(playing, audio, list);
+      const audio = make('audio', 'editorial-audio'); audio.preload = 'none';
+      const player = make('div', 'editorial-preview-player'); player.hidden = true;
+      const toggle = make('button', 'editorial-preview-toggle', '▶'); toggle.type = 'button'; toggle.setAttribute('aria-label', t('暂停或继续试听', 'Pause or resume preview'));
+      const playing = make('span', 'editorial-preview-title');
+      const progress = make('input', 'editorial-preview-progress'); progress.type = 'range'; progress.min = 0; progress.max = 100; progress.value = 0; progress.setAttribute('aria-label', t('试听进度', 'Preview progress'));
+      const time = make('span', 'editorial-preview-time', '0:00');
+      const audioCover = make('img', 'editorial-preview-cover'); audioCover.src = print.src; audioCover.alt = '';
+      player.append(audioCover, toggle, playing, progress, time);
+      tracks.append(list, player, audio);
+      const stamp = seconds => { const n = Math.floor(Number.isFinite(seconds) ? seconds : 0); return Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0'); };
+      toggle.addEventListener('click', () => audio.paused ? audio.play().catch(() => {}) : audio.pause());
+      audio.addEventListener('play', () => toggle.textContent = 'Ⅱ');
+      audio.addEventListener('pause', () => toggle.textContent = '▶');
+      audio.addEventListener('timeupdate', () => { progress.value = audio.duration ? String(audio.currentTime / audio.duration * 100) : '0'; time.textContent = stamp(audio.currentTime) + ' / ' + stamp(audio.duration); });
+      progress.addEventListener('input', () => { if (audio.duration) audio.currentTime = Number(progress.value) / 100 * audio.duration; });
       for (const song of songs) {
         const item = make('li');
+        if (song.previewUrl) {
+          const cover = make('button', 'editorial-track-cover'); cover.type = 'button'; cover.setAttribute('aria-label', t('试听', 'Preview') + ' ' + song.trackName);
+          const image = make('img'); image.src = song.artworkUrl100 || print.src; image.alt = '';
+          cover.append(image, make('span', '', '▶'));
+          cover.addEventListener('click', () => {
+            watch.querySelectorAll('iframe').forEach(frame => frame.remove());
+            if (audio.src !== song.previewUrl) { audio.src = song.previewUrl; audio.load(); }
+            player.hidden = false; playing.textContent = song.trackName + ' · ' + t('30 秒试听', '30-second preview');
+            audio.play().catch(() => {});
+          });
+          item.append(cover);
+        } else item.append(make('span', 'editorial-track-cover-placeholder', '♪'));
         const name = make('strong', '', song.trackName); item.append(name);
         const actions = make('span', 'editorial-track-actions');
-        const verified = isDoom(print) && doomTrackVideo(song.trackName);
-        if (verified) {
-          const play = make('button', 'editorial-track-play', t('▶ 播放', '▶ Play')); play.type = 'button';
-          play.addEventListener('click', () => { const player = watch.querySelector('.editorial-video-player'); const heading = watch.querySelector('.editorial-playing'); if (player && heading) startVideo(verified, player, heading); });
-          actions.append(play);
-        } else if (song.previewUrl) {
-          const play = make('button', 'editorial-track-play', t('▶ 试听', '▶ Preview')); play.type = 'button';
-          play.addEventListener('click', () => { watch.querySelectorAll('iframe').forEach(frame => frame.remove()); audio.src = song.previewUrl; audio.hidden = false; playing.textContent = song.trackName + ' · ' + t('试听片段', 'Preview clip'); audio.play().catch(() => {}); });
-          actions.append(play);
-        }
         const copy = make('button', 'editorial-copy-song', '⧉'); copy.type = 'button'; copy.title = t('复制歌名与歌手', 'Copy song and artist'); copy.setAttribute('aria-label', copy.title);
         copy.addEventListener('click', () => copySong(song.trackName + ' — ' + (song.artistName || print.artist), copy));
         actions.append(copy); item.append(actions); list.append(item);

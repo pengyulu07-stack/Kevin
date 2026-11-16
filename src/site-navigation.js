@@ -15,7 +15,7 @@
     {key:'art',screen:'art-all',number:'02',name:'Art',line:'Art shared today.'},
     {key:'books',screen:'books-all',number:'03',name:'Books',line:'Books shared today.'},
     {key:'daily',screen:'daily-all',number:'04',name:'Daily Life',line:'Notes from today.'},
-    {key:'forum',screen:'forum-all',number:'05',name:'Forum',line:'Questions and discussion.'}
+    {key:'news',screen:'welcome',number:'05',name:'News',line:'Recent stories and sources.'}
   ];
   // Curated source-linked discoveries are separate from members' daily shares.
   const filmPrints=[
@@ -314,7 +314,9 @@
     return shelf;
   }
   function previewFrame(day){
-    host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf(day));const head=node('div','day-preview-head');
+    host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf(day));
+    if(activeRoom==='news'){const roomContent=node('section','room-content');host.append(roomContent);return {roomContent};}
+    const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', activeRoom==='music'?'Music on this day':rooms.find(room=>room.key===activeRoom).name+' on this day'));
     head.append(node('div','room-poster-corners'));showCornerPrints(head,day);
@@ -363,7 +365,7 @@
   async function render(){
     const openArchiveDates=new Set([...host.querySelectorAll('.month-day[open] summary span')].map(item=>item.textContent));
     const current=++request,day=app.getDay(),{music,periodic,gallery,archive,roomContent}=previewFrame(day);
-    if(roomContent){if(client)void renderRoomContent(roomContent,day,activeRoom,current);else roomContent.append(node('p','day-preview-empty','The shared database is unavailable.'));return;}
+    if(roomContent){if(activeRoom==='news')window.AilleursNews?.render(roomContent);else if(client)void renderRoomContent(roomContent,day,activeRoom,current);else roomContent.append(node('p','day-preview-empty','The shared database is unavailable.'));return;}
     music.append(node('p','day-preview-loading','Loading today’s music…'));periodic.append(node('p','day-preview-loading','Loading the chart…'));archive.append(node('p','day-preview-loading','Opening the month…'));
     if(!client){music.append(node('p','','The shared database is unavailable.'));return;}
     try{
@@ -419,5 +421,6 @@
   gestureSurface.addEventListener('touchstart',event=>{const touch=event.touches[0];touchStart=touch&&event.target instanceof Element&&!event.target.closest(gestureExcluded)?{x:touch.clientX,y:touch.clientY}:null;},{passive:true});
   gestureSurface.addEventListener('touchend',event=>{if(!touchStart||app.getScreen()!=='welcome')return;const touch=event.changedTouches[0],dx=touch.clientX-touchStart.x,dy=touch.clientY-touchStart.y;touchStart=null;if(Math.abs(dx)>110&&Math.abs(dx)>Math.abs(dy)*1.6)stepRoom(dx>0?1:-1);},{passive:true});
   document.body.dataset.activeRoom=activeRoom;
+  window.AilleursRooms={select:selectRoom};
   navState(app.getScreen());if(app.getScreen()==='welcome')void render();else if(['following','explore'].includes(app.getScreen()))void renderCollection(app.getScreen());
 })();

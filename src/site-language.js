@@ -1,7 +1,7 @@
 /* Small, human-written Chinese interface for the English-first site. */
 (() => {
   const zh = {
-    'AILLEURS / ROOMS':'AILLEURS / 空间','Move through the rooms':'滑动切换空间','Previous room':'上一个空间','Next room':'下一个空间','Choose a room':'选择空间','In this room':'当前空间','Show this room ↗':'切换到这里 ↗',
+    'AILLEURS / ROOMS':'AILLEURS / 空间','Move through the rooms':'滑动切换空间','Previous room':'上一个空间','Next room':'下一个空间','Choose a room':'选择空间','In this room':'当前空间','Show this room ↗':'切换到这里 ↗','News':'新闻','Recent stories ↗':'查看新近报道 ↗','Recent stories and sources.':'新近报道与原始资料。',
     'Scenes that stayed with us.':'留在心里的电影画面。','A closer look at what we see.':'再仔细看一眼。','Pages worth returning to.':'值得重读的书页。','Questions and the replies they bring.':'问题，以及随之而来的回答。',
     'Pick a date and move between rooms. Each room has its own page for the day.':'选好日期，左右滑动切换空间；这一天的内容会随之改变。',
     'Film on this day':'这一天的电影','Art on this day':'这一天的艺术','Books on this day':'这一天的书籍','Daily Life on this day':'这一天的日常','Forum on this day':'这一天的论坛',

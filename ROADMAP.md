@@ -100,6 +100,17 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [x] Verify public GitHub Pages deployment and a fresh browser load for this pass.
 - [x] Make Library covers open listening and titles open the discussion, with visible action labels.
 
+### November 16 pass (publication and browser verification pending)
+
+- [x] Split *Mm..Food* into a short introduction and expandable, source-linked chapters on the album concept, production, sleeve and disputed reception. These are original summaries of checked sources, not copied encyclopedia text.
+- [x] Replace the work page's mixed source menu with titled further reads; keep image licenses with the image captions. Remove the misleading DOOM interview link that was actually about *Madvillainy*.
+- [x] Move track preview to a cover hover/focus/touch play control and a compact player below the list. Remove the duplicate per-track Play buttons; retain three embedded YouTube choices in Listen here.
+- [x] Replace the visible Forum room in the calendar and cinematic entrance with News. Keep historic forum posts and their routes in Library/notifications instead of deleting member data.
+- [x] Add six News categories (Music, Film, Art, Books, Earth, Space), six source-checked on-site stories, large article images, progressive vertical browsing, original-source links and a separate Google search option. The date shown is the article or feature date, not an automatically generated site edition.
+- [ ] Establish a reliable daily collection, verification and editorial publishing workflow. Static six-story seed does not fulfill the daily-update requirement; it must not be presented as automatic news.
+- [ ] Expand researched work histories, reviews, and useful further reads beyond *Mm..Food* to other albums, films, art, books and member shares. Six curated examples per room are only the cover selection, not six fully researched work pages.
+- [ ] Verify the refreshed site in an actual desktop and mobile browser, including media loading, category controls, modal keyboard navigation and a signed-in photo comment.
+
 1. **Playback and posting:** Make the cover's first click start available audio or a confirmed embedded video with a stable small player. At posting, present several YouTube/Bilibili candidate videos so the contributor can choose the correct version. Show exactly what is playable on DAYTONE and where a platform opens in a new tab. Auto-match artist and album artwork from reliable metadata, with contributor review and override. Apply the same flow to older songs and playlists.
 2. **Navigation and interaction:** Test a Mac two-finger swipe on a physical trackpad. Tune gesture thresholds, animation, loading state, and focus behavior against vertical reading and horizontal selector scrolling. Keep shortcuts visible without repeating the same list in several places. Make notification items open their exact post or reply.
 3. **Visual design:** Research and document specific album, cinema, print, and editorial references. Build ten genuinely distinct designs for each music category, including chart, calendar, gallery, type, and accent choices; the present ten designs are shared base templates, not this finished library. Let visitors choose a default design and room display mode, with an accessible high-contrast option.

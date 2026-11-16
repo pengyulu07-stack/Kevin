@@ -323,7 +323,7 @@
   $v('start-day').addEventListener('click', () => show('lobby'));
   $v('lobby-back').addEventListener('click', () => show('welcome'));
   $v('space-select').addEventListener('click', () => show('welcome'));
-  document.querySelectorAll('.taxi-mirror button[data-space]').forEach(button => button.addEventListener('click', () => show(button.dataset.space === 'music' ? 'music-hub' : button.dataset.space === 'forum' ? 'forum' : button.dataset.space+'-all')));
+  document.querySelectorAll('.taxi-mirror button[data-space]').forEach(button => button.addEventListener('click', () => {if(button.dataset.space==='news'){show('welcome');window.AilleursRooms?.select('news');}else show(button.dataset.space === 'music' ? 'music-hub' : button.dataset.space === 'forum' ? 'forum' : button.dataset.space+'-all');}));
   $v('music-back-lobby').addEventListener('click', () => show('music-hub'));
   $v('forum-back-lobby').addEventListener('click', () => show('lobby'));
   $v('music-gallery-all').addEventListener('click', () => show('music-all'));
