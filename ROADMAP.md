@@ -100,7 +100,7 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [x] Verify public GitHub Pages deployment and a fresh browser load for this pass.
 - [x] Make Library covers open listening and titles open the discussion, with visible action labels.
 
-### November 16 pass (publication and browser verification pending)
+### November 16 pass (published and checked in the public browser)
 
 - [x] Split *Mm..Food* into a short introduction and expandable, source-linked chapters on the album concept, production, sleeve and later editions. These are original summaries of checked sources, not copied encyclopedia text.
 - [x] Replace the repeated single critic note with a sourced AllMusic/Pitchfork contrast about the disputed middle section; cover edition history in the expandable chapter instead.
@@ -108,6 +108,7 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [x] Move track preview to a cover hover/focus/touch play control and a compact player below the list. Remove the duplicate per-track Play buttons; retain three embedded YouTube choices in Listen here.
 - [x] Replace the visible Forum room in the calendar and cinematic entrance with News. Keep historic forum posts and their routes in Library/notifications instead of deleting member data.
 - [x] Add six News categories (Music, Film, Art, Books, Earth, Space), six source-checked on-site stories, large article images, progressive vertical browsing, original-source links and a separate Google search option. The date shown is the article or feature date, not an automatically generated site edition.
+- [x] Check the public GitHub Pages page after publication: the News room and article dialog open, all six article bodies contain 301–321 English words, the selected room stays visible in the horizontal selector, and an *Mm..Food* track preview plays on the page through the compact player.
 - [ ] Establish a reliable daily collection, verification and editorial publishing workflow. Static six-story seed does not fulfill the daily-update requirement; it must not be presented as automatic news.
 - [ ] Expand researched work histories, reviews, and useful further reads beyond *Mm..Food* to other albums, films, art, books and member shares. Six curated examples per room are only the cover selection, not six fully researched work pages.
 - [ ] Verify the refreshed site in an actual desktop and mobile browser, including media loading, category controls, modal keyboard navigation and a signed-in photo comment.
