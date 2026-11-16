@@ -57,6 +57,7 @@
     if (room === 'music') {
       if (isDoom(print)) {
         longRead(panel, t('食物、文字游戏和唱片结构', 'Food, wordplay and album structure'), t('Nick Sylvester 的 2004 年乐评；尤其留意他对中段拼贴的保留。', 'Nick Sylvester’s 2004 review, including a dissent on the middle stretch.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/');
+        longRead(panel, t('另一种听法：轻快的声音拼贴', 'A different hearing of the collages'), t('AllMusic 的 David Jeffries 对中段有相反评价。', 'David Jeffries at AllMusic hears the middle stretch differently.'), 'https://www.allmusic.com/album/mmfood-mw0000674548');
         longRead(panel, t('Jason Jägel 如何画出封面', 'How Jason Jägel painted the sleeve'), t('画家回忆试听、草图与 DOOM 对成品的反应。', 'The artist recalls the demo, sketch and DOOM’s response.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659');
         longRead(panel, t('Hoe Cakes 的单曲画作', 'The Hoe Cakes single artwork'), t('Stones Throw 展示唱片画面的延续。', 'Stones Throw documents the related single artwork.'), 'https://www.stonesthrow.com/news/mf-doom-hoe-cakes-poster/');
       } else longRead(panel, t('查看这个版本的曲目与发行资料', 'Track list and release details'), t('目录资料；创作背景仍需单独核对。', 'Catalog information; creative history still needs checking.'), print.source);
@@ -131,13 +132,13 @@
     if (isDoom(print)) {
       paragraph(about, t('2004 年发行的《Mm..Food》把食物变成整张唱片的语言：歌名、双关和日常故事互相牵连。它的封面也不是随手配的插图；画家 Jason Jägel 听着唱片试播带完成了画作。', 'Released in 2004, Mm..Food builds an album-wide language from food: titles, double meanings and everyday stories connect. Its sleeve is equally deliberate: Jason Jägel made the painting while listening to a demo of the record.'));
       const deep = make('details', 'editorial-deep-read');
-      deep.append(make('summary', '', t('展开：概念、制作、封面与评价', 'Read more: concept, production, sleeve and reception')));
+      deep.append(make('summary', '', t('展开：概念、制作、封面与版本', 'Read more: concept, production, sleeve and editions')));
       const chapters = make('div', 'editorial-deep-chapters'); deep.append(chapters);
       const chapter = (title, copy, url, source) => { const part = make('section'); part.append(make('h4', '', title)); paragraph(part, copy); part.append(external(source, url)); chapters.append(part); };
       chapter(t('食物怎么成为概念', 'Food as a concept'), t('标题重新排列了 MF DOOM 的名字。食物词汇在歌里承担多重意思：它既可以是真实的吃食，也可以指向友情、同行、名声和自嘲。Pitchfork 的首发乐评指出，专辑并没有机械地把每一句歌词都写成食物谜题，主题更像是把普通生活收拢到同一种语言里。', 'The title rearranges MF DOOM’s name. Food language carries several meanings at once: literal meals, friendships, other rappers, fame and self-mockery. Pitchfork’s contemporary review observes that the record does not force every line into a food riddle; the theme draws everyday subjects into a shared vocabulary.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · 2004 ↗');
       chapter(t('谁制作了这些声音', 'Who made the music'), t('DOOM 制作了唱片的大部分音乐，但并非全部。《Potholderz》由 Count Bass D 制作；《One Beer》来自 Madlib，原本与《Madvillainy》的创作有关；《Kon Queso》由 PNS 制作，早先以《Yee Haw》之名出现。中间几段连续的声音拼贴，也让这张唱片听起来像在切换广播频道。', 'DOOM produced most, but not all, of the record. Count Bass D made Potholderz; Madlib’s One Beer came from the Madvillainy period; PNS produced Kon Queso, previously heard as Yee Haw. A run of sound collages in the middle makes the sequence feel like changing radio stations.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · credits and review ↗');
       chapter(t('封面的创作经过', 'How the sleeve was made'), t('美术指导 Jeff Jank 把试播 CD 交给 Jason Jägel。画家回忆自己反复听它，先画铅笔草图，再完成绘画。DOOM 与 Jasmine 喜欢结果，因此又请他继续做封底和《Hoe Cakes》的单曲画面。这里谈的是 2004 年原版封面；页面显示的 Deluxe Edition 是后来的发行版本。', 'Art director Jeff Jank gave Jason Jägel a demo CD. Jägel recalled playing it repeatedly, drawing a pencil sketch and then making the painting. DOOM and Jasmine liked the result and asked him to work on the back sleeve and Hoe Cakes single art. This account concerns the original 2004 sleeve; the Deluxe Edition shown here is a later release.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659', 'Artnet · interview with Jägel ↗');
-      chapter(t('为什么评价并不一致', 'Why listeners disagree'), t('这张唱片广受后来听众喜爱，但首发时并非所有评论都毫无保留。Nick Sylvester 在《Pitchfork》里称赞文字游戏、制作以及《Potholderz》的低音，却认为连续四段拼贴拖慢了中段。他的疑问是：一个极有能力的说唱者，是否把自己的目标设得太轻？这是一个具体的听法，而非对唱片的定论。', 'Later listeners have embraced the record, but its initial reception was not unreserved. In Pitchfork, Nick Sylvester praised the wordplay, production and bass on Potholderz, yet argued that four consecutive collages slow the middle. His question was whether a gifted rapper had set his ambitions too low. This is one argued reading, not a verdict.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · Nick Sylvester ↗');
+      chapter(t('后来出现了哪些版本', 'How later editions changed the record'), t('Rhymesayers 在二十周年再版中收录了《Kookies》的原始版本，并为数字版加进混音、替代编辑以及 Kevin Beacham 在 2004 年录下的 DOOM 访谈片段。不同发行版本的曲目数因此不一定相同；下方的曲目表只对应此处显示的 Deluxe Edition。', 'Rhymesayers’ twentieth-anniversary reissue brought back the original Kookies version. Its digital edition also added remixes, an alternate edit and excerpts from Kevin Beacham’s 2004 interviews with DOOM. Track counts therefore differ between releases; the list below belongs specifically to the Deluxe Edition displayed here.'), 'https://rhymesayers.com/blogs/news/celebrating-20-years-of-mf-dooms-mm-food', 'Rhymesayers · anniversary edition ↗');
       about.append(deep);
       const chooser = make('div', 'editorial-video-choices');
       const playing = make('p', 'editorial-playing', t('选择一个版本，在页面内播放。', 'Choose a recording to play here.'));
@@ -296,8 +297,10 @@
     });
     reading.append(make('h4', '', t('别人的看法', 'Other readings')));
     if (room === 'music' && isDoom(print)) {
-      paragraph(reading, t('Nick Sylvester 欣赏 DOOM 的双关和制作，却认为中段连续的声音拼贴打断了整张唱片的节奏。', 'Nick Sylvester admires DOOM’s wordplay and production, but hears the run of sound collages as a break in the album’s flow.'));
-      paragraph(reading, 'Nick Sylvester · Pitchfork, 2004', 'editorial-attribution');
+      paragraph(reading, t('同一段拼贴，听出了相反的结果。David Jeffries 认为那段近乎纯器乐的中段很有玩心，证明 DOOM 不被潮流牵着走；Nick Sylvester 则觉得四段连放打断了整张唱片的节奏。两人都重视 DOOM 的制作能力，分歧在于这些短片段是否值得占据唱片中心。', 'The same middle stretch produced opposite responses. David Jeffries hears a playful, mostly instrumental passage that shows DOOM resisting fashion. Nick Sylvester hears four collages in a row interrupting the album’s flow. Both take DOOM’s production seriously; they disagree on whether those short pieces earn their central place.'));
+      const views = make('div', 'editorial-review-links');
+      views.append(external('David Jeffries · AllMusic ↗', 'https://www.allmusic.com/album/mmfood-mw0000674548'), external('Nick Sylvester · Pitchfork ↗', 'https://pitchfork.com/reviews/albums/5255-mmfood/'));
+      reading.append(views);
     } else if (room === 'film' && isCaligari(print)) {
       paragraph(reading, t('Alex Barrett 注意到扭曲的布景如何与演员身体结合，而结尾保留的疑问让它远不止是一场视觉实验。', 'Alex Barrett connects the distorted sets with the performers’ bodies and reads the unsettled ending as more than a visual trick.'));
       paragraph(reading, 'Alex Barrett · BFI, 2020', 'editorial-attribution');

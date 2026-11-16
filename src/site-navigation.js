@@ -315,6 +315,7 @@
   }
   function previewFrame(day){
     host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf(day));
+    requestAnimationFrame(()=>{const strip=host.querySelector('.room-shelf-track'),selected=strip?.querySelector('.selected');if(strip&&selected)strip.scrollLeft=selected.offsetLeft-strip.offsetLeft-(strip.clientWidth-selected.clientWidth)/2;});
     if(activeRoom==='news'){const roomContent=node('section','room-content');host.append(roomContent);return {roomContent};}
     const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));

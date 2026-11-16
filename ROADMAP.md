@@ -102,7 +102,8 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 
 ### November 16 pass (publication and browser verification pending)
 
-- [x] Split *Mm..Food* into a short introduction and expandable, source-linked chapters on the album concept, production, sleeve and disputed reception. These are original summaries of checked sources, not copied encyclopedia text.
+- [x] Split *Mm..Food* into a short introduction and expandable, source-linked chapters on the album concept, production, sleeve and later editions. These are original summaries of checked sources, not copied encyclopedia text.
+- [x] Replace the repeated single critic note with a sourced AllMusic/Pitchfork contrast about the disputed middle section; cover edition history in the expandable chapter instead.
 - [x] Replace the work page's mixed source menu with titled further reads; keep image licenses with the image captions. Remove the misleading DOOM interview link that was actually about *Madvillainy*.
 - [x] Move track preview to a cover hover/focus/touch play control and a compact player below the list. Remove the duplicate per-track Play buttons; retain three embedded YouTube choices in Listen here.
 - [x] Replace the visible Forum room in the calendar and cinematic entrance with News. Keep historic forum posts and their routes in Library/notifications instead of deleting member data.
