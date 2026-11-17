@@ -51,7 +51,7 @@ const isLanguageChart = (key) => musicLanguages.some(([id]) => id === key);
 const songInChart = (song, key) => key === "all" || (isLanguageChart(key) ? song.language === key : (song.genres || [song.genre]).includes(key));
 const musicGenreName = (key) => musicCharts.find(([id]) => id === key)?.[1] || "All Music";
 const today = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
-const PUBLIC_LAUNCH_DAY = "2026-11-18";
+const PUBLIC_LAUNCH_DAY = "2026-11-17";
 window.AilleursLaunchDay = PUBLIC_LAUNCH_DAY;
 const validDay = (value) => {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -299,7 +299,7 @@ async function loadSongs() {
     comments = nextComments;
     commentLikes = nextCommentLikes;
     renderSongs();
-    status(songs.length ? "Loaded " + day + " songs." : day < PUBLIC_LAUNCH_DAY ? "Public music sharing begins November 18." : "No songs have been shared this day.");
+    status(songs.length ? "Loaded " + day + " songs." : day < PUBLIC_LAUNCH_DAY ? "No public songs for this day." : "No songs have been shared this day.");
     window.dispatchEvent(new Event("daytone:songs-loaded"));
   } catch (error) {
     if (request !== loadRequest) return;
@@ -591,7 +591,6 @@ async function copyLink(path) {
   catch { toast("Could not copy. Please copy the URL from your browser."); }
 }
 async function openUpload() {
-  if (today() < PUBLIC_LAUNCH_DAY) { toast("音乐分享将于 11 月 18 日开放。"); return; }
   if (user && !profile) await hydrateProfile();
   if (!requireAccount()) return;
   $("form-error").textContent = "";
@@ -684,7 +683,6 @@ async function publish(event) {
   const uploaded = [];
   try {
     const day = today();
-    if (day < PUBLIC_LAUNCH_DAY) throw new Error("Music sharing opens on November 18.");
     const usedResult = await client.from("songs").select("daily_slot,genres,language").eq("owner_id", user.id).eq("day", day);
     if (usedResult.error) throw usedResult.error;
     const used = new Set((usedResult.data || []).map((item) => item.daily_slot));
