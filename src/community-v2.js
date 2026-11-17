@@ -281,6 +281,10 @@
     const heading = make('h2', '', post.title); heading.id = 'discussion-title'; host.append(heading);
     const byline=make('p','byline'),member=make('button','member-link','@'+post.nickname);member.type='button';member.addEventListener('click',()=>window.DaytoneSocial?.openProfile(post.owner_id,post.nickname));byline.append(member);host.append(byline);
     if (post.body) host.append(make('p', '', post.body));
+    if(['film','art','books'].includes(post.category)){
+      const context=make('section','work-research');context.hidden=true;host.append(context);
+      void window.AilleursWorkResearch?.mount(context,post.title,post.creator,post.category);
+    }
     if (post.source_url) { const link = make('a', 'open-link', 'Open related link ↗'); link.href = post.source_url; link.target = '_blank'; link.rel = 'noopener noreferrer'; host.append(link); }
     host.append(copyButton(post.title, 'Copy forum title'));
     if(post.owner_id===user?.id){const edit=make('button','author-edit-link','Edit forum');edit.type='button';edit.addEventListener('click',()=>window.DaytoneAuthorTools?.openPost(post));host.append(edit);}

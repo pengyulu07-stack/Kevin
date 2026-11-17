@@ -1,0 +1,10 @@
+.work-research{margin:16px 0;padding:15px 18px;border:1px solid #74655c;border-radius:7px;background:#2a2727;color:#e9e2dc;font:14px/1.65 system-ui,sans-serif}
+.work-research[hidden]{display:none}
+.work-research h3{margin:0 0 8px;color:#f3e9e2;font:20px/1.25 Georgia,serif}
+.work-research p{margin:0 0 10px;color:#e1d8d0}
+.work-research details{border-top:1px solid #665952;padding-top:8px}
+.work-research summary{width:fit-content;color:#edc3ac;cursor:pointer;font-weight:600}
+.work-research summary:hover,.work-research summary:focus-visible{color:#fff;text-decoration:underline}
+.work-research small{display:block;margin-top:11px;color:#bfb0a4}
+.work-research a{color:#ecc0a8;text-decoration:underline;text-underline-offset:3px}
+.work-research a:hover,.work-research a:focus-visible{color:#fff}

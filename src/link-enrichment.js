@@ -76,7 +76,18 @@
       form.querySelector('.upload-genres')?.setAttribute('open','');
     };
     const stopSample=()=>{sample.pause();sample.removeAttribute('src');sample.load();sample.hidden=true;};
-    const clearCatalog=()=>{delete form.dataset.catalogArtUrl;delete form.dataset.catalogUrl;preview.replaceChildren();preview.hidden=true;};
+    const clearCatalog=()=>{
+      const autoUrl=form.dataset.catalogAutoSourceUrl;
+      if(autoUrl&&form.elements.url?.value.trim()===autoUrl){
+        form.elements.url.value='';
+        const titleOnly=form.querySelector('input[name="source"][value="none"]');
+        if(titleOnly){titleOnly.checked=true;titleOnly.dispatchEvent(new Event('change',{bubbles:true}));}
+      }
+      delete form.dataset.catalogAutoSourceUrl;
+      delete form.dataset.catalogArtUrl;
+      delete form.dataset.catalogUrl;
+      preview.replaceChildren();preview.hidden=true;
+    };
     const showCatalog=row=>{
       clearCatalog();const art=artwork(String(row.artworkUrl100||row.art||'').replace(/100x100(?:bb|-75)?/,'300x300bb'));
       if(!art)return;
@@ -93,6 +104,12 @@
       suggestGenre(row);
       updateSources();
       showCatalog(row);
+      if(row.catalogName==='Apple Music'&&/^https:\/\//i.test(row.trackViewUrl||'')&&!form.elements.url.value.trim()){
+        form.elements.url.value=row.trackViewUrl;
+        form.dataset.catalogAutoSourceUrl=row.trackViewUrl;
+        const linked=form.querySelector('input[name="source"][value="link"]');
+        if(linked){linked.checked=true;linked.dispatchEvent(new Event('change',{bubbles:true}));}
+      }
       status.replaceChildren(document.createTextNode((automatic?'Matched: ':'Selected: ')+row.trackName+' · '+row.artistName+'. Check the details. '));
       if(row.trackViewUrl){const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='View on '+(row.catalogName||'Apple Music')+' ↗';status.append(source);}
       form.dispatchEvent(new CustomEvent('daytone:recording-selected',{detail:{title:title.value,artist:artist.value}}));
@@ -105,6 +122,7 @@
       const value=title.value.trim();if(value.length<3||/^https:\/\//i.test(value))return;
       timer=setTimeout(()=>void search(),950);
     });
+    artist.addEventListener('input',()=>{clearCatalog();stopSample();results.replaceChildren();status.textContent='';});
     artist.addEventListener('change',()=>{if(title.value.trim().length>=3)void search();});
     form.addEventListener('reset',()=>{clearCatalog();stopSample();results.replaceChildren();status.textContent='';});
     title.addEventListener('paste',()=>setTimeout(()=>{

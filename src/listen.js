@@ -28,9 +28,23 @@
   async function previewCandidates(song){
     const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();
     if(!title)return [];
-    const key=normalize(title)+'|'+normalize(artist);
+    const key=normalize(title)+'|'+normalize(artist)+'|'+String(song?.source_url||'');
     if(previewCache.has(key))return previewCache.get(key);
     try{
+      try{
+        const direct=new URL(song?.source_url||'');
+        if(direct.hostname==='music.apple.com'){
+          const trackId=direct.searchParams.get('i')||(direct.pathname.includes('/song/')?direct.pathname.match(/\/(\d+)\/?$/)?.[1]:null);
+          if(trackId&&/^\d+$/.test(trackId)){
+            const lookup=await fetch('https://itunes.apple.com/lookup?id='+trackId+'&entity=song&country=US');
+            if(lookup.ok){
+              const data=await lookup.json();
+              const exact=(data.results||[]).find(item=>String(item.trackId)===trackId&&item.previewUrl&&normalize(item.trackName)===normalize(title)&&(!artist||normalize(item.artistName)===normalize(artist)));
+              if(exact){previewCache.set(key,[exact]);return [exact];}
+            }
+          }
+        }
+      }catch{ /* A catalog lookup failure still allows title and artist search. */ }
       const results=[];
       for(const country of ['CN','US']){
         const query=new URL('https://itunes.apple.com/search');
@@ -53,7 +67,7 @@
     const status=node('p','listen-note',tr('正在寻找相符版本…','Checking for a matching recording…'));area.append(status);body.append(area);
     void previewCandidates(song).then(items=>{
       if(!area.isConnected)return;
-      status.textContent=items.length?tr('请核对歌手和版本。这是目录试听，不是整首歌。','Check the artist and version before playing. These are catalog previews, not the full song.'):tr('暂时没有找到标题相符的试听。','No matching preview was found for this title and artist.');
+      status.textContent=items.length?tr('请核对歌手和版本。30 秒试听由 iTunes 提供，可在原平台打开完整歌曲。','Check the artist and version. The 30-second preview is provided courtesy of iTunes; open the original service for the full song.'):tr('暂时没有找到标题相符的试听。','No matching preview was found for this title and artist.');
       for(const item of items){
         const button=node('button','listen-preview-choice');button.type='button';
         const image=node('img','');image.src=item.artworkUrl100||'';image.alt='';

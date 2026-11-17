@@ -180,7 +180,11 @@
     } else {
       const story = storyFor(print, 'music');
       if (story) addStory(about, story);
-      else paragraph(about, t('下方先列出这个版本的发行资料与曲目。封面创作、录音背景和评论仍需逐项核对，暂不把目录信息写成创作故事。', 'The catalog facts and tracks for this edition appear below. Its cover, recording history and criticism still need source-by-source research.'));
+      else {
+        paragraph(about, t('下方列出这个版本的发行资料与曲目。', 'The release details and tracks for this edition appear below.'));
+        const context=make('div','work-research');context.hidden=true;about.append(context);
+        void window.AilleursWorkResearch?.mount(context,titleOnly(print),print.artist,'music');
+      }
       paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
       const images = make('div', 'editorial-photo-grid'); photo(images, print.src, t('唱片封面', 'Album cover')); gallery.append(images);
     }
@@ -295,7 +299,11 @@
     else if (isCaligari(print)) {
       paragraph(context, t('罗伯特·维内执导的《卡里加里博士的小屋》于 1920 年问世。它把德国表现主义的倾斜街道、锯齿般的室内空间与演员动作连在一起，让不安直接成为可见的布景。', 'Robert Wiene’s 1920 film makes unease visible. Slanted streets, jagged interiors and the performers’ movements are joined into an expressionist world.'));
       paragraph(context, t('BFI 的 Alex Barrett 把这种风格放回战后德国的情绪、制作条件与电影发行的背景中，也指出结尾的框架故事没有把真实与幻觉彻底分开。下面的画面是影片截图，不是拍摄现场照片。', 'BFI writer Alex Barrett connects this style to postwar Germany, the film’s production and its release. He also notes that the framing story leaves reality and delusion unresolved. The images below are frames from the film, not behind-the-scenes photographs.'));
-    } else paragraph(context, t('这张原海报或截图已核对出处。主创与拍摄资料仍需逐片补写。', 'The poster or frame has a checked source. Credits and production history still need film-by-film research.'));
+    } else {
+      paragraph(context, t('这张海报或截图已核对出处。', 'The poster or frame has a checked source.'));
+      const source=make('div','work-research');source.hidden=true;context.append(source);
+      void window.AilleursWorkResearch?.mount(source,titleOnly(print),'','film');
+    }
     const gallery = make('div', 'editorial-photo-grid'); photo(gallery, print.src, titleOnly(print) + ' · ' + t('海报／截图', 'Poster or frame')); images.append(gallery);
     if (isCaligari(print)) {
       for (const n of ['02', '03']) photo(gallery, 'https://commons.wikimedia.org/wiki/Special:FilePath/CABINETOFDRCALIGARI-' + n + '.jpg?width=800', t('影片截图', 'Film frame') + ' ' + n, 'Wikimedia Commons');
