@@ -4,7 +4,7 @@
 
 - Eight topics: music, film, art, books, politics, technology, earth, and space.
 - The list shows two to four recent **source briefs** per topic when the feeds provide them. Each card keeps the publisher, actual publication date, image when supplied, excerpt when usable, and original URL. A source brief is not an AILLEURS-reported article.
-- A three-story shelf appears above the list. In each topic it ranks reader likes twice plus comments, breaking ties by publication time. Until anyone interacts, it explicitly says that it is ordered by date. Briefs and edited articles have on-page likes and comments using the existing editorial discussion tables.
+- A three-story shelf appears above the list. In each topic it ranks reader likes twice plus comments. Politics gives a China report the first unengaged/tied slot, then uses publication time; other topics use publication time on ties. The shelf names its fallback instead of claiming that zero-vote stories are popular. Briefs and edited articles have on-page likes and comments using the existing editorial discussion tables. Dates on cards and dialogs use Shanghai time.
 - Longer articles live in **Editorial reading**. They are written and checked individually, with the original page and any extended source named. A contributor's suggested URL goes to the owner's feedback inbox for review; it is not published immediately.
 - The edition date is computed in Asia/Shanghai. If the scheduled collection fails, the page names the last successful edition instead of labelling old items as today's news.
 

@@ -95,6 +95,7 @@
   let category = 'all', visible = 4, feed = null, feedCheckDay = '', feedLastCheck = 0, feedLoading = false, activeHost = null;
   let engagement = new Map(), engagementSignature = '', engagementLoading = false;
   const newsKey = item => 'news:' + item.url;
+  const localDate = value => new Intl.DateTimeFormat(zh()?'zh-CN':'en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));
   const allRows = () => feed?.categories ? Object.entries(feed.categories).flatMap(([key,items]) => (items||[]).map(item => ({...item,category:key}))) : [];
   async function loadEngagement(force=false){
     if(!client || !feed || engagementLoading)return;
@@ -263,16 +264,16 @@
     else status.textContent=feedLoading?word(['正在读取新闻来源…','Loading sources…']):word(['暂时无法读取每日新闻。','Daily news is temporarily unavailable.']);
     host.append(status);
     const sourceRows=allRows();
-    const visibleRows=sourceRows.filter(item=>category==='all'||item.category===category).sort((a,b)=>b.published_at.localeCompare(a.published_at));
+    const visibleRows=sourceRows.filter(item=>category==='all'||item.category===category).sort((a,b)=>category==='politics' ? Number(b.region==='china')-Number(a.region==='china')||b.published_at.localeCompare(a.published_at) : b.published_at.localeCompare(a.published_at));
     if(visibleRows.length){
       const ranked=[...visibleRows].sort((a,b)=>{
         const left=counts(a),right=counts(b),score=x=>x.likes*2+x.comments;
-        return score(right)-score(left)||b.published_at.localeCompare(a.published_at);
+        return score(right)-score(left)||(category==='politics'?Number(b.region==='china')-Number(a.region==='china'):0)||b.published_at.localeCompare(a.published_at);
       }).slice(0,3);
       const popular=el('section','ailleurs-news-top');
       popular.append(el('h4','',word([category==='all'?'先看这三条':'本类最受关注的三条',category==='all'?'Three to start with':'Top three in this topic'])));
       const hasVotes=ranked.some(item=>counts(item).likes+counts(item).comments>0);
-      popular.append(el('p','',hasVotes?word(['按本站喜欢和评论排序；同分时看发布时间。','Ranked by reader likes and comments, then publication time.']):word(['还没有读者互动，暂按发布时间排列。','No reader activity yet; ordered by publication time.'])));
+      popular.append(el('p','',hasVotes?word(['按本站喜欢和评论排序；同分时优先显示中国报道，再看发布时间。','Ranked by reader likes and comments; China coverage breaks ties in Politics.']):category==='politics'?word(['还没有读者互动，先显示中国报道，再按发布时间排列。','No reader activity yet; China coverage comes first, then publication time.']):word(['还没有读者互动，暂按发布时间排列。','No reader activity yet; ordered by publication time.'])));
       const topList=el('div','ailleurs-news-top-list');
       for(const [index,item] of ranked.entries()){
         const button=el('button');button.type='button';
@@ -287,7 +288,7 @@
       const card=el('button','ailleurs-news-card');card.type='button';
       if(item.image){const image=el('img');image.src=item.image;image.alt='';image.loading='lazy';card.append(image);}
       else card.append(el('div','ailleurs-news-no-image',item.source));
-      const copy=el('span');copy.append(el('small','',item.source+' · '+item.published_at.slice(0,10)+(item.region==='china'?' · '+word(['中国','China']):'')),el('strong','',item.title));
+      const copy=el('span');copy.append(el('small','',item.source+' · '+localDate(item.published_at)+(item.region==='china'?' · '+word(['中国','China']):'')),el('strong','',item.title));
       if(item.summary)copy.append(el('em','',item.summary));copy.append(el('b','',word(['在这里看短讯','Read source brief'])));card.append(copy);card.onclick=()=>openBrief(item);list.append(card);
     }
     if(!visibleRows.length&&!feedLoading)list.append(el('p','ailleurs-news-empty',word(['这个分类暂时没有近期来源短讯。','No recent source brief in this category yet.'])));
