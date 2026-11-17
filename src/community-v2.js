@@ -130,7 +130,7 @@
     }
     if(selectedSongId!==id)return;
     const rank=sortedSongs().findIndex(x=>x.id===id)+1;
-    host.replaceChildren(createCard(song,rank,true));showDialog('music-discussion-dialog');void renderSongConnections(song);
+    host.replaceChildren(createCard(song,rank,true));showDialog('music-discussion-dialog');void window.DaytoneSongResearch?.mount(host,song);void renderSongConnections(song);
   }
   const externalArtistCache=new Map();
   async function externalArtistTracks(artist){

@@ -103,6 +103,29 @@
     'Film on this date':'这一天的电影','Art on this date':'这一天的艺术','Books on this date':'这一天的书籍','Daily Life on this date':'这一天的日常',
     'No film shared on this date.':'这一天还没有电影分享。','No art shared on this date.':'这一天还没有艺术分享。','No books shared on this date.':'这一天还没有书籍分享。','No daily life shared on this date.':'这一天还没有日常分享。'
   });
+  Object.assign(zh,{
+    'Paste a song link or copied share text':'粘贴歌曲链接或分享文字',
+    'https://… or a share message with a link':'https://… 或包含链接的分享文字',
+    'Check link details':'核对链接资料',
+    'Search another music platform':'在其他音乐平台查找',
+    'Choose the exact version, then paste its link below.':'确认具体版本后，把链接粘贴在下方。',
+    '▷ Preview this version here':'▷ 在本站预览这个版本',
+    'Playback can depend on the platform and your account.':'能否完整播放取决于平台和你的账号。',
+    'YouTube versions':'YouTube 视频版本',
+    'Search on YouTube ↗':'到 YouTube 搜索 ↗',
+    'Use this version':'分享这个版本',
+    '▷ 30s':'▷ 试听 30 秒',
+    'Read more from the source':'展开来源摘要',
+    'About this song':'关于这首歌',
+    'Read the source ↗':'查看原文 ↗',
+    'Finding YouTube versions…':'正在查找 YouTube 视频…',
+    'Checking video versions…':'正在核对视频版本…',
+    'Pick the exact video; the title and channel may describe a different recording.':'请选择准确版本；视频标题和频道未必就是歌曲版本。',
+    'Video choices are unavailable right now. You can still check YouTube and paste the exact link.':'暂时无法列出视频；可前往 YouTube 确认后粘贴链接。',
+    'No embeddable videos were returned. Check YouTube directly.':'没有找到可嵌入的视频，可前往 YouTube 查看。',
+    'This is a playlist link. Use Share a playlist to keep its tracks together.':'这是歌单链接；请使用“分享歌单”，保留歌曲顺序。',
+    'Link added. Details will be checked automatically; review the version before publishing.':'已加入链接，正在自动查找资料；发布前请核对版本。'
+  });
   const originals = new WeakMap(), attrs = new WeakMap();
   let language = localStorage.getItem('daytone-language') === 'zh' ? 'zh' : 'en', pending = false;
   const select = document.getElementById('site-language'); select.value = language;

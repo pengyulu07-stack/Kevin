@@ -46,16 +46,17 @@
     const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Find song details';
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     const results=document.createElement('div');results.className='song-lookup-results';results.setAttribute('aria-label','Matching recordings');
+    const sample=document.createElement('audio');sample.className='publish-sample';sample.controls=true;sample.hidden=true;sample.preload='none';sample.setAttribute('aria-label','30-second recording preview');
     const preview=document.createElement('div');preview.className='catalog-cover-preview';preview.hidden=true;
     const sources=document.createElement('details');sources.className='publish-source-search';
-    const summary=document.createElement('summary');summary.textContent='Find a playable version';
-    const hint=document.createElement('p');hint.textContent='Open a search, check the version, then paste its link into Music or video link below.';
+    const summary=document.createElement('summary');summary.textContent='Search another music platform';
+    const hint=document.createElement('p');hint.textContent='Choose the exact version, then paste its link below.';
     const links=document.createElement('div');links.className='publish-source-links';
-    const providers=[['YouTube','https://www.youtube.com/results?search_query='],['Bilibili','https://search.bilibili.com/all?keyword='],['SoundCloud','https://soundcloud.com/search?q=']];
+    const providers=[['YouTube','https://www.youtube.com/results?search_query='],['Bilibili','https://search.bilibili.com/all?keyword='],['SoundCloud','https://soundcloud.com/search?q='],['QQ Music','https://y.qq.com/n/ryqq/search?w='],['网易云音乐','https://music.163.com/#/search/m/?s='],['Spotify','https://open.spotify.com/search/']];
     const sourceLinks=providers.map(([name,base])=>{const link=document.createElement('a');link.textContent=name+' ↗';link.target='_blank';link.rel='noopener noreferrer';link.dataset.base=base;links.append(link);return link;});
     const updateSources=()=>{const query=[title.value.trim(),artist.value.trim()].filter(Boolean).join(' ');for(const link of sourceLinks){if(query)link.href=link.dataset.base+encodeURIComponent(query);else link.removeAttribute('href');link.setAttribute('aria-disabled',String(!query));link.tabIndex=query?0:-1;}};
-    sources.append(summary,hint,links);
-    title.closest('label').after(button,status,preview,results,sources);
+    sources.append(summary,hint,links);sources.open=true;
+    artist.closest('label').after(button,status,preview,results,sample,sources);
     updateSources();title.addEventListener('input',updateSources);artist.addEventListener('input',updateSources);
     let timer,sequence=0,suggestedArtist='',lastMusicBrainzRequest=0;
     const artwork=value=>{
@@ -74,6 +75,7 @@
       for(const choice of choices)choice.checked=choice.value===key;
       form.querySelector('.upload-genres')?.setAttribute('open','');
     };
+    const stopSample=()=>{sample.pause();sample.removeAttribute('src');sample.load();sample.hidden=true;};
     const clearCatalog=()=>{delete form.dataset.catalogArtUrl;delete form.dataset.catalogUrl;preview.replaceChildren();preview.hidden=true;};
     const showCatalog=row=>{
       clearCatalog();const art=artwork(String(row.artworkUrl100||row.art||'').replace(/100x100(?:bb|-75)?/,'300x300bb'));
@@ -93,17 +95,18 @@
       showCatalog(row);
       status.replaceChildren(document.createTextNode((automatic?'Matched: ':'Selected: ')+row.trackName+' · '+row.artistName+'. Check the details. '));
       if(row.trackViewUrl){const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='View on '+(row.catalogName||'Apple Music')+' ↗';status.append(source);}
+      form.dispatchEvent(new CustomEvent('daytone:recording-selected',{detail:{title:title.value,artist:artist.value}}));
       if(!automatic)results.replaceChildren();
     };
     title.addEventListener('input',()=>{
       clearTimeout(timer);++sequence;clearCatalog();
       if(suggestedArtist&&artist.value===suggestedArtist){artist.value='';suggestedArtist='';}
-      results.replaceChildren();status.textContent='';
+      results.replaceChildren();stopSample();status.textContent='';
       const value=title.value.trim();if(value.length<3||/^https:\/\//i.test(value))return;
       timer=setTimeout(()=>void search(),950);
     });
     artist.addEventListener('change',()=>{if(title.value.trim().length>=3)void search();});
-    form.addEventListener('reset',clearCatalog);
+    form.addEventListener('reset',()=>{clearCatalog();stopSample();results.replaceChildren();status.textContent='';});
     title.addEventListener('paste',()=>setTimeout(()=>{
       clearTimeout(timer);const value=title.value.trim();if(!value)return;
       if(/^https:\/\//i.test(value)){
@@ -160,12 +163,18 @@
         else if(candidates.length && artists.size===1)select(candidates[0],true);
         else status.textContent='Choose the right artist and album. Your title can stay as written.';
         for(const row of tracks){
+          const line=document.createElement('div');line.className='song-lookup-row';
           const option=document.createElement('button');option.type='button';option.className='song-lookup-option';
           const art=artwork(String(row.artworkUrl100||'').replace(/100x100(?:bb|-75)?/,'300x300bb'));
           if(art){const image=document.createElement('img');image.src=art;image.alt='';image.loading='lazy';image.addEventListener('error',()=>image.remove(),{once:true});option.append(image);}
           const words=document.createElement('span');words.append(document.createElement('strong'),document.createElement('small'));words.firstChild.textContent=row.trackName;words.lastChild.textContent=[row.artistName,row.collectionName,row.catalogName].filter(Boolean).join(' · ');option.append(words);
           if(art&&form.dataset.catalogArtUrl===art)option.setAttribute('aria-pressed','true');
-          option.addEventListener('click',()=>select(row,false));results.append(option);
+          option.addEventListener('click',()=>select(row,false));line.append(option);
+          if(/^https:\/\//i.test(row.previewUrl||'')){
+            const play=document.createElement('button');play.type='button';play.className='song-lookup-sample';play.textContent='▷ 30s';play.setAttribute('aria-label','Play 30-second preview of '+row.trackName+' by '+row.artistName);
+            play.addEventListener('click',()=>{if(sample.src!==row.previewUrl){sample.src=row.previewUrl;sample.hidden=false;}void sample.play().catch(()=>{status.textContent='Preview could not play here. Choose another recording or check its source.';});});line.append(play);
+          }
+          results.append(line);
         }
       }catch{if(current===sequence)status.textContent='Could not search right now. You can publish with just the title.';}
       finally{if(current===sequence)button.disabled=false;}
@@ -257,12 +266,65 @@
     link.addEventListener('input',update);link.addEventListener('change',update);
     form.addEventListener('reset',()=>setTimeout(()=>{last='';update();},0));
   }
+  function setupVideoSuggestions(form){
+    const title=form?.elements.title,artist=form?.elements.artist,link=form?.elements.url;
+    if(!title||!artist||!link)return;
+    const section=document.createElement('section');section.className='publish-video-results';section.hidden=true;
+    const heading=document.createElement('h3');heading.textContent='YouTube versions';
+    const status=document.createElement('p');status.setAttribute('role','status');
+    const cards=document.createElement('div');cards.className='publish-video-grid';
+    const stage=document.createElement('div');stage.className='publish-video-stage';
+    const fallback=document.createElement('a');fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.textContent='Search on YouTube ↗';
+    section.append(heading,status,cards,stage,fallback);
+    form.querySelector('.publish-source-search')?.after(section);
+    let timer,sequence=0,unavailable=false;
+    const updateFallback=()=>fallback.href='https://www.youtube.com/results?search_query='+encodeURIComponent([title.value.trim(),artist.value.trim()].filter(Boolean).join(' '));
+    const render=items=>{
+      cards.replaceChildren();stage.replaceChildren();
+      for(const item of items.slice(0,4)){
+        const card=document.createElement('article');card.className='publish-video-card';
+        const watch=document.createElement('button');watch.type='button';watch.className='publish-video-watch';watch.setAttribute('aria-label','Preview '+item.title);
+        const image=document.createElement('img');image.src=item.thumbnail;image.alt='';image.loading='lazy';
+        const symbol=document.createElement('span');symbol.textContent='▶';watch.append(image,symbol);
+        watch.addEventListener('click',()=>{
+          const player=typeof musicEmbed==='function'?musicEmbed(item.url):null;if(!player)return;
+          player.loading='eager';const url=new URL(player.src);url.searchParams.set('autoplay','1');player.src=url.href;stage.replaceChildren(player);
+        });
+        const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=item.channel;
+        const select=document.createElement('button');select.type='button';select.textContent='Use this version';select.addEventListener('click',()=>{
+          link.value=item.url;const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));link.dispatchEvent(new Event('input',{bubbles:true}));
+          status.textContent='Selected '+item.title+'. Check the video below, then confirm this version.';
+        });
+        info.append(name,channel,select);card.append(watch,info);cards.append(card);
+      }
+    };
+    const search=async()=>{
+      const current=++sequence,song=title.value.trim(),performer=artist.value.trim();
+      updateFallback();if(song.length<3){section.hidden=true;return;}
+      section.hidden=false;cards.replaceChildren();stage.replaceChildren();
+      if(unavailable){status.textContent='Video choices are unavailable right now. You can still check YouTube and paste the exact link.';return;}
+      status.textContent='Finding YouTube versions…';
+      try{
+        const result=await client.functions.invoke('song-video-search',{body:{title:song,artist:performer}});
+        if(current!==sequence||title.value.trim()!==song||artist.value.trim()!==performer)return;
+        if(result.error||!result.data?.available){if(result.data?.reason==='unconfigured')unavailable=true;status.textContent='Video choices are unavailable right now. You can still check YouTube and paste the exact link.';return;}
+        const items=Array.isArray(result.data.items)?result.data.items:[];
+        status.textContent=items.length?'Pick the exact video; the title and channel may describe a different recording.':'No embeddable videos were returned. Check YouTube directly.';
+        render(items);
+      }catch{if(current===sequence)status.textContent='Could not search YouTube right now. Paste a checked link instead.';}
+    };
+    const schedule=()=>{clearTimeout(timer);++sequence;updateFallback();if(title.value.trim().length<3){section.hidden=true;return;}section.hidden=false;status.textContent='Checking video versions…';timer=setTimeout(()=>void search(),1450);};
+    title.addEventListener('input',schedule);artist.addEventListener('input',schedule);
+    form.addEventListener('daytone:catalog-found',schedule);form.addEventListener('daytone:recording-selected',schedule);
+    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;cards.replaceChildren();stage.replaceChildren();section.hidden=true;});
+  }
   document.addEventListener('DOMContentLoaded',()=>{
     const song=document.getElementById('upload-form');
     const linkReader=setup(song,song?.elements.url,song?.elements.title,song?.elements.artist);
     setupTitleSearch(song,linkReader);
     setupQuickImport(song);
     setupSourcePreview(song);
+    setupVideoSuggestions(song);
     if(song?.elements.url){
       const preview=document.createElement('div');preview.className='youtube-publish-preview';preview.hidden=true;
       preview.innerHTML='<img alt="Selected YouTube video thumbnail"><div><strong>Check this video version</strong><p>This is the video listeners will see.</p><label><input type="checkbox" name="confirm_video"> Yes, this is the version I want to share</label></div>';
