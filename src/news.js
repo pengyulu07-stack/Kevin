@@ -252,13 +252,18 @@
     dialog.append(header, figure, content, links); mountDiscussion(article); dialog.showModal();
   }
   function render(host) {
-    activeHost=host;loadFeed();host.replaceChildren();
+    activeHost=host;loadFeed();
+    const filters=host.querySelector('.ailleurs-news-filters')||el('div','ailleurs-news-filters');
+    for(const child of [...host.children])if(child!==filters)child.remove();
     const head=el('div','ailleurs-news-head');
     head.append(el('small','',word(['每日新闻 / 亚洲上海时间','DAILY NEWS / SHANGHAI TIME'])),el('h3','',word(['今天的新闻','Today’s news'])),el('p','',word(['每日更新来源短讯；深入文章由编辑核对后发布。','Source briefs refresh daily. Longer features appear after editorial review.'])));
-    const suggest=el('button','ailleurs-news-suggest-button',word(['＋ 推荐新闻链接','＋ Suggest a story']));suggest.type='button';suggest.onclick=openSuggestion;head.append(suggest);host.append(head);
-    const filters=el('div','ailleurs-news-filters');
-    for(const [key,cn,en] of categories){const button=el('button',key===category?'active':'',zh()?cn:en);button.type='button';button.setAttribute('aria-pressed',String(key===category));button.onclick=()=>{category=key;visible=4;render(host);};filters.append(button);}
-    host.append(filters);
+    const suggest=el('button','ailleurs-news-suggest-button',word(['＋ 推荐新闻链接','＋ Suggest a story']));suggest.type='button';suggest.onclick=openSuggestion;head.append(suggest);host.insertBefore(head,filters.isConnected?filters:null);
+    if(!filters.childElementCount){
+      for(const [key,cn,en] of categories){const button=el('button',key===category?'active':'',zh()?cn:en);button.type='button';button.setAttribute('aria-pressed',String(key===category));button.onclick=()=>{category=key;visible=4;render(host);};filters.append(button);}
+    }else for(const [index,button] of [...filters.children].entries()){
+      const [key,cn,en]=categories[index];button.textContent=zh()?cn:en;button.classList.toggle('active',key===category);button.setAttribute('aria-pressed',String(key===category));
+    }
+    if(!filters.isConnected)host.append(filters);
     const selectedFilter=filters.querySelector('button.active');
     if(selectedFilter&&category!=='all'){
       const itemRect=selectedFilter.getBoundingClientRect(),barRect=filters.getBoundingClientRect();
