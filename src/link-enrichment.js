@@ -4,6 +4,8 @@
     try {
       const url = new URL(value.trim());
       if (url.protocol !== 'https:') return null;
+      if (typeof youtubeVideoId==='function' && youtubeVideoId(url.href))
+        return {platform:'YouTube',endpoint:'song-link-preview'};
       if (url.hostname === 'open.spotify.com' && /^\/(track|album|playlist)\/[A-Za-z0-9]{22}\/?$/.test(url.pathname))
         return {platform:'Spotify', endpoint:'https://open.spotify.com/oembed?url='+encodeURIComponent(url.origin+url.pathname)};
       if (['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname)) {
@@ -22,6 +24,11 @@
   function cleanSpotifyTitle(title){return String(title||'').replace(/\s*\|\s*Spotify\s*$/i,'').replace(/\s*[-–]\s*(?:song|album|playlist) by .+$/i,'').trim();}
   async function read(value){
     const target=metadataUrl(value);if(!target)return null;
+    if(target.platform==='YouTube'){
+      const response=await client.functions.invoke('song-link-preview',{body:{url:value}});
+      if(response.error||!response.data?.title)throw Error('Video details unavailable');
+      return {title:response.data.title,artist:'',channel:response.data.artist||'',art:response.data.art||'',platform:'YouTube'};
+    }
     const response=await fetch(target.endpoint,{mode:'cors',signal:AbortSignal.timeout(7000)});
     if(!response.ok)throw Error('Metadata unavailable');
     const data=await response.json();
@@ -52,7 +59,7 @@
     updateSources();title.addEventListener('input',updateSources);artist.addEventListener('input',updateSources);
     let timer,sequence=0,suggestedArtist='',lastMusicBrainzRequest=0;
     const artwork=value=>{
-      try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com')||url.hostname==='i1.sndcdn.com'||url.hostname==='i2.sndcdn.com'||url.hostname==='coverartarchive.org')?url.href:'';} catch{return '';}
+      try {const url=new URL(value);return url.protocol==='https:' && (url.hostname==='mzstatic.com'||url.hostname.endsWith('.mzstatic.com')||url.hostname==='i1.sndcdn.com'||url.hostname==='i2.sndcdn.com'||url.hostname==='coverartarchive.org'||url.hostname==='i.ytimg.com')?url.href:'';} catch{return '';}
     };
     const genreFor=value=>{
       const genre=String(value||'').toLowerCase();
@@ -100,7 +107,7 @@
     title.addEventListener('paste',()=>setTimeout(()=>{
       clearTimeout(timer);const value=title.value.trim();if(!value)return;
       if(/^https:\/\//i.test(value)){
-        const link=form.elements.url;if(link){link.value=value;title.value='';const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));if(metadataUrl(value))linkReader?.click();else status.textContent='Link added. Enter the song title to publish.';}
+        const link=form.elements.url;if(link){link.value=value;title.value='';const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));link.dispatchEvent(new Event('input',{bubbles:true}));}
       }else void search();
     },100));
     async function search(){
@@ -146,7 +153,11 @@
         const exact=tracks.filter(row=>normal(row.trackName)===wantedTitle);
         const candidates=wantedArtist?exact.filter(row=>normal(row.artistName)===wantedArtist):exact;
         const artists=new Set(candidates.map(row=>normal(row.artistName)));
-        if(candidates.length && artists.size===1)select(candidates[0],true);
+        if(candidates.length && artists.size===1 && form.elements.url?.value.trim()){
+          suggestGenre(candidates[0]);
+          status.textContent='Possible category found. Check the recording and cover choices below.';
+        }
+        else if(candidates.length && artists.size===1)select(candidates[0],true);
         else status.textContent='Choose the right artist and album. Your title can stay as written.';
         for(const row of tracks){
           const option=document.createElement('button');option.type='button';option.className='song-lookup-option';
@@ -160,41 +171,106 @@
       finally{if(current===sequence)button.disabled=false;}
     }
     button.addEventListener('click',()=>void search());
-    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);if(row)suggestGenre(row);updateSources();});
+    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);if(row)suggestGenre(row);updateSources();if(['Spotify','SoundCloud'].includes(row?.platform)&&title.value.trim().length>=3&&artist.value.trim())void search();});
   }
   function setup(form,input,title,artist,playlist=false){
     if(!form||!input||!title)return;
-    const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Get title from link ↗';
+    const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Check link details';
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     input.closest('label').after(button,status);
-    button.addEventListener('click',async()=>{
-      const value=input.value.trim();if(!value){status.textContent='Paste a music link first.';return;}
+    let timer,sequence=0,filledTitle='',filledArtist='';
+    const inspect=async()=>{
+      const value=input.value.trim(),current=++sequence;
+      if(!value){status.textContent='';return;}
+      if(!metadataUrl(value)){status.textContent='Link saved. Add or check the song title and artist yourself.';return;}
       button.disabled=true;status.textContent='Checking the link…';
       try{
         const result=await read(value);
+        if(current!==sequence||input.value.trim()!==value)return;
         if(!result){status.textContent='Paste a direct track link to read its details. Search result pages still need a song title.';return;}
-        if(result.title)title.value=result.title;
-        if(artist&&result.artist)artist.value=result.artist;
+        if(result.title&&(!title.value.trim()||title.value===filledTitle)){title.value=result.title.slice(0,100);filledTitle=title.value;}
+        if(artist&&result.artist&&(!artist.value.trim()||artist.value===filledArtist)){artist.value=result.artist.slice(0,100);filledArtist=artist.value;}
         form.dispatchEvent(new CustomEvent('daytone:catalog-found',{detail:result}));
-        status.replaceChildren(document.createTextNode('Found on '+result.platform+'. Check the details before publishing.'));
+        status.textContent='Found on '+result.platform+(result.channel?' · channel: '+result.channel:'')+'. Check the title, artist and exact version.';
         if(playlist)status.append(document.createTextNode(' Add or paste the track names below; the platform does not provide a readable full list here.'));
-      }catch{status.textContent='Could not read details from this link. Enter the title manually; the original link will still work.';}
-      finally{button.disabled=false;}
-    });
-    input.addEventListener('paste',()=>setTimeout(()=>{if(input.value.trim())button.click();},100));
+      }catch{if(current===sequence)status.textContent='Could not read this link. Enter the title yourself; the link remains attached.';}
+      finally{if(current===sequence)button.disabled=false;}
+    };
+    button.addEventListener('click',()=>{clearTimeout(timer);void inspect();});
+    input.addEventListener('input',()=>{clearTimeout(timer);++sequence;button.disabled=false;status.textContent='';if(input.value.trim())timer=setTimeout(()=>void inspect(),550);});
+    input.addEventListener('change',()=>{clearTimeout(timer);if(input.value.trim())void inspect();});
+    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;filledTitle='';filledArtist='';status.textContent='';button.disabled=false;});
     return button;
+  }
+  function setupQuickImport(form){
+    const title=form?.elements.title,artist=form?.elements.artist,link=form?.elements.url;
+    if(!title||!artist||!link)return;
+    const wrap=document.createElement('section');wrap.className='share-import';
+    const label=document.createElement('label');label.textContent='Paste a song link or copied share text';
+    const field=document.createElement('textarea');field.rows=2;field.placeholder='https://… or a share message with a link';field.setAttribute('aria-describedby','share-import-status');
+    const status=document.createElement('small');status.id='share-import-status';status.setAttribute('role','status');
+    label.append(field);wrap.append(label,status);title.closest('label').before(wrap);
+    const apply=()=>{
+      const value=field.value.trim();if(!value){status.textContent='';return;}
+      const url=value.match(/https:\/\/[^\s<>"“”]+/i)?.[0]?.replace(/[，。！？,.;!?）)]+$/u,'');
+      if(!url){status.textContent='No link found. Add a direct track or video link below.';return;}
+      try {new URL(url);} catch {status.textContent='This link could not be read.';return;}
+      if(/open\.spotify\.com\/playlist\/|music\.apple\.com\/[^/]+\/playlist\/|soundcloud\.com\/[^/]+\/sets\//i.test(url)){
+        status.textContent='This is a playlist link. Use Share a playlist to keep its tracks together.';return;
+      }
+      link.value=url;const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));
+      if(!title.value.trim()){
+        const marked=value.match(/《([^》]{1,100})》/u);
+        if(marked)title.value=marked[1].trim();
+      }
+      if(!artist.value.trim()){
+        const marked=value.match(/(?:歌手|演唱|artist)\s*[:：]\s*([^\n，,。]{1,100})/iu);
+        if(marked)artist.value=marked[1].trim();
+      }
+      link.dispatchEvent(new Event('input',{bubbles:true}));
+      status.textContent='Link added. Details will be checked automatically; review the version before publishing.';
+    };
+    field.addEventListener('paste',()=>setTimeout(apply,0));
+    field.addEventListener('change',apply);
+    form.addEventListener('reset',()=>{field.value='';status.textContent='';});
+  }
+  function setupSourcePreview(form){
+    const link=form?.elements.url;if(!link)return;
+    const wrap=document.createElement('div');wrap.className='publish-source-preview';wrap.hidden=true;
+    const button=document.createElement('button');button.type='button';button.textContent='▷ Preview this version here';
+    const note=document.createElement('small');note.textContent='Playback can depend on the platform and your account.';
+    const stage=document.createElement('div');stage.className='publish-preview-stage';
+    wrap.append(button,note,stage);link.closest('label').after(wrap);
+    let last='';
+    const update=()=>{
+      const value=link.value.trim();if(value===last)return;last=value;stage.replaceChildren();
+      const playable=typeof musicEmbed==='function'?musicEmbed(value):null;
+      wrap.hidden=!playable;
+      if(playable)button.disabled=false;
+    };
+    button.addEventListener('click',()=>{
+      const player=typeof musicEmbed==='function'?musicEmbed(link.value.trim()):null;
+      if(!player){update();return;}
+      if(player.tagName==='IFRAME')player.loading='eager';
+      stage.replaceChildren(player);button.disabled=true;
+    });
+    link.addEventListener('input',update);link.addEventListener('change',update);
+    form.addEventListener('reset',()=>setTimeout(()=>{last='';update();},0));
   }
   document.addEventListener('DOMContentLoaded',()=>{
     const song=document.getElementById('upload-form');
     const linkReader=setup(song,song?.elements.url,song?.elements.title,song?.elements.artist);
     setupTitleSearch(song,linkReader);
+    setupQuickImport(song);
+    setupSourcePreview(song);
     if(song?.elements.url){
       const preview=document.createElement('div');preview.className='youtube-publish-preview';preview.hidden=true;
       preview.innerHTML='<img alt="Selected YouTube video thumbnail"><div><strong>Check this video version</strong><p>This is the video listeners will see.</p><label><input type="checkbox" name="confirm_video"> Yes, this is the version I want to share</label></div>';
       song.elements.url.closest('label').after(preview);
+      let lastId='';
       const update=()=>{
         const value=song.elements.url.value,id=typeof youtubeVideoId==='function'?youtubeVideoId(value):'';
-        preview.hidden=!id;preview.querySelector('input').checked=false;
+        preview.hidden=!id;if(id!==lastId)preview.querySelector('input').checked=false;lastId=id;
         if(id)preview.querySelector('img').src='https://i.ytimg.com/vi/'+id+'/hqdefault.jpg';
         else preview.querySelector('img').removeAttribute('src');
       };

@@ -132,7 +132,7 @@
     details.append(links);return details;
   }
   function playerFor(url){const player=typeof musicEmbed==='function'?musicEmbed(url):null;if(player){player.classList.add('listen-player');if(player.tagName==='IFRAME')player.loading='eager';}return player;}
-  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && platform(song.source_url)!=='Apple Music' && playerFor(song.source_url)));}
+  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && playerFor(song.source_url)));}
   function actionLabel(song){return (canPlayHere(song)?'Play ':'Find ') + String(song?.title||'song');}
   function updateQueueControls(){
     const active=Boolean(queue),position=dock.querySelector('#player-dock-position');
@@ -184,7 +184,6 @@
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);body.append(audio);void audio.play().catch(()=>{});return true;}
     if(!song.source_url)return false;
     const label=platform(song.source_url);
-    if(label==='Apple Music'){body.append(directLink(song.source_url,tr('在 Apple Music 打开分享版本','Open shared version in Apple Music')));return true;}
     const player=playerFor(song.source_url);
     if(player){attachPlayer(player,label,song.source_url);return true;}
     body.append(directLink(song.source_url,tr('在 '+label+' 打开分享版本','Open shared version in '+label)));return true;
@@ -193,13 +192,12 @@
     const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
     if(!fromQueue)queue=null;
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);openDock(song,audio);return;}
-    if(song.source_url&&platform(song.source_url)!=='Apple Music'){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
+    if(song.source_url){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
     dialog.querySelector('h2').textContent='Where to listen';
     if(!dialog.open)dialog.showModal();
     const hasSource=sourceSection(song);
     if(!hasSource)body.append(node('p','listen-note',tr('这条分享没有附上可在本站播放的音源。正在查找目录试听。','No playable recording was attached to this post. Checking for a catalog preview.')));
-    else if(platform(song.source_url)==='Apple Music')body.append(node('p','listen-note',tr('这条分享附有 Apple Music 链接；下方可能有目录试听。','This post links to Apple Music. A catalog preview may be available below.')));
     addPreviewChoices(song);
     body.append(searchLinks(title,artist));
   }
