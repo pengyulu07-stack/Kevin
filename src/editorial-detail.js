@@ -289,6 +289,10 @@
         paragraph(context, t('以上为 Open Library 书目资料；创作经过与专业评论仍需单独核对。', 'The text above comes from the Open Library record. Writing history and criticism need separate verification.'), 'editorial-source-note');
       }
     } catch { if (id === generation && !story) { context.replaceChildren(make('h3', '', t('这本书', 'The book'))); paragraph(context, t('书目暂时无法读取。', 'The catalog record is temporarily unavailable.')); } }
+    if(id===generation&&!story){
+      const source=make('div','work-research');source.hidden=true;context.append(source);
+      void window.AilleursWorkResearch?.mount(source,titleOnly(print),print.artist,'books');
+    }
   }
 
   function filmContent(print, body) {

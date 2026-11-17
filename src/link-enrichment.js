@@ -104,7 +104,7 @@
       suggestGenre(row);
       updateSources();
       showCatalog(row);
-      if(row.catalogName==='Apple Music'&&/^https:\/\//i.test(row.trackViewUrl||'')&&!form.elements.url.value.trim()){
+      if(row.catalogName==='Apple Music'&&/^https:\/\//i.test(row.trackViewUrl||'')&&!form.elements.url.value.trim()&&form.querySelector('input[name="source"]:checked')?.value!=='file'){
         form.elements.url.value=row.trackViewUrl;
         form.dataset.catalogAutoSourceUrl=row.trackViewUrl;
         const linked=form.querySelector('input[name="source"][value="link"]');
