@@ -1,10 +1,28 @@
 {
-  "edition_date": "2026-11-16",
-  "updated_at": "2026-11-16T13:49:25.923922Z",
+  "edition_date": "2026-11-17",
+  "updated_at": "2026-11-17T04:35:28.809461Z",
   "time_zone": "Asia/Shanghai",
   "kind": "source_briefs",
   "categories": {
     "music": [
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "Killer tunes: how Grand Theft Auto conquered the music world",
+        "url": "https://www.theguardian.com/games/2026/nov/16/auto-tunes-music-grand-theft-auto-conquered-zeitgeist-gta",
+        "published_at": "2026-11-16T15:03:38Z",
+        "image": "https://i.guim.co.uk/img/media/653be1d2025e6e81bbe8942259f72ca29936769c/400_0_2698_2160/master/2698.jpg?width=460&quality=85&auto=format&fit=max&s=b0a5db80d48165b08bdea91b028bb726",
+        "summary": "Featuring hundreds of songs from the hippest real-world artists, the radio stations in Rockstar’s crime sagas are as hotly anticipated as the storylines. Contributors including Flying Lotus, Wavves and Nite Jewel reflect on the soundtracks’ curation and…"
+      },
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "Grammys 2027: Raye, Rosalía and Olivia Rodrigo lead female-heavy nominations",
+        "url": "https://www.theguardian.com/music/2026/nov/16/grammy-nominations-2027-female-artists",
+        "published_at": "2026-11-16T14:31:37Z",
+        "image": "https://i.guim.co.uk/img/media/d53d3d8597b3d6fdb5bd263fce26483a0f4c267b/288_0_3038_2430/master/3038.jpg?width=460&quality=85&auto=format&fit=max&s=35e24620919107eda7b18e703ce10e74",
+        "summary": "The race is led by a number of female artists, also including Phoebe Bridgers and Ella Langley, with Beyoncé receiving her record-breaking 100th nomination Grammys 2027: the nominations in all the major categories Raye is leading this year’s female-heavy…"
+      },
       {
         "category": "music",
         "source": "The Guardian",
@@ -22,65 +40,56 @@
         "published_at": "2026-11-16T06:00:35Z",
         "image": "https://i.guim.co.uk/img/media/7a1a6ea16390ca50812acf9789ab2f4e332add3a/697_0_2699_2160/master/2699.jpg?width=460&quality=85&auto=format&fit=max&s=fe32633ccc152c7e611600227cb81db6",
         "summary": "In 1961, a group of Italian creatives crossed the border to collect anti-Franco resistance songs and share them with the world – sparking intense backlash from the dictator. A new documentary retraces that perilous journey In the summer of 1961, four Italians…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "Philippines’ Carmelle wins first Eurovision contest in Asia",
-        "url": "https://www.theguardian.com/tv-and-radio/2026/nov/14/philippines-carmelle-wins-first-eurovision-contest-in-asia",
-        "published_at": "2026-11-14T19:01:32Z",
-        "image": "https://i.guim.co.uk/img/media/e086ead12105dc2c27d05464ce6db1d81b380886/300_0_3206_2564/master/3206.jpg?width=460&quality=85&auto=format&fit=max&s=6d8069d98d48b98ea343fbade4c75a27",
-        "summary": "Filipino entry, pop and rap song Sobra-Sobra, takes 19-year-old to victory at grand final in Bangkok Carmelle Collado has won the first Eurovision song contest Asia, taking the Philippines’ entry, Sobra-Sobra , to victory in Bangkok on Saturday night, at the…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "James Blunt: ‘Do I have a nickname? Yes, it rhymes with blunt’",
-        "url": "https://www.theguardian.com/music/2026/nov/15/james-blunt-10-chaotic-questions-interview",
-        "published_at": "2026-11-14T14:00:46Z",
-        "image": "https://i.guim.co.uk/img/media/8d05391f77653139edc13495e968485a7a46ec8b/0_274_2666_2133/master/2666.jpg?width=460&quality=85&auto=format&fit=max&s=d86fc3717a780d34189a44a71475591a",
-        "summary": "The singer on his love for Ibiza, the weirdest thing he’s done in the name of romance, and being signed up for Celebrity Traitors against his will You were a punching bag for such a long time after You’re Beautiful became a massive hit but your consistent…"
       }
     ],
     "film": [
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "‘Partly the movie’s fault I’m a writer at all’: why Wonder Boys is my feelgood movie",
-        "url": "https://www.theguardian.com/film/2026/nov/16/wonder-boys-curtis-hanson-feelgood-movie",
-        "published_at": "2026-11-16T10:00:02Z",
-        "image": "https://i.guim.co.uk/img/media/a270362bac9b7b2e8ed906227be1edbd39616db1/0_0_1725_1381/master/1725.jpg?width=460&quality=85&auto=format&fit=max&s=d6690eca5bb3ee8caaa3d20b6fa5d584",
-        "summary": "The latest in our series of writers picking their most comforting rewatches is a tribute to Curtis Hanson’s insightful 2000 comedy drama I’m allergic to movies and books about writers. Washed-up novelists, aspiring screenwriters, creative writing professors…"
+        "title": "Glenn Close cries! John Malkovich weeps! But it’s Nathan Fielder everyone wants to talk to at the honorary Oscars",
+        "url": "https://www.theguardian.com/film/2026/nov/16/governers-awards-honorary-oscars",
+        "published_at": "2026-11-16T18:47:42Z",
+        "image": "https://i.guim.co.uk/img/media/7b8bab95f621af31b5180565a9a5e4c394e3d560/278_0_2777_2222/master/2777.jpg?width=460&quality=85&auto=format&fit=max&s=3d8bc065891df4540f1b61cb58e5bcb3",
+        "summary": "All of Hollywood’s biggest stars are in attendance for the Governors’ awards, but nobody gets drunk and the biggest draw is an awkward documentarian Timothée Chalamet was seconds away from getting into trouble. It was just after 6pm in Hollywood and Lynette…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "The DCU’s James Gunn and Peter Safran are out – this is the biggest disaster to hit superhero movies in years",
-        "url": "https://www.theguardian.com/film/2026/nov/16/james-gunn-fired-dc-studios-peter-safran-superman-skydance",
-        "published_at": "2026-11-16T06:30:35Z",
-        "image": "https://i.guim.co.uk/img/media/7f5751f059b0ae4dacc7f62de06673f7226f6075/270_0_2650_2120/master/2650.jpg?width=460&quality=85&auto=format&fit=max&s=992062e7675bfa22ab08528b8b81fc78",
-        "summary": "The adventurous weirdness of the Gunn/Safran era that fans responded to is now history. Can the DCU ever get back on track? What was Warner Bros’ plan in 2022 , when the studio decided to reboot its superhero output, jettison the increasingly muddled DC…"
+        "title": "The man with the golden touch: James Bond franchise is a money-spinner",
+        "url": "https://www.theguardian.com/film/2026/nov/16/man-with-golden-touch-james-bond-franchise-money-spinner",
+        "published_at": "2026-11-16T18:47:38Z",
+        "image": "https://i.guim.co.uk/img/media/410e65812d5c14268a96c1cc5d4d25181b9cfcd5/75_42_2879_2304/master/2879.jpg?width=460&quality=85&auto=format&fit=max&s=c4cc6fef1ccf97f0e5db364268fea0ce",
+        "summary": "Big-screen debut of Ian Fleming’s creation in 1962, with Sean Connery as lead in Dr No, was start of marketing dream New James Bond announced ... and the name’s Pattinson, Robert Pattinson Share your thoughts on the casting Peter Bradshaw’s take Robert…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "‘A songbook for protest movements’: how did this secret mission to smuggle antifascist music out of Spain ever get forgotten?",
-        "url": "https://www.theguardian.com/film/2026/nov/16/antifascist-music-spain-the-drunkmens-marseillaise-la-marsellesa-de-los-borachos",
-        "published_at": "2026-11-16T06:00:35Z",
-        "image": "https://i.guim.co.uk/img/media/7a1a6ea16390ca50812acf9789ab2f4e332add3a/697_0_2699_2160/master/2699.jpg?width=460&quality=85&auto=format&fit=max&s=fe32633ccc152c7e611600227cb81db6",
-        "summary": "In 1961, a group of Italian creatives crossed the border to collect anti-Franco resistance songs and share them with the world – sparking intense backlash from the dictator. A new documentary retraces that perilous journey In the summer of 1961, four Italians…"
+        "title": "Robert Pattinson’s journey from Harry Potter and Twilight to James Bond: ‘The honour of a lifetime’",
+        "url": "https://www.theguardian.com/film/2026/nov/16/robert-pattinson-james-bond-career",
+        "published_at": "2026-11-16T18:11:46Z",
+        "image": "https://i.guim.co.uk/img/media/6ddcede3589dcbd5e43898c4eaf693c2dc330427/0_548_2343_1874/master/2343.jpg?width=460&quality=85&auto=format&fit=max&s=e5f3cba37bca93cba77587bc6d087829",
+        "summary": "The 40-year-old British actor has had a remarkable career and is back again with the coveted 007 New James Bond announced ... and the name’s Pattinson, Robert Pattinson Robert Pattinson’s gift for cool, sensual menace makes him an exquisite choice as James…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "‘I’m a smalltown girl with a terrible disability. He’s a Hollywood superstar. But we’ve been laughing since we met’: Emma Fogarty and Colin Farrell on their extraordinary story",
-        "url": "https://www.theguardian.com/film/2026/nov/16/emma-fogarty-colin-farrell-marathons-friendship-the-slightest-touch",
-        "published_at": "2026-11-16T05:00:33Z",
-        "image": "https://i.guim.co.uk/img/media/596f1380796ca4fa0a799cde4e6d345f2cedc137/632_220_1632_1306/master/1632.jpg?width=460&quality=85&auto=format&fit=max&s=cf33e6712a9e451dfd1a2b16096ebe65",
-        "summary": "She has a rare debilitating skin condition but still tackled a marathon, helped by her old friend. As new film The Slightest Touch tells the full story of that emotional day, its stars talk about their lifelong bond – and why he opened up about parenthood…"
+        "title": "Robert Pattinson’s gift for cool, sensual menace makes him an exquisite choice as James Bond | Peter Bradshaw",
+        "url": "https://www.theguardian.com/film/2026/nov/16/robert-pattinson-choice-bond",
+        "published_at": "2026-11-16T15:14:37Z",
+        "image": "https://i.guim.co.uk/img/media/fdbe68e252d8ff1f72989ac7e4235a2529bcdaf7/560_0_5600_4480/master/5600.jpg?width=460&quality=85&auto=format&fit=max&s=13cc8ab3b0167a25a48a8bac7744a8ad",
+        "summary": "Pattinson is a character actor whose talent for inscrutable appraisal may mean a new era for 007. Will this more willowy, classy Bond leave sexism in the shadows? • New James Bond announced ... and the name’s Pattinson, Robert Pattinson • Share your thoughts…"
       }
     ],
     "art": [
+      {
+        "category": "art",
+        "source": "The Guardian",
+        "title": "‘Aboriginal people were the backbone of this state’: rediscovered photographs reveal life inside the 1946 Pilbara strike camps",
+        "url": "https://www.theguardian.com/australia-news/ng-interactive/2026/nov/17/aboriginal-workers-1946-pilbara-strike-camps-john-wilson-photographs-australia-history-ntwnfb",
+        "published_at": "2026-11-16T14:00:19Z",
+        "image": "https://i.guim.co.uk/img/media/c8d423fcefff059c8419b61eb4e801a3d4a1de8c/365_0_2417_1933/master/2417.jpg?width=460&quality=85&auto=format&fit=max&s=de82497b4628ef9b71d682112251614c",
+        "summary": "Eighty years after hundreds of Aboriginal workers walked off Pilbara stations, a trove of photos found beneath a wardrobe documents what happened next Warning: This article contains images of and references to Indigenous Australians who have died Troy Eaton…"
+      },
       {
         "category": "art",
         "source": "The Guardian",
@@ -124,114 +133,114 @@
       {
         "category": "politics",
         "source": "BBC News",
-        "title": "Miliband says he won't resign if government approves Rosebank oil field",
-        "url": "https://www.bbc.co.uk/news/articles/crvg2n8vwyqdo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T13:42:37Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/f57a/live/6be5a010-e1bf-11f1-99a1-253766e7ad8b.jpg",
-        "summary": "Energy Secretary Miatta Fahnbulleh is to make a decision on Britain's largest untapped oil field."
+        "title": "Failed asylum seekers face removal without five-day notice period",
+        "url": "https://www.bbc.co.uk/news/articles/cq20xnp2egm8o?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-17T01:24:49Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b8c2/live/ba87c490-e210-11f1-a541-6d0c391a4254.jpg",
+        "summary": "Under proposed new rules, the Home Office would have six months in which to remove a person without telling them in advance."
+      },
+      {
+        "category": "politics",
+        "source": "BBC News",
+        "title": "Five EU countries announce migrant deportation centre in Rwanda",
+        "url": "https://www.bbc.co.uk/news/articles/cw987343352go?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-16T23:20:45Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7397/live/2ac14ca0-e1d9-11f1-b8c8-67fa35f5afdb.jpg",
+        "summary": "Germany, Denmark, Austria, Greece and the Netherlands have announced a \"return hub\" for failed asylum seekers."
       },
       {
         "category": "politics",
         "source": "The Guardian",
-        "title": "Under-threat lidos get lifeline as Andy Burnham sets up fund to rebuild pools",
-        "url": "https://www.theguardian.com/lifeandstyle/2026/nov/16/lidos-lifeline-andy-burnham-fund-rebuild-outdoor-pools",
-        "published_at": "2026-11-16T13:35:49Z",
-        "image": "https://i.guim.co.uk/img/media/aa60d9ca769129b85ffb3080fdd35fc29b38374b/566_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=6fec6bacba33e46d4cb2e811968491e2",
-        "summary": "Move reflects growing demand for outdoor swimming as Britain heats up and follows campaign by MPs Andy Burnham is setting up a public fund to rebuild the UK’s lidos after a revival in outdoor swimming. Outdoor pools were built across the UK in the 1930s. They…"
+        "title": "Alan Milburn urges Burnham to spend billions on ‘new deal’ for young people",
+        "url": "https://www.theguardian.com/society/2026/nov/16/alan-milburn-urges-burnham-spend-billions-new-deal-young-people-youth-jobs-crisis-welfare-employment",
+        "published_at": "2026-11-16T22:30:55Z",
+        "image": "https://i.guim.co.uk/img/media/a86708b5e4debf383f4b49fc72cc08d1c91043ac/869_0_4344_3475/master/4344.jpg?width=460&quality=85&auto=format&fit=max&s=86c905d6e85817cc35aff84b1782228e",
+        "summary": "Report on Britain’s youth jobs crisis calls for welfare, education, health and employment policy shake-up Andy Burnham is being urged to spend billions of pounds on a “new deal” for the next generation that would fund guaranteed jobs support for young people…"
       },
       {
         "category": "politics",
         "source": "BBC News",
-        "title": "Create more jobs for under-25s by cutting National Insurance, key report urges",
-        "url": "https://www.bbc.co.uk/news/articles/c6p9dzmj514ko?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T13:19:33Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/283e/live/4753f640-e1ae-11f1-b0a4-450a350911f4.jpg",
-        "summary": "Some parents are so desperate for their children to find a job that they've offered to pay their wages, one hairdresser has told the BBC."
-      },
-      {
-        "category": "politics",
-        "source": "BBC News",
-        "title": "UK lost more than it gained from Brexit, Burnham to say ahead of EU summit",
-        "url": "https://www.bbc.co.uk/news/articles/crp3e1n5kezpo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T11:27:53Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/832a/live/0baf51f0-e192-11f1-93e1-3b657b665bcf.jpg",
-        "summary": "The prime minister will say the \"Brexit we were given has not worked\" in a speech on Monday."
+        "title": "Children dropping out of school: What can politicians do about it?",
+        "url": "https://www.bbc.co.uk/news/articles/cje39lx9267vo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-16T22:23:41Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6e5e/live/0f686c70-e20d-11f1-b023-f7d19fda92c1.jpg",
+        "summary": "The government believes around a third of young people who are persistently absent in Years 10 and 11 in England go on to be not in education, employment or training."
       }
     ],
     "technology": [
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "GTA 6 hacker pleads guilty after release from secure hospital",
-        "url": "https://www.bbc.co.uk/news/articles/cq99exy89dngo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T13:34:22Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7b17/live/41c7a2f0-e1a2-11f1-b0a4-450a350911f4.png",
-        "summary": "21-year-old Arion Kurtaj pleaded guilty to the Rockstar Games hack and others he carried out when he was a teenager."
+        "title": "Nvidia dismisses 'Bring Jensen Back' campaign as Trump backs effort to reinstate ex CEO",
+        "url": "https://www.bbc.co.uk/news/articles/cry49plv8v3go?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-17T02:37:53Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/78e4/live/4bc24280-e1d2-11f1-b8c8-67fa35f5afdb.jpg",
+        "summary": "A number of tech figures have backed an effort asking the AI chip giant to give Jensen Huang his job back."
       },
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "Elon Musk joins 'Bring Jensen Back' campaign to reinstate the ex-Nvidia boss",
-        "url": "https://www.bbc.co.uk/news/articles/cry49plv8v3go?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T12:20:49Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4318/live/458f6840-e1c1-11f1-99b6-a35a62fa4264.jpg",
-        "summary": "A number of tech figures want the board of the AI chip giant to give Jensen Huang his job back."
+        "title": "New Zealand tricks and annual leave - the lengths fans are going to for GTA 6",
+        "url": "https://www.bbc.co.uk/news/articles/cm4gn9xnn1ppo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-17T01:04:45Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/eb4c/live/4a003210-e1d0-11f1-b8c8-67fa35f5afdb.jpg",
+        "summary": "Sensor Tower estimates the game has already made $1.18bn from pre-orders across PlayStation and Xbox"
       },
       {
         "category": "technology",
-        "source": "The Guardian",
-        "title": "Elon Musk joins 165,000 others calling for Nvidia to bring back Jensen Huang in open letter",
-        "url": "https://www.theguardian.com/technology/2026/nov/16/elon-musk-tech-execs-open-letter-jensen-huang-return-nvidia-ceo",
-        "published_at": "2026-11-16T11:30:35Z",
-        "image": "https://i.guim.co.uk/img/media/e480adfe7860e9e4439f965fe15e55a5e4ff13f0/555_0_5960_4770/master/5960.jpg?width=460&quality=85&auto=format&fit=max&s=2cb7709914af37a90ec6505b3062c853",
-        "summary": "CEO ousted after affair with suspected Chinese spy reportedly plans comeback, but US treasury secretary urges ‘dramatic shake-up’ Megaspeed says it’s a ‘legitimate and lawful business’ Business live – latest updates Elon Musk and a host of other tech bosses…"
+        "source": "BBC News",
+        "title": "The AI start-ups fixing India's broken roads and messy land records",
+        "url": "https://www.bbc.co.uk/news/articles/c820vnln2lzpo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-16T23:25:53Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/886f/live/a4a715f0-c892-11f1-b0a4-81e564f1cfaa.jpg",
+        "summary": "From legal-tech to healthcare, dozens of Indian AI start-ups are solving uniquely Indian challenges."
       },
       {
         "category": "technology",
-        "source": "The Guardian",
-        "title": "Albanese treads tightrope in upcoming Trump meeting, wanting Indo-Pacific engagement and end to Iran and Ukraine wars",
-        "url": "https://www.theguardian.com/australia-news/2026/nov/16/albanese-treads-tightrope-in-upcoming-trump-meeting-wanting-indo-pacific-engagement-and-end-to-iran-and-ukraine-wars",
-        "published_at": "2026-11-16T09:40:29Z",
-        "image": "https://i.guim.co.uk/img/media/b57480f6f6d59b1e608fcb68882810c017ea2e92/499_0_4985_3988/master/4985.jpg?width=460&quality=85&auto=format&fit=max&s=293a5c277b8e6822666594bbce36ad3c",
-        "summary": "Quad leaders’ summit in Philippines is Trump’s first, as Australia joins US and Japan to protect AI technologies in face of China efforts to dominate Get our daily political email , free app or daily news podcast Anthony Albanese will attempt to walk a…"
+        "source": "BBC News",
+        "title": "California sues OpenAI over Hugging Face attack",
+        "url": "https://www.bbc.co.uk/news/articles/c6wy4xv2mxglo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-16T23:12:24Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/ce1a/live/7c81aa70-e211-11f1-a541-6d0c391a4254.jpg",
+        "summary": "Attorney General Rob Bonta alleges OpenAI misled and endangered the public"
       }
     ],
     "earth": [
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "‘When the sun came out it felt like it opened a scar’ – This is climate breakdown",
-        "url": "https://www.theguardian.com/environment/ng-interactive/2026/nov/16/when-the-sun-came-out-it-felt-like-it-opened-a-scar-this-is-climate-breakdown",
-        "published_at": "2026-11-16T12:00:59Z",
-        "image": "https://i.guim.co.uk/img/media/03df085cea47ca4df586d23872f7663cb2637137/320_0_1600_1280/master/1600.jpg?width=460&quality=85&auto=format&fit=max&s=3fc30254aac4001c05f66630c7a158f5",
-        "summary": "When the floods hit Pakistan he went out to help. Then the water reached his own family. This is Imran Lodhi’s story Location: Dera Ghazi Khan, Pakistan Disaster: Pakistan intense monsoon rainfall Imran Lodhi is a university lecturer with a doctorate in…"
+        "title": "Band of baby sea turtles swims into ocean after historic California nesting",
+        "url": "https://www.theguardian.com/us-news/2026/nov/16/california-sea-turtle-eggs-hatched",
+        "published_at": "2026-11-16T23:19:11Z",
+        "image": "https://i.guim.co.uk/img/media/4861d06aace7cca64a1450b2e61fb90d86e1600a/243_0_2431_1945/master/2431.jpg?width=460&quality=85&auto=format&fit=max&s=9f88c67bd7c85e48be3276e2e6c41072",
+        "summary": "Hatchlings emerge after discovery in September of first sea turtle nests ever to have been recorded on US west coast Two months after the discovery of the first sea turtle nests ever to have been recorded on the US west coast, the eggs have hatched – and…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Relocation of Cape Town baboons to sanctuary ignites heated protests",
-        "url": "https://www.theguardian.com/world/2026/nov/16/cape-town-baboons-relocation-protests",
-        "published_at": "2026-11-16T10:19:08Z",
-        "image": "https://i.guim.co.uk/img/media/2d86a054583a1a5d541606f7e702b5f03c426653/770_0_4580_3666/master/4580.jpg?width=460&quality=85&auto=format&fit=max&s=5cd46938c7ca2e14076c7016769bf811",
-        "summary": "Demonstrators tried to block vehicle carrying the baboons, whose capture authorities say is needed to protect both primate and human The relocation of a troop of baboons in Cape Town to a wildlife sanctuary has triggered furious protests by local people…"
+        "title": "Massive wave knocks down onlooker in California – video",
+        "url": "https://www.theguardian.com/us-news/video/2026/nov/16/massive-wave-knocks-down-onlooker-in-california-video",
+        "published_at": "2026-11-16T18:52:31Z",
+        "image": "https://i.guim.co.uk/img/media/d85ab83c0a0fb3d3576a26193944f98fc45e4614/67_68_1238_990/master/1238.jpg?width=460&quality=85&auto=format&fit=max&s=a46fe0befc96a7fd196705f51918e598",
+        "summary": "A large wave knocked down at least one onlooker on a beach in northern California on 14 November as heavy tides battered the west coast over the weekend. Waves reached up to 50ft along the coast as swells supercharged by El Niño slammed into seaside…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "‘Crocodiles are possible, but hunger is certain’: Malawi’s foragers forced into infested waters",
-        "url": "https://www.theguardian.com/global-development/2026/nov/16/malawi-hunger-food-foraging-nyika-shire-river-crocodiles",
-        "published_at": "2026-11-16T10:00:03Z",
-        "image": "https://i.guim.co.uk/img/media/89c7de95e8d6f5e5e88fc87f59541e5c7a93232c/174_0_1124_900/master/1124.jpg?width=460&quality=85&auto=format&fit=max&s=8749b37120d945c1d8060f83783dc8cc",
-        "summary": "Once ‘famine food’, empty granaries have forced people along the Shire River to harvest water-lily roots in waters full of the reptiles The mid-morning heat in Malawi’s lower Shire River basin is already suffocating, but Beatrice Maseko cannot afford to look…"
+        "title": "Cop31 draft text is attempt to ‘draw out parties’ to find agreement, president of talks says",
+        "url": "https://www.theguardian.com/environment/2026/nov/16/cop31-draft-text-draw-out-parties-find-agreement-president-talks-says",
+        "published_at": "2026-11-16T16:54:42Z",
+        "image": "https://i.guim.co.uk/img/media/a2d4b420ed47005796a742b6214ae07afc58f5e1/536_0_6113_4890/master/6113.jpg?width=460&quality=85&auto=format&fit=max&s=cdbf27455399dbc8fa6e467a6b6dd6db",
+        "summary": "Many countries surprised to see first version delivered with more than four days of negotiation remaining A draft text of a possible final outcome from the Cop31 UN climate summit is an attempt to “draw out parties” on their areas of agreement and…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Weakening UK electric vehicle targets would hurt car industry, ministers told",
-        "url": "https://www.theguardian.com/environment/2026/nov/16/weakening-uk-electric-vehicle-targets-would-hurt-car-industry-ministers-told",
-        "published_at": "2026-11-16T06:00:37Z",
-        "image": "https://i.guim.co.uk/img/media/2c482caa3e759cd7a5225f2c03f309598ab7e3a4/0_1589_3765_3012/master/3765.jpg?width=460&quality=85&auto=format&fit=max&s=803054df66f26743dcc201e0ff83a759",
-        "summary": "Exclusive: Experts say watering down ZEV mandate would slow market and hamper efforts to reduce cost of living Moves to weaken the UK’s targets on electric vehicles would hurt the car industry as well as consumers, campaigners and experts have said before a…"
+        "title": "Hero, villain or victim: why are refugees so rarely seen now as fully human? | Zoe Williams",
+        "url": "https://www.theguardian.com/commentisfree/2026/nov/16/hero-villain-or-victim-why-are-refugees-so-rarely-seen-now-as-fully-human",
+        "published_at": "2026-11-16T16:22:51Z",
+        "image": "https://i.guim.co.uk/img/media/5b45f24a321357dce1ec09f992b8a4f0c39d03d8/42_0_1713_1370/master/1713.jpg?width=460&quality=85&auto=format&fit=max&s=3c8a8e3cb871386d4fdc2f4323afd84b",
+        "summary": "The understanding of refugees as complex individuals, motivated variously by wanting to build a new life and return to what was theirs, often seems to have been lost. A new film offers a different, truer, perspective There was a screening last week of Seize…"
       }
     ],
     "space": [
@@ -241,7 +250,7 @@
         "title": "NGC 7129: Star Formation with Jets from Webb",
         "url": "https://science.nasa.gov/image-article/apod-2026-november-16-ngc-7129-star-formation-with-jets-from-webb/",
         "published_at": "2026-11-16T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/10/weic2620a.jpg?w=1280&h=1194&fit=clip&crop=faces%2Cfocalpoint",
+        "image": "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/10/weic2620a.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
         "summary": "Explanation: How do stars form? To help answer this question, NASA used the James Webb Space Telescope to take the featured detailed image of the star-forming region NGC 7129 in infrared light . Star formation progresses when gravity pulls together massive…"
       },
       {
@@ -250,7 +259,7 @@
         "title": "Leonid Meteors Through Orion",
         "url": "https://science.nasa.gov/image-article/apod-2026-november-15-leonid-meteors-through-orion/",
         "published_at": "2026-11-15T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/Leonids2022_Hongyang_2880.jpg?w=2880&h=3600&fit=clip&crop=faces%2Cfocalpoint",
+        "image": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/Leonids2022_Hongyang_2880.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
         "summary": "Explanation: Where will the next meteor appear? Even during a meteor shower, it is practically impossible to know. Therefore, a good way to enjoy a meteor shower is to find a place where you can sit comfortably and monitor a great expanse of dark sky. And it…"
       }
     ]
