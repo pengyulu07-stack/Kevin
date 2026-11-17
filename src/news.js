@@ -259,6 +259,11 @@
     const filters=el('div','ailleurs-news-filters');
     for(const [key,cn,en] of categories){const button=el('button',key===category?'active':'',zh()?cn:en);button.type='button';button.setAttribute('aria-pressed',String(key===category));button.onclick=()=>{category=key;visible=4;render(host);};filters.append(button);}
     host.append(filters);
+    const selectedFilter=filters.querySelector('button.active');
+    if(selectedFilter&&category!=='all'){
+      const itemRect=selectedFilter.getBoundingClientRect(),barRect=filters.getBoundingClientRect();
+      filters.scrollLeft+=itemRect.left-barRect.left-(filters.clientWidth-itemRect.width)/2;
+    }
     const status=el('p','ailleurs-news-edition');
     if(feed){const fresh=feed.edition_date===todayInShanghai();status.textContent=fresh?word(['今天的来源短讯 · '+feed.edition_date,'Source briefs for '+feed.edition_date]):word(['最近一次更新：'+feed.edition_date+'；今天的内容仍在等待更新。','Last update: '+feed.edition_date+'. Today’s edition is still pending.']);}
     else status.textContent=feedLoading?word(['正在读取新闻来源…','Loading sources…']):word(['暂时无法读取每日新闻。','Daily news is temporarily unavailable.']);
