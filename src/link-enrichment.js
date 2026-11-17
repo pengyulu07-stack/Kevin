@@ -227,13 +227,14 @@
       if(/open\.spotify\.com\/playlist\/|music\.apple\.com\/[^/]+\/playlist\/|soundcloud\.com\/[^/]+\/sets\//i.test(url)){
         status.textContent='This is a playlist link. Use Share a playlist to keep its tracks together.';return;
       }
+      const prose=value.replace(url,' ').trim();
       link.value=url;const radio=form.querySelector('input[name="source"][value="link"]');radio.checked=true;radio.dispatchEvent(new Event('change',{bubbles:true}));
       if(!title.value.trim()){
-        const marked=value.match(/《([^》]{1,100})》/u);
+        const marked=prose.match(/《([^》]{1,100})》/u);
         if(marked)title.value=marked[1].trim();
       }
       if(!artist.value.trim()){
-        const marked=value.match(/(?:歌手|演唱|artist)\s*[:：]\s*([^\n，,。]{1,100})/iu);
+        const marked=prose.match(/(?:歌手|演唱|artist)\s*[:：]\s*([^\n，,。]{1,100})/iu);
         if(marked)artist.value=marked[1].trim();
       }
       link.dispatchEvent(new Event('input',{bubbles:true}));
