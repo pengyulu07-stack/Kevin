@@ -273,7 +273,7 @@
       const popular=el('section','ailleurs-news-top');
       popular.append(el('h4','',word([category==='all'?'先看这三条':'本类最受关注的三条',category==='all'?'Three to start with':'Top three in this topic'])));
       const hasVotes=ranked.some(item=>counts(item).likes+counts(item).comments>0);
-      popular.append(el('p','',hasVotes?word(['按本站喜欢和评论排序；同分时优先显示中国报道，再看发布时间。','Ranked by reader likes and comments; China coverage breaks ties in Politics.']):category==='politics'?word(['还没有读者互动，先显示中国报道，再按发布时间排列。','No reader activity yet; China coverage comes first, then publication time.']):word(['还没有读者互动，暂按发布时间排列。','No reader activity yet; ordered by publication time.'])));
+      popular.append(el('p','',hasVotes?(category==='politics'?word(['按本站喜欢和评论排序；同分时优先显示中国报道，再看发布时间。','Ranked by reader likes and comments; China coverage breaks ties.']):word(['按本站喜欢和评论排序；同分时看发布时间。','Ranked by reader likes and comments, then publication time.'])):category==='politics'?word(['还没有读者互动，先显示中国报道，再按发布时间排列。','No reader activity yet; China coverage comes first, then publication time.']):word(['还没有读者互动，暂按发布时间排列。','No reader activity yet; ordered by publication time.'])));
       const topList=el('div','ailleurs-news-top-list');
       for(const [index,item] of ranked.entries()){
         const button=el('button');button.type='button';
