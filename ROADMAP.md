@@ -132,7 +132,9 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 - [x] Add a signed-in reader link suggestion form. Submissions go privately to the existing owner feedback inbox, with category, URL and optional note.
 - [x] Add a scheduled morning collector and document the editorial gate in `NEWS_PIPELINE.md`. The page shows the last successful edition date if today's collection is not available.
 - [x] Local browser check: News sits directly beside Daily Life; eight topic tabs appear; Space has two source briefs, and one opens in a site dialog; November 7 shows no cover cards, November 8 shows six; November 16 has no public songs.
-- [ ] Observe the first scheduled GitHub Actions run on November 17 and confirm its new edition is visible on the published site. Scheduled jobs can be delayed and cannot be guaranteed in advance.
+- [x] Observe the first scheduled GitHub Actions run on November 17: the source-brief workflow and following Pages build both succeeded. The workflow began at 12:35 Shanghai time, later than the scheduled morning window; verify the public page after this release separately.
+- [x] Reserve one Politics brief for a recent China report from the China desk feeds; fail the collector rather than publish a new edition without one. The November 17 local edition includes the China-marked Guardian report on the proposed Xi–Trump–Putin meeting.
+- [x] Add on-page likes and comments to source briefs and edited News articles, with in-place updates and author comment deletion. Add a three-story shelf inside each topic, ordered by onsite likes and comments with a clearly labelled date fallback before readers interact. Signed-in write and cross-account checks are still pending.
 - [ ] Write and check more 300–450-word original articles, two to four per topic per day. The automatic source briefs are deliberately shorter and do not satisfy the full editorial article target.
 - [ ] Complete the remaining deep work pages, contributor-confirmed playback, richer recommendations, calendar and gesture polish, responsive and signed-in end-to-end QA from the existing backlog.
 

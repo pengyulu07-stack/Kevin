@@ -2,7 +2,7 @@
 
 This writes short source briefs, not AI-written articles. The six hand-edited
 features in src/news.js remain separate from these automatically refreshed
-links. Run twice each morning through GitHub Actions.
+links. GitHub Actions is scheduled twice daily; actual start time can vary.
 """
 
 from __future__ import annotations
@@ -39,6 +39,10 @@ FEEDS = {
     "earth": [("The Guardian", "https://www.theguardian.com/environment/rss")],
     "space": [("NASA APOD", "https://science.nasa.gov/feed/apod-basic/")],
 }
+CHINA_FEEDS = [
+    ("The Guardian · China", "https://www.theguardian.com/world/china/rss"),
+    ("BBC News · China", "https://feeds.bbci.co.uk/news/world/asia/china/rss.xml"),
+]
 MEDIA = "{http://search.yahoo.com/mrss/}"
 TAG = re.compile(r"<[^>]*>")
 LOW_SIGNAL = re.compile(r"\b(review|cartoon|letters|live blog|live updates)\b|\blive:|\blive$|(?:^|\s)[–—-]\s*live\b|\bin pictures\b|^share your thoughts\b", re.I)
@@ -119,6 +123,18 @@ def main() -> int:
                 failures.append(f"{category}: {source}: {type(exc).__name__}")
         unique = {row["url"]: row for row in sorted(rows, key=lambda row: row["published_at"], reverse=True)}
         result[category] = list(unique.values())[:4]
+    china = []
+    for source, url in CHINA_FEEDS:
+        try:
+            china.extend(read_feed("politics", source, url))
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, ET.ParseError) as exc:
+            failures.append(f"politics: {source}: {type(exc).__name__}")
+    china.sort(key=lambda row: row["published_at"], reverse=True)
+    if not china:
+        print("No recent China report from the checked China feeds; keeping the previous edition.", file=sys.stderr)
+        return 1
+    china_item = {**china[0], "region": "china"}
+    result["politics"] = [china_item] + [row for row in result["politics"] if row["url"] != china_item["url"]][:3]
     # Do not replace a working edition with an empty or mostly failed scrape.
     healthy = sum(bool(rows) for rows in result.values())
     if healthy < 6:

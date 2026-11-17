@@ -1,6 +1,6 @@
 {
   "edition_date": "2026-11-17",
-  "updated_at": "2026-11-17T04:35:28.809461Z",
+  "updated_at": "2026-11-17T05:49:43.490278Z",
   "time_zone": "Asia/Shanghai",
   "kind": "source_briefs",
   "categories": {
@@ -84,6 +84,15 @@
       {
         "category": "art",
         "source": "The Guardian",
+        "title": "‘His lighthouses are self-portraits’: did Edward Hopper paint his sexual problems?",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/17/edward-hopper-sexual-problems-melancholy-wife-lighthouses",
+        "published_at": "2026-11-17T05:00:05Z",
+        "image": "https://i.guim.co.uk/img/media/975099e31f3df85f26826e7c9f5ed3ae60bc9fa9/370_104_3039_2432/master/3039.jpg?width=460&quality=85&auto=format&fit=max&s=3d35b55f5b4cf505cfeccc10079ee727",
+        "summary": "He is the maestro of American melancholy. But in a new biography, the artist is called a ‘sadist’ and a ‘prize hog’ by his wife – who was horrified to see their domestic and bedroom problems surfacing in his most famous works It should have been a happy…"
+      },
+      {
+        "category": "art",
+        "source": "The Guardian",
         "title": "‘Aboriginal people were the backbone of this state’: rediscovered photographs reveal life inside the 1946 Pilbara strike camps",
         "url": "https://www.theguardian.com/australia-news/ng-interactive/2026/nov/17/aboriginal-workers-1946-pilbara-strike-camps-john-wilson-photographs-australia-history-ntwnfb",
         "published_at": "2026-11-16T14:00:19Z",
@@ -132,39 +141,40 @@
     "politics": [
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "Failed asylum seekers face removal without five-day notice period",
-        "url": "https://www.bbc.co.uk/news/articles/cq20xnp2egm8o?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-17T01:24:49Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/b8c2/live/ba87c490-e210-11f1-a541-6d0c391a4254.jpg",
-        "summary": "Under proposed new rules, the Home Office would have six months in which to remove a person without telling them in advance."
-      },
-      {
-        "category": "politics",
-        "source": "BBC News",
-        "title": "Five EU countries announce migrant deportation centre in Rwanda",
-        "url": "https://www.bbc.co.uk/news/articles/cw987343352go?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T23:20:45Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/7397/live/2ac14ca0-e1d9-11f1-b8c8-67fa35f5afdb.jpg",
-        "summary": "Germany, Denmark, Austria, Greece and the Netherlands have announced a \"return hub\" for failed asylum seekers."
+        "source": "The Guardian · China",
+        "title": "Xi, Trump and Putin to discuss ‘world peace’ at trilateral, says China",
+        "url": "https://www.theguardian.com/world/2026/nov/16/xi-jinping-donald-trump-vladimir-putin-world-peace-trilateral-says-china",
+        "published_at": "2026-11-16T18:23:02Z",
+        "image": "https://i.guim.co.uk/img/media/396fda908dd29d4d244c2d89ce981e6578af985f/0_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=51ad0b4f873ff59a008485151439f596",
+        "summary": "Beijing stops short of confirming specific agenda, but Trump says denuclearisation, Iran war, trade and Ukraine will be among topics The meeting of Xi Jinping, Donald Trump and Vladimir Putin in Shenzhen this week will cover topics of “groundbreaking…",
+        "region": "china"
       },
       {
         "category": "politics",
         "source": "The Guardian",
-        "title": "Alan Milburn urges Burnham to spend billions on ‘new deal’ for young people",
-        "url": "https://www.theguardian.com/society/2026/nov/16/alan-milburn-urges-burnham-spend-billions-new-deal-young-people-youth-jobs-crisis-welfare-employment",
-        "published_at": "2026-11-16T22:30:55Z",
-        "image": "https://i.guim.co.uk/img/media/a86708b5e4debf383f4b49fc72cc08d1c91043ac/869_0_4344_3475/master/4344.jpg?width=460&quality=85&auto=format&fit=max&s=86c905d6e85817cc35aff84b1782228e",
-        "summary": "Report on Britain’s youth jobs crisis calls for welfare, education, health and employment policy shake-up Andy Burnham is being urged to spend billions of pounds on a “new deal” for the next generation that would fund guaranteed jobs support for young people…"
+        "title": "Invest in international rail services to boost UK-EU reset, Burnham urged",
+        "url": "https://www.theguardian.com/business/2026/nov/17/invest-international-rail-services-boost-uk-eu-reset-andy-burnham",
+        "published_at": "2026-11-17T05:00:06Z",
+        "image": "https://i.guim.co.uk/img/media/73462068d8df30f56420b8afb97c6004264f88e6/0_632_3531_2824/master/3531.jpg?width=460&quality=85&auto=format&fit=max&s=5af7d9604a821ede8e62a21f9e19d7ee",
+        "summary": "Campaigners call for reopening of high-speed Eurostar stations and new infrastructure for London St Pancras Britain should throw its weight behind international rail services to reset the UK-EU relationship, transport campaigners have urged the prime…"
       },
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "Children dropping out of school: What can politicians do about it?",
-        "url": "https://www.bbc.co.uk/news/articles/cje39lx9267vo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-16T22:23:41Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/6e5e/live/0f686c70-e20d-11f1-b023-f7d19fda92c1.jpg",
-        "summary": "The government believes around a third of young people who are persistently absent in Years 10 and 11 in England go on to be not in education, employment or training."
+        "source": "The Guardian",
+        "title": "Asylum seekers on final ‘one in, one out’ UK-France flight feel they are being ‘punished’",
+        "url": "https://www.theguardian.com/uk-news/2026/nov/17/asylum-seekers-one-in-one-out-uk-france-smugglers",
+        "published_at": "2026-11-17T05:00:06Z",
+        "image": "https://i.guim.co.uk/img/media/dac37f478ef7d47640a3bc5acc16af3f65584177/1000_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=52aec603dd22fbc37f2e9dd7cf2fc414",
+        "summary": "Many of those onboard are being deported for second time after fleeing threats from people smugglers in France Many of the asylum seekers on Tuesday’s final “one in, one out” deportation flight are people who returned to the UK fleeing threats from smugglers…"
+      },
+      {
+        "category": "politics",
+        "source": "The Guardian",
+        "title": "Who are the Neets? UK youth job crisis in five charts",
+        "url": "https://www.theguardian.com/society/2026/nov/17/who-are-neets-uk-youth-job-crisis-charts",
+        "published_at": "2026-11-17T05:00:04Z",
+        "image": "https://i.guim.co.uk/img/media/d186b9f0238afc401443f0e9fea01d1a37b8e386/700_0_3500_2801/master/3500.jpg?width=460&quality=85&auto=format&fit=max&s=54ada12320dd5faf397bdee7287cc7ae",
+        "summary": "Bringing the number not in education, employment or training down from a decade high will be tough. Here’s why Alan Milburn urges Burnham to spend billions on ‘new deal’ for young people Almost a million young people – one in eight – in the UK are not in…"
       }
     ],
     "technology": [
@@ -209,11 +219,11 @@
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Band of baby sea turtles swims into ocean after historic California nesting",
-        "url": "https://www.theguardian.com/us-news/2026/nov/16/california-sea-turtle-eggs-hatched",
-        "published_at": "2026-11-16T23:19:11Z",
-        "image": "https://i.guim.co.uk/img/media/4861d06aace7cca64a1450b2e61fb90d86e1600a/243_0_2431_1945/master/2431.jpg?width=460&quality=85&auto=format&fit=max&s=9f88c67bd7c85e48be3276e2e6c41072",
-        "summary": "Hatchlings emerge after discovery in September of first sea turtle nests ever to have been recorded on US west coast Two months after the discovery of the first sea turtle nests ever to have been recorded on the US west coast, the eggs have hatched – and…"
+        "title": "The root-to-tip revolution! An A-Z of how to eat plants in full – for extra flavour, fibre and savings",
+        "url": "https://www.theguardian.com/lifeandstyle/2026/nov/17/root-to-tip-revolution-a-to-z-eat-plants-full-flavour-fibre-savings",
+        "published_at": "2026-11-17T05:00:07Z",
+        "image": "https://i.guim.co.uk/img/media/50bbd93dc9e7da85ab3e5d3e3f88c68f3430e121/0_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=613b827349754adabb0d6dcf3db9fc2e",
+        "summary": "If you discard the peels, skins, stalks and seeds when consuming fruit and vegetables you are missing out on a lot of value. Here’s what to incorporate into your diet – and what to avoid Do you peel your potatoes, deseed your squash and core your cauliflower?…"
       },
       {
         "category": "earth",
@@ -247,20 +257,20 @@
       {
         "category": "space",
         "source": "NASA APOD",
+        "title": "Milky Way versus Aurora",
+        "url": "https://science.nasa.gov/image-article/apod-2026-november-17-milky-way-versus-aurora/",
+        "published_at": "2026-11-17T05:05:00Z",
+        "image": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/GalaxyVsAurora_Scheib_960.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
+        "summary": "Explanation: Are these two giant arches battling for control of the sky? No, but it sure looks like it! The arch on the left is the central band of our Milky Way Galaxy , an ancient system of stars, gas, and dust that predates our Earth and is very far away.…"
+      },
+      {
+        "category": "space",
+        "source": "NASA APOD",
         "title": "NGC 7129: Star Formation with Jets from Webb",
         "url": "https://science.nasa.gov/image-article/apod-2026-november-16-ngc-7129-star-formation-with-jets-from-webb/",
         "published_at": "2026-11-16T05:05:00Z",
         "image": "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/10/weic2620a.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
         "summary": "Explanation: How do stars form? To help answer this question, NASA used the James Webb Space Telescope to take the featured detailed image of the star-forming region NGC 7129 in infrared light . Star formation progresses when gravity pulls together massive…"
-      },
-      {
-        "category": "space",
-        "source": "NASA APOD",
-        "title": "Leonid Meteors Through Orion",
-        "url": "https://science.nasa.gov/image-article/apod-2026-november-15-leonid-meteors-through-orion/",
-        "published_at": "2026-11-15T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/Leonids2022_Hongyang_2880.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
-        "summary": "Explanation: Where will the next meteor appear? Even during a meteor shower, it is practically impossible to know. Therefore, a good way to enjoy a meteor shower is to find a place where you can sit comfortably and monitor a great expanse of dark sky. And it…"
       }
     ]
   }
