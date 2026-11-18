@@ -21,7 +21,7 @@
           const wanted=normal(song),artistName=normal(performer);
           const matches=pages.filter(page=>{
             const heading=normal(page.title),body=normal(page.extract);
-            if(/^(list of|列表|消歧义)/i.test(page.title))return false;
+            if(/^(list of|列表|消歧义)/i.test(page.title)||/\((disambiguation|消歧义)\)/i.test(page.title)||/\bmay also refer to\b/i.test(page.extract))return false;
             return (heading===wanted||heading.startsWith(wanted+' '))&&(heading.includes(artistName)||body.includes(artistName));
           }).sort((a,b)=>(normal(a.title)===wanted?0:1)-(normal(b.title)===wanted?0:1));
           if(matches.length){const page=matches[0];return {title:page.title,text:page.extract.trim(),url:page.fullurl,language};}
@@ -41,7 +41,7 @@
     for(const item of items.slice(0,6)){
       try{
         const src=new URL(item.src),page=new URL(item.pageUrl);
-        if(src.protocol!=='https:'||src.hostname!=='upload.wikimedia.org'||page.protocol!=='https:'||page.hostname!=='commons.wikimedia.org')continue;
+        if(src.protocol!=='https:'||!['upload.wikimedia.org','thumb.wikimedia.org'].includes(src.hostname)||page.protocol!=='https:'||page.hostname!=='commons.wikimedia.org')continue;
         const figure=document.createElement('figure'),img=document.createElement('img');img.src=src.href;img.alt=item.title||song.artist;img.loading='lazy';
         const caption=document.createElement('figcaption');caption.textContent=item.title||song.artist;
         const credit=document.createElement('a');credit.href=page.href;credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent=(item.credit||'Wikimedia Commons')+' · '+(item.license||'source');

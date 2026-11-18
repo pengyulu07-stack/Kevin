@@ -1,10 +1,10 @@
 /* Optional Commons photographs. Every suggestion keeps its file-page attribution. */
 (() => {
   const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
-  const plain=value=>{const element=document.createElement('div');element.innerHTML=String(value||'');return element.textContent.trim();};
-  const safeImage=value=>{try{const url=new URL(value);return url.protocol==='https:'&&(['upload.wikimedia.org','commons.wikimedia.org'].includes(url.hostname))?url.href:'';}catch{return '';}};
+  const plain=value=>new DOMParser().parseFromString(String(value||''),'text/html').body.textContent.trim();
+  const safeImage=value=>{try{const url=new URL(value);return url.protocol==='https:'&&(['upload.wikimedia.org','thumb.wikimedia.org'].includes(url.hostname))?url.href:'';}catch{return '';}};
   const safePage=value=>{try{const url=new URL(value);return url.protocol==='https:'&&url.hostname==='commons.wikimedia.org'?url.href:'';}catch{return '';}};
-  async function search(artist){
+  async function searchName(artist){
     const endpoint=new URL('https://commons.wikimedia.org/w/api.php');
     endpoint.search=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:'intitle:"'+artist.replaceAll('"','')+'" filetype:bitmap',gsrnamespace:'6',gsrlimit:'35',prop:'imageinfo',iiprop:'url|extmetadata|mime',iiurlwidth:'480'}).toString();
     const response=await fetch(endpoint,{mode:'cors',signal:AbortSignal.timeout(8500)});
@@ -17,8 +17,14 @@
       const src=safeImage(file?.thumburl||''),pageUrl=safePage(file?.descriptionurl||'');
       const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).slice(0,160);
       if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||seen.has(pageUrl))return [];
-      seen.add(pageUrl);return [{src,pageUrl,title,credit:credit||'Wikimedia Commons',license}];
+      const description=plain(meta.ImageDescription?.value).slice(0,180);
+      seen.add(pageUrl);return [{src,pageUrl,title:description&&normalize(description).includes(name)?description:title,credit:credit||'Wikimedia Commons',license}];
     }).slice(0,12);
+  }
+  async function search(artist){
+    const names=normalize(artist)==='madvillain'?['MF Doom','Madlib']:[artist];
+    const matches=await Promise.allSettled(names.map(searchName));
+    const seen=new Set();return matches.flatMap(result=>result.status==='fulfilled'?result.value:[]).filter(item=>{if(seen.has(item.pageUrl))return false;seen.add(item.pageUrl);return true;}).slice(0,12);
   }
   function setup(){
     const form=document.getElementById('upload-form'),artist=form?.elements.artist;
@@ -33,8 +39,11 @@
     form.elements.cover.closest('label').after(section);
     let timer,sequence=0,lastArtist='',chosen=[];
     const render=items=>{
-      grid.replaceChildren();chosen=items.slice(0,4);
-      status.textContent=items.length?items.length+' sourced photos found · '+chosen.length+' selected. Review or change them below.':'No clearly named, credited Commons photographs found. You can publish without extras.';
+      grid.replaceChildren();chosen=[];
+      const captions=new Set();
+      for(const item of items){const key=normalize(item.title);if(!captions.has(key)){chosen.push(item);captions.add(key);}if(chosen.length===4)break;}
+      for(const item of items){if(chosen.length===4)break;if(!chosen.includes(item))chosen.push(item);}
+      status.textContent=items.length?items.length+' sourced photos found'+(normalize(artist.value)==='madvillain'?' of MF DOOM and Madlib, the members of Madvillain':'')+' · '+chosen.length+' selected. Review or change them below.':'No clearly named, credited Commons photographs found. You can publish without extras.';
       for(const item of items){
         const label=document.createElement('label');label.className='song-photo-option';
         const check=document.createElement('input');check.type='checkbox';check.checked=chosen.includes(item);check.setAttribute('aria-label','Include '+item.title);

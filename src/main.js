@@ -710,7 +710,7 @@ async function publish(event) {
     if (coverPath) uploaded.push({ bucket: "images", path: coverPath });
     const mediaGallery = JSON.parse(form.dataset.mediaGallery || '[]');
     const safeGallery = Array.isArray(mediaGallery) ? mediaGallery.filter(item => {
-      try { const src=new URL(item.src),page=new URL(item.pageUrl);return src.protocol==='https:'&&src.hostname==='upload.wikimedia.org'&&page.protocol==='https:'&&page.hostname==='commons.wikimedia.org'&&String(item.title||'').length<=240&&String(item.credit||'').length<=160&&String(item.license||'').length<=80; } catch { return false; }
+      try { const src=new URL(item.src),page=new URL(item.pageUrl);return src.protocol==='https:'&&['upload.wikimedia.org','thumb.wikimedia.org'].includes(src.hostname)&&page.protocol==='https:'&&page.hostname==='commons.wikimedia.org'&&String(item.title||'').length<=240&&String(item.credit||'').length<=160&&String(item.license||'').length<=80; } catch { return false; }
     }).slice(0,6) : [];
     const song = {
       id: crypto.randomUUID(), owner_id: user.id, day, title, artist, album, nickname: profile.nickname, note, genre: genres[0], genres, language,
