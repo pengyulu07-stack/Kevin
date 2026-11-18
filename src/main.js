@@ -256,7 +256,7 @@ async function loadSongs() {
   const day = selectedDay;
   status("Loading songs for this date…");
   try {
-    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,nickname,note,genre,genres,language,audio_path,source_url,cover_path,created_at").eq("day", day).gte("day", PUBLIC_LAUNCH_DAY).order("created_at", { ascending: false }).order("id"));
+    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,album,nickname,note,genre,genres,language,audio_path,source_url,video_url,cover_path,media_gallery,created_at").eq("day", day).gte("day", PUBLIC_LAUNCH_DAY).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
     const nextVotes = new Map();
     const nextComments = new Map();
@@ -360,7 +360,7 @@ function youtubeVideoId(value) {
     return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
   } catch{return '';}
 }
-function songCoverUrl(song) { const id=youtubeVideoId(song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
+function songCoverUrl(song) { const id=youtubeVideoId(song?.video_url||song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
 function soundCloudTrackUrl(value) {
   try { const url=new URL(value);if(url.protocol!=='https:'||!['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname))return '';
     const parts=url.pathname.split('/').filter(Boolean);if(!(parts.length===2||parts.length===3&&parts[1]==='sets')||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
@@ -433,6 +433,7 @@ function createCard(song, rank, discussion = false) {
   const byline=el('p','song-byline');
   if(song.artist)byline.append(document.createTextNode(song.artist+' · '));
   const member=el('button','member-link',song.nickname);member.type='button';member.title='See '+song.nickname+'’s shares and followers';member.addEventListener('click',()=>window.DaytoneSocial?.openProfile(song.owner_id,song.nickname));byline.append(member);meta.append(byline);
+  if(song.album)meta.append(el('p','song-album',song.album));
   const genreRow = el("div", "song-genre-row");
   for (const key of song.genres || [song.genre || "other"]) genreRow.append(el("span", "song-genre-tag", musicGenreName(key)));
   genreRow.append(el("span", "song-genre-tag language-tag", musicGenreName(song.language || "other_language")));
@@ -460,8 +461,9 @@ function createCard(song, rank, discussion = false) {
   const videoSearch = el('div','song-video-search');
   videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
   meta.append(videoSearch);
-  if (youtubeVideoId(song.source_url)) {
-    const video=el('button','listen-youtube','▶ YouTube video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on YouTube');
+  if (musicEmbed(song.video_url||song.source_url)?.classList.contains('video-player')) {
+    const service=youtubeVideoId(song.video_url||song.source_url)?'YouTube':'Bilibili';
+    const video=el('button','listen-youtube','▶ '+service+' video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on '+service);
     video.addEventListener('click',()=>window.DaytoneListen?.openVideo(song));meta.append(video);
   }
   if (song.audio_path) {
@@ -654,6 +656,7 @@ async function publish(event) {
   const data = new FormData(form);
   const title = String(data.get("title") || "").trim();
   const artist = String(data.get("artist") || "").trim();
+  const album = String(data.get("album") || "").trim();
   const note = String(data.get("note") || "").trim();
   const genres = data.getAll("genres").map(String);
   if (!genres.length) genres.push("other");
@@ -662,6 +665,7 @@ async function publish(event) {
   const file = data.get("file");
   const cover = data.get("cover");
   const urlText = String(data.get("url") || "").trim();
+  const videoText = String(data.get("video_url") || "").trim();
   const errorNode = $("form-error");
   errorNode.textContent = "";
   if (!title) { errorNode.textContent = "Enter a song title."; return; }
@@ -674,8 +678,10 @@ async function publish(event) {
       sourceUrl = parsed.href;
     } catch { errorNode.textContent = "Music links must start with https://."; return; }
   }
-  if (sourceUrl && youtubeVideoId(sourceUrl) && !form.elements.confirm_video?.checked) {
-    errorNode.textContent = "Confirm that this YouTube video is the version you want to share."; return;
+  let videoUrl = null;
+  if(videoText){try{const parsed=new URL(videoText);if(parsed.protocol!=='https:'||!musicEmbed(parsed.href)?.classList.contains('video-player'))throw Error();videoUrl=parsed.href;}catch{errorNode.textContent='Paste a direct YouTube or Bilibili video link.';return;}}
+  if ((videoUrl || (sourceUrl && musicEmbed(sourceUrl)?.classList.contains('video-player'))) && !form.elements.confirm_video?.checked) {
+    errorNode.textContent = "Check and confirm the video version before publishing."; return;
   }
   const button = $("submit-song");
   button.disabled = true;
@@ -702,9 +708,13 @@ async function publish(event) {
     }
     coverPath = await uploadFile("images", coverToUpload, imageTypes, 1024 * 1024);
     if (coverPath) uploaded.push({ bucket: "images", path: coverPath });
+    const mediaGallery = JSON.parse(form.dataset.mediaGallery || '[]');
+    const safeGallery = Array.isArray(mediaGallery) ? mediaGallery.filter(item => {
+      try { const src=new URL(item.src),page=new URL(item.pageUrl);return src.protocol==='https:'&&src.hostname==='upload.wikimedia.org'&&page.protocol==='https:'&&page.hostname==='commons.wikimedia.org'&&String(item.title||'').length<=240&&String(item.credit||'').length<=160&&String(item.license||'').length<=80; } catch { return false; }
+    }).slice(0,6) : [];
     const song = {
-      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, nickname: profile.nickname, note, genre: genres[0], genres, language,
-      audio_path: audioPath, source_url: sourceUrl, cover_path: coverPath,
+      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, album, nickname: profile.nickname, note, genre: genres[0], genres, language,
+      audio_path: audioPath, source_url: sourceUrl, video_url:videoUrl, cover_path: coverPath, media_gallery:safeGallery,
       file_size: audioPath ? file.size : null
     };
     let saved = false;

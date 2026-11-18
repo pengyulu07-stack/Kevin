@@ -161,7 +161,7 @@ The short completion report for any single release is not the full product check
 - [x] Use an on-site Apple Music embed when the shared Apple link has a supported embed shape. Platform login and licensing may still restrict full playback.
 - [x] Make a typed or pasted song title search the Apple catalog automatically; show recording, artist and album choices with an on-page 30-second sample button. A sample does not imply the contributor's exact full-length version.
 - [x] Show an optional, attributed Wikipedia background excerpt in the composer and song discussion only when a page matches both title and artist. This is source context, not an invented creation story; songs with no reliable match remain blank.
-- [x] Build and deploy a signed-in YouTube Data API search endpoint with four embeddable video choices, click-to-preview and explicit version selection in the composer. The endpoint requires a server-side `YOUTUBE_API_KEY` that is not yet configured; its live UI currently falls back to a clearly labeled YouTube search link.
+- [x] Build and deploy a signed-in YouTube Data API search endpoint with up to ten embeddable video choices, click-to-preview and explicit version selection in the composer. The endpoint requires a server-side `YOUTUBE_API_KEY` that is not yet configured; its live UI currently falls back to clearly labeled YouTube and Bilibili search links.
 - [ ] Verify a real signed-in publication and second-account view, including the new YouTube lookup, saved cover, category suggestion and same-page refresh. The November 17 date gate has been removed; a production post under the owner's account has not been made solely for testing.
 
 ### November 17 sharing opened for owner review
@@ -174,6 +174,14 @@ The short completion report for any single release is not the full product check
 - [ ] Configure the server-side YouTube search credential and check candidate, embed and version confirmation on the public share form. Until then, the form offers a labeled YouTube search link and can embed a specific pasted YouTube URL, but does not auto-list video candidates.
 
 ### November 18 share quality continuation
+
+- [x] Show up to ten catalog recording candidates after entering a song title, and require the contributor to select the exact artist and album. Keep the candidates visible for comparison, offer available 30-second iTunes previews, and fill album, cover, genre and an editable factual note only after selection.
+- [x] Separate the selected YouTube or Bilibili video from the original music link, keep explicit video confirmation, and prefer the selected video when a listener plays the song here. The server endpoint now requests up to ten YouTube candidates; automatic results still require the missing server-side key.
+- [x] Add optional Wikimedia Commons photo candidates of the confirmed artist to the music composer. Up to four credited, license-labeled photos are selected by default when found; the contributor can change the selection, up to six, and the chosen photos appear on the published song discussion. The search only accepts files whose names contain the artist and have a file page and machine-readable license. This is not a guarantee of four suitable photos for every artist or of verified concert/creation context.
+- [ ] Verify the Commons search, candidate selection, album and video fields, preview, publication and displayed gallery in the public browser. Do not publish a test share under the owner's account without a real choice from the owner.
+- [ ] Add a sourced, individually reviewed music introduction that leads with the song's content and compelling features, then its creative context and any meaningful honors. A catalog title/album/year sentence and a Wikipedia excerpt are only a first draft, not an editorially complete note.
+- [ ] Curate at least five genuinely related extra photographs for each system music recommendation; include a useful caption, source and license. The contributor Commons picker does not complete this editorial task.
+- [ ] Add the requested day/week music browsing switch while leaving the calendar day-based. Defer the monthly Film/Art/Books redesign until the music sharing path is dependable, per the owner's priority.
 
 - [x] Add local previews for a selected song cover, uploaded song audio and Film/Art/Books/Daily Life photo before submission. Reject unsupported file types and oversize files visibly before the member clicks Publish. Clear previews and release their temporary browser URLs when a form resets or closes.
 - [x] Keep the Upload audio choice when catalog matching also finds an Apple track; an automatically suggested catalog link should not replace the member's chosen file.

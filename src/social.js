@@ -11,7 +11,7 @@
     if(!dialog.open)dialog.showModal();
     try{
       const [songsResult,postsResult,countResult,ownResult]=await Promise.all([
-        client.from('songs').select('id,day,title,artist,nickname,cover_path,audio_path,source_url,created_at').eq('owner_id',id).gte('day',window.AilleursLaunchDay).order('created_at',{ascending:false}).limit(30),
+        client.from('songs').select('id,day,title,artist,album,nickname,cover_path,audio_path,source_url,video_url,media_gallery,created_at').eq('owner_id',id).gte('day',window.AilleursLaunchDay).order('created_at',{ascending:false}).limit(30),
         client.from('posts').select('id,day,title,category,nickname,created_at').eq('owner_id',id).order('created_at',{ascending:false}).limit(20),
         client.from('user_follows').select('follower_id',{count:'exact',head:true}).eq('followed_id',id),
         user?client.from('user_follows').select('follower_id').eq('follower_id',user.id).eq('followed_id',id).maybeSingle():Promise.resolve({data:null,error:null})

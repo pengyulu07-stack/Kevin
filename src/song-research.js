@@ -32,11 +32,29 @@
     cache.set(key,task);return task;
   }
   function panel(){const section=document.createElement('section');section.className='song-research';section.hidden=true;return section;}
+  function gallery(section,song){
+    const items=Array.isArray(song?.media_gallery)?song.media_gallery:[];
+    if(!items.length)return;
+    const block=document.createElement('section');block.className='song-related-photos';
+    const title=document.createElement('h3');title.textContent=word('相关照片','Related photographs');block.append(title);
+    const grid=document.createElement('div');grid.className='song-related-grid';
+    for(const item of items.slice(0,6)){
+      try{
+        const src=new URL(item.src),page=new URL(item.pageUrl);
+        if(src.protocol!=='https:'||src.hostname!=='upload.wikimedia.org'||page.protocol!=='https:'||page.hostname!=='commons.wikimedia.org')continue;
+        const figure=document.createElement('figure'),img=document.createElement('img');img.src=src.href;img.alt=item.title||song.artist;img.loading='lazy';
+        const caption=document.createElement('figcaption');caption.textContent=item.title||song.artist;
+        const credit=document.createElement('a');credit.href=page.href;credit.target='_blank';credit.rel='noopener noreferrer';credit.textContent=(item.credit||'Wikimedia Commons')+' · '+(item.license||'source');
+        img.addEventListener('error',()=>figure.remove(),{once:true});figure.append(img,caption,credit);grid.append(figure);
+      }catch{/* A broken remote image should not hide the song. */}
+    }
+    block.append(grid);section.after(block);
+  }
   function show(section,source){
     section.replaceChildren();
     if(!source){section.hidden=true;return;}
     section.hidden=false;
-    const heading=document.createElement('h3');heading.textContent=word('关于这首歌','About this song');
+    const heading=document.createElement('h3');heading.textContent=source.scope==='album'?word('关于这张专辑','About the album'):word('关于这首歌','About this song');
     const lead=document.createElement('p');lead.textContent=source.text.slice(0,300)+(source.text.length>300?'…':'');
     const details=document.createElement('details');
     const summary=document.createElement('summary');summary.textContent=word('展开来源摘要','Read more from the source');details.append(summary);
@@ -48,22 +66,24 @@
   async function mount(host,song){
     if(!host||!song?.title||!song?.artist)return;
     const section=panel();host.append(section);
-    const source=await lookup(song.title,song.artist);
-    if(section.isConnected)show(section,source);
+    let source=await lookup(song.title,song.artist);
+    if(!source&&song.album&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(song.album,song.artist,'music');source=found?{...found,scope:'album'}:null;}
+    if(section.isConnected){show(section,source);gallery(section,song);}
   }
   document.addEventListener('DOMContentLoaded',()=>{
-    const form=document.getElementById('upload-form'),title=form?.elements.title,artist=form?.elements.artist,note=form?.elements.note;
+    const form=document.getElementById('upload-form'),title=form?.elements.title,artist=form?.elements.artist,album=form?.elements.album,note=form?.elements.note;
     if(!title||!artist||!note)return;
     const section=panel();note.closest('label').after(section);
     let timer,sequence=0;
     const run=async()=>{
-      const current=++sequence,song=title.value.trim(),performer=artist.value.trim();
+      const current=++sequence,song=title.value.trim(),performer=artist.value.trim(),record=album?.value.trim()||'';
       if(song.length<3||performer.length<2){show(section,null);return;}
-      const source=await lookup(song,performer);
-      if(current===sequence&&song===title.value.trim()&&performer===artist.value.trim())show(section,source);
+      let source=await lookup(song,performer);
+      if(!source&&record&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(record,performer,'music');source=found?{...found,scope:'album'}:null;}
+      if(current===sequence&&song===title.value.trim()&&performer===artist.value.trim()&&record===(album?.value.trim()||''))show(section,source);
     };
     const schedule=()=>{clearTimeout(timer);++sequence;show(section,null);timer=setTimeout(()=>void run(),1300);};
-    title.addEventListener('input',schedule);artist.addEventListener('input',schedule);
+    title.addEventListener('input',schedule);artist.addEventListener('input',schedule);album?.addEventListener('input',schedule);
     form.addEventListener('daytone:catalog-found',schedule);
     form.addEventListener('daytone:recording-selected',schedule);
     form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;show(section,null);});

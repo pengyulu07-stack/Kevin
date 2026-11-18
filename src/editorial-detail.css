@@ -85,6 +85,7 @@
 .editorial-book-excerpt summary{cursor:pointer;color:#f2d2c2;font:600 14px/1.4 system-ui,sans-serif}
 .editorial-book-excerpt blockquote{margin:16px 0 2px;color:#f0e8e1;font:italic 20px/1.55 Georgia,serif}
 .editorial-community{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(210px,.8fr);gap:32px}
+.editorial-community.without-criticism{grid-template-columns:1fr}
 .editorial-community h4{margin:0 0 14px;color:#eee7e0;font:22px/1.2 Georgia,serif}
 .editorial-heart{padding:10px 14px;border:1px solid #a96e5e;border-radius:5px;background:#3b2926;color:#f7e4db;cursor:pointer;font:600 13px/1.3 system-ui,sans-serif}
 .editorial-heart[aria-pressed="true"]{background:#8a403b;color:#fff}

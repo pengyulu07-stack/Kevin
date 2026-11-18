@@ -25,7 +25,7 @@ Deno.serve(async(request:Request)=>{
   const cached=cache.get(query);
   if(cached&&Date.now()-cached.at<6*60*60*1000)return new Response(JSON.stringify({available:true,items:cached.items}),{headers});
   const url=new URL('https://www.googleapis.com/youtube/v3/search');
-  url.search=new URLSearchParams({part:'snippet',q:query,type:'video',videoEmbeddable:'true',maxResults:'4',safeSearch:'moderate',key}).toString();
+  url.search=new URLSearchParams({part:'snippet',q:query,type:'video',videoEmbeddable:'true',maxResults:'10',safeSearch:'moderate',key}).toString();
   try{
     const response=await fetch(url,{signal:AbortSignal.timeout(7000)});
     if(!response.ok)return new Response(JSON.stringify({available:false,reason:'provider_unavailable',items:[]}),{status:502,headers});

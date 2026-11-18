@@ -150,7 +150,7 @@
     const host=$v('music-discussion-body'),section=make('section','song-connections');section.append(make('h3','','Discover more'));
     const content=make('div','song-connections-content');content.append(make('p','song-connections-empty','Finding other songs…'));section.append(content);host.append(section);
     try{
-      const columns='id,day,title,artist,nickname,cover_path,audio_path,source_url,genres,genre,language,note,created_at';
+      const columns='id,day,title,artist,album,nickname,cover_path,audio_path,source_url,video_url,media_gallery,genres,genre,language,note,created_at';
       const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/\b(feat\.?|ft\.?|featuring|with)\b.*$/i,'').replace(/[\s.,·&/()\[\]_-]+/g,'').trim();
       const artistKey=normalize(song.artist);
       const artistSearch=String(song.artist||'').split(/\s*(?:,|&|·|\/| feat\.? | ft\.? )\s*/i)[0]?.trim();

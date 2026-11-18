@@ -254,7 +254,6 @@
     if (cached) {
       paragraph(context, [cached.creation_date, cached.technique, cached.culture].filter(Boolean).join(' · '), 'editorial-meta');
       if (!story) paragraph(context, cached.description || t('馆藏记录未提供说明。', 'The museum record has no description.'));
-      paragraph(images, t('馆藏目前只有这件作品的图像；没有核对到创作过程照片。', 'The catalog supplies this work image, but no verified process photographs.'));
       return;
     }
     if (!story) paragraph(context, t('正在读取馆藏记录…', 'Loading museum record…'));
@@ -274,14 +273,14 @@
     const context = section(body, t('这本书', 'The book'), 'about');
     const story = storyFor(print, 'books');
     if (story) addStory(context, story);
-    const reading = section(body, t('翻开几页', 'Read a little'), 'reading');
+    const reading = titleOnly(print) === 'The Picture of Dorian Gray' ? section(body, t('翻开几页', 'Read a little'), 'reading') : null;
     if (!story) paragraph(context, t('正在读取书目…', 'Loading book record…'));
-    paragraph(reading, print.artist + ' · ' + titleOnly(print), 'editorial-meta');
+    if(reading)paragraph(reading, print.artist + ' · ' + titleOnly(print), 'editorial-meta');
     if (titleOnly(print) === 'The Picture of Dorian Gray') {
       const excerpt = make('details', 'editorial-book-excerpt'); excerpt.append(make('summary', '', t('展开一小段原文', 'Read a short passage')));
       excerpt.append(make('blockquote', '', 'There is no such thing as a moral or an immoral book. Books are well written, or badly written.'));
       reading.append(excerpt);
-    } else paragraph(reading, t('这本书尚无核对过的站内摘录。', 'No rights-checked excerpt has been added yet.'));
+    }
     try {
       const key = new URL(print.source).pathname;
       const response = await fetch('https://openlibrary.org' + key + '.json'); if (!response.ok) throw Error('book');
@@ -307,7 +306,6 @@
       paragraph(context, t('罗伯特·维内执导的《卡里加里博士的小屋》于 1920 年问世。它把德国表现主义的倾斜街道、锯齿般的室内空间与演员动作连在一起，让不安直接成为可见的布景。', 'Robert Wiene’s 1920 film makes unease visible. Slanted streets, jagged interiors and the performers’ movements are joined into an expressionist world.'));
       paragraph(context, t('BFI 的 Alex Barrett 把这种风格放回战后德国的情绪、制作条件与电影发行的背景中，也指出结尾的框架故事没有把真实与幻觉彻底分开。下面的画面是影片截图，不是拍摄现场照片。', 'BFI writer Alex Barrett connects this style to postwar Germany, the film’s production and its release. He also notes that the framing story leaves reality and delusion unresolved. The images below are frames from the film, not behind-the-scenes photographs.'));
     } else {
-      paragraph(context, t('这张海报或截图已核对出处。', 'The poster or frame has a checked source.'));
       const source=make('div','work-research');source.hidden=true;context.append(source);
       void window.AilleursWorkResearch?.mount(source,titleOnly(print),'','film');
     }
@@ -354,7 +352,7 @@
     } else if (room === 'film' && isCaligari(print)) {
       paragraph(reading, t('Alex Barrett 注意到扭曲的布景如何与演员身体结合，而结尾保留的疑问让它远不止是一场视觉实验。', 'Alex Barrett connects the distorted sets with the performers’ bodies and reads the unsettled ending as more than a visual trick.'));
       paragraph(reading, 'Alex Barrett · BFI, 2020', 'editorial-attribution');
-    } else paragraph(reading, t('还没有核对过的站外评论。', 'No outside review has been checked for this work yet.'));
+    } else {reading.remove();grid.classList.add('without-criticism');}
     if (!client) { list.textContent = t('讨论暂不可用。', 'Discussion is unavailable.'); heart.disabled = true; form.hidden = true; return; }
     async function refresh() {
       const [likesResult, commentsResult] = await Promise.all([

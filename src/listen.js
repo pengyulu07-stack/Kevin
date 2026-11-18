@@ -146,7 +146,7 @@
     details.append(links);return details;
   }
   function playerFor(url){const player=typeof musicEmbed==='function'?musicEmbed(url):null;if(player){player.classList.add('listen-player');if(player.tagName==='IFRAME')player.loading='eager';}return player;}
-  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && playerFor(song.source_url)));}
+  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && playerFor(song.source_url)) || (song?.video_url && playerFor(song.video_url)));}
   function actionLabel(song){return (canPlayHere(song)?'Play ':'Find ') + String(song?.title||'song');}
   function updateQueueControls(){
     const active=Boolean(queue),position=dock.querySelector('#player-dock-position');
@@ -196,17 +196,17 @@
   }
   function sourceSection(song){
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);body.append(audio);void audio.play().catch(()=>{});return true;}
-    if(!song.source_url)return false;
-    const label=platform(song.source_url);
-    const player=playerFor(song.source_url);
-    if(player){attachPlayer(player,label,song.source_url);return true;}
-    body.append(directLink(song.source_url,tr('在 '+label+' 打开分享版本','Open shared version in '+label)));return true;
+    const source=song.video_url||song.source_url;if(!source)return false;
+    const label=platform(source);
+    const player=playerFor(source);
+    if(player){attachPlayer(player,label,source);return true;}
+    body.append(directLink(source,tr('在 '+label+' 打开分享版本','Open shared version in '+label)));return true;
   }
   function open(song,fromQueue=false){
     const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
     if(!fromQueue)queue=null;
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);openDock(song,audio);return;}
-    if(song.source_url){const player=playerFor(song.source_url);if(player){openDock(song,player);return;}}
+    for(const source of [song.video_url,song.source_url]){if(source){const player=playerFor(source);if(player){openDock({...song,source_url:source},player);return;}}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
     dialog.querySelector('h2').textContent='Where to listen';
     if(!dialog.open)dialog.showModal();
@@ -216,13 +216,14 @@
     body.append(searchLinks(title,artist));
   }
   function openVideo(song){
-    if(platform(song?.source_url)!=='YouTube')return;
-    const player=playerFor(song.source_url);if(!player)return;
+    const video= song?.video_url || song?.source_url;
+    if(!['YouTube','Bilibili'].includes(platform(video)))return;
+    const player=playerFor(video);if(!player)return;
     if(!dock.hidden){dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');}
     videoStage.replaceChildren();player.loading='eager';player.src+=(player.src.includes('?')?'&':'?')+'autoplay=1';videoStage.append(player);
     videoDialog.querySelector('#video-dialog-title').textContent=song.title||'Video';
     videoDialog.querySelector('#video-dialog-artist').textContent=song.artist||'';
-    videoDialog.querySelector('#video-original').href=song.source_url;
+    videoDialog.querySelector('#video-original').href=video;
     if(!videoDialog.open)videoDialog.showModal();
   }
   dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
