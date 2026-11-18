@@ -16,7 +16,9 @@
       const title=String(page.title||'').replace(/^File:/i,'').replace(/\.[^.]+$/,'').replaceAll('_',' ');
       const src=safeImage(file?.thumburl||''),pageUrl=safePage(file?.descriptionurl||'');
       const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).slice(0,160);
-      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||seen.has(pageUrl)||/accuracy disputes/i.test(meta.Categories?.value||''))return [];
+      const categories=String(meta.Categories?.value||'').split('|').map(normalize);
+      const identified=categories.some(category=>category===name||category.startsWith(name+' ')||category.endsWith(' of '+name));
+      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||seen.has(pageUrl)||/accuracy disputes/i.test(meta.Categories?.value||''))return [];
       const description=plain(meta.ImageDescription?.value).slice(0,180);
       seen.add(pageUrl);return [{src,pageUrl,title:description&&normalize(description).includes(name)?description:title,credit:credit||'Wikimedia Commons',license}];
     }).slice(0,12);
