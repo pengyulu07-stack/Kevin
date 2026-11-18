@@ -150,6 +150,19 @@
     const tracks = section(body, t('曲目', 'Tracks'), 'tracks');
     const gallery = section(body, t('画面', 'Images'), 'images');
     const albumId = print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1];
+    const addRelatedPhotos=async(images)=>{
+      const found=await window.AilleursCommonsPhotos?.search(print.artist||'');
+      if(id!==generation||!images.isConnected||!found?.length)return;
+      const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase()));
+      let count=0;
+      for(const item of found){
+        const page=item.pageUrl.toLowerCase();
+        if(used.has(item.src.toLowerCase())||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
+        photo(images,item.src,item.title,item.credit+' · '+item.license,item.pageUrl);
+        used.add(item.src.toLowerCase());count++;
+        if(count===5)break;
+      }
+    };
     if (isDoom(print)) {
       paragraph(about, t('2004 年发行的《Mm..Food》把食物变成整张唱片的语言：歌名、双关和日常故事互相牵连。它的封面也不是随手配的插图；画家 Jason Jägel 听着唱片试播带完成了画作。', 'Released in 2004, Mm..Food builds an album-wide language from food: titles, double meanings and everyday stories connect. Its sleeve is equally deliberate: Jason Jägel made the painting while listening to a demo of the record.'));
       const deep = make('details', 'editorial-deep-read');
@@ -177,6 +190,7 @@
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
       gallery.append(images);
+      void addRelatedPhotos(images);
     } else {
       const story = storyFor(print, 'music');
       if (story) addStory(about, story);
@@ -187,6 +201,7 @@
       }
       paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
       const images = make('div', 'editorial-photo-grid'); photo(images, print.src, t('唱片封面', 'Album cover')); gallery.append(images);
+      void addRelatedPhotos(images);
     }
     paragraph(tracks, t('正在读取曲目…', 'Loading tracks…'));
     if (!albumId) { tracks.replaceChildren(make('h3', '', t('曲目', 'Tracks'))); paragraph(tracks, t('这条记录没有可读取的曲目编号。', 'No track identifier is available for this edition.')); return; }
