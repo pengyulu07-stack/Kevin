@@ -1,0 +1,11 @@
+.share-file-preview{margin:10px 0 16px;padding:12px;border:1px solid #806b61;border-radius:7px;background:#292626;color:#eee5de;font:13px/1.45 system-ui,sans-serif}
+.share-file-preview[hidden]{display:none}
+.share-file-preview-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.share-file-preview-head strong{font-weight:650}
+.share-file-preview-head small{color:#c5b4a9;overflow-wrap:anywhere}
+.share-file-preview-head button{margin-left:auto;padding:5px 8px;border:1px solid #8f7365;border-radius:4px;background:#42332d;color:#f5e7df;cursor:pointer}
+.share-file-preview-head button:hover,.share-file-preview-head button:focus-visible{background:#65473a;color:#fff}
+.share-file-preview img{display:block;width:min(100%,220px);max-height:170px;object-fit:contain;background:#171719;border-radius:4px}
+.share-file-preview audio{display:block;width:min(100%,460px)}
+.share-file-preview p{margin:8px 0 0;color:#ccbbae}
+.share-file-preview .share-file-preview-error{color:#ffd3bd}

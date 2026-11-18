@@ -13,7 +13,7 @@ This file tracks requested behavior separately from work that has been verified 
 - [x] Two-finger horizontal gesture switches the whole daily room; vertical reading and the room selector's own scrolling stay independent.
 - [x] Add visible YouTube and Bilibili search links for every song on the daily spread, gallery, and full song cards.
 - [x] Verify the genre, chart design, and video search release on the published GitHub Pages URL.
-- [x] Keep album details separate from the playback source: selecting catalog metadata no longer silently creates an Apple Music listening link.
+- [x] Keep pasted playback links separate from catalog metadata. When the member explicitly chooses an Apple Music recording and has not supplied another link or uploaded audio, save that exact track link with the share.
 - [x] Require an unambiguous title and artist match before automatic artist/cover selection; retry the Chinese storefront when the first storefront has no exact match.
 - [x] Make an unlinked song's listening options appear immediately; older Apple Music links open as a direct source instead of a slow preview frame.
 - [x] Label cover and card actions as "Play" only when this site has an embeddable source or uploaded audio; otherwise show "Find". Show cover thumbnails beside catalog matches before a contributor chooses one.
@@ -126,7 +126,7 @@ The lookup follows the [iTunes Search API](https://developer.apple.com/library/a
 ### November 16 evening continuation
 
 - [x] Correct the News room button's accidental page-wide `.welcome` styling so it stays beside Daily Life.
-- [x] Set the edition boundary: curated covers begin November 8, while public music shares begin November 18. Hide the 40 earlier song rows from public song lists, charts, library, member profiles and related-song queries. Preserve their 24 votes and 15 comments for owner review in the database.
+- [x] Set the edition boundary: curated covers begin November 8, while public music shares begin November 17 after the owner asked to open sharing immediately. Hide the 40 earlier song rows from public song lists, charts, library, member profiles and related-song queries. Preserve their 24 votes and 15 comments for owner review in the database.
 - [x] Add Politics and Technology to News, alongside Music, Film, Art, Books, Earth and Space. Add a daily source brief list above the edited long reads.
 - [x] Collect 2–4 current source briefs per topic from dated RSS, retaining publisher, date, image and original URL. Do not call an RSS excerpt a full edited story.
 - [x] Add a signed-in reader link suggestion form. Submissions go privately to the existing owner feedback inbox, with category, URL and optional note.
@@ -162,7 +162,23 @@ The short completion report for any single release is not the full product check
 - [x] Make a typed or pasted song title search the Apple catalog automatically; show recording, artist and album choices with an on-page 30-second sample button. A sample does not imply the contributor's exact full-length version.
 - [x] Show an optional, attributed Wikipedia background excerpt in the composer and song discussion only when a page matches both title and artist. This is source context, not an invented creation story; songs with no reliable match remain blank.
 - [x] Build and deploy a signed-in YouTube Data API search endpoint with four embeddable video choices, click-to-preview and explicit version selection in the composer. The endpoint requires a server-side `YOUTUBE_API_KEY` that is not yet configured; its live UI currently falls back to a clearly labeled YouTube search link.
-- [ ] Verify the share flow with an ordinary signed-in account after the November 18 opening date, including the new YouTube lookup, saved cover, category suggestion, same-page refresh and a second account's view. The current date gate prevents a production publish test on November 17.
+- [ ] Verify a real signed-in publication and second-account view, including the new YouTube lookup, saved cover, category suggestion and same-page refresh. The November 17 date gate has been removed; a production post under the owner's account has not been made solely for testing.
+
+### November 17 sharing opened for owner review
+
+- [x] Remove the November 18 block from the music composer and publication path. Align public songs, archive, library, member profiles, charts and related queries to the November 17 edition. The public browser opens Share a song while signed in as the owner.
+- [x] Preserve the exact Apple Music track selected in the song composer when no different source is supplied; the published listening dialog checks that track ID before falling back to title and artist catalog search. A 30-second preview remains distinct from a full recording.
+- [x] Add optional, cited Wikipedia introductions inside Film, Art and Books post composers and details when title, creator and work type match. Add the same source path to unresearched system film, album and book detail views. Verified The Third Man in the public Film form and poster detail; a researched introduction is not a substitute for individually edited cover history, stills or criticism.
+- [ ] Confirm a published song, generic post, photo comment and News suggestion from separate ordinary accounts, then verify immediate redraw, remote visibility and failure messages. Empty-form and form-opening checks do not prove database writes.
+- [ ] Complete per-work editorial research and visual records for all six daily system picks in Music, Film, Art and Books. Several works still have only a catalog summary, cover/poster, one image, or no reviewed outside criticism; their detail pages do not yet match Mm..Food.
+- [ ] Configure the server-side YouTube search credential and check candidate, embed and version confirmation on the public share form. Until then, the form offers a labeled YouTube search link and can embed a specific pasted YouTube URL, but does not auto-list video candidates.
+
+### November 18 share quality continuation
+
+- [x] Add local previews for a selected song cover, uploaded song audio and Film/Art/Books/Daily Life photo before submission. Reject unsupported file types and oversize files visibly before the member clicks Publish. Clear previews and release their temporary browser URLs when a form resets or closes.
+- [x] Keep the Upload audio choice when catalog matching also finds an Apple track; an automatically suggested catalog link should not replace the member's chosen file.
+- [x] Place iTunes preview attribution and a direct Apple Music source beside editorial track previews. The listening dialog also identifies a 30-second preview as a catalog sample, not the full song.
+- [ ] Verify local image/audio file previews and removal in the published browser, then complete a real signed-in post, cross-account view and instant refresh check without publishing test content under the owner's identity.
 - [ ] Configure and quota-monitor the official YouTube Data API key before claiming four live video choices. Bilibili does not yet have an equivalent vetted candidate source; its search button remains an external search.
 - [ ] Replace source excerpts with checked, useful creative histories for individual songs. Wikipedia intros and catalog fields do not establish the origin, recording process or critical context for every song.
 - [ ] Improve bulk playlist/day-list import, exact full-length source availability, SoundCloud-first discovery, member-specific auto enrichment and cover checks. This pass handles a single shared song link or copied message, not an entire list.

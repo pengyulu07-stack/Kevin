@@ -46,7 +46,7 @@
     const button=document.createElement('button');button.type='button';button.className='link-read-button';button.textContent='Find song details';
     const status=document.createElement('small');status.className='link-read-status';status.setAttribute('role','status');
     const results=document.createElement('div');results.className='song-lookup-results';results.setAttribute('aria-label','Matching recordings');
-    const sample=document.createElement('audio');sample.className='publish-sample';sample.controls=true;sample.hidden=true;sample.preload='none';sample.setAttribute('aria-label','30-second recording preview');
+    const sample=document.createElement('audio');sample.className='publish-sample';sample.controls=true;sample.hidden=true;sample.preload='none';sample.setAttribute('aria-label','30-second recording preview provided courtesy of iTunes');
     const preview=document.createElement('div');preview.className='catalog-cover-preview';preview.hidden=true;
     const sources=document.createElement('details');sources.className='publish-source-search';
     const summary=document.createElement('summary');summary.textContent='Search another music platform';

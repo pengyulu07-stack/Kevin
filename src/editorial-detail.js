@@ -209,6 +209,9 @@
       const audioCover = make('img', 'editorial-preview-cover'); audioCover.src = print.src; audioCover.alt = '';
       player.append(audioCover, toggle, playing, progress, time);
       tracks.append(list, player, audio);
+      const previewCredit = make('p', 'editorial-source-note', t('30 秒试听由 iTunes 提供。', '30-second previews provided courtesy of iTunes. '));
+      previewCredit.append(external('Apple Music ↗', print.source));
+      tracks.append(previewCredit);
       const stamp = seconds => { const n = Math.floor(Number.isFinite(seconds) ? seconds : 0); return Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0'); };
       toggle.addEventListener('click', () => audio.paused ? audio.play().catch(() => {}) : audio.pause());
       audio.addEventListener('play', () => toggle.textContent = 'Ⅱ');
