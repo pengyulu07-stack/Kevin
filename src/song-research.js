@@ -66,7 +66,7 @@
   }
   async function mount(host,song){
     if(!host||!song?.title||!song?.artist)return;
-    const section=panel();host.append(section);
+    const section=panel();const comments=host.querySelector('.comment-section');if(comments)comments.before(section);else host.append(section);
     let source=await lookup(song.title,song.artist);
     if(!source&&song.album&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(song.album,song.artist,'music');source=found?{...found,scope:'album'}:null;}
     if(section.isConnected){show(section,source);gallery(section,song);}
@@ -81,9 +81,18 @@
       if(song.length<3||performer.length<2){show(section,null);return;}
       let source=await lookup(song,performer);
       if(!source&&record&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(record,performer,'music');source=found?{...found,scope:'album'}:null;}
-      if(current===sequence&&song===title.value.trim()&&performer===artist.value.trim()&&record===(album?.value.trim()||''))show(section,source);
+      if(current===sequence&&song===title.value.trim()&&performer===artist.value.trim()&&record===(album?.value.trim()||'')){
+        show(section,source);
+        if(source&&(!note.value.trim()||note.value===form.dataset.contextDraft)){
+          const first=source.text.split(/(?<=[。.!?])\s+/).filter(Boolean).slice(0,2).join(' ');
+          const prefix=source.scope==='album'?(word('专辑背景：','Album context: ')):'';
+          const suffix=' · Wikipedia';
+          const draft=prefix+first.slice(0,Math.max(0,490-prefix.length-suffix.length))+suffix;
+          note.value=draft;form.dataset.contextDraft=draft;
+        }
+      }
     };
-    const schedule=()=>{clearTimeout(timer);++sequence;show(section,null);timer=setTimeout(()=>void run(),1300);};
+    const schedule=()=>{clearTimeout(timer);++sequence;if(note.value===form.dataset.contextDraft)note.value='';delete form.dataset.contextDraft;show(section,null);timer=setTimeout(()=>void run(),1300);};
     title.addEventListener('input',schedule);artist.addEventListener('input',schedule);album?.addEventListener('input',schedule);
     form.addEventListener('daytone:catalog-found',schedule);
     form.addEventListener('daytone:recording-selected',schedule);

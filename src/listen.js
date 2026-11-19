@@ -17,8 +17,8 @@
   videoDialog.querySelector('.video-dialog-close').addEventListener('click',()=>videoDialog.close());
   videoDialog.addEventListener('close',()=>videoStage.replaceChildren());
   videoDialog.querySelector('#video-fullscreen').addEventListener('click',()=>videoStage.querySelector('iframe')?.requestFullscreen?.());
-  let queue=null;
-  dock.querySelector('#player-dock-close').addEventListener('click',()=>{queue=null;dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
+  let queue=null,playbackGeneration=0;
+  dock.querySelector('#player-dock-close').addEventListener('click',()=>{playbackGeneration++;queue=null;dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
   dock.querySelector('#player-dock-previous').addEventListener('click',()=>advance(-1));
   dock.querySelector('#player-dock-next').addEventListener('click',()=>advance(1));
   const node=(tag,className,value)=>{const item=document.createElement(tag);item.className=className;if(value!=null)item.textContent=value;return item;};
@@ -146,7 +146,7 @@
     details.append(links);return details;
   }
   function playerFor(url){const player=typeof musicEmbed==='function'?musicEmbed(url):null;if(player){player.classList.add('listen-player');if(player.tagName==='IFRAME')player.loading='eager';}return player;}
-  function canPlayHere(song){return Boolean(song?.audio_path || (song?.source_url && playerFor(song.source_url)) || (song?.video_url && playerFor(song.video_url)));}
+  function canPlayHere(song){return Boolean(song?.previewUrl || song?.audio_path || (song?.source_url && playerFor(song.source_url)) || (song?.video_url && playerFor(song.video_url)));}
   function actionLabel(song){return (canPlayHere(song)?'Play ':'Find ') + String(song?.title||'song');}
   function updateQueueControls(){
     const active=Boolean(queue),position=dock.querySelector('#player-dock-position');
@@ -202,10 +202,23 @@
     if(player){attachPlayer(player,label,source);return true;}
     body.append(directLink(source,tr('在 '+label+' 打开分享版本','Open shared version in '+label)));return true;
   }
-  function open(song,fromQueue=false){
+  async function open(song,fromQueue=false){
+    const playbackRequest=++playbackGeneration;
     const title=String(song?.title||'').trim(),artist=String(song?.artist||'').trim();if(!title)return;
     if(!fromQueue)queue=null;
+    if(song.previewUrl){
+      try{const url=new URL(song.previewUrl);if(url.protocol!=='https:'||!/(^|\.)(itunes\.apple\.com|mzstatic\.com)$/.test(url.hostname))throw Error();
+        const audio=node('audio','listen-player');audio.controls=true;audio.preload='none';audio.src=url.href;
+        audio.addEventListener('timeupdate',()=>{if(audio.currentTime>=30&&audio.duration>30.25){audio.pause();audio.currentTime=0;if(queue)advance(1);}});
+        openDock(song,audio);return;
+      }catch{/* Only catalog preview hosts are accepted. */}
+    }
     if(song.audio_path){const audio=node('audio','listen-player');audio.controls=true;audio.preload='metadata';audio.src=publicFile('tracks',song.audio_path);openDock(song,audio);return;}
+    if(!song.video_url&&platform(song.source_url)==='Apple Music'){
+      const candidates=await previewCandidates(song);if(playbackRequest!==playbackGeneration)return;
+      const match=candidates.find(row=>normalize(row.trackName)===normalize(title)&&artist&&normalize(row.artistName)===normalize(artist));
+      if(match){const audio=node('audio','listen-player');audio.controls=true;audio.preload='none';audio.src=match.previewUrl;audio.addEventListener('timeupdate',()=>{if(audio.currentTime>=30&&audio.duration>30.25){audio.pause();audio.currentTime=0;if(queue)advance(1);}});openDock({...song,previewUrl:match.previewUrl},audio);return;}
+    }
     for(const source of [song.video_url,song.source_url]){if(source){const player=playerFor(source);if(player){openDock({...song,source_url:source},player);return;}}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
     dialog.querySelector('h2').textContent='Where to listen';

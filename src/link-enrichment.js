@@ -55,7 +55,7 @@
     const providers=[['YouTube','https://www.youtube.com/results?search_query='],['Bilibili','https://search.bilibili.com/all?keyword='],['SoundCloud','https://soundcloud.com/search?q='],['QQ Music','https://y.qq.com/n/ryqq/search?w='],['网易云音乐','https://music.163.com/#/search/m/?s='],['Spotify','https://open.spotify.com/search/']];
     const sourceLinks=providers.map(([name,base])=>{const link=document.createElement('a');link.textContent=name+' ↗';link.target='_blank';link.rel='noopener noreferrer';link.dataset.base=base;links.append(link);return link;});
     const updateSources=()=>{const query=[title.value.trim(),artist.value.trim()].filter(Boolean).join(' ');for(const link of sourceLinks){if(query)link.href=link.dataset.base+encodeURIComponent(query);else link.removeAttribute('href');link.setAttribute('aria-disabled',String(!query));link.tabIndex=query?0:-1;}};
-    sources.append(summary,hint,links);sources.open=true;
+    sources.append(summary,hint,links);sources.open=false;
     artist.closest('label').after(button,status,preview,results,sample,sources);
     updateSources();title.addEventListener('input',updateSources);artist.addEventListener('input',updateSources);
     let timer,sequence=0,suggestedArtist='',suggestedAlbum='',suggestedNote='',lastMusicBrainzRequest=0;
@@ -148,14 +148,15 @@
         const normal=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
         const wantedTitle=normal(title.value),wantedArtist=normal(artist.value);
         const score=row=>{const foundTitle=normal(row.trackName),foundArtist=normal(row.artistName);return (foundTitle===wantedTitle?6:foundTitle.includes(wantedTitle)?2:0)+(wantedArtist?(foundArtist===wantedArtist?5:foundArtist.includes(wantedArtist)?2:0):0);};
+        const bundled=await window.AilleursCatalog?.search(title.value.trim(),artist.value.trim())||[];
         const countries=/[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(query)?['jp','us']:/[\p{Script=Han}]/u.test(query)?['cn','tw','hk']:['us','gb'];
-        const storefronts=await Promise.allSettled(countries.map(async country=>{
+        const storefronts=bundled.some(row=>normal(row.trackName)===wantedTitle&&wantedArtist&&normal(row.artistName)===wantedArtist)?[]:await Promise.allSettled(countries.map(async country=>{
           const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:query,media:'music',entity:'song',country,limit:'12'}).toString();
           const response=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(5000)});if(!response.ok)throw Error('Search unavailable');
           const data=await response.json();return (data.results||[]).filter(row=>row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).map(row=>({...row,catalogName:'Apple Music'}));
         }));
         if(current!==sequence)return;
-        let tracks=storefronts.flatMap(result=>result.status==='fulfilled'?result.value:[]);
+        let tracks=[...bundled.map(row=>({...row,catalogName:'Apple Music'})),...storefronts.flatMap(result=>result.status==='fulfilled'?result.value:[])];
         if(!tracks.some(row=>normal(row.trackName)===wantedTitle&&(!wantedArtist||normal(row.artistName)===wantedArtist))){
           try{
             const pause=Math.max(0,1100-(Date.now()-lastMusicBrainzRequest));
@@ -266,7 +267,7 @@
   }
   function setupSourcePreview(form,fieldName='url'){
     const link=form?.elements[fieldName];if(!link)return;
-    const wrap=document.createElement('div');wrap.className='publish-source-preview';wrap.hidden=true;
+    const wrap=document.createElement('div');wrap.className='publish-source-preview';wrap.dataset.sourceField=fieldName;wrap.hidden=true;
     const button=document.createElement('button');button.type='button';button.textContent='▷ Preview this version here';
     const note=document.createElement('small');note.textContent='Playback can depend on the platform and your account.';
     const stage=document.createElement('div');stage.className='publish-preview-stage';
@@ -316,6 +317,7 @@
         const select=document.createElement('button');select.type='button';select.textContent='Use this video';select.addEventListener('click',()=>{
           const video=form.elements.video_url||link;video.value=item.url;video.dispatchEvent(new Event('input',{bubbles:true}));
           form.dataset.videoAutoSelection=item.url;
+          if(form.elements.confirm_video)form.elements.confirm_video.checked=true;
           status.textContent='Selected: '+item.title;
         });
         info.append(name,channel,select);card.append(watch,info);cards.append(card);

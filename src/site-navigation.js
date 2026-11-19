@@ -308,7 +308,7 @@
         if(activeRoom==='music'&&index>=4)caption.append(node('small','room-daily-new',isZh?'今日加入':'NEW TODAY'));
         card.append(image,caption);list.append(card);
       }
-      section.append(heading,list);shelf.append(section);
+      section.append(heading,list);shelf.append(section);if(activeRoom==='music')void window.AilleursCatalog?.mount(shelf,day);
     }
     return shelf;
   }
@@ -377,7 +377,7 @@
       showCornerPrints(host.querySelector('.day-preview-head'),day,coverRows.filter(song=>song.cover_path).map(song=>({src:songCoverUrl(song),title:song.title+' · '+(song.artist||'shared album cover'),kind:'album'})));
       if(!todayRows.length)music.append(node('p','day-preview-empty',day<window.AilleursLaunchDay?'No public songs for this day.':'No songs yet. Share the first one.'));
       else todayRows.forEach((song,i)=>music.append(songRow(song,i+1,counts.get(song.id)||0,day,voteUsers)));
-      renderGallery(gallery,todayRows,counts,day);
+      gallery.hidden=true;
       const musicActions=node('div','day-preview-actions'),allMusic=node('button','','See every song ↗'),share=node('button','','＋ Share a song');
       allMusic.type=share.type='button';allMusic.addEventListener('click',()=>{app.setDay(day);app.show('music-all');});share.addEventListener('click',openUpload);if(todayRows.some(song=>window.DaytoneListen?.canPlayHere(song))){const playToday=node('button','play-available','▶ Play available');playToday.type='button';playToday.addEventListener('click',()=>window.DaytoneListen?.playQueue(todayRows));musicActions.append(playToday);}musicActions.append(allMusic,share);music.append(musicActions);
       const {weekStart,weekEnd}=boundaries(day),periodRows=songs.filter(song=>period==='month'||song.day>=weekStart&&song.day<weekEnd),leaders=periodRank(periodRows,counts,voteUsers).slice(0,5);
@@ -400,6 +400,11 @@
   const refreshOnReturn=()=>{if(document.hidden||Date.now()-lastFocusRefresh<15000)return;lastFocusRefresh=Date.now();monthCache=null;roomCache.clear();const screen=app.getScreen();if(screen==='welcome')void render();else if(screen==='explore')void renderCollection('explore');};
   window.addEventListener('focus',refreshOnReturn);
   document.addEventListener('visibilitychange',refreshOnReturn);
+  let liveDate=today();
+  const refreshDate=()=>{const next=today();if(next===liveDate)return;const followToday=app.getDay()===liveDate;liveDate=next;if(followToday)app.setDay(next);};
+  setInterval(refreshDate,60000);
+  window.addEventListener('focus',refreshDate);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshDate();});
   let gestureAmount=0,gestureTimer=0,gestureLockedUntil=0;
   const gestureSurface=document.getElementById('welcome');
   const gestureExcluded='input,select,textarea,summary,dialog,.room-shelf-track,.calendar-follow-controls,[contenteditable],audio,video,iframe';

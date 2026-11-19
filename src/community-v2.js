@@ -130,6 +130,10 @@
     }
     if(selectedSongId!==id)return;
     const rank=sortedSongs().findIndex(x=>x.id===id)+1;
+    const view=$v('music-discussion-dialog');view.classList.add('song-reading-page');
+    const albumIndex=(window.AilleursMusicCovers||[]).findIndex(print=>print.title.normalize('NFKC').toLocaleLowerCase()===String(song.album||'').normalize('NFKC').toLocaleLowerCase());
+    const theme=window.AilleursAlbumThemes?.[albumIndex];
+    for(const [key,value] of Object.entries({'--record-paper':theme?.paper||'#191b1d','--record-panel':theme?.panel||'#232527','--record-accent':theme?.accent||'#d69270'}))view.style.setProperty(key,value);
     host.replaceChildren(createCard(song,rank,true));
     const chosen = song.video_url || song.source_url;
     const player = chosen ? musicEmbed(chosen) : null;

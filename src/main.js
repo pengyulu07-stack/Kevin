@@ -360,7 +360,7 @@ function youtubeVideoId(value) {
     return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
   } catch{return '';}
 }
-function songCoverUrl(song) { const id=youtubeVideoId(song?.video_url||song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
+function songCoverUrl(song) { if(song?.cover_path)return publicFile('images',song.cover_path);const cached=window.AilleursCatalog?.coverFor(song);if(cached)return cached;const id=youtubeVideoId(song?.video_url||song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
 function soundCloudTrackUrl(value) {
   try { const url=new URL(value);if(url.protocol!=='https:'||!['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname))return '';
     const parts=url.pathname.split('/').filter(Boolean);if(!(parts.length===2||parts.length===3&&parts[1]==='sets')||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
@@ -444,7 +444,7 @@ function createCard(song, rank, discussion = false) {
   meta.append(genreRow);
   if (song.note) meta.append(el("div", "song-note", "“" + song.note + "”"));
   meta.append(el("small", "", song.day + " · " + new Date(song.created_at).toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" })));
-  const copyName = el("button", "copy-name", "Copy song title");
+  const copyName = el("button", "copy-name", "Copy title");
   copyName.type = "button";
   copyName.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(song.title); toast("Song title copied. Search for it in your own app."); }
@@ -454,13 +454,17 @@ function createCard(song, rank, discussion = false) {
   const listen = el('button', 'listen-action', window.DaytoneListen?.canPlayHere(song) ? '▷ Play here' : '↗ Find song');
   listen.type = 'button';
   listen.setAttribute('aria-label', window.DaytoneListen?.actionLabel(song) || 'Find ' + song.title);
-  listen.addEventListener('click', () => window.DaytoneListen?.open(song));
+  listen.addEventListener('click', () => {
+    const frame=discussion?document.querySelector('#music-discussion-body .song-inline-video iframe'):null;
+    if(frame){const url=new URL(frame.src);url.searchParams.set('autoplay','1');frame.src=url.href;frame.scrollIntoView({behavior:'smooth',block:'center'});}
+    else window.DaytoneListen?.open(song);
+  });
   meta.append(listen);
   if(song.artist){const artistMore=el('button','artist-more','More by '+song.artist+' ↓');artistMore.type='button';artistMore.addEventListener('click',()=>{if(!discussion){window.DaytoneCommunity?.openMusicDiscussion(song);return;}document.querySelector('#music-discussion-body .song-connections')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});});meta.append(artistMore);}
   if(!discussion){const related=el('button','artist-more related-open','Find related songs ↗');related.type='button';related.addEventListener('click',()=>window.DaytoneCommunity?.openMusicDiscussion(song));meta.append(related);}
   const videoSearch = el('div','song-video-search');
   videoSearch.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
-  meta.append(videoSearch);
+  const destinations=el('details','song-destinations');destinations.append(el('summary','','Other platforms'),videoSearch);meta.append(destinations);
   if (musicEmbed(song.video_url||song.source_url)?.classList.contains('video-player')) {
     const service=youtubeVideoId(song.video_url||song.source_url)?'YouTube':'Bilibili';
     const video=el('button','listen-youtube','▶ '+service+' video');video.type='button';video.setAttribute('aria-label','Watch '+song.title+' on '+service);
@@ -501,7 +505,7 @@ function createCard(song, rank, discussion = false) {
   share.type = "button";
   share.setAttribute("aria-label", "Share " + song.title);
   share.addEventListener("click", () => void copyLink("?day=" + song.day + "#song-" + song.id));
-  bottom.append(voteButton, row, share);
+  const reactionsMore=el('details','song-reactions-more');reactionsMore.append(el('summary','','React'),row);bottom.append(voteButton, reactionsMore, share);
   meta.append(bottom);
   const section = el("section", "comment-section");
   const songComments = comments.get(song.id) || [];

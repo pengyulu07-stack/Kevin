@@ -258,9 +258,11 @@
     paragraph(tracks, t('正在读取曲目…', 'Loading tracks…'));
     if (!albumId) { tracks.replaceChildren(make('h3', '', t('曲目', 'Tracks'))); paragraph(tracks, t('这条记录没有可读取的曲目编号。', 'No track identifier is available for this edition.')); return; }
     try {
-      const response = await fetch('https://itunes.apple.com/lookup?id=' + albumId + '&entity=song&limit=200&country=US');
-      if (!response.ok) throw Error('catalog');
-      const data = await response.json(); if (id !== generation) return;
+      const stored=await window.AilleursCatalog?.album(albumId);
+      let data;
+      if(stored?.tracks.length)data={results:[{wrapperType:'collection',releaseDate:stored.releaseDate,trackCount:stored.tracks.length},...stored.tracks.map(row=>({...row,wrapperType:'track'}))]};
+      else {const response=await fetch('https://itunes.apple.com/lookup?id='+albumId+'&entity=song&limit=200&country=US');if(!response.ok)throw Error('catalog');data=await response.json();}
+      if(id!==generation)return;
       tracks.replaceChildren(make('h3', '', t('曲目', 'Tracks')));
       const album = data.results?.find(item => item.wrapperType === 'collection');
       if (album) paragraph(about, [album.releaseDate?.slice(0, 4), album.primaryGenreName, album.trackCount && album.trackCount + ' ' + t('首曲目', 'tracks')].filter(Boolean).join(' · '), 'editorial-meta');
