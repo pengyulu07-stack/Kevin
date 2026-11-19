@@ -165,13 +165,14 @@
     const addRelatedPhotos=async(images)=>{
       const found=await window.AilleursCommonsPhotos?.search(print.artist||'');
       if(id!==generation||!images.isConnected||!found?.length)return;
-      const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase())),seenPages=new Set([...images.querySelectorAll('figcaption a')].map(link=>link.href.toLowerCase())),events=new Set();
+      const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase())),seenPages=new Set([...images.querySelectorAll('figcaption a')].map(link=>link.href.toLowerCase())),events=new Set(),captions=new Set([...images.querySelectorAll('figcaption')].map(node=>node.textContent.split(' · ')[0].toLocaleLowerCase()));
       let count=0;
       for(const item of found){
         const page=item.pageUrl.toLowerCase();
-        if(used.has(item.src.toLowerCase())||seenPages.has(page)||events.has(item.eventKey)||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
+        const caption=item.title.toLocaleLowerCase();
+        if(used.has(item.src.toLowerCase())||seenPages.has(page)||events.has(item.eventKey)||captions.has(caption)||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
         photo(images,item.src,item.title,item.credit+' · '+item.license,item.pageUrl);
-        used.add(item.src.toLowerCase());seenPages.add(page);events.add(item.eventKey);count++;
+        used.add(item.src.toLowerCase());seenPages.add(page);events.add(item.eventKey);captions.add(caption);count++;
         if(count===5)break;
       }
     };
@@ -206,6 +207,7 @@
       const story = storyFor(print, 'music');
       if (story) addStory(about, story);
       else {
+        about.querySelector('h3')?.remove();
         const lead=albumLeads[albumId];
         if(lead){paragraph(about,t(...lead));const source=make('p','editorial-source-note');source.append(external(t('发行与背景资料 ↗','Release and background ↗'),print.source));about.append(source);}
         const context=make('div','work-research');context.hidden=true;about.append(context);

@@ -15,7 +15,7 @@
       const file=page.imageinfo?.[0],meta=file?.extmetadata||{};
       const title=String(page.title||'').replace(/^File:/i,'').replace(/\.[^.]+$/,'').replaceAll('_',' ');
       const src=safeImage(file?.thumburl||''),pageUrl=safePage(file?.descriptionurl||'');
-      const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).slice(0,160);
+      const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).split(/\n+/)[0].trim().slice(0,90);
       const categories=String(meta.Categories?.value||'').split('|').map(normalize);
       const identified=categories.some(category=>category===name||category.startsWith(name+' ')||category.endsWith(' of '+name));
       if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
@@ -45,8 +45,8 @@
     let timer,sequence=0,lastArtist='',chosen=[];
     const render=items=>{
       grid.replaceChildren();chosen=[];
-      const captions=new Set();
-      for(const item of items){const key=item.eventKey||normalize(item.title);if(!captions.has(key)){chosen.push(item);captions.add(key);}if(chosen.length===4)break;}
+      const captions=new Set(),events=new Set();
+      for(const item of items){const key=normalize(item.title),event=item.eventKey||key;if(!captions.has(key)&&!events.has(event)){chosen.push(item);captions.add(key);events.add(event);}if(chosen.length===4)break;}
       status.textContent=items.length?items.length+' sourced photos found'+(normalize(artist.value)==='madvillain'?' of MF DOOM and Madlib, the members of Madvillain':'')+' · '+chosen.length+' selected. Review or change them below.':'No clearly named, credited Commons photographs found. You can publish without extras.';
       for(const item of items){
         const label=document.createElement('label');label.className='song-photo-option';

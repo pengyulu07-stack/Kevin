@@ -84,7 +84,7 @@
     vinyl.append(inner); if (song) vinyl.addEventListener('click', () => window.DaytoneListen?.open(song)); wrap.append(vinyl);
     const info = make('div', 'record-info');
     if (song) { info.append(make('small', '', '@' + song.nickname + ' · ' + gallerySupport(song) + ' supporters'), make('h3', '', song.title)); if (song.artist) info.append(make('p', '', song.artist)); info.append(copyButton(song.title, 'Copy song title')); }
-    else info.append(make('h3', '', rank === 1 ? 'Welcome to today.' : 'The next song is yours to share.'), make('p', '', rank === 1 ? 'The record is turning, waiting for a song for today.' : '')); wrap.append(info);
+    else info.append(make('h3', '', rank === 1 ? 'No songs shared yet' : 'Share a song for this date')); wrap.append(info);
     return wrap;
   }
   function renderMusicGallery() {
@@ -93,7 +93,7 @@
     $v('music-gallery').dataset.genre = genre;
     const palette=window.DaytoneMusicRooms?.genrePalette(genre);
     if(palette){$v('music-gallery').style.setProperty('--genre-ink',palette[0]);$v('music-gallery').style.setProperty('--genre-paper',palette[1]);}
-    $v('music-gallery-title').textContent = genre === 'all' ? 'MUSIC SO GOOD,\nEVEN DEVIL MAY CRY' : musicGenreName(genre).toUpperCase() + '\nIN ROTATION';
+    $v('music-gallery-title').textContent = genre === 'all' ? 'Music' : musicGenreName(genre);
     $v('music-gallery').querySelector('.gallery-heading small').textContent = genre === 'all' ? 'MUSIC / AILLEURS' : 'MUSIC / ' + musicGenreName(genre).toUpperCase();
     $v('music-gallery-date').textContent = window.daytoneSpan === 'all' ? 'ALL-TIME TOP 5 / EVERY DAY SO FAR' : dateLabel(day) + ' / TODAY’S TOP 5';
     $v('music-period-today').classList.toggle('selected', window.daytoneSpan === 'today');
