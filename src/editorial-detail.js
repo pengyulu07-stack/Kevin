@@ -163,11 +163,20 @@
     const gallery = section(body, t('画面', 'Images'), 'images');
     const albumId = print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1];
     const addRelatedPhotos=async(images)=>{
+      // A generic artist-name search often returns unrelated tours. For these
+      // researched records, keep only pictures from the recording/release years;
+      // an empty gallery is more honest than a row of later concert shots.
+      const releaseEra = {
+        '887699504': /\b(?:2002|2003|2004|madvillain)\b/i,
+        '108233171': /\b(?:2005|2006|donuts)\b/i,
+        '1109714933': /\b(?:2007|2008|in rainbows)\b/i
+      }[albumId];
       const found=await window.AilleursCommonsPhotos?.search(print.artist||'');
       if(id!==generation||!images.isConnected||!found?.length)return;
       const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase())),seenPages=new Set([...images.querySelectorAll('figcaption a')].map(link=>link.href.toLowerCase())),events=new Set(),captions=new Set([...images.querySelectorAll('figcaption')].map(node=>node.textContent.split(' · ')[0].toLocaleLowerCase()));
       let count=0;
       for(const item of found){
+        if(releaseEra&&!releaseEra.test(item.title))continue;
         const page=item.pageUrl.toLowerCase();
         const caption=item.title.toLocaleLowerCase();
         if(used.has(item.src.toLowerCase())||seenPages.has(page)||events.has(item.eventKey)||captions.has(caption)||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
