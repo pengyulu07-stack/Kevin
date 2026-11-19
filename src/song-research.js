@@ -13,7 +13,7 @@
     const task=(async()=>{
       for(const language of (/[\p{Script=Han}]/u.test(song+performer)?['zh','en']:['en'])){
         const endpoint=new URL('https://'+language+'.wikipedia.org/w/api.php');
-        endpoint.search=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:'intitle:"'+song.replaceAll('"','')+'" '+performer.replaceAll('"',''),gsrlimit:'4',prop:'extracts|info|pageprops',ppprop:'disambiguation',exintro:'1',explaintext:'1',exchars:'900',inprop:'url'}).toString();
+        endpoint.search=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:'intitle:"'+song.replaceAll('"','')+'" '+performer.replaceAll('"',''),gsrlimit:'6',prop:'extracts|info|pageprops',ppprop:'disambiguation',exintro:'1',explaintext:'1',exchars:'900',inprop:'url'}).toString();
         try{
           const response=await fetch(endpoint,{mode:'cors',signal:AbortSignal.timeout(6500)});
           if(!response.ok)continue;
@@ -22,7 +22,7 @@
           const wanted=normal(song),artistName=normal(performer);
           const matches=pages.filter(page=>{
             const heading=normal(page.title),body=normal(page.extract);
-            if(Object.hasOwn(page.pageprops||{},'disambiguation')||/(?:可以指|可能指|可指[：:]|may refer to|may also refer to)/i.test(page.extract.slice(0,160))||/^(list of|列表|消歧义)/i.test(page.title)||/\((disambiguation|消歧义)\)/i.test(page.title)||/\bmay also refer to\b/i.test(page.extract))return false;
+            if(/[（(](?:album|專輯|专辑|電影|电影|film|EP)[)）]/i.test(page.title)||/^(?:.{0,40}\b(?:is|was) (?:a|an|the) .{0,35}\balbum\b|.{0,50}(?:第.{0,6}張|第.{0,6}张).{0,12}[專专][輯辑])/i.test(page.extract)||Object.hasOwn(page.pageprops||{},'disambiguation')||/(?:可以指|可能指|可指[：:]|may refer to|may also refer to)/i.test(page.extract.slice(0,160))||/^(list of|列表|消歧义)/i.test(page.title)||/\((disambiguation|消歧义)\)/i.test(page.title)||/\bmay also refer to\b/i.test(page.extract))return false;
             return (heading===wanted||heading.startsWith(wanted+' '))&&(heading.includes(artistName)||body.includes(artistName));
           }).sort((a,b)=>(normal(a.title)===wanted?0:1)-(normal(b.title)===wanted?0:1));
           if(matches.length){const page=matches[0];return {title:page.title,text:page.extract.trim(),url:page.fullurl,language};}

@@ -128,3 +128,5 @@ body[data-layout="scenes"] .start-day{grid-column:2;grid-row:4}
 .song-lookup-option[aria-pressed=true]{background:var(--dt-raised,#303235)!important;border-color:var(--record-accent,#e1ac90)!important;color:var(--dt-text,#f3ede6)!important}.song-lookup-option[aria-pressed=true] strong{color:var(--dt-text,#f3ede6)!important}.song-lookup-option[aria-pressed=true] small{color:var(--dt-muted,#c4bcb4)!important}
 
 @media(max-width:650px){.editorial-detail-header{gap:6px;min-height:58px}.editorial-detail-header>small{display:none}.editorial-detail-header .music-reading-actions{margin-left:0;gap:4px}.editorial-detail-header .music-reading-actions button{padding:9px 10px!important;font-size:12px!important}.editorial-detail-header .editorial-more-about{margin-right:auto}.editorial-detail-header .editorial-more-about>summary{font-size:12px;padding:8px}.editorial-detail-tabs{top:58px;flex-wrap:nowrap;overflow-x:auto}.editorial-detail-section{scroll-margin-top:116px}}
+
+.song-reading-page .card-bottom>.song-vote{display:none}

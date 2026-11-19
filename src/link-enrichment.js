@@ -64,6 +64,8 @@
     };
     const genreFor=value=>{
       const genre=String(value||'').toLowerCase();
+      if(/cantopop|hk[ -]?pop/.test(genre))return 'cantopop';
+      if(/mandopop/.test(genre))return 'mandopop';
       const rules=[[/hip.hop|rap/, 'hiphop'],[/trap/, 'trap'],[/r&b|soul/, 'rnb'],[/metal/, 'metal'],[/punk/, 'punk'],[/alternative/, 'alternative'],[/indie/, 'indie'],[/rock/, 'rock'],[/house/, 'house'],[/techno/, 'techno'],[/dubstep/, 'dubstep'],[/edm/, 'edm'],[/ambient/, 'ambient'],[/lo.fi/, 'lofi'],[/funk/, 'funk'],[/electronic|electronica/, 'electronic'],[/dance/, 'dance'],[/jazz/, 'jazz'],[/blues/, 'blues'],[/piano/, 'piano'],[/instrumental/, 'instrumental'],[/acoustic/, 'acoustic'],[/singer.songwriter/, 'singer_songwriter'],[/opera|choral/, 'opera'],[/classical/, 'classical'],[/soundtrack|film score/, 'soundtrack'],[/anime/, 'anime'],[/folk/, 'folk'],[/country/, 'country'],[/afrobeats/, 'afrobeats'],[/reggae/, 'reggae'],[/latin/, 'latin'],[/gospel/, 'gospel'],[/experimental/, 'experimental'],[/new.age/, 'newage'],[/k.pop/, 'kpop'],[/j.pop/, 'jpop'],[/city.pop/, 'citypop'],[/mandopop/, 'mandopop'],[/cantopop/, 'cantopop'],[/chinese/, 'chinese'],[/pop/, 'pop']];
       return rules.find(([pattern])=>pattern.test(genre))?.[1]||'';
     };

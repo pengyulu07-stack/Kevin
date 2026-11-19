@@ -4,6 +4,11 @@
   const plain=value=>new DOMParser().parseFromString(String(value||''),'text/html').body.textContent.trim();
   const safeImage=value=>{try{const url=new URL(value);return url.protocol==='https:'&&(['upload.wikimedia.org','thumb.wikimedia.org'].includes(url.hostname))?url.href:'';}catch{return '';}};
   const safePage=value=>{try{const url=new URL(value);return url.protocol==='https:'&&url.hostname==='commons.wikimedia.org'?url.href:'';}catch{return '';}};
+  function matchesArtist(artist,categories,title=''){
+    const name=normalize(artist),tags=categories.map(normalize);
+    if(name==='beyond'&&/beyond the black/i.test(title+' '+categories.join(' ')))return false;
+    return tags.some(category=>category===name||[' band',' musician',' singer',' rapper',' group'].some(suffix=>category===name+suffix)||category.endsWith(' of '+name)||category==='members of '+name||category==='live performances of '+name||category==='concerts of '+name);
+  }
   async function searchName(artist){
     const endpoint=new URL('https://commons.wikimedia.org/w/api.php');
     endpoint.search=new URLSearchParams({action:'query',format:'json',origin:'*',generator:'search',gsrsearch:'intitle:"'+artist.replaceAll('"','')+'" filetype:bitmap',gsrnamespace:'6',gsrlimit:'35',prop:'imageinfo',iiprop:'url|extmetadata|mime',iiurlwidth:'480'}).toString();
@@ -16,11 +21,12 @@
       const title=String(page.title||'').replace(/^File:/i,'').replace(/\.[^.]+$/,'').replaceAll('_',' ');
       const src=safeImage(file?.thumburl||''),pageUrl=safePage(file?.descriptionurl||'');
       const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).split(/\n+/)[0].trim().slice(0,90);
-      const categories=String(meta.Categories?.value||'').split('|').map(normalize);
-      const identified=categories.some(category=>category===name||category.startsWith(name+' ')||category.endsWith(' of '+name));
+      const categories=String(meta.Categories?.value||'').split('|');
+      const identified=matchesArtist(artist,categories,title);
+      const wrongIdentity=name==='beyond'&&/beyond the black/i.test(title+' '+String(meta.Categories?.value||''));
       const nonSubject=/(?:\bhouse\b|\bavenue\b|\bstreet\b|\broad\b|\bplaque\b|\bmemorial\b|\bstatue\b|\bgrave\b|\bmural\b|\bposter\b|\blogo\b|\bpainting\b|\bdrawing\b|\bsketch\b|\bwatercolou?r\b|\bpeinture\b)/i.test(title);
       const nonPhotoCategory=/(?:paintings|drawings|sketches|illustrations|watercolours|portraits in art) of /i.test(meta.Categories?.value||'');
-      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||nonSubject||nonPhotoCategory||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
+      if(wrongIdentity||!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||nonSubject||nonPhotoCategory||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
       const rawDescription=plain(meta.ImageDescription?.value);
       const description=/collectie|archief|reportage|file description/i.test(rawDescription)?'':rawDescription.split(/\n+/)[0].trim().slice(0,180);
       const eventKey=normalize(title.replace(/\s*(?:[(_-]\s*)?(?:0?[1-9]|1[0-9])\)?$/,'')||title);
@@ -80,5 +86,5 @@
     status.textContent='Choose a recording or enter an artist to find photos.';
   }
   document.addEventListener('DOMContentLoaded',setup);
-  window.AilleursCommonsPhotos={search};
+  window.AilleursCommonsPhotos={search,matchesArtist};
 })();
