@@ -43,6 +43,8 @@ The cover examples and API pages above were read for the facts used here. Other 
 
 ## Next evidence gates
 
+Live page check on 19 November: the three new story/visual treatments were read and inspected in a narrow viewport. Desktop dialog width was 1060 px inside a 1280 px viewport, with no page-level horizontal overflow. The first Commons artist search put unrelated 2006 and 2016–17 Radiohead concert shots on *In Rainbows*. The page now limits automatic suggestions to the album's 2007–08 period and uses four separately checked 2008 tour photographs (band, Jonny Greenwood, stage lighting, Thom Yorke), each with a Commons file-page credit. This is four, not the requested five. *Donuts* still has two strong instrument photographs; *Madvillainy* still lacks a verified release-era gallery. Do not mark those galleries complete.
+
 1. Check the three visual cases in desktop and narrow detail views and revise any low-contrast or derivative effect.
 2. Audit the other 27 sleeves one by one before calling all 30 visually finished. Record their edition and design source, or label a motif as a direct observation when no maker interview is available.
 3. Build and check the 200-recording manifest in small album batches. Log failed album lookups, duplicate versions, missing previews and wrong covers; do not publish unreviewed candidates as recommendations.
