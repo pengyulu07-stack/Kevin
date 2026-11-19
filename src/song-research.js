@@ -55,10 +55,11 @@
     if(!source){section.hidden=true;return;}
     section.hidden=false;
     const heading=document.createElement('h3');heading.textContent=source.scope==='album'?word('关于这张专辑','About the album'):word('关于这首歌','About this song');
-    const lead=document.createElement('p');lead.textContent=source.text.slice(0,300)+(source.text.length>300?'…':'');
+    const boundary=source.text.indexOf('. ',220),split=boundary<0?Math.min(300,source.text.length):boundary+1;
+    const lead=document.createElement('p');lead.textContent=source.text.slice(0,split);
     const details=document.createElement('details');
     const summary=document.createElement('summary');summary.textContent=word('展开来源摘要','Read more from the source');details.append(summary);
-    const full=document.createElement('p');full.textContent=source.text;details.append(full);
+    const full=document.createElement('p');full.textContent=source.text.slice(split).trim();details.hidden=!full.textContent;details.append(full);
     const credit=document.createElement('small');credit.append(document.createTextNode('Wikipedia · CC BY-SA · '));
     const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=word('查看原文 ↗','Read the source ↗');credit.append(link);
     section.append(heading,lead,details,credit);

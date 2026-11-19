@@ -57,16 +57,46 @@
       : 'film:' + (isCaligari(print) ? 'Caligari' : titleOnly(print));
     return window.AilleursWorkStories?.[key];
   };
+  function addChapter(root, title, copy, source, url) {
+    const part = make('section', 'editorial-chapter');
+    part.append(make('h4', '', title));
+    const boundary = /[。！？]|[.!?](?=\s+[A-Z“])/u.exec(copy);
+    const split = boundary ? boundary.index + boundary[0].length : copy.length;
+    paragraph(part, copy.slice(0, split));
+    const rest = copy.slice(split).trim();
+    if (rest) {
+      const detail = make('details', 'editorial-chapter-more');
+      detail.append(make('summary', '', t('展开', 'Read more')));
+      paragraph(detail, rest);
+      if (url) detail.append(external(source, url));
+      part.append(detail);
+    } else if (url) part.append(external(source, url));
+    root.append(part);
+  }
   function addStory(root, story) {
     paragraph(root, t(...story.intro));
-    const deep = make('details', 'editorial-deep-read');
-    deep.append(make('summary', '', t('展开：创作与作品细节', 'Read more: making and context')));
-    const chapters = make('div', 'editorial-deep-chapters'); deep.append(chapters);
-    for (const chapter of story.chapters) {
-      const part = make('section'); part.append(make('h4', '', t(...chapter.title)));
-      paragraph(part, t(...chapter.body)); part.append(external(chapter.source + ' ↗', chapter.url)); chapters.append(part);
+    for (const chapter of story.chapters)
+      addChapter(root, t(...chapter.title), t(...chapter.body), chapter.source, chapter.url);
+  }
+  function videoChoices(root, videos, artist) {
+    if (!videos.length) return;
+    const stage = make('div', 'editorial-video-player');
+    const choices = make('div', 'editorial-video-choices');
+    const show = (video, autoplay) => {
+      stage.replaceChildren();
+      const frame = make('iframe');
+      frame.src = 'https://www.youtube-nocookie.com/embed/' + video.id + '?rel=0' + (autoplay ? '&autoplay=1' : '');
+      frame.title = artist + ' — ' + video.name;
+      frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; frame.allowFullscreen = true;
+      stage.append(frame);
+      [...choices.children].forEach((button, index) => button.setAttribute('aria-pressed', String(videos[index] === video)));
+      if (autoplay) dialog.querySelector('.editorial-audio')?.pause();
+    };
+    for (const video of videos) {
+      const button = make('button', 'editorial-video-choice', video.name); button.type = 'button';
+      button.addEventListener('click', () => show(video, true)); choices.append(button);
     }
-    root.append(deep);
+    root.append(stage, choices); show(videos[0], false);
   }
   const doomVideos = [
     { name: 'Beef Rapp', id: 'XvKDFX00tsU' },
@@ -187,26 +217,12 @@
     };
     if (isDoom(print)) {
       paragraph(about, t('2004 年发行的《Mm..Food》把食物变成整张唱片的语言：歌名、双关和日常故事互相牵连。它的封面也不是随手配的插图；画家 Jason Jägel 听着唱片试播带完成了画作。', 'Released in 2004, Mm..Food builds an album-wide language from food: titles, double meanings and everyday stories connect. Its sleeve is equally deliberate: Jason Jägel made the painting while listening to a demo of the record.'));
-      const deep = make('details', 'editorial-deep-read');
-      deep.append(make('summary', '', t('展开：概念、制作、封面与版本', 'Read more: concept, production, sleeve and editions')));
-      const chapters = make('div', 'editorial-deep-chapters'); deep.append(chapters);
-      const chapter = (title, copy, url, source) => { const part = make('section'); part.append(make('h4', '', title)); paragraph(part, copy); part.append(external(source, url)); chapters.append(part); };
+      const chapter = (title, copy, url, source) => addChapter(about, title, copy, source, url);
       chapter(t('食物怎么成为概念', 'Food as a concept'), t('标题重新排列了 MF DOOM 的名字。食物词汇在歌里承担多重意思：它既可以是真实的吃食，也可以指向友情、同行、名声和自嘲。Pitchfork 的首发乐评指出，专辑并没有机械地把每一句歌词都写成食物谜题，主题更像是把普通生活收拢到同一种语言里。', 'The title rearranges MF DOOM’s name. Food language carries several meanings at once: literal meals, friendships, other rappers, fame and self-mockery. Pitchfork’s contemporary review observes that the record does not force every line into a food riddle; the theme draws everyday subjects into a shared vocabulary.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · 2004 ↗');
       chapter(t('谁制作了这些声音', 'Who made the music'), t('DOOM 制作了唱片的大部分音乐，但并非全部。《Potholderz》由 Count Bass D 制作；《One Beer》来自 Madlib，原本与《Madvillainy》的创作有关；《Kon Queso》由 PNS 制作，早先以《Yee Haw》之名出现。中间几段连续的声音拼贴，也让这张唱片听起来像在切换广播频道。', 'DOOM produced most, but not all, of the record. Count Bass D made Potholderz; Madlib’s One Beer came from the Madvillainy period; PNS produced Kon Queso, previously heard as Yee Haw. A run of sound collages in the middle makes the sequence feel like changing radio stations.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · credits and review ↗');
       chapter(t('封面的创作经过', 'How the sleeve was made'), t('美术指导 Jeff Jank 把试播 CD 交给 Jason Jägel。画家回忆自己反复听它，先画铅笔草图，再完成绘画。DOOM 与 Jasmine 喜欢结果，因此又请他继续做封底和《Hoe Cakes》的单曲画面。这里谈的是 2004 年原版封面；页面显示的 Deluxe Edition 是后来的发行版本。', 'Art director Jeff Jank gave Jason Jägel a demo CD. Jägel recalled playing it repeatedly, drawing a pencil sketch and then making the painting. DOOM and Jasmine liked the result and asked him to work on the back sleeve and Hoe Cakes single art. This account concerns the original 2004 sleeve; the Deluxe Edition shown here is a later release.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659', 'Artnet · interview with Jägel ↗');
       chapter(t('后来出现了哪些版本', 'How later editions changed the record'), t('Rhymesayers 在二十周年再版中收录了《Kookies》的原始版本，并为数字版加进混音、替代编辑以及 Kevin Beacham 在 2004 年录下的 DOOM 访谈片段。不同发行版本的曲目数因此不一定相同；下方的曲目表只对应此处显示的 Deluxe Edition。', 'Rhymesayers’ twentieth-anniversary reissue brought back the original Kookies version. Its digital edition also added remixes, an alternate edit and excerpts from Kevin Beacham’s 2004 interviews with DOOM. Track counts therefore differ between releases; the list below belongs specifically to the Deluxe Edition displayed here.'), 'https://rhymesayers.com/blogs/news/celebrating-20-years-of-mf-dooms-mm-food', 'Rhymesayers · anniversary edition ↗');
-      about.append(deep);
-      const chooser = make('div', 'editorial-video-choices');
-      const playing = make('p', 'editorial-playing', t('选择一个版本，在页面内播放。', 'Choose a recording to play here.'));
-      const player = make('div', 'editorial-video-player');
-      watch.append(chooser, playing, player);
-      for (const video of doomVideos) {
-        const button = make('button', 'editorial-video-choice'); button.type = 'button';
-        const image = make('img'); image.src = 'https://i.ytimg.com/vi/' + video.id + '/hqdefault.jpg'; image.alt = '';
-        button.append(image, make('span', '', video.name));
-        button.addEventListener('click', () => startVideo(video, player, playing));
-        chooser.append(button);
-      }
+      videoChoices(watch, doomVideos, print.artist);
       const images = make('div', 'editorial-photo-grid');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
@@ -222,7 +238,9 @@
         const context=make('div','work-research');context.hidden=true;about.append(context);
         void window.AilleursWorkResearch?.mount(context,titleOnly(print),print.artist,'music');
       }
-      paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
+      const videos = window.AilleursMusicVideos?.forAlbum(albumId) || [];
+      if (videos.length) videoChoices(watch, videos, print.artist);
+      else watch.hidden = true;
       const images = make('div', 'editorial-photo-grid'); gallery.append(images);
       if (albumId === '1109714933') {
         const commons = name => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(name) + '?width=900';

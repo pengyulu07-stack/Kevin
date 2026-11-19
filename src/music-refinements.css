@@ -1,0 +1,33 @@
+/* Playback and discussion stay visible; destination choices sit behind one control. */
+.song-platform-menu{position:relative;margin-left:4px}
+.song-platform-menu>summary{display:grid;place-items:center;min-width:42px;min-height:42px;border:1px solid var(--dt-rule,#655f59);border-radius:4px;cursor:pointer;list-style:none;color:var(--dt-text,#eee);font:700 18px/1 system-ui,sans-serif}
+.song-platform-menu>summary::-webkit-details-marker{display:none}
+.song-platform-menu[open]>.day-preview-video-links{position:absolute;right:0;top:48px;z-index:15;display:flex;flex-wrap:wrap;gap:8px;width:270px;padding:14px;border:1px solid var(--dt-rule,#655f59);background:var(--dt-raised,#232426);box-shadow:0 12px 32px #0007}
+.song-platform-menu:not([open])>.day-preview-video-links{display:none}
+.song-platform-menu .day-preview-discover{width:100%;text-align:left;margin:2px 0 0;font:500 14px system-ui,sans-serif}
+.song-inline-video{clear:both;padding:24px 0;max-width:850px}
+.song-inline-video h3{font:normal 28px Georgia,serif;margin:0 0 16px}
+.song-inline-video iframe{display:block;width:100%;height:auto;min-height:200px;aspect-ratio:16/9;border:0}
+#music-discussion-dialog:has(.song-inline-video) .listen-youtube{display:none}
+@media(min-width:1000px){
+body[data-layout="scenes"] .welcome{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:24px;align-items:start}
+body[data-layout="scenes"] .welcome-heading{grid-column:1;grid-row:1;text-align:left;align-self:center}
+body[data-layout="scenes"] .display-mode-switch{justify-content:flex-start}
+body[data-layout="scenes"] .calendar-layout{grid-column:2;grid-row:1;width:290px;margin:0;display:block}
+body[data-layout="scenes"] .calendar-layout .follow-chart-side{display:none}
+body[data-layout="scenes"] .paper-calendar{width:100%;padding:12px;min-height:0}
+body[data-layout="scenes"] .paper-calendar-head h2{font-size:24px}
+body[data-layout="scenes"] .paper-calendar-head small{display:none}
+body[data-layout="scenes"] .calendar-grid button{min-height:30px;font-size:14px;padding:4px}
+body[data-layout="scenes"] .calendar-foot{font-size:11px}
+body[data-layout="scenes"] .calendar-day-preview{grid-column:1/-1;grid-row:2;width:100%}
+body[data-layout="scenes"] .calendar-follow-controls{grid-column:1/-1;grid-row:3;width:100%}
+body[data-layout="scenes"] .calendar-feedback{grid-column:1;grid-row:4}
+body[data-layout="scenes"] .start-day{grid-column:2;grid-row:4}
+}
+/* A page-sized reading surface keeps the feed out of the reading context. */
+.editorial-detail,#music-discussion-dialog{width:100vw;max-width:none;height:100dvh;max-height:100dvh;margin:0;border:0;border-radius:0;box-shadow:none}
+.editorial-detail::backdrop,#music-discussion-dialog::backdrop{background:#151617;backdrop-filter:none}
+.editorial-detail-body,.editorial-detail-hero{max-width:1120px;margin-inline:auto}
+.editorial-detail-header,.editorial-detail-tabs{padding-inline:max(20px,calc((100vw - 1120px)/2))}
+#music-discussion-dialog{padding:24px max(20px,calc((100vw - 1000px)/2));background:var(--dt-bg,#191b1c);color:var(--dt-text,#eee)}

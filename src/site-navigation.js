@@ -244,8 +244,8 @@
     const copy=node('button','paper-copy');copy.type='button';copy.title='Copy song title';copy.setAttribute('aria-label','Copy song title');const icon=node('span','paper-copy-icon');icon.setAttribute('aria-hidden','true');copy.append(icon);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(song.title);toast('Copied: '+song.title);}catch{toast('Select the title to copy it.');}});actions.append(vote,discuss,copy);
     const videoLinks=node('span','day-preview-video-links');
     videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
-    actions.append(videoLinks);
-    const discover=node('button','day-preview-discover','More like this ↗');discover.type='button';discover.title='More by this artist and related songs';discover.addEventListener('click',()=>discussSong(song,day));actions.append(discover);
+    const more=node('details','song-platform-menu');more.append(node('summary','','•••'),videoLinks);actions.append(more);
+    const discover=node('button','day-preview-discover','Related songs');discover.type='button';discover.title='More by this artist and related songs';discover.addEventListener('click',()=>discussSong(song,day));videoLinks.append(discover);
     row.append(art,open,actions);return row;
   }
   function renderGallery(host,rows,counts,day){

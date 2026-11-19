@@ -1,0 +1,11 @@
+# Music interface update — 19 November 2026
+
+Implemented: individual topic disclosures with visible openings; one inline video player with concise recording selectors; official Madvillain remasters from Stones Throw; hand-checked Rainbow video offered as a composer choice; selected daily-share video in the reading surface; provider links behind one menu; page-sized reading surfaces; desktop Scenes calendar at upper right; catalog-only filler no longer inserted as a personal note; Wikipedia extract expansion no longer repeats the lead.
+
+Sources consulted for this focused implementation: Apple HIG design principles and disclosure controls; YouTube player parameters and authorization guide; Stones Throw remaster announcement (25 November 2024, linked official embeds ru2IrTY2UG0 and lWpRJK_z08I); Kacey Musgraves official Rainbow video 6OFv566mj7s. The broader research target of about 50 screened sources was not completed in this focused pass. No claim of a complete design study or complete music catalog.
+
+QA: JavaScript syntax and static build passed. Browser inspected 1440px desktop and 409px narrow view. Checked independently expanded sleeve chapter, desktop Scenes calendar position, full-page reading layout, catalog track listing and rendered official Accordion player. Full video duration was not watched; no production test post created. Daily-share selected-video mounting is implemented but publish-to-read flow remains unverified in a separate user account.
+
+Remaining: all 30 albums need individually checked videos and visual treatments; 200-song editorial manifest remains incomplete; per-work photo sets and deduplication need continued checking. Existing Rainbow share has no selected video; its author's data was not silently changed. Automatic new YouTube searches still require server YOUTUBE_API_KEY. Page-sized dialog styling does not add permanent shareable detail routes.
+
+Cloud setup: create/select project Ailleurs Music, enable YouTube Data API v3, create API key restricted to that API, save as YOUTUBE_API_KEY in the existing server function secrets. Keep the key out of public config.js and GitHub. No private account access or OAuth permissions needed for public video search. Do not activate a paid trial or billing for this step without explaining the specific requirement and fee first.

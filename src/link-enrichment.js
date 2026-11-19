@@ -112,14 +112,6 @@
       updateSources();
       showCatalog(row);
       if(album&&canFillAlbum){suggestedAlbum=String(row.collectionName||'').slice(0,120);album.value=suggestedAlbum;}
-      if(note&&canFillNote){
-        const year=/^\d{4}/.exec(String(row.releaseDate||''))?.[0];
-        const verifiedAlbum=String(row.collectionName||'').trim();
-        suggestedNote=verifiedAlbum
-          ? (localStorage.getItem('daytone-language')==='zh'?'《'+row.trackName+'》收录于 '+row.artistName+' 的《'+verifiedAlbum+'》'+(year?'（'+year+'）':'')+'。':'“'+row.trackName+'” appears on '+row.artistName+'’s '+verifiedAlbum+(year?' ('+year+')':'')+'.')
-          : '';
-        if(suggestedNote)note.value=suggestedNote.slice(0,500);
-      }
       if(row.catalogName==='Apple Music'&&/^https:\/\//i.test(row.trackViewUrl||'')&&!form.elements.url.value.trim()&&form.querySelector('input[name="source"]:checked')?.value!=='file'){
         form.elements.url.value=row.trackViewUrl;
         form.dataset.catalogAutoSourceUrl=row.trackViewUrl;
@@ -321,10 +313,10 @@
           player.loading='eager';const url=new URL(player.src);url.searchParams.set('autoplay','1');player.src=url.href;stage.replaceChildren(player);
         });
         const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=item.channel;
-        const select=document.createElement('button');select.type='button';select.textContent='Use this version';select.addEventListener('click',()=>{
+        const select=document.createElement('button');select.type='button';select.textContent='Use this video';select.addEventListener('click',()=>{
           const video=form.elements.video_url||link;video.value=item.url;video.dispatchEvent(new Event('input',{bubbles:true}));
           form.dataset.videoAutoSelection=item.url;
-          status.textContent='Selected '+item.title+'. Check the video below, then confirm this version.';
+          status.textContent='Selected: '+item.title;
         });
         info.append(name,channel,select);card.append(watch,info);cards.append(card);
       }
@@ -333,6 +325,8 @@
       const current=++sequence,song=title.value.trim(),performer=artist.value.trim();
       updateFallback();if(song.length<3){section.hidden=true;return;}
       section.hidden=false;cards.replaceChildren();stage.replaceChildren();
+      const checked = window.AilleursMusicVideos?.find(song, performer) || [];
+      if(checked.length){status.textContent='';render(checked);return;}
       if(unavailable){status.textContent='Automatic video search is unavailable right now. You can check YouTube or Bilibili and paste the exact video link.';return;}
       status.textContent='Finding YouTube versions…';
       try{

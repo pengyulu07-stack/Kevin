@@ -130,7 +130,15 @@
     }
     if(selectedSongId!==id)return;
     const rank=sortedSongs().findIndex(x=>x.id===id)+1;
-    host.replaceChildren(createCard(song,rank,true));showDialog('music-discussion-dialog');void window.DaytoneSongResearch?.mount(host,song);void renderSongConnections(song);
+    host.replaceChildren(createCard(song,rank,true));
+    const chosen = song.video_url || song.source_url;
+    const player = chosen ? musicEmbed(chosen) : null;
+    if(player?.classList.contains('video-player')){
+      const area=make('section','song-inline-video');area.append(make('h3','','Listen here'));player.loading='lazy';area.append(player);
+      const card=host.querySelector('.song-card'),comments=card?.querySelector('.comment-section');
+      if(comments)comments.before(area);else host.append(area);
+    }
+    showDialog('music-discussion-dialog');void window.DaytoneSongResearch?.mount(host,song);void renderSongConnections(song);
   }
   const externalArtistCache=new Map();
   async function externalArtistTracks(artist){
