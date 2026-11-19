@@ -2,7 +2,7 @@
 (() => {
   const norm=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
   let manifest;
-  const ready=fetch(new URL('music-catalog.json',document.baseURI)).then(r=>{if(!r.ok)throw Error('catalog');return r.json();}).then(data=>{manifest=data;return data;}).catch(()=>null);
+  const ready=fetch(new URL('music-catalog.json?v=20261119h2',document.baseURI)).then(r=>{if(!r.ok)throw Error('catalog');return r.json();}).then(data=>{manifest=data;return data;}).catch(()=>null);
   const albumFor=row=>manifest?.albums.find(album=>String(album.id)===String(row.collectionId));
   function asSong(row){const album=albumFor(row);return {id:'catalog-'+row.trackId,title:row.trackName,artist:row.artistName,album:row.collectionName,source_url:row.trackViewUrl,previewUrl:row.previewUrl,catalogCover:album?.cover||row.artworkUrl100,nickname:'AILLEURS',catalog:true,print:album&&{title:album.title,artist:album.artist,src:album.cover,source:album.source}};}
   const active=day=>{
@@ -22,7 +22,7 @@
     const grid=document.createElement('div');grid.className='music-recordings-grid';
     let limit=12;
     const render=()=>{
-      const q=norm(search.value),rows=(q?data.tracks:active(day)).filter(row=>!q||norm([row.trackName,row.artistName,row.collectionName].join(' ')).includes(q));
+      const q=norm(search.value),rows=(q?[...new Map(data.albums.flatMap(album=>album.tracks).map(row=>[row.trackId,row])).values()]:active(day)).filter(row=>!q||norm([row.trackName,row.artistName,row.collectionName].join(' ')).includes(q));
       grid.replaceChildren();
       for(const row of rows.slice(0,limit)){
         const song=asSong(row),card=document.createElement('article');card.className='music-recording-card';
