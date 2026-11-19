@@ -37,8 +37,9 @@
   function editorialPrints(day,room){
     const pool=room==='music'?(window.AilleursMusicCovers||[]):room==='art'?(window.AilleursArtWorks||[]):room==='books'?(window.AilleursBookCovers||[]):filmPrints;
     if(!pool.length)return [];
-    const dateOffset=dayNumber(day)-dayNumber('2026-11-15');
-    const stride=7;
+    const dateOffset=dayNumber(day)-dayNumber('2026-11-18');
+    // Four albums remain from the previous day; two enter the six-cover shelf.
+    const stride=room==='music'?2:7;
     const start=((dateOffset*stride)%pool.length+pool.length)%pool.length;
     return Array.from({length:Math.min(6,pool.length)},(_,index)=>pool[(start+index)%pool.length]);
   }
@@ -304,6 +305,7 @@
         const image=node('img');image.src=print.src;image.alt='';image.loading=index<3?'eager':'lazy';image.decoding='async';
         const caption=node('span','room-daily-print-caption');caption.append(node('strong','',print.title),node('small','',print.artist||(activeRoom==='film'?(isZh?'电影图像':'Film image'):(isZh?'馆藏资料':'Museum record'))));
         caption.append(node('em','',isZh?'查看详情':'View details'));
+        if(activeRoom==='music'&&index>=4)caption.append(node('small','room-daily-new',isZh?'今日加入':'NEW TODAY'));
         card.append(image,caption);list.append(card);
       }
       section.append(heading,list);shelf.append(section);

@@ -255,6 +255,7 @@ body[data-chart-design="ink"] #music-gallery .gallery-record{background:var(--ch
 .room-daily-print-caption strong,.room-daily-print-caption small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .room-daily-print-caption strong{color:var(--dt-text);font-weight:650}.room-daily-print-caption small{margin-top:3px;color:var(--dt-muted)}
 .room-daily-print-caption em{display:block;margin-top:4px;color:var(--room-accent);font:700 10px/1.25 system-ui,sans-serif;white-space:nowrap}
+.room-daily-print-caption .room-daily-new{margin-top:5px;color:#f0c4a3;font:700 10px/1.2 system-ui,sans-serif;letter-spacing:.05em}
 .room-daily-print:is(:hover,:focus-visible){transform:translateY(-7px) rotate(0);filter:brightness(1.12);outline:2px solid var(--room-accent);outline-offset:4px;position:relative;z-index:3}
 @media(max-width:700px){.room-daily-prints-list{grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.room-daily-prints-heading{display:block}.room-daily-prints-heading span{display:block;margin-top:4px}}
 @media(prefers-reduced-motion:reduce){.room-daily-print{transition:none}}

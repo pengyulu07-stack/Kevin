@@ -119,6 +119,56 @@ window.AilleursMusicCovers = [
     "artist": "The Velvet Underground & Nico",
     "src": "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/92/93/39/9293397f-a707-237e-ec7e-0ca613a67e3c/06UMGIM04143.rgb.jpg/400x400bb.jpg",
     "source": "https://music.apple.com/us/album/the-velvet-underground-nico-45th-anniversary-edition/1440851613"
+  },
+  {
+    "title": "In Rainbows", "artist": "Radiohead",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/dd/50/c7/dd50c790-99ac-d3d0-5ab8-e3891fb8fd52/634904032463.png/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/in-rainbows/1109714933"
+  },
+  {
+    "title": "Blue", "artist": "Joni Mitchell",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/eb/9a/b4/eb9ab4be-1dd6-b132-a2c2-55066e5e6223/U0RTLU1TLVdXLUpvbmlNaXRjaGVsbC1BREFNX0lEPTE0OTIyNjMwOTIucG5n.png/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/blue/1492263092"
+  },
+  {
+    "title": "The Miseducation of Lauryn Hill", "artist": "Lauryn Hill",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/09/6b/55/096b55c4-ee8f-23bd-df8f-0ca0821f3028/886446727189.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/the-miseducation-of-lauryn-hill/1276760743"
+  },
+  {
+    "title": "Voodoo", "artist": "D'Angelo",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/e9/b9/9e/e9b99e73-58a5-1e31-f57c-b11e78419dcf/16UMGIM86249.rgb.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/voodoo/1443829916"
+  },
+  {
+    "title": "Vespertine", "artist": "Björk",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/32/d6/28/32d62861-0e24-2111-d3ed-3b54f23083d5/081227607265.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/vespertine/20920260"
+  },
+  {
+    "title": "Selected Ambient Works 85-92", "artist": "Aphex Twin",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/5f/b3/e0/5fb3e08d-c2cd-3da4-6ad7-c5dc61803683/cover.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/selected-ambient-works-85-92/1668862636"
+  },
+  {
+    "title": "Black Messiah", "artist": "D'Angelo and The Vanguard",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/01/38/24/01382463-de8c-2a33-f8fe-fb3a008dfc87/886444977449.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/black-messiah/950764300"
+  },
+  {
+    "title": "Heaven Or Las Vegas (Remastered)", "artist": "Cocteau Twins",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/76/cd/61/76cd61e7-0714-dce5-c48e-0f05f8fcb84b/652637001280.png/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/heaven-or-las-vegas-remastered/258198881"
+  },
+  {
+    "title": "Chet Baker Sings", "artist": "Chet Baker",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/2f/99/e5/2f99e569-3920-07ab-b29e-c2da9b50468d/16UMGIM49055.rgb.jpg/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/chet-baker-sings/1440864756"
+  },
+  {
+    "title": "A Love Supreme", "artist": "John Coltrane",
+    "src": "https://is1-ssl.mzstatic.com/image/thumb/Features116/v4/0d/70/93/0d709323-1c1b-57b4-0ee3-f2b7298b4217/U0RTLU1TLVdXLUpvaG5fQ29sdHJhbmUtQURBTV9JRD0xNDQwNzEzMDE4LnBuZw.png/592x592bb.webp",
+    "source": "https://music.apple.com/us/album/a-love-supreme/1440713018"
   }
 ];
 

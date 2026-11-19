@@ -1,5 +1,15 @@
 # AILLEURS work ledger
 
+## November 19 music pass
+
+- [x] Expand the sourced Music cover pool from 20 to 30 catalog-checked albums. Give each album its own dark, legible palette and a small geometric cover cue in its on-site detail, with the same palette carried through controls and reading sections.
+- [x] Change the six-cover daily shelf so four remain and two new albums enter each day; mark the two arrivals. This is a 30-album discovery shelf, not the proposed 200-song catalog or 100-song monthly program.
+- [x] Reject Commons logos, signatures and other artwork from artist photograph suggestions; vary the defaults by photographic event and alternate Madvillain member results. Leave fewer than four when four distinct credited photos cannot be verified.
+- [x] Remove the redundant album-cover repeat from the gallery; the cover stays in the hero. Add short source-led leads to the ten newly introduced albums.
+- [ ] Configure server-side YouTube search after the Google Cloud first-run service agreement is accepted by the account owner. The UI will show three candidate videos and ask the contributor to confirm the version; do not claim this works while the key is absent.
+- [ ] Extend the music catalog toward 200 checked songs with ~100 in a monthly cycle, two entries joining and two leaving each day. The 30-album shelf is an initial visual set, not fulfillment of that song program.
+- [ ] Replace general artist portraits with genuinely song/album-specific visual material where reliable licensed sources exist; check actual overlap and attribution on public examples.
+
 This file tracks requested behavior separately from work that has been verified on the public site. A local build is not a release.
 
 ## Current release goals

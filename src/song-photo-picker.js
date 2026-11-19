@@ -18,15 +18,18 @@
       const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).slice(0,160);
       const categories=String(meta.Categories?.value||'').split('|').map(normalize);
       const identified=categories.some(category=>category===name||category.startsWith(name+' ')||category.endsWith(' of '+name));
-      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||seen.has(pageUrl)||/accuracy disputes/i.test(meta.Categories?.value||''))return [];
+      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
       const description=plain(meta.ImageDescription?.value).slice(0,180);
-      seen.add(pageUrl);return [{src,pageUrl,title:description&&normalize(description).includes(name)?description:title,credit:credit||'Wikimedia Commons',license}];
+      const eventKey=normalize(title.replace(/\s*(?:[(_-]\s*)?(?:0?[1-9]|1[0-9])\)?$/,'')||title);
+      seen.add(pageUrl);return [{src,pageUrl,title:description&&normalize(description).includes(name)?description:title,credit:credit||'Wikimedia Commons',license,eventKey}];
     }).slice(0,12);
   }
   async function search(artist){
     const names=normalize(artist)==='madvillain'?['MF Doom','Madlib']:[artist];
     const matches=await Promise.allSettled(names.map(searchName));
-    const seen=new Set();return matches.flatMap(result=>result.status==='fulfilled'?result.value:[]).filter(item=>{if(seen.has(item.pageUrl))return false;seen.add(item.pageUrl);return true;}).slice(0,12);
+    const groups=matches.map(result=>result.status==='fulfilled'?result.value:[]),seen=new Set(),result=[];
+    for(let i=0;i<12;i++)for(const group of groups){const item=group[i];if(item&&!seen.has(item.pageUrl)){seen.add(item.pageUrl);result.push(item);}}
+    return result.slice(0,12);
   }
   function setup(){
     const form=document.getElementById('upload-form'),artist=form?.elements.artist;
@@ -43,8 +46,7 @@
     const render=items=>{
       grid.replaceChildren();chosen=[];
       const captions=new Set();
-      for(const item of items){const key=normalize(item.title);if(!captions.has(key)){chosen.push(item);captions.add(key);}if(chosen.length===4)break;}
-      for(const item of items){if(chosen.length===4)break;if(!chosen.includes(item))chosen.push(item);}
+      for(const item of items){const key=item.eventKey||normalize(item.title);if(!captions.has(key)){chosen.push(item);captions.add(key);}if(chosen.length===4)break;}
       status.textContent=items.length?items.length+' sourced photos found'+(normalize(artist.value)==='madvillain'?' of MF DOOM and Madlib, the members of Madvillain':'')+' · '+chosen.length+' selected. Review or change them below.':'No clearly named, credited Commons photographs found. You can publish without extras.';
       for(const item of items){
         const label=document.createElement('label');label.className='song-photo-option';
@@ -71,7 +73,7 @@
     artist.addEventListener('input',schedule);form.addEventListener('daytone:recording-selected',schedule);form.addEventListener('daytone:catalog-found',schedule);
     refresh.addEventListener('click',()=>{lastArtist='';void run();});
     form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;lastArtist='';chosen=[];grid.replaceChildren();status.textContent='';});
-    form.addEventListener('submit',()=>{form.dataset.mediaGallery=JSON.stringify(chosen.slice(0,6));},{capture:true});
+    form.addEventListener('submit',()=>{form.dataset.mediaGallery=JSON.stringify(chosen.slice(0,6).map(({eventKey,...item})=>item));},{capture:true});
     status.textContent='Choose a recording or enter an artist to find photos.';
   }
   document.addEventListener('DOMContentLoaded',setup);

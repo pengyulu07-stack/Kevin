@@ -299,7 +299,7 @@
     const title=form?.elements.title,artist=form?.elements.artist,link=form?.elements.url;
     if(!title||!artist||!link)return;
     const section=document.createElement('section');section.className='publish-video-results';section.hidden=true;
-    const heading=document.createElement('h3');heading.textContent='YouTube versions';
+    const heading=document.createElement('h3');heading.textContent='Choose a video';
     const status=document.createElement('p');status.setAttribute('role','status');
     const cards=document.createElement('div');cards.className='publish-video-grid';
     const stage=document.createElement('div');stage.className='publish-video-stage';
@@ -311,7 +311,7 @@
     const updateFallback=()=>{const q=encodeURIComponent([title.value.trim(),artist.value.trim()].filter(Boolean).join(' '));fallback.href='https://www.youtube.com/results?search_query='+q;bilibili.href='https://search.bilibili.com/all?keyword='+q;};
     const render=items=>{
       cards.replaceChildren();stage.replaceChildren();
-      for(const item of items.slice(0,10)){
+      for(const item of items.slice(0,3)){
         const card=document.createElement('article');card.className='publish-video-card';
         const watch=document.createElement('button');watch.type='button';watch.className='publish-video-watch';watch.setAttribute('aria-label','Preview '+item.title);
         const image=document.createElement('img');image.src=item.thumbnail;image.alt='';image.loading='lazy';
@@ -340,7 +340,7 @@
         if(current!==sequence||title.value.trim()!==song||artist.value.trim()!==performer)return;
         if(result.error||!result.data?.available){if(result.data?.reason==='unconfigured')unavailable=true;status.textContent='Video choices are unavailable right now. You can still check YouTube and paste the exact link.';return;}
         const items=Array.isArray(result.data.items)?result.data.items:[];
-        status.textContent=items.length?'Pick the exact video; the title and channel may describe a different recording.':'No embeddable videos were returned. Check YouTube directly.';
+        status.textContent=items.length?'Check the title and channel, then choose the right version.':'No embeddable videos were returned. Check YouTube directly.';
         render(items);
       }catch{if(current===sequence)status.textContent='Could not search YouTube right now. Paste a checked link instead.';}
     };

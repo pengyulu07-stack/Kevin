@@ -38,6 +38,18 @@
   const cleanCatalogText = value => textValue(value).replace(/\*\*/g, '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/\*([^*]+)\*/g, '$1');
   const isDoom = print => print.source.includes('/1558162066');
   const isCaligari = print => titleOnly(print).includes('Caligari');
+  const albumLeads={
+    '1109714933':['2007 年，Radiohead 让听众自行决定《In Rainbows》的下载价格。撇开发行方式，这十首歌回到更直接的吉他、节奏与孤独感。','In 2007 Radiohead let listeners choose the download price of In Rainbows. Beyond that release experiment, these ten songs return to guitars, rhythms and loneliness.'],
+    '1492263092':['《Blue》把失恋、爱情与家庭秘密写进十首歌。Joni Mitchell 在人生关系变化期间录下它；从《Little Green》到《River》，感情从不只有一种颜色。','Blue puts heartbreak, love and family secrecy into ten songs. Joni Mitchell recorded it amid personal change; Little Green and River show how many shades those feelings take.'],
+    '1276760743':['Lauryn Hill 的唯一一张个人录音室专辑，把感情、信仰、成长与社会经验放在同一间想象中的课堂。开场点名时她缺席，真正的课程却从这里开始。','Lauryn Hill’s only solo studio album brings love, faith, growing up and social experience into one imagined classroom. She is absent at roll call; the lessons start there.'],
+    '1443829916':['《Voodoo》在纽约 Electric Lady 录音室慢慢成形。D’Angelo 和 Soulquarians 把爵士、放克、灵魂乐与不急于迎合电台的节奏编织在一起。','Voodoo grew slowly at New York’s Electric Lady Studios. D’Angelo and the Soulquarians wove jazz, funk and soul into rhythms that refused to rush toward radio formulas.'],
+    '20920260':['Björk 用近距离的低语、竖琴和细小的电子节拍，做出一张适合戴耳机听的唱片。《Vespertine》里的亲密感，也来自她在电影拍摄之后寻求庇护的时期。','Björk built a headphone record from close whispers, harp and tiny electronic beats. Vespertine’s intimacy also grew from a period of seeking refuge after a difficult film shoot.'],
+    '1668862636':['虽然名叫“Ambient Works”，这张唱片仍能听到 Aphex Twin 的舞曲根基：节拍留在远处，合成器声在前景缓慢变形。','Despite its Ambient Works title, the album retains Aphex Twin’s dance roots: beats sit in the distance while synthesizer sounds shift in the foreground.'],
+    '950764300':['离《Voodoo》十四年，D’Angelo 与 The Vanguard 带着《Black Messiah》回来。模拟录音的放克与灵魂乐，回应了他看到的抗议和社区行动。','Fourteen years after Voodoo, D’Angelo returned with The Vanguard on Black Messiah. Its analog funk and soul respond to protests and community action around him.'],
+    '258198881':['Cocteau Twins 在家庭变故、乐队摩擦和唱片公司压力之间录下这张唱片。飘忽的吉他声与清晰的流行旋律同时存在。','Cocteau Twins recorded this amid family change, band friction and label pressure. Hazy guitar textures and clear pop hooks coexist throughout.'],
+    '1440864756':['Chet Baker 已是小号手，1954 年却用脆弱、贴近耳边的声音唱起情歌。《My Funny Valentine》成为他此后反复演唱的曲目。','Already known as a trumpeter, Chet Baker sang these ballads in a fragile, close voice in 1954. My Funny Valentine became a song he would revisit repeatedly.'],
+    '1440713018':['Coltrane 与经典四重奏在 1964 年的一天录下《A Love Supreme》。四个部分把一个简短的旋律动机发展成献给信仰与重生的作品。','Coltrane and his classic quartet recorded A Love Supreme in a single day in 1964. Four parts turn a short motif into a work of devotion and renewal.']
+  };
   const storyFor = (print, room) => {
     const key = room === 'music' ? 'music:' + print.source.match(/\/album\/[^/]+\/(\d+)/)?.[1]
       : room === 'art' ? 'art:' + print.source.split('/art/')[1]
@@ -153,13 +165,13 @@
     const addRelatedPhotos=async(images)=>{
       const found=await window.AilleursCommonsPhotos?.search(print.artist||'');
       if(id!==generation||!images.isConnected||!found?.length)return;
-      const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase()));
+      const used=new Set([...images.querySelectorAll('img')].map(image=>image.src.toLowerCase())),seenPages=new Set([...images.querySelectorAll('figcaption a')].map(link=>link.href.toLowerCase())),events=new Set();
       let count=0;
       for(const item of found){
         const page=item.pageUrl.toLowerCase();
-        if(used.has(item.src.toLowerCase())||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
+        if(used.has(item.src.toLowerCase())||seenPages.has(page)||events.has(item.eventKey)||[...used].some(src=>src.includes(page.split('/').pop()?.toLowerCase()||'\u0000')))continue;
         photo(images,item.src,item.title,item.credit+' · '+item.license,item.pageUrl);
-        used.add(item.src.toLowerCase());count++;
+        used.add(item.src.toLowerCase());seenPages.add(page);events.add(item.eventKey);count++;
         if(count===5)break;
       }
     };
@@ -186,7 +198,6 @@
         chooser.append(button);
       }
       const images = make('div', 'editorial-photo-grid');
-      photo(images, print.src, t('唱片封面', 'Album sleeve'), 'Jason Jägel / Jeff Jank');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
       gallery.append(images);
@@ -195,12 +206,13 @@
       const story = storyFor(print, 'music');
       if (story) addStory(about, story);
       else {
-        paragraph(about, t('下方列出这个版本的发行资料与曲目。', 'The release details and tracks for this edition appear below.'));
+        const lead=albumLeads[albumId];
+        if(lead){paragraph(about,t(...lead));const source=make('p','editorial-source-note');source.append(external(t('发行与背景资料 ↗','Release and background ↗'),print.source));about.append(source);}
         const context=make('div','work-research');context.hidden=true;about.append(context);
         void window.AilleursWorkResearch?.mount(context,titleOnly(print),print.artist,'music');
       }
       paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
-      const images = make('div', 'editorial-photo-grid'); photo(images, print.src, t('唱片封面', 'Album cover')); gallery.append(images);
+      const images = make('div', 'editorial-photo-grid'); gallery.append(images);
       void addRelatedPhotos(images);
     }
     paragraph(tracks, t('正在读取曲目…', 'Loading tracks…'));
@@ -437,6 +449,17 @@
     const id = ++generation;
     if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; }
     dialog.replaceChildren();
+    const albumIndex=room==='music'?(window.AilleursMusicCovers||[]).findIndex(item=>item.source===print.source):-1;
+    const theme=albumIndex>=0?window.AilleursAlbumThemes?.[albumIndex]:null;
+    dialog.classList.toggle('album-themed',!!theme);
+    if(theme){
+      dialog.style.setProperty('--record-paper',theme.paper);
+      dialog.style.setProperty('--record-panel',theme.panel);
+      dialog.style.setProperty('--record-accent',theme.accent);
+      dialog.dataset.albumMotif=theme.motif;
+    }else{
+      dialog.style.removeProperty('--record-paper');dialog.style.removeProperty('--record-panel');dialog.style.removeProperty('--record-accent');delete dialog.dataset.albumMotif;
+    }
     const header = make('header', 'editorial-detail-header');
     const close = make('button', 'editorial-close', '×'); close.type = 'button'; close.setAttribute('aria-label', t('关闭', 'Close')); close.addEventListener('click', () => dialog.close());
     header.append(make('small', '', ('AILLEURS / ' + room).toUpperCase()), sourceMenu(print, room), close);
