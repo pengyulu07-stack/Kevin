@@ -130,19 +130,29 @@
     }
     if(selectedSongId!==id)return;
     const rank=sortedSongs().findIndex(x=>x.id===id)+1;
-    const view=$v('music-discussion-dialog');view.classList.add('song-reading-page');
+    const view=$v('music-discussion-dialog');const previousScroll=view.open&&host.dataset.songId===String(song.id)?view.scrollTop:0;view.classList.add('song-reading-page');
     const albumIndex=(window.AilleursMusicCovers||[]).findIndex(print=>print.title.normalize('NFKC').toLocaleLowerCase()===String(song.album||'').normalize('NFKC').toLocaleLowerCase());
     const theme=window.AilleursAlbumThemes?.[albumIndex];
     for(const [key,value] of Object.entries({'--record-paper':theme?.paper||'#191b1d','--record-panel':theme?.panel||'#232527','--record-accent':theme?.accent||'#d69270'}))view.style.setProperty(key,value);
+    const retainedVideo=host.dataset.songId===String(song.id)?host.querySelector('.song-inline-video'):null;host.dataset.songId=String(song.id);if(retainedVideo)retainedVideo.remove();
     host.replaceChildren(createCard(song,rank,true));
     const chosen = song.video_url || song.source_url;
     const player = chosen ? musicEmbed(chosen) : null;
     if(player?.classList.contains('video-player')){
-      const area=make('section','song-inline-video');area.append(make('h3','','Listen here'));player.loading='lazy';area.append(player);
+      const area=retainedVideo||make('section','song-inline-video');if(!retainedVideo)area.append(make('h3','','Listen here'));
+      const yt=typeof youtubeVideoId==='function'?youtubeVideoId(chosen):null;
+      if(yt&&!retainedVideo){const stage=make('div','');area.append(stage);window.AilleursVideoPlayer.mount(stage,[{id:yt,name:song.title,artist:song.artist,kind:'Shared video'}]);}
+      else if(!retainedVideo){player.loading='lazy';area.append(player);} 
       const card=host.querySelector('.song-card'),comments=card?.querySelector('.comment-section');
       if(comments)comments.before(area);else host.append(area);
     }
-    showDialog('music-discussion-dialog');void window.DaytoneSongResearch?.mount(host,song);void renderSongConnections(song);
+    const originalHeart=host.querySelector('.song-vote');
+    const actions=make('div','music-reading-actions shared-reading-actions');
+    const like=make('button','',originalHeart?.textContent||'♡');like.type='button';
+    const sync=()=>{if(originalHeart){like.textContent=originalHeart.textContent;like.disabled=originalHeart.disabled;like.setAttribute('aria-pressed',originalHeart.getAttribute('aria-pressed')||'false');}};
+    if(originalHeart){like.addEventListener('click',()=>originalHeart.click());const observer=new MutationObserver(sync);observer.observe(originalHeart,{attributes:true,childList:true,subtree:true});const cleanup=new MutationObserver(()=>{if(!originalHeart.isConnected){observer.disconnect();cleanup.disconnect();}});cleanup.observe(host,{childList:true,subtree:true});view.addEventListener('close',()=>{observer.disconnect();cleanup.disconnect();},{once:true});sync();actions.append(like);}
+    const comment=make('button','','Comment · '+(comments.get(song.id)?.length||0));comment.type='button';comment.addEventListener('click',()=>{const input=host.querySelector('.comment-section textarea');input?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});input?.focus({preventScroll:true});});actions.append(comment);host.prepend(actions);
+    showDialog('music-discussion-dialog');view.scrollTop=previousScroll;window.DaytoneListen?.attachTo(view);void window.DaytoneSongResearch?.mount(host,song);void renderSongConnections(song);
   }
   const externalArtistCache=new Map();
   async function externalArtistTracks(artist){
@@ -358,6 +368,7 @@
   $v('generic-post-cancel').addEventListener('click', () => $v('generic-post-dialog').close());
   $v('generic-post-form').addEventListener('submit', event => void publishPost(event));
   $v('generic-discussion-close').addEventListener('click', () => $v('generic-discussion-dialog').close());
+  $v('music-discussion-dialog').addEventListener('close',()=>{window.DaytoneListen?.attachTo(document.body);$v('music-discussion-body').querySelectorAll('.music-video').forEach(host=>{window.AilleursVideoPlayer?.destroy(host);host.replaceChildren();});});
   $v('music-discussion-close').addEventListener('click', () => $v('music-discussion-dialog').close());
   $v('music-post').addEventListener('click', openUpload);
   $v('show-top-songs').addEventListener('click', () => show('music'));

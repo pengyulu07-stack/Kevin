@@ -7,17 +7,11 @@
   const body=dialog.querySelector('#listen-body');
   dialog.querySelector('button').addEventListener('click',()=>dialog.close());
   const dock=document.createElement('section');dock.id='daytone-player-dock';dock.className='daytone-player-dock';dock.hidden=true;
-  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / AILLEURS</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><span id="player-dock-position" hidden></span><button type="button" id="player-dock-previous" hidden aria-label="Previous song">⏮</button><button type="button" id="player-dock-next" hidden aria-label="Next song">⏭</button><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
+  dock.innerHTML='<div class="player-dock-head"><div><small>NOW PLAYING / AILLEURS</small><strong id="player-dock-title"></strong><span id="player-dock-artist"></span></div><div class="player-dock-actions"><span id="player-dock-position" hidden></span><button type="button" id="player-dock-previous" hidden aria-label="Previous song">⏮</button><button type="button" id="player-dock-next" hidden aria-label="Next song">⏭</button><button type="button" id="player-dock-details">Details</button><a id="player-dock-source" target="_blank" rel="noopener noreferrer">Original ↗</a><button type="button" id="player-dock-close" aria-label="Stop and close player">×</button></div></div><div id="player-dock-content"></div>';
   document.body.append(dock);
   const dockContent=dock.querySelector('#player-dock-content');
-  const videoDialog=document.createElement('dialog');videoDialog.id='daytone-video-dialog';videoDialog.className='daytone-video-dialog';
-  videoDialog.innerHTML='<div class="video-dialog-shell"><div class="video-dialog-head"><div><small>AILLEURS / VIDEO</small><h2 id="video-dialog-title"></h2><p id="video-dialog-artist"></p></div><button type="button" class="video-dialog-close" aria-label="Close video">×</button></div><div id="video-dialog-player" class="video-dialog-player"></div><div class="video-dialog-foot"><span>Shared version</span><div><button type="button" id="video-fullscreen">⛶ Full screen</button><a id="video-original" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div></div></div>';
-  document.body.append(videoDialog);
-  const videoStage=videoDialog.querySelector('#video-dialog-player');
-  videoDialog.querySelector('.video-dialog-close').addEventListener('click',()=>videoDialog.close());
-  videoDialog.addEventListener('close',()=>videoStage.replaceChildren());
-  videoDialog.querySelector('#video-fullscreen').addEventListener('click',()=>videoStage.querySelector('iframe')?.requestFullscreen?.());
-  let queue=null,playbackGeneration=0;
+  let queue=null,playbackGeneration=0,currentSong=null;
+  dock.querySelector('#player-dock-details').addEventListener('click',()=>{if(currentSong?.print)window.AilleursEditorial?.open(currentSong.print,'music');else if(currentSong)window.DaytoneCommunity?.openMusicDiscussion(currentSong);});
   dock.querySelector('#player-dock-close').addEventListener('click',()=>{playbackGeneration++;queue=null;dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');});
   dock.querySelector('#player-dock-previous').addEventListener('click',()=>advance(-1));
   dock.querySelector('#player-dock-next').addEventListener('click',()=>advance(1));
@@ -171,6 +165,7 @@
     }).catch(()=>{});
   }
   function openDock(song,player){
+    currentSong=song;dock.querySelector('#player-dock-details').hidden=!(song.print||song.id);
     dockContent.querySelectorAll('audio').forEach(audio=>audio.pause());dockContent.replaceChildren();
     dock.querySelector('#player-dock-title').textContent=(song.title||'')+(song.previewUrl?' · '+tr('30 秒试听','30-second preview'):'');
     dock.querySelector('#player-dock-artist').textContent=song.artist||'';
@@ -178,7 +173,9 @@
     dock.classList.toggle('video',player.classList.contains('video-player'));
     dock.classList.toggle('soundcloud',platform(song.source_url)==='SoundCloud');
     updateQueueControls();
-    if(player.tagName==='IFRAME'){
+    if(player.tagName==='IFRAME' && typeof youtubeVideoId==='function' && youtubeVideoId(song.source_url)){
+      const stage=node('div','');dockContent.append(stage);window.AilleursVideoPlayer.mount(stage,[{id:youtubeVideoId(song.source_url),name:song.title,artist:song.artist}],{autoplay:true});
+    }else if(player.tagName==='IFRAME'){
       const url=new URL(player.src);url.searchParams.set(url.hostname==='w.soundcloud.com'?'auto_play':'autoplay',url.hostname==='w.soundcloud.com'?'true':'1');player.src=url.href;
       const status=node('p','player-dock-status','Opening '+platform(song.source_url)+'…');dockContent.append(status,player);
       const timer=setTimeout(()=>{if(status.isConnected)status.textContent='Still loading? Use the original link above.';},6000);
@@ -222,23 +219,19 @@
     for(const source of [song.video_url,song.source_url]){if(source){const player=playerFor(source);if(player){openDock({...song,source_url:source},player);return;}}}
     body.replaceChildren();body.append(node('h3','',title));if(artist)body.append(node('p','listen-artist',artist));
     dialog.querySelector('h2').textContent='Where to listen';
-    if(!dialog.open)dialog.showModal();
+    openDock(song,body);
     const hasSource=sourceSection(song);
     if(!hasSource)body.append(node('p','listen-note',tr('这条分享没有附上可在本站播放的音源。正在查找目录试听。','No playable recording was attached to this post. Checking for a catalog preview.')));
     addPreviewChoices(song);
     body.append(searchLinks(title,artist));
   }
   function openVideo(song){
-    const video= song?.video_url || song?.source_url;
-    if(!['YouTube','Bilibili'].includes(platform(video)))return;
-    const player=playerFor(video);if(!player)return;
-    if(!dock.hidden){dockContent.replaceChildren();dock.hidden=true;document.body.classList.remove('player-dock-open');}
-    videoStage.replaceChildren();player.loading='eager';player.src+=(player.src.includes('?')?'&':'?')+'autoplay=1';videoStage.append(player);
-    videoDialog.querySelector('#video-dialog-title').textContent=song.title||'Video';
-    videoDialog.querySelector('#video-dialog-artist').textContent=song.artist||'';
-    videoDialog.querySelector('#video-original').href=video;
-    if(!videoDialog.open)videoDialog.showModal();
+    const source=song?.video_url||song?.source_url;
+    if(!['YouTube','Bilibili'].includes(platform(source)))return;
+    const player=playerFor(source);if(player){queue=null;++playbackGeneration;openDock({...song,source_url:source},player);}
   }
   dialog.addEventListener('close',()=>{body.querySelectorAll('audio').forEach(audio=>audio.pause());body.replaceChildren();});
-  window.DaytoneListen={open,openVideo,playQueue,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,musicServiceLinks,canPlayHere,actionLabel};
+  const attachTo=host=>{host.append(dock);};
+  new ResizeObserver(()=>document.documentElement.style.setProperty('--music-dock-height',dock.hidden?'0px':dock.getBoundingClientRect().height+'px')).observe(dock);
+  window.DaytoneListen={attachTo,open,openVideo,playQueue,videoSearchUrl,videoSearchLink,preferredPlatform,setPreferredPlatform,preferredSearchLink,musicServiceLinks,canPlayHere,actionLabel};
 })();

@@ -102,6 +102,7 @@
       preview.append(image,label,remove);preview.hidden=false;
     };
     const select=(row,automatic)=>{
+      results.hidden=true;button.textContent='Change recording';stopSample();
       if(form.dataset.videoAutoSelection&&form.elements.video_url?.value===form.dataset.videoAutoSelection){form.elements.video_url.value='';form.elements.video_url.dispatchEvent(new Event('input',{bubbles:true}));delete form.dataset.videoAutoSelection;}
       const previousAlbum=suggestedAlbum,previousNote=suggestedNote;
       const canFillAlbum=album&&(!album.value.trim()||album.value===previousAlbum);
@@ -127,12 +128,12 @@
       clearTimeout(timer);++sequence;clearCatalog();
       if(suggestedArtist&&artist.value===suggestedArtist){artist.value='';suggestedArtist='';}
       results.replaceChildren();stopSample();status.textContent='';
-      const value=title.value.trim();if(value.length<3||/^https:\/\//i.test(value))return;
+      const value=title.value.trim();if(value.length<2||/^https:\/\//i.test(value))return;
       timer=setTimeout(()=>void search(),950);
     });
-    artist.addEventListener('input',()=>{clearCatalog();stopSample();results.replaceChildren();status.textContent='';});
-    artist.addEventListener('change',()=>{if(title.value.trim().length>=3)void search();});
-    form.addEventListener('reset',()=>{clearCatalog();stopSample();results.replaceChildren();status.textContent='';});
+    artist.addEventListener('input',()=>{clearTimeout(timer);++sequence;clearCatalog();stopSample();results.replaceChildren();status.textContent='';if(title.value.trim().length>=2)timer=setTimeout(()=>void search(),950);});
+    artist.addEventListener('change',()=>{if(title.value.trim().length>=2)void search();});
+    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;clearCatalog();stopSample();results.replaceChildren();status.textContent='';button.disabled=false;});
     title.addEventListener('paste',()=>setTimeout(()=>{
       clearTimeout(timer);const value=title.value.trim();if(!value)return;
       if(/^https:\/\//i.test(value)){
@@ -140,18 +141,19 @@
       }else void search();
     },100));
     async function search(){
-      clearTimeout(timer);const current=++sequence;
+      clearTimeout(timer);const current=++sequence;results.hidden=false;
       const query=[title.value.trim(),artist.value.trim()].filter(Boolean).join(' ');results.replaceChildren();
       if(!title.value.trim()){status.textContent='Enter a song title first.';return;}
       button.disabled=true;status.textContent='Checking song details…';
       try{
-        const normal=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+        await window.AilleursMusicSearch?.ready;if(current!==sequence)return;
+        const normal=window.AilleursMusicSearch?.normal || (value=>String(value||'').normalize('NFKC').toLocaleLowerCase().trim());
         const wantedTitle=normal(title.value),wantedArtist=normal(artist.value);
         const score=row=>{const foundTitle=normal(row.trackName),foundArtist=normal(row.artistName);return (foundTitle===wantedTitle?6:foundTitle.includes(wantedTitle)?2:0)+(wantedArtist?(foundArtist===wantedArtist?5:foundArtist.includes(wantedArtist)?2:0):0);};
         const bundled=await window.AilleursCatalog?.search(title.value.trim(),artist.value.trim())||[];
         const countries=/[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(query)?['jp','us']:/[\p{Script=Han}]/u.test(query)?['cn','tw','hk']:['us','gb'];
-        const storefronts=bundled.some(row=>normal(row.trackName)===wantedTitle&&wantedArtist&&normal(row.artistName)===wantedArtist)?[]:await Promise.allSettled(countries.map(async country=>{
-          const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:query,media:'music',entity:'song',country,limit:'12'}).toString();
+        const storefronts=bundled.some(row=>normal(row.trackName)===wantedTitle&&wantedArtist&&normal(row.artistName)===wantedArtist)?[]:await Promise.allSettled(countries.map(async (country,index)=>{
+          const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:(window.AilleursMusicSearch?.variants(query)||[query])[index % (window.AilleursMusicSearch?.variants(query).length||1)],media:'music',entity:'song',country,limit:'25'}).toString();
           const response=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(5000)});if(!response.ok)throw Error('Search unavailable');
           const data=await response.json();return (data.results||[]).filter(row=>row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).map(row=>({...row,catalogName:'Apple Music'}));
         }));
@@ -177,7 +179,7 @@
         }
         tracks=tracks.filter(row=>{
           const found=normal(row.trackName);
-          return found===wantedTitle || (wantedTitle.length>=5 && found.includes(wantedTitle));
+          return found===wantedTitle || (wantedTitle.length>=2 && found.includes(wantedTitle));
         }).filter((row,index,array)=>array.findIndex(item=>normal(item.trackName)===normal(row.trackName)&&normal(item.artistName)===normal(row.artistName)&&normal(item.collectionName)===normal(row.collectionName))===index).sort((a,b)=>score(b)-score(a)).slice(0,10);
         if(!tracks.length){status.textContent='No clear match. Keep your own title and artist, or paste a music link.';return;}
         const exact=tracks.filter(row=>normal(row.trackName)===wantedTitle);
@@ -201,7 +203,7 @@
       finally{if(current===sequence)button.disabled=false;}
     }
     button.addEventListener('click',()=>void search());
-    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);if(row)suggestGenre(row);updateSources();if(['Spotify','SoundCloud'].includes(row?.platform)&&title.value.trim().length>=3&&artist.value.trim())void search();});
+    form.addEventListener('daytone:catalog-found',event=>{const row=event.detail;if(row?.art)showCatalog(row);if(row)suggestGenre(row);updateSources();if(['Spotify','SoundCloud'].includes(row?.platform)&&title.value.trim().length>=2&&artist.value.trim())void search();});
   }
   function setup(form,input,title,artist,playlist=false){
     if(!form||!input||!title)return;
@@ -283,7 +285,7 @@
       const player=typeof musicEmbed==='function'?musicEmbed(link.value.trim()):null;
       if(!player){update();return;}
       if(player.tagName==='IFRAME')player.loading='eager';
-      stage.replaceChildren(player);button.disabled=true;
+      const id=typeof youtubeVideoId==='function'?youtubeVideoId(link.value.trim()):null;if(id)window.AilleursVideoPlayer.mount(stage,[{id,name:form.elements.title.value,kind:'Video preview'}],{autoplay:true});else stage.replaceChildren(player);button.disabled=true;
     });
     link.addEventListener('input',update);link.addEventListener('change',update);
     form.addEventListener('reset',()=>setTimeout(()=>{last='';update();},0));
@@ -311,21 +313,21 @@
         const symbol=document.createElement('span');symbol.textContent='▶';watch.append(image,symbol);
         watch.addEventListener('click',()=>{
           const player=typeof musicEmbed==='function'?musicEmbed(item.url):null;if(!player)return;
-          player.loading='eager';const url=new URL(player.src);url.searchParams.set('autoplay','1');player.src=url.href;stage.replaceChildren(player);
+          window.AilleursVideoPlayer.mount(stage,[{id:item.id||youtubeVideoId(item.url),name:item.title,channel:item.channel,kind:item.kind}],{autoplay:true});
         });
         const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=item.channel;
         const select=document.createElement('button');select.type='button';select.textContent='Use this video';select.addEventListener('click',()=>{
           const video=form.elements.video_url||link;video.value=item.url;video.dispatchEvent(new Event('input',{bubbles:true}));
           form.dataset.videoAutoSelection=item.url;
           if(form.elements.confirm_video)form.elements.confirm_video.checked=true;
-          status.textContent='Selected: '+item.title;
+          status.textContent='Selected: '+item.title;for(const choice of cards.querySelectorAll('.publish-video-card'))choice.classList.toggle('selected',choice===card);const group=section.closest('details');if(group)group.open=true;
         });
         info.append(name,channel,select);card.append(watch,info);cards.append(card);
       }
     };
     const search=async()=>{
       const current=++sequence,song=title.value.trim(),performer=artist.value.trim();
-      updateFallback();if(song.length<3){section.hidden=true;return;}
+      updateFallback();if(song.length<2){section.hidden=true;return;}
       section.hidden=false;cards.replaceChildren();stage.replaceChildren();
       const checked = window.AilleursMusicVideos?.find(song, performer) || [];
       if(checked.length){status.textContent='';render(checked);return;}
@@ -340,7 +342,7 @@
         render(items);
       }catch{if(current===sequence)status.textContent='Could not search YouTube right now. Paste a checked link instead.';}
     };
-    const schedule=()=>{clearTimeout(timer);++sequence;updateFallback();if(title.value.trim().length<3){section.hidden=true;return;}section.hidden=false;status.textContent='Checking video versions…';timer=setTimeout(()=>void search(),1450);};
+    const schedule=()=>{clearTimeout(timer);++sequence;if(form.dataset.videoAutoSelection&&form.elements.video_url?.value===form.dataset.videoAutoSelection){form.elements.video_url.value='';delete form.dataset.videoAutoSelection;form.elements.video_url.dispatchEvent(new Event('input',{bubbles:true}));}if(form.elements.confirm_video)form.elements.confirm_video.checked=false;updateFallback();if(title.value.trim().length<2){section.hidden=true;return;}section.hidden=false;status.textContent='Checking video versions…';timer=setTimeout(()=>void search(),1450);};
     title.addEventListener('input',schedule);artist.addEventListener('input',schedule);
     form.addEventListener('daytone:catalog-found',schedule);form.addEventListener('daytone:recording-selected',schedule);
     form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;cards.replaceChildren();stage.replaceChildren();section.hidden=true;});

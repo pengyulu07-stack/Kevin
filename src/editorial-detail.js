@@ -79,24 +79,8 @@
       addChapter(root, t(...chapter.title), t(...chapter.body), chapter.source, chapter.url);
   }
   function videoChoices(root, videos, artist) {
-    if (!videos.length) return;
-    const stage = make('div', 'editorial-video-player');
-    const choices = make('div', 'editorial-video-choices');
-    const show = (video, autoplay) => {
-      stage.replaceChildren();
-      const frame = make('iframe');
-      frame.src = 'https://www.youtube-nocookie.com/embed/' + video.id + '?rel=0' + (autoplay ? '&autoplay=1' : '');
-      frame.title = artist + ' — ' + video.name;
-      frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; frame.allowFullscreen = true;
-      stage.append(frame);
-      [...choices.children].forEach((button, index) => button.setAttribute('aria-pressed', String(videos[index] === video)));
-      if (autoplay) dialog.querySelector('.editorial-audio')?.pause();
-    };
-    for (const video of videos) {
-      const button = make('button', 'editorial-video-choice', video.name); button.type = 'button';
-      button.addEventListener('click', () => show(video, true)); choices.append(button);
-    }
-    root.append(stage, choices); show(videos[0], false);
+    const host = make('div', 'editorial-video-player');root.append(host);
+    window.AilleursVideoPlayer.mount(host,videos,{title:artist});
   }
   const doomVideos = [
     { name: 'Beef Rapp', id: 'XvKDFX00tsU' },
@@ -222,7 +206,7 @@
       chapter(t('谁制作了这些声音', 'Who made the music'), t('DOOM 制作了唱片的大部分音乐，但并非全部。《Potholderz》由 Count Bass D 制作；《One Beer》来自 Madlib，原本与《Madvillainy》的创作有关；《Kon Queso》由 PNS 制作，早先以《Yee Haw》之名出现。中间几段连续的声音拼贴，也让这张唱片听起来像在切换广播频道。', 'DOOM produced most, but not all, of the record. Count Bass D made Potholderz; Madlib’s One Beer came from the Madvillainy period; PNS produced Kon Queso, previously heard as Yee Haw. A run of sound collages in the middle makes the sequence feel like changing radio stations.'), 'https://pitchfork.com/reviews/albums/5255-mmfood/', 'Pitchfork · credits and review ↗');
       chapter(t('封面的创作经过', 'How the sleeve was made'), t('美术指导 Jeff Jank 把试播 CD 交给 Jason Jägel。画家回忆自己反复听它，先画铅笔草图，再完成绘画。DOOM 与 Jasmine 喜欢结果，因此又请他继续做封底和《Hoe Cakes》的单曲画面。这里谈的是 2004 年原版封面；页面显示的 Deluxe Edition 是后来的发行版本。', 'Art director Jeff Jank gave Jason Jägel a demo CD. Jägel recalled playing it repeatedly, drawing a pencil sketch and then making the painting. DOOM and Jasmine liked the result and asked him to work on the back sleeve and Hoe Cakes single art. This account concerns the original 2004 sleeve; the Deluxe Edition shown here is a later release.'), 'https://news.artnet.com/art-world/mf-doom-mm-food-20th-anniversary-2570659', 'Artnet · interview with Jägel ↗');
       chapter(t('后来出现了哪些版本', 'How later editions changed the record'), t('Rhymesayers 在二十周年再版中收录了《Kookies》的原始版本，并为数字版加进混音、替代编辑以及 Kevin Beacham 在 2004 年录下的 DOOM 访谈片段。不同发行版本的曲目数因此不一定相同；下方的曲目表只对应此处显示的 Deluxe Edition。', 'Rhymesayers’ twentieth-anniversary reissue brought back the original Kookies version. Its digital edition also added remixes, an alternate edit and excerpts from Kevin Beacham’s 2004 interviews with DOOM. Track counts therefore differ between releases; the list below belongs specifically to the Deluxe Edition displayed here.'), 'https://rhymesayers.com/blogs/news/celebrating-20-years-of-mf-dooms-mm-food', 'Rhymesayers · anniversary edition ↗');
-      videoChoices(watch, doomVideos, print.artist);
+      videoChoices(watch, window.AilleursMusicVideos?.forAlbum(albumId) || doomVideos, print.artist);
       const images = make('div', 'editorial-photo-grid');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg?width=900', t('2005 年亚特兰大的演出', 'Performing in Atlanta, 2005'), 'shrtstck | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_The_Loft_2005_DSC00808_(35953302).jpg');
       photo(images, 'https://commons.wikimedia.org/wiki/Special:FilePath/MF_Doom_-_23_July_2011_01.jpg?width=900', t('2011 年的演出', 'Performing in 2011'), 'possan | CC BY 2.0', 'https://commons.wikimedia.org/wiki/File:MF_Doom_-_23_July_2011_01.jpg');
@@ -294,7 +278,7 @@
           const image = make('img'); image.src = song.artworkUrl100 || print.src; image.alt = '';
           cover.append(image, make('span', '', '▶'));
           cover.addEventListener('click', () => {
-            watch.querySelectorAll('iframe').forEach(frame => frame.remove());
+            window.AilleursVideoPlayer?.claim(audio);
             if (audio.src !== song.previewUrl) { audio.src = song.previewUrl; audio.load(); }
             player.hidden = false; playing.textContent = song.trackName + ' · ' + t('30 秒试听', '30-second preview');
             audio.play().catch(() => {});
@@ -393,8 +377,12 @@
     const grid = make('div', 'editorial-community'); root.append(grid);
     const members = make('div', 'editorial-member-comments');
     const reading = make('aside', 'editorial-criticism'); grid.append(members, reading);
-    members.append(make('h4', '', t('读者讨论', 'Member discussion')));
-    const heart = make('button', 'editorial-heart', '♡'); heart.type = 'button'; members.append(heart);
+    
+    const heart = make('button', 'editorial-heart', '♡'); heart.type = 'button';
+    const bar=make('div','music-reading-actions');bar.setAttribute('aria-label',t('作品互动','Work actions'));
+    const comment=make('button','',t('评论','Comment'));comment.type='button';
+    comment.addEventListener('click',()=>{form.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});input.focus({preventScroll:true});});
+    bar.append(heart,comment);dialog.querySelector('.editorial-detail-header').insertBefore(bar,dialog.querySelector('.editorial-close'));
     const list = make('div', 'editorial-comments-list'); members.append(list);
     const form = make('form', 'editorial-comment-form');
     const input = make('textarea'); input.name = 'body'; input.maxLength = 1000; input.rows = 3; input.placeholder = t('写下你的想法，也可以只发照片…', 'Share a thought or a photograph…');
@@ -432,7 +420,7 @@
       if (likesResult.error || commentsResult.error) { list.textContent = t('暂时无法读取讨论。', 'Discussion is temporarily unavailable.'); heart.disabled = true; form.hidden = true; return; }
       const likes = likesResult.data || []; const mine = likes.some(row => row.user_id === user?.id);
       heart.textContent = (mine ? '♥' : '♡') + ' ' + t('喜欢', 'Like') + ' · ' + likes.length;
-      heart.setAttribute('aria-pressed', String(mine));
+      heart.setAttribute('aria-pressed', String(mine));comment.textContent=t('评论','Comment')+' · '+(commentsResult.data?.length||0);
       list.replaceChildren();
       if (!commentsResult.data?.length) paragraph(list, t('还没有评论。', 'No comments yet.'));
       for (const row of commentsResult.data || []) {
@@ -490,7 +478,7 @@
   function open(print, room) {
     const id = ++generation;
     if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; }
-    dialog.replaceChildren();
+    window.DaytoneListen?.attachTo(document.body);dialog.replaceChildren();
     const albumIndex=room==='music'?(window.AilleursMusicCovers||[]).findIndex(item=>item.source===print.source):-1;
     const theme=albumIndex>=0?window.AilleursAlbumThemes?.[albumIndex]:null;
     dialog.classList.toggle('album-themed',!!theme);
@@ -520,15 +508,15 @@
     }
     dialog.append(tabs);
     const body = make('div', 'editorial-detail-body'); dialog.append(body);
-    dialog.showModal();
+    dialog.showModal();window.DaytoneListen?.attachTo(dialog);
     if (room === 'music') void albumContent(print, body, id);
     else if (room === 'art') void artContent(print, body, id);
     else if (room === 'books') void bookContent(print, body, id);
     else filmContent(print, body);
-    const comments = section(body, t('喜欢与讨论', 'Likes and discussion'), 'discussion');
+    const comments = section(body, t('评论', 'Comments'), 'discussion');
     void discussion(comments, print, room, id);
   }
-  dialog.addEventListener('close', () => { generation++; if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; } dialog.querySelectorAll('iframe').forEach(frame => frame.remove()); dialog.querySelectorAll('audio').forEach(audio => { audio.pause(); audio.removeAttribute('src'); }); });
+  dialog.addEventListener('close', () => { window.DaytoneListen?.attachTo(document.body);generation++; if (photoPreviewUrl) { URL.revokeObjectURL(photoPreviewUrl); photoPreviewUrl = null; } dialog.querySelectorAll('iframe').forEach(frame => frame.remove()); dialog.querySelectorAll('audio').forEach(audio => { audio.pause(); audio.removeAttribute('src'); }); });
   dialog.addEventListener('cancel', event => { const veil = dialog.querySelector('.editorial-lightbox'); if (veil) { event.preventDefault(); veil.remove(); } });
   dialog.addEventListener('keydown', event => { if (event.key === 'Escape' && dialog.querySelector('.editorial-lightbox')) { event.preventDefault(); dialog.querySelector('.editorial-lightbox').remove(); } });
   window.AilleursEditorial = { open };
