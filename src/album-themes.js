@@ -7,10 +7,10 @@ window.AilleursAlbumThemes = [
   ['#202326','#30383c','#e1b98e','grain'],       // Dummy
   ['#1b2929','#314345','#bce4ba','waves'],       // 浮躁
   ['#23242a','#34394b','#e5d9b4','peaks'],       // Kid A
-  ['#28272d','#3a3a40','#edb6ad','frame'],       // Madvillainy
+  ['#222326','#343536','#f2a267','mask-registration'], // Madvillainy · monochrome photograph, orange corner
   ['#132b3a','#21485a','#a8dbd4','waves'],       // Long Season
   ['#34202d','#523043','#f2b5bc','frame'],       // IGOR
-  ['#2e241d','#493a2b','#ebc68a','rings'],       // Donuts
+  ['#241f1d','#3d332c','#eabf84','donuts-sleeve'], // Donuts · smile photograph, alternate illustrated LP
   ['#1c2730','#293b4a','#b8d1da','grain'],       // Mezzanine
   ['#28212b','#40334c','#e0bcdd','rings'],       // Songs in the Key of Life
   ['#292522','#41362d','#efc493','tiles'],       // Operation: Doomsday
@@ -21,7 +21,7 @@ window.AilleursAlbumThemes = [
   ['#271d23','#422d35','#f3c5ba','lines'],       // Back to Black
   ['#222b22','#394735','#d6e4b0','rings'],       // Spirit of Eden
   ['#30271f','#4a382c','#f2d7a7','frame'],       // Velvet Underground
-  ['#24242f','#38394e','#ecd49a','grid'],        // In Rainbows
+  ['#171c29','#29364a','#f5c8aa','rainbows-ink'], // In Rainbows · Donwood's liquid mark-making
   ['#182638','#28435b','#b9d9f5','lines'],       // Blue
   ['#302922','#4a3d2d','#e8d8b0','frame'],       // Miseducation
   ['#272324','#423332','#e2c1aa','grain'],       // Voodoo

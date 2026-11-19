@@ -18,8 +18,9 @@
       const license=plain(meta.LicenseShortName?.value),credit=plain(meta.Artist?.value||meta.Credit?.value).split(/\n+/)[0].trim().slice(0,90);
       const categories=String(meta.Categories?.value||'').split('|').map(normalize);
       const identified=categories.some(category=>category===name||category.startsWith(name+' ')||category.endsWith(' of '+name));
-      const nonSubject=/(?:\bhouse\b|\bavenue\b|\bstreet\b|\broad\b|\bplaque\b|\bmemorial\b|\bstatue\b|\bgrave\b|\bmural\b|\bposter\b|\blogo\b)/i.test(title);
-      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||nonSubject||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
+      const nonSubject=/(?:\bhouse\b|\bavenue\b|\bstreet\b|\broad\b|\bplaque\b|\bmemorial\b|\bstatue\b|\bgrave\b|\bmural\b|\bposter\b|\blogo\b|\bpainting\b|\bdrawing\b|\bsketch\b|\bwatercolou?r\b|\bpeinture\b)/i.test(title);
+      const nonPhotoCategory=/(?:paintings|drawings|sketches|illustrations|watercolours|portraits in art) of /i.test(meta.Categories?.value||'');
+      if(!src||!pageUrl||!license||!file?.mime?.startsWith('image/')||!normalize(title).includes(name)||!identified||nonSubject||nonPhotoCategory||seen.has(pageUrl)||/accuracy disputes|logos|signatures|in art|album covers/i.test(meta.Categories?.value||''))return [];
       const rawDescription=plain(meta.ImageDescription?.value);
       const description=/collectie|archief|reportage|file description/i.test(rawDescription)?'':rawDescription.split(/\n+/)[0].trim().slice(0,180);
       const eventKey=normalize(title.replace(/\s*(?:[(_-]\s*)?(?:0?[1-9]|1[0-9])\)?$/,'')||title);
