@@ -1,10 +1,28 @@
 {
-  "edition_date": "2026-11-18",
-  "updated_at": "2026-11-18T03:44:31.749043Z",
+  "edition_date": "2026-11-19",
+  "updated_at": "2026-11-19T03:39:04.051141Z",
   "time_zone": "Asia/Shanghai",
   "kind": "source_briefs",
   "categories": {
     "music": [
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "‘Everything he said sounded like a song title!’ The rackety, romantic life of Bobby Charles, alligator-befriending bard of the bayou",
+        "url": "https://www.theguardian.com/music/2026/nov/18/bobby-charles-story-box-set",
+        "published_at": "2026-11-18T12:00:57Z",
+        "image": "https://i.guim.co.uk/img/media/4b6a25e0f7bbf20dc1950c5f37b50e53251a86e3/0_228_1500_1199/master/1500.jpg?width=460&quality=85&auto=format&fit=max&s=f7c75ba669d618124208d1dbab3d7c47",
+        "summary": "He was nearly an early rock’n’roll star but took a different path, from Fats Domino to the Band and pro-environment songwriting. As a career-spanning box set is released, those who knew him remember an American original ‘I was listening to Bob Dylan’s Theme…"
+      },
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "Sam Fender, Harry Styles and Billie Eilish to be youngest Glastonbury headliners of 21st century",
+        "url": "https://www.theguardian.com/music/2026/nov/18/sam-fender-harry-styles-and-billie-eilish-to-be-youngest-glastonbury-headliners-of-21st-century",
+        "published_at": "2026-11-18T08:00:37Z",
+        "image": "https://i.guim.co.uk/img/media/b87faa30dad81d79ca777370ca87142fa1c12506/0_1_5000_3998/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=08af0467c4c65526dd1976c9aa255992",
+        "summary": "Cher will take the legends slot at next year’s festival, which will also see debuts from Kraftwerk and Angine de Poitrine • Read the lineup so far in full below After fervent speculation about its headliners, the first batch of 2027 Glastonbury performers has…"
+      },
       {
         "category": "music",
         "source": "The Guardian",
@@ -22,236 +40,228 @@
         "published_at": "2026-11-17T11:12:54Z",
         "image": "https://i.guim.co.uk/img/media/7e4032f39fee208832ef739bc05b73e1acf76a72/76_227_2135_1709/master/2135.jpg?width=460&quality=85&auto=format&fit=max&s=acb154778d2059e91aec8e66f2f4d282",
         "summary": "Major tours by the likes of Oasis helped make 2025 a lucrative year, with music export revenue reaching £4.8bn Major tours by Oasis, Robbie Williams and Dua Lipa, as well as hit albums by the likes of Olivia Dean, have helped to push the UK music industry to…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "‘Mick Jagger should fold up his penis and go home’: the caustic genius of music critic Robert Christgau",
-        "url": "https://www.theguardian.com/film/2026/nov/17/music-critic-robert-christgau-documentary",
-        "published_at": "2026-11-17T11:00:36Z",
-        "image": "https://i.guim.co.uk/img/media/cde7c03e1f5a0dae3f87c3a6ed481d1fa73e6a58/502_0_2697_2160/master/2697.jpg?width=460&quality=85&auto=format&fit=max&s=1eb7b2bdd9e9c7c85f7b8f8469619e3f",
-        "summary": "Beloved for his savage takedowns and rhapsodic raves, the legendary Village Voice reviewer opens up in a candid new documentary Rows and rows of CDs, albums, cassettes and books creak and groan on shelves that snake around the walls and choke the halls of an…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "Mother of renowned musicians ‘devastated’ by closure of department at Nottingham University",
-        "url": "https://www.theguardian.com/music/2026/nov/17/nottingham-university-music-department-closure-kadiatu-kanneh-mason",
-        "published_at": "2026-11-17T06:00:05Z",
-        "image": "https://i.guim.co.uk/img/media/425d7fec2327e9f3e1ee209c19d1d51d1d8632ab/93_0_6540_5233/master/6540.jpg?width=460&quality=85&auto=format&fit=max&s=e01330fc72b65c0a05a1c755c19e8e6a",
-        "summary": "‘This department helped make my family who we are,’ says Kadiatu Kanneh-Mason As the mother of seven supremely talented young musicians, Kadiatu Kanneh-Mason is better placed than most to understand the value of a musical education. Her children, including…"
       }
     ],
     "film": [
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "Call my (estate) agent! Why celebrities are always buying each other’s homes",
-        "url": "https://www.theguardian.com/film/2026/nov/17/celebrities-buying-each-others-homes-brad-pitt-sylvester-stallone-joe-pesci",
-        "published_at": "2026-11-17T14:07:58Z",
-        "image": "https://i.guim.co.uk/img/media/de1bdba5ee7807c6e69a6dcf01ea487472859e26/330_0_2230_1784/master/2230.jpg?width=460&quality=85&auto=format&fit=max&s=10e6def9974fa3dd5117d24135b39890",
-        "summary": "If you’re seeking a discreet mansion with secluded grounds and plenty of room for your own memorabilia, you may want to remember Joe Pesci’s mistakes before trying the open market Last year, Austin Butler bought a mansion from Brad Pitt. The month before…"
+        "title": "Bond role was ‘Josh O’Connor’s to lose’ but actor pulled out of the running, report suggests",
+        "url": "https://www.theguardian.com/film/2026/nov/18/james-bond-josh-oconnor-robert-pattinson-denis-villeneuve",
+        "published_at": "2026-11-18T11:51:31Z",
+        "image": "https://i.guim.co.uk/img/media/f0267f7910cf541bbc76968089e75bbe1f13ba20/644_0_6444_5156/master/6444.jpg?width=460&quality=85&auto=format&fit=max&s=75421fc79a37de2d2e9dd85661f9b4e8",
+        "summary": "The Crown star was reportedly an early favourite of director Denis Villeneuve, but ‘had reservations about the baggage associated with the role from the start’ Josh O’Connor, one of the actors on the final shortlist for the role of James Bond which was…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "‘Sorry, I’m still in love with Daniel Craig’: Ralph Fiennes, Brad Pitt and more react to Robert Pattinson as James Bond",
-        "url": "https://www.theguardian.com/film/2026/nov/17/brad-pitt-ralph-fiennes-react-to-robert-pattinson-as-james-bond",
-        "published_at": "2026-11-17T13:03:24Z",
-        "image": "https://i.guim.co.uk/img/media/1af950b033a60e4879dba795ec7d77db0e82a11f/882_293_2419_1936/master/2419.jpg?width=460&quality=85&auto=format&fit=max&s=898f27dff2adf79cec498f4950aad7d1",
-        "summary": "Former 007 George Lazenby was supportive while The Lighthouse director Robert Eggers reveals what Pattinson was doing when the news broke • Robert Pattinson is James Bond. What happens next? • Peter Bradshaw’s take • Pattinson’s journey to James Bond • Behind…"
+        "title": "‘Worst decision in cinema history’: Guardian readers shaken and stirred by the casting of Robert Pattinson as Bond",
+        "url": "https://www.theguardian.com/film/2026/nov/18/readers-casting-robert-pattinson-bond-007",
+        "published_at": "2026-11-18T10:00:47Z",
+        "image": "https://i.guim.co.uk/img/media/eab76eab47acbea94d14ab5fa07f87f02beeba11/0_795_9126_7301/master/9126.jpg?width=460&quality=85&auto=format&fit=max&s=06b65dad88c1b73fba6fedeb35cdee78",
+        "summary": "‘Deliciously dark’! ‘Not sexy enough’! Opinion is split on whether the star of Twilight and The Batman is the right choice to play 007. Here’s what some of you thought So it’s official, Robert Pattinson will be James Bond. The long-awaited announcement of who…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "‘Mick Jagger should fold up his penis and go home’: the caustic genius of music critic Robert Christgau",
-        "url": "https://www.theguardian.com/film/2026/nov/17/music-critic-robert-christgau-documentary",
-        "published_at": "2026-11-17T11:00:36Z",
-        "image": "https://i.guim.co.uk/img/media/cde7c03e1f5a0dae3f87c3a6ed481d1fa73e6a58/502_0_2697_2160/master/2697.jpg?width=460&quality=85&auto=format&fit=max&s=1eb7b2bdd9e9c7c85f7b8f8469619e3f",
-        "summary": "Beloved for his savage takedowns and rhapsodic raves, the legendary Village Voice reviewer opens up in a candid new documentary Rows and rows of CDs, albums, cassettes and books creak and groan on shelves that snake around the walls and choke the halls of an…"
+        "title": "‘The aesthetics in my family were so high, I felt ugly’: Charlotte Gainsbourg on extremism, abortion and her mother, Jane Birkin",
+        "url": "https://www.theguardian.com/culture/2026/nov/18/charlotte-gainsbourg-aesthetics-family-high-i-felt-ugly-extremism-abortion-jane-birkin",
+        "published_at": "2026-11-18T05:00:32Z",
+        "image": "https://i.guim.co.uk/img/media/7d4e303fcd39d077eed325014feb8076e2ba95b8/887_1459_3376_2702/master/3376.jpg?width=460&quality=85&auto=format&fit=max&s=29e3494fa352318efccd773b94735bac",
+        "summary": "In her new film, the actor plays a lawyer taking on the French state over reproductive rights. She talks about being criticised for her support of Israel and pushed to the limit by Lars von Trier While she was making the film Women on Trial , about the…"
       },
       {
         "category": "film",
         "source": "The Guardian",
-        "title": "Rocky is Philadelphia’s founding myth – and 50 years later, we’re still telling it",
-        "url": "https://www.theguardian.com/film/2026/nov/17/rocky-philadelphia-founding-myth-50-years-later",
-        "published_at": "2026-11-17T10:00:09Z",
-        "image": "https://i.guim.co.uk/img/media/58a55aa7a9f317f2719b5cf227ec9d26d57caf42/0_0_1486_1189/master/1486.jpg?width=460&quality=85&auto=format&fit=max&s=158749eee5b09fb7177a9411c00ad1c6",
-        "summary": "As Sylvester Stallone’s Oscar-winning drama celebrates its 50th anniversary, I Play Rocky helps to further turn the boxing hero into the stuff of legend The story behind the making of Rocky has always sounded uncannily like Rocky itself. An unknown with an…"
+        "title": "Shaken and stirred: Jeff Bezos says he was ‘heavily involved’ in picking new James Bond",
+        "url": "https://www.theguardian.com/film/2026/nov/17/james-bond-robert-pattinson-jeff-bezos-pick",
+        "published_at": "2026-11-18T02:13:58Z",
+        "image": "https://i.guim.co.uk/img/media/7cbe6de1f6428412178cc0bf05d7ace0713c62c0/366_0_3913_3130/master/3913.jpg?width=460&quality=85&auto=format&fit=max&s=49b8487ec6a410af585c12f29c6caf62",
+        "summary": "Amazon’s executive chair and billionaire founder said he felt there was ‘something special’ about Robert Pattinson Amazon’s founder and billionaire chairman, Jeff Bezos , has said he was “heavily involved” in the decision to cast Robert Pattinson as the next…"
       }
     ],
     "art": [
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "‘We don’t want our city to lose its storytellers’: Sydney artists given $25k in Australian first – no strings attached",
-        "url": "https://www.theguardian.com/australia-news/2026/nov/18/artist-living-grant-sydney-australian-first-creative-arts",
-        "published_at": "2026-11-17T14:00:14Z",
-        "image": "https://i.guim.co.uk/img/media/cb85b15d535b8448fd708efeb57f3622ce10b87f/658_0_6600_5280/master/6600.jpg?width=460&quality=85&auto=format&fit=max&s=49f2a553e1b052f2da29a26569bde30f",
-        "summary": "City of Sydney’s inaugural ‘living grants’ program aimed at retaining city’s ‘creative soul’ Get our breaking news email , free app or daily news podcast Julian Hamman feels as if a “great weight” has been lifted from his shoulders. On Monday the 26-year-old…"
+        "title": "Vincent van Gogh painting auctioned for record $190.4m after dispute over Nazi era sale",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/19/vincent-van-gogh-painting-sells-for-record-190million",
+        "published_at": "2026-11-19T02:35:05Z",
+        "image": "https://i.guim.co.uk/img/media/bc800d6ab8d38dc4057ab46b719c55ba2921c6ee/334_0_3333_2667/master/3333.jpg?width=460&quality=85&auto=format&fit=max&s=bd07253e279b6ea8207d7103017eb05b",
+        "summary": "Chataigniers en fleurs (Chestnut Trees in Blossom), which was painted in 1890 in Auvers-sur-Oise, France, set a new record for the Dutch post-impressionist A Vincent van Gogh masterpiece sold for a record-breaking $190.4m (£144.9m, A$285m) on Wednesday after…"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "‘She set out to buy a painting a day’: on the trail of Peggy Guggenheim’s legendary shopping spree",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/17/she-set-out-to-buy-a-painting-a-day-on-the-trail-of-peggy-guggenheims-legendary-shopping-spree",
-        "published_at": "2026-11-17T12:23:22Z",
-        "image": "https://i.guim.co.uk/img/media/5bcda70851b60cdbdbb6b8b52f3ff51a3ba32023/271_0_5443_4354/master/5443.jpg?width=460&quality=85&auto=format&fit=max&s=a68561f70732eaa98fa668e6192fa949",
-        "summary": "Royal Academy, London The modernist collector once ran a gallery in London – but from this confusing exhibition, it’s hard to tell what exactly was once in there Peggy Guggenheim, art enthusiast and socialite born into a wealthy New York family, was often…"
+        "title": "German knives, English socks: 13 gifts beloved globally that Americans are missing out on",
+        "url": "https://www.theguardian.com/thefilter-us/2026/nov/11/best-international-gifts",
+        "published_at": "2026-11-18T20:11:07Z",
+        "image": "https://i.guim.co.uk/img/media/73f2cfe7ec1149cb5202e24a73122110fbf396e4/1_0_2499_2000/master/2499.jpg?width=460&quality=85&auto=format&fit=max&s=9f6cdfa34d0d49f754bc4dbcf45da527",
+        "summary": "From Guyanese rum to soft Australian bedsheets, you don’t have to buy a plane ticket to enjoy Guardian staff’s international favorites – perfect for holidays The best food Advent calendars The 143 best holiday gifts Our editors and writers have lived across…"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "‘His wife was horrified’: did Edward Hopper paint his sexual problems?",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/17/edward-hopper-sexual-problems-melancholy-wife-lighthouses",
-        "published_at": "2026-11-17T05:00:05Z",
-        "image": "https://i.guim.co.uk/img/media/f7e1259ca1ca5bdf0f5057a0c0e1ed300ff93c8e/1471_884_2078_1663/master/2078.jpg?width=460&quality=85&auto=format&fit=max&s=fc8919563928cc35b5928048b3170933",
-        "summary": "He is the maestro of American melancholy. But in a new biography, the artist is called a ‘sadist’ and a ‘prize hog’ by his wife – who was aghast to see their domestic and bedroom problems surface in his most famous works It should have been a happy occasion.…"
+        "title": "A TikTok superstar bares all: Siorna Ashby’s best shot",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/18/a-tiktok-superstar-bares-all-siorna-ashby-best-shot",
+        "published_at": "2026-11-18T14:27:03Z",
+        "image": "https://i.guim.co.uk/img/media/6b34fa5cedd67faaa06339030038416a98cc0df5/390_2222_3238_2590/master/3238.jpg?width=460&quality=85&auto=format&fit=max&s=06a3d9d97447b29e24916c726a22cc00",
+        "summary": "Portraits often rely on the face and eyes to communicate. Here, I wanted to explore how much of Meg’s presence and personality could come through her body and gesture I met Meg at a nude life-drawing class. I was struck by how free she seemed and how…"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "‘Aboriginal people were the backbone of this state’: rediscovered photographs reveal life inside the 1946 Pilbara strike camps",
-        "url": "https://www.theguardian.com/australia-news/ng-interactive/2026/nov/17/aboriginal-workers-1946-pilbara-strike-camps-john-wilson-photographs-australia-history-ntwnfb",
-        "published_at": "2026-11-16T14:00:19Z",
-        "image": "https://i.guim.co.uk/img/media/c8d423fcefff059c8419b61eb4e801a3d4a1de8c/365_0_2417_1933/master/2417.jpg?width=460&quality=85&auto=format&fit=max&s=de82497b4628ef9b71d682112251614c",
-        "summary": "Eighty years after hundreds of Aboriginal workers walked off Pilbara stations, a trove of photos found beneath a wardrobe documents what happened next Warning: This article contains images of and references to Indigenous Australians who have died Troy Eaton…"
+        "title": "Am I Caribbean, or am I a tourist? How art helped me find the answer",
+        "url": "https://www.theguardian.com/news/2026/nov/18/caribbean-artists-speaking-truth-to-the-world",
+        "published_at": "2026-11-18T14:00:03Z",
+        "image": "https://i.guim.co.uk/img/media/f9426e2b3de4906eaf25c620fe61a09bae5f8b25/9_1441_2696_2157/master/2696.jpg?width=460&quality=85&auto=format&fit=max&s=4688d3ec4d5623923c002f1c9bfac10e",
+        "summary": "During my visit to the Fuze Caribbean art fair in the Bahamas, I marvelled at how creators captured the complex nature of Caribbeanness Don’t get The Long Wave delivered to your inbox? Sign up here When I tell people I’m travelling to the Bahamas to report on…"
       }
     ],
-    "books": [],
+    "books": [
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "Theodore Zeldin obituary",
+        "url": "https://www.theguardian.com/books/2026/nov/18/theodore-zeldin-obituary",
+        "published_at": "2026-11-18T15:42:17Z",
+        "image": "https://i.guim.co.uk/img/media/68f3a3b5dba2762d60cb95cdc6879523e1238879/1078_548_4044_3235/master/4044.jpg?width=460&quality=85&auto=format&fit=max&s=ca0837e325221b92b9fddd07d930e667",
+        "summary": "Revered historian, author and francophile with a novelistic approach to his subject On the website the Oxford Muse , which the francophile Oxford historian Theodore Zeldin set up in 2001 to bring strangers together for mutually liberating conversations, there…"
+      }
+    ],
     "politics": [
       {
         "category": "politics",
-        "source": "BBC News · China",
-        "title": "As Trump and Xi meet, China's AI dreams face an unexpected hurdle: the Nvidia spy scandal",
-        "url": "https://www.bbc.co.uk/news/articles/c5vg23g92rj4o?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-17T23:02:12Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/ec0d/live/1061d030-dea2-11f1-b441-2b33b063138f.jpg",
-        "summary": "China worries the scandal could ramp up pressure on the US to further restrict the sale of advanced chips.",
+        "source": "The Guardian · China",
+        "title": "China gives Japan PM frosty welcome at Apec amid fanfare for other leaders",
+        "url": "https://www.theguardian.com/world/2026/nov/19/china-gives-japan-pm-frosty-welcome-apec",
+        "published_at": "2026-11-19T03:05:48Z",
+        "image": "https://i.guim.co.uk/img/media/a1af0b25b7afdb4ccaa6c1973633ad2d8f68b4b8/0_0_5160_4129/master/5160.jpg?width=460&quality=85&auto=format&fit=max&s=429b4e5a6071de17a79aa478e55b5918",
+        "summary": "Sanae Takaichi cuts lonely figure at airport, a move by China that is being linked to the simmering row over Taiwan Apec’s Chinese hosts went out of their way to give world leaders a warm welcome as they arrived in Shenzhen this week. Military bands played…",
         "region": "china"
       },
       {
         "category": "politics",
         "source": "The Guardian",
-        "title": "Can Labour end the youth unemployment crisis? – podcast",
-        "url": "https://www.theguardian.com/news/audio/2026/nov/18/can-labour-end-the-youth-unemployment-crisis-podcast",
-        "published_at": "2026-11-18T03:00:29Z",
-        "image": "https://i.guim.co.uk/img/media/be8cd6448da51b5e23777d4c2bc56ba634f79590/65_0_3090_2472/master/3090.jpg?width=460&quality=85&auto=format&fit=max&s=4b1f9ee2b6f748dfc75ce55fbfe6a984",
-        "summary": "There are about a million young people across the country not in employment, education or training. Could Alan Milburn’s landmark report help change that? Richard Partington reports The UK has one of the worst rates in Europe when it comes to youth…"
+        "title": "Brejoin? Is Andy Burnham going to reverse Brexit? – podcast",
+        "url": "https://www.theguardian.com/news/audio/2026/nov/19/brejoin-is-andy-burnham-going-to-reverse-brexit-podcast",
+        "published_at": "2026-11-19T03:00:15Z",
+        "image": "https://i.guim.co.uk/img/media/0f3f9c5fb91730c4a2fd1bab3c90fed9828719bf/218_0_5160_4128/master/5160.jpg?width=460&quality=85&auto=format&fit=max&s=550441f09950d2179b9459038b860e07",
+        "summary": "Deputy political editor Jessica Elgot and influential MEP David McAllister on the prospect of the UK rejoining the European Union, before Friday’s UK-EU summit On Friday, Andy Burnham will be in Brussels, to sign off a series of new deals between the UK and…"
       },
       {
         "category": "politics",
         "source": "BBC News",
-        "title": "Government risks missing climate targets if EV rules weakened, adviser warns",
-        "url": "https://www.bbc.co.uk/news/articles/c63rgqg5l9l2o?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-18T00:44:48Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/36bf/live/43e4a6f0-e29c-11f1-8dda-8925a81c3da5.jpg",
-        "summary": "The UK could miss legally binding climate targets if EV targets are cut, an adviser warns"
+        "title": "Google rejects UK request for Russell Brand YouTube video to be removed, sources say",
+        "url": "https://www.bbc.co.uk/news/articles/cmgrenln8p29o?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-18T23:29:14Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c05a/live/ff349a00-e38c-11f1-bc86-33d7d6275eba.jpg",
+        "summary": "This comes after Brand's wife shared a message from him in which he claimed his innocence."
       },
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "The EU that Burnham is eyeing up is very different to the one Britain left",
-        "url": "https://www.bbc.co.uk/news/articles/cq4gn3109pzgo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-18T00:39:06Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/0152/live/8197ef80-e282-11f1-99a1-253766e7ad8b.jpg",
-        "summary": "Andy Burnham wants \"steps\" towards a closer EU alignment. But the bloc has changed considerably since the UK left it"
+        "source": "The Guardian",
+        "title": "Leaseholders in England and Wales to have ground rent capped in 2028",
+        "url": "https://www.theguardian.com/society/2026/nov/18/leaseholders-in-england-and-wales-to-have-ground-rent-capped-in-2028",
+        "published_at": "2026-11-18T22:30:09Z",
+        "image": "https://i.guim.co.uk/img/media/97ce229918d221f2d068eabb6be6664af10b33e2/5_0_5637_4512/master/5637.jpg?width=460&quality=85&auto=format&fit=max&s=277c5cc031b00507a8c38a45cfc7720f",
+        "summary": "Housing minister hails ‘historic moment’ as he publishes bill to eventually ban almost all new leasehold properties Leaseholders in England and Wales will have their ground rent capped in 2028, the housing minister has said as he publishes a bill that will…"
       }
     ],
     "technology": [
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "Waymo temporarily pulls driverless taxis from all US freeways",
-        "url": "https://www.bbc.co.uk/news/articles/cmy86pp336qlo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-18T03:07:22Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/9e7c/live/e9a84520-e2f5-11f1-910a-c953499d69d5.jpg",
-        "summary": "The decision comes after California banned Waymo's driverless vehicles from operating on the state's highways following a series of traffic incidents."
-      },
-      {
-        "category": "technology",
-        "source": "BBC News",
-        "title": "Nvidia says it won't reinstate Huang as firm reports bumper results",
-        "url": "https://www.bbc.co.uk/news/articles/cm2kl50vkwkdo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-18T01:18:18Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2e48/live/58880030-e2d7-11f1-99a1-253766e7ad8b.jpg",
-        "summary": "The AI chip giant reported strong quarterly earnings on Tuesday after the dramatic exit of Jensen Huang."
+        "title": "Elon Musk says record spending on US midterms was 'pretty foolish'",
+        "url": "https://www.bbc.co.uk/news/articles/cm9q8j2z3gg8o?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-19T02:59:06Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3333/live/c9ef87a0-e3b5-11f1-ac8e-bf9cbaf16b78.jpg",
+        "summary": "The multi-billionaire also said he was \"not Maga\", distancing himself from the political movement linked to Trump."
       },
       {
         "category": "technology",
         "source": "The Guardian",
-        "title": "Ofqual urges ‘life-altering’ penalties for students who use tech to cheat",
-        "url": "https://www.theguardian.com/education/2026/nov/18/ofqual-urges-life-altering-penalties-for-students-who-use-tech-to",
-        "published_at": "2026-11-18T00:01:25Z",
-        "image": "https://i.guim.co.uk/img/media/efcbf5966e70ac7fdc150878c56d20292fd9b3c7/299_0_2911_2329/master/2911.jpg?width=460&quality=85&auto=format&fit=max&s=5f3be4ec9da4b0f65c7f268b24599831",
-        "summary": "England’s exam regulator says those caught using AI or smart glasses face disqualification from GCSEs and A-levels Students in England could suffer “life-altering” penalties if they are caught relying on AI or smart glasses to cheat, England’s qualifications…"
+        "title": "GTA 6 dazzles gamers in Australia with ‘fully lived-in, breathable world’",
+        "url": "https://www.theguardian.com/games/2026/nov/19/gta-6-grand-theft-auto-vi-release-launch-australia-first-to-play-game",
+        "published_at": "2026-11-19T02:30:12Z",
+        "image": "https://i.guim.co.uk/img/media/e5ce165329932836314e73aaa1608c379bc0f198/570_0_2700_2160/master/2700.jpg?width=460&quality=85&auto=format&fit=max&s=1c2860ce20fa0c66bed06728bd023149",
+        "summary": "Players can renovate houses, fix cars, lift weights and follow the story in Grand Theft Auto VI’s Miami-inspired Vice City Tell us: are you playing Grand Theft Auto VI? Gamers across Australia woke up Thursday morning feeling like Christmas had come early…"
       },
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "Europe plans to catch the next computer chip wave",
-        "url": "https://www.bbc.co.uk/news/articles/cqglwjd450k0o?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-18T00:00:24Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c96b/live/b14b3a60-d9c8-11f1-93e1-3b657b665bcf.jpg",
-        "summary": "Europe hopes to be a leader in a new generation of computer chips which use light to process data."
+        "title": "AI giant Anthropic valued at up to $1.5tn ahead of stock market debut",
+        "url": "https://www.bbc.co.uk/news/articles/c6742m39xgzxo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-19T02:20:15Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/3a11/live/4dfcb420-e37d-11f1-b879-03485a55c082.jpg",
+        "summary": "The firm started just five years ago and is now one of the biggest names in artificial intelligence."
+      },
+      {
+        "category": "technology",
+        "source": "The Guardian",
+        "title": "Four Maryland high school students sue after AI mistakes Doritos bag for gun",
+        "url": "https://www.theguardian.com/us-news/2026/nov/18/maryland-baltimore-county-doritos-gun-ai-lawsuit",
+        "published_at": "2026-11-18T23:53:51Z",
+        "image": "https://i.guim.co.uk/img/media/55b30b78210b9de9b6079a003a575537c1f083f7/340_0_2178_1744/master/2178.jpg?width=460&quality=85&auto=format&fit=max&s=a215908473fd80692169b13f5e33df09",
+        "summary": "Football players say they are ‘traumatized’ after being handcuffed and detained by police while waiting for rides home Four current and former students at a Maryland high school have filed a lawsuit a year after armed police detained them , prompted by an AI…"
       }
     ],
     "earth": [
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Tag team: dual waterspouts appear in San Francisco Bay amid stormy weather",
-        "url": "https://www.theguardian.com/us-news/2026/nov/17/san-francisco-bay-area-waterspouts",
-        "published_at": "2026-11-18T02:33:21Z",
-        "image": "https://i.guim.co.uk/img/media/5850e2c91738ca3380c5e63343b69ea1c8b5c6f2/0_575_1080_864/master/1080.jpg?width=460&quality=85&auto=format&fit=max&s=4d5a51d6eb91bc5e4d6db5006de31587",
-        "summary": "Phenomenon is not a common occurrence in the Bay area and inclement weather is expected to continue for few days A pair of waterspouts were recorded recently in the San Francisco Bay area, much to the delight and shock of several observers, as storms…"
+        "title": "World ‘held hostage by oil mafia’, says Panama minister at Cop 31",
+        "url": "https://www.theguardian.com/environment/2026/nov/18/world-held-hostage-by-oil-mafia-says-panama-minister-at-cop-31",
+        "published_at": "2026-11-18T17:07:06Z",
+        "image": "https://i.guim.co.uk/img/media/d76762d2e74b075396fcf3dc300d912daf841590/180_0_6222_4978/master/6222.jpg?width=460&quality=85&auto=format&fit=max&s=d8819eac039a81026e4bb147621237c3",
+        "summary": "Key issues unresolved as summit enters final days, with 30 countries signed up to forge fossil fuel treaty separate to UN process The world is “being held hostage by the petroleum mafia” and seems unable to break free, Panama’s environment minister has…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "UK will miss climate targets if it weakens EV sales rules, advisers warn",
-        "url": "https://www.theguardian.com/environment/2026/nov/18/uk-will-miss-climate-targets-if-weakens-rules-on-ev-sales-zev-ccc",
-        "published_at": "2026-11-18T00:01:26Z",
-        "image": "https://i.guim.co.uk/img/media/3ed391e009abd724b30b099d8a5378a1fc28ff5a/558_0_3100_2480/master/3100.jpg?width=460&quality=85&auto=format&fit=max&s=89277f8312127e432857bc5af788db35",
-        "summary": "Analysts say mooted move to let more petrol and diesel vehicles be sold would wreck plan to reach net zero by 2050 Weakening the UK’s electric car sales rules would probably cause the government to miss legally binding climate targets, according to advisers…"
+        "title": "UK government ‘breaking the law’ by not stopping decline of wild birds",
+        "url": "https://www.theguardian.com/environment/2026/nov/18/uk-government-angela-eagle-natural-england-wild-birds-decline-",
+        "published_at": "2026-11-18T16:56:18Z",
+        "image": "https://i.guim.co.uk/img/media/ec8ab6692ef60ad08b4c21283c2bd1f5159aa301/878_0_2879_2303/master/2879.jpg?width=460&quality=85&auto=format&fit=max&s=8f107aa3b9309a87b68a57db3bfba76a",
+        "summary": "Populations at lowest level on record with 45% of native breeding species in decline, environment watchdog says The environment secretary, Angela Eagle, her ministers and Natural England are breaking the law by failing to intervene to slow the “deeply…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Isolated Brazilian tribe emerges amid alarm over threats to group’s way of life",
-        "url": "https://www.theguardian.com/world/2026/nov/17/brazil-amazon-isolated-indigenous-people",
-        "published_at": "2026-11-17T21:40:56Z",
-        "image": "https://i.guim.co.uk/img/media/dde5ccc76241e935a3052e3e3dd59bb8f8f29473/755_0_4561_3648/master/4561.jpg?width=460&quality=85&auto=format&fit=max&s=343df94450d542534ae8b7aaaf226ebd",
-        "summary": "Indigenous Awá people of Amazon make contact with villagers and accept food to take back to territory About 20 Indigenous people emerged from isolation in Brazil’s Amazon rainforest, several organizations reported on Tuesday, raising the alarm about increased…"
+        "title": "Cop31 as it happened: rich world offering ‘crumbs’ to help poor countries adapt to climate breakdown, campaigners say",
+        "url": "https://www.theguardian.com/environment/live/2026/nov/18/cop31-climate-crisis-talks-turkey-latest-news-updates",
+        "published_at": "2026-11-18T15:34:06Z",
+        "image": "https://i.guim.co.uk/img/media/7424fb56b2c2ae2cfde779cfb5afc8c4df3d701b/318_0_5490_4392/master/5490.jpg?width=460&quality=85&auto=format&fit=max&s=2656ac948286420e28dba62b49d218b5",
+        "summary": "Wealthy polluters promised to put $50m into an adaptation fund this week, less than half of what countries promised at last year’s climate summit California Governor Gavin Newsom was a big presence in Antalya last week, serving as the head of a US delegation…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Fossil-fuel industry accused of violating Colorado law over not disclosing drilling chemicals",
-        "url": "https://www.theguardian.com/environment/2026/nov/17/fossil-fuel-industry-colorado",
-        "published_at": "2026-11-17T19:12:15Z",
-        "image": "https://i.guim.co.uk/img/media/8f02a85b241f2031a347ba2959c6552d870749ba/546_0_3757_3006/master/3757.jpg?width=460&quality=85&auto=format&fit=max&s=86265caa08e16808fd45367fea2da76e",
-        "summary": "Non-profit FracTracker Alliance alleges regulators have exempted compounds used in drilling despite 2022 law The fossil-fuel industry is violating Colorado law by not disclosing which chemicals it uses in drilling, a new analysis by the FracTracker Alliance…"
+        "title": "‘Huge experiment in biogeography’: US offshore windfarms are creating artificial reefs",
+        "url": "https://www.theguardian.com/us-news/2026/nov/18/offshore-wind-farms-artificial-reef-experiment-fishing-industry",
+        "published_at": "2026-11-18T14:00:04Z",
+        "image": "https://i.guim.co.uk/img/media/357c057ffd037975abe9fde2c30429a651d61667/0_0_1350_1080/master/1350.jpg?width=460&quality=85&auto=format&fit=max&s=053b51b5c2990fc15f8688e46c224f95",
+        "summary": "Scientists and fishers study how these ‘reefs’ and the creatures living on them are transforming the ocean floor – and what it means for the fishing industry A few years ago, Tony DiLernia, a New York-based charter boat captain, heard rumors of prime fishing…"
       }
     ],
     "space": [
       {
         "category": "space",
         "source": "NASA APOD",
-        "title": "Milky Way versus Aurora",
-        "url": "https://science.nasa.gov/image-article/apod-2026-november-17-milky-way-versus-aurora/",
-        "published_at": "2026-11-17T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/content/dam/science/cds/apod/apod/2026/november/GalaxyVsAurora_Scheib_960.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg",
-        "summary": "Explanation: Are these two giant arches battling for control of the sky? No, but it sure looks like it! The arch on the left is the central band of our Milky Way Galaxy , an ancient system of stars, gas, and dust that predates our Earth and is very far away.…"
+        "title": "A Medium-Sized Solar Flare",
+        "url": "https://science.nasa.gov/image-article/apod-2026-november-18-an-m-class-solar-flare/",
+        "published_at": "2026-11-18T05:05:00Z",
+        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/solar_M_flare.jpg?w=3000&h=2759&fit=clip",
+        "summary": "Explanation: What a flare for the chromatic ! Today’s image combines a series of images taken over ten minutes capturing the Sun ’s chromosphere , the layer of the Sun ’s atmosphere above its surface where the temperature rises . Why would the Sun become…"
       },
       {
         "category": "space",
         "source": "NASA APOD",
-        "title": "NGC 7129: Star Formation with Jets from Webb",
-        "url": "https://science.nasa.gov/image-article/apod-2026-november-16-ngc-7129-star-formation-with-jets-from-webb/",
-        "published_at": "2026-11-16T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/10/weic2620a.jpg?w=1280&h=1194&fit=clip",
-        "summary": "Explanation: How do stars form? To help answer this question, NASA used the James Webb Space Telescope to take the featured detailed image of the star-forming region NGC 7129 in infrared light . Star formation progresses when gravity pulls together massive…"
+        "title": "Milky Way versus Aurora",
+        "url": "https://science.nasa.gov/image-article/apod-2026-november-17-milky-way-versus-aurora/",
+        "published_at": "2026-11-17T05:05:00Z",
+        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/GalaxyVsAurora_Scheib_960.jpg?w=960&h=1200&fit=clip",
+        "summary": "Explanation: Are these two giant arches battling for control of the sky? No, but it sure looks like it! The arch on the left is the central band of our Milky Way Galaxy , an ancient system of stars, gas, and dust that predates our Earth and is very far away.…"
       }
     ]
   }
