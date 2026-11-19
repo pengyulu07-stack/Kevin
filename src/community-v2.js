@@ -134,17 +134,24 @@
     const albumIndex=(window.AilleursMusicCovers||[]).findIndex(print=>print.title.normalize('NFKC').toLocaleLowerCase()===String(song.album||'').normalize('NFKC').toLocaleLowerCase());
     const theme=window.AilleursAlbumThemes?.[albumIndex];
     for(const [key,value] of Object.entries({'--record-paper':theme?.paper||'#191b1d','--record-panel':theme?.panel||'#232527','--record-accent':theme?.accent||'#d69270'}))view.style.setProperty(key,value);
-    const retainedVideo=host.dataset.songId===String(song.id)?host.querySelector('.song-inline-video'):null;host.dataset.songId=String(song.id);if(retainedVideo)retainedVideo.remove();
+    const chosen=song.video_url||song.source_url;
+    const player=chosen?musicEmbed(chosen):null;
+    const hasSharedVideo=Boolean(player?.classList.contains('video-player'));
+    const yt=typeof youtubeVideoId==='function'?youtubeVideoId(chosen):null;
+    const choices=yt?[{id:yt,name:song.title,artist:song.artist,kind:'Shared video'}]:!hasSharedVideo?(window.AilleursMusicVideos?.find(song.title,song.artist)||[]):[];
+    const videoKey=hasSharedVideo?chosen:choices.map(item=>item.id).join('|');
+    const retainedVideo=host.dataset.songId===String(song.id)&&host.dataset.videoKey===videoKey?host.querySelector('.song-inline-video'):null;
+    host.dataset.songId=String(song.id);host.dataset.videoKey=videoKey;if(retainedVideo)retainedVideo.remove();
     host.replaceChildren(createCard(song,rank,true));
-    const chosen = song.video_url || song.source_url;
-    const player = chosen ? musicEmbed(chosen) : null;
-    if(player?.classList.contains('video-player')){
-      const area=retainedVideo||make('section','song-inline-video');if(!retainedVideo)area.append(make('h3','','Listen here'));
-      const yt=typeof youtubeVideoId==='function'?youtubeVideoId(chosen):null;
-      if(yt&&!retainedVideo){const stage=make('div','');area.append(stage);window.AilleursVideoPlayer.mount(stage,[{id:yt,name:song.title,artist:song.artist,kind:'Shared video'}]);}
-      else if(!retainedVideo){player.loading='lazy';area.append(player);} 
-      const card=host.querySelector('.song-card'),comments=card?.querySelector('.comment-section');
-      if(comments)comments.before(area);else host.append(area);
+    if(hasSharedVideo||choices.length){
+      const area=retainedVideo||make('section','song-inline-video');
+      if(!retainedVideo){
+        area.append(make('h3','',hasSharedVideo?'Listen here':'Video versions'));
+        if(choices.length){const stage=make('div','');area.append(stage);window.AilleursVideoPlayer.mount(stage,choices);}
+        else {player.loading='lazy';area.append(player);}
+      }
+      const card=host.querySelector('.song-card'),commentSection=card?.querySelector('.comment-section');
+      if(commentSection)commentSection.before(area);else host.append(area);
     }
     const originalHeart=host.querySelector('.song-vote');
     const actions=make('div','music-reading-actions shared-reading-actions');
