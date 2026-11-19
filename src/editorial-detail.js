@@ -224,6 +224,17 @@
       }
       paragraph(watch, t('点击下方曲目封面，可播放目录提供的 30 秒试听。', 'Choose a track cover below for an available 30-second catalog preview.'));
       const images = make('div', 'editorial-photo-grid'); gallery.append(images);
+      if (albumId === '1109714933') {
+        const commons = name => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(name) + '?width=900';
+        const filePage = name => 'https://commons.wikimedia.org/wiki/File:' + encodeURIComponent(name);
+        const stills = [
+          ['Radiohead 2008 Barcelona, Catalonia Daydream Festival 03.jpg', t('2008 年巴塞罗那 Daydream Festival 的舞台', 'Radiohead on stage at Barcelona’s Daydream Festival, 2008'), 'Alterna2 · CC BY 2.0'],
+          ['Jonny does Keith Emerson 2.jpg', t('2008 年，Jonny Greenwood 操作现场合成器', 'Jonny Greenwood at the live synthesizer, 2008'), 'Ripton Scott · CC BY-SA 2.0'],
+          ['Radiohead Stage.jpg', t('2008 年演出前的 LED 灯光装置', 'LED lighting before a 2008 performance'), 'Wonker Wonker · CC BY 2.0'],
+          ['Radiohead France 2008.jpg', t('2008 年 In Rainbows 巡演中的 Thom Yorke', 'Thom Yorke during the In Rainbows tour, 2008'), 'Nicolas Lœuillet · CC BY-SA 2.0']
+        ];
+        for (const [name, caption, credit] of stills) photo(images, commons(name), caption, credit, filePage(name));
+      }
       void addRelatedPhotos(images);
     }
     paragraph(tracks, t('正在读取曲目…', 'Loading tracks…'));
