@@ -315,13 +315,14 @@
         const symbol=document.createElement('span');symbol.textContent='▶';watch.append(image,symbol);
         watch.addEventListener('click',()=>{
           const player=typeof musicEmbed==='function'?musicEmbed(item.url):null;if(!player)return;
-          window.AilleursVideoPlayer.mount(stage,[{id:item.id||youtubeVideoId(item.url),name:item.title,channel:item.channel,kind:item.kind}],{autoplay:true});
+          window.AilleursVideoPlayer.mount(stage,[{id:item.id||youtubeVideoId(item.url),name:item.title,channel:item.channel,kind:item.kind}],{autoplay:true});stage.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
         });
-        const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=item.channel;
+        const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=[item.kind,item.channel].filter(Boolean).join(' · ');
         const select=document.createElement('button');select.type='button';select.textContent='Use this video';select.addEventListener('click',()=>{
           const video=form.elements.video_url||link;video.value=item.url;video.dispatchEvent(new Event('input',{bubbles:true}));
           form.dataset.videoAutoSelection=item.url;
           if(form.elements.confirm_video)form.elements.confirm_video.checked=true;
+          const confirmation=form.querySelector('.youtube-publish-preview');if(confirmation)confirmation.hidden=true;const duplicate=form.querySelector('.publish-source-preview[data-source-field="video_url"]');if(duplicate)duplicate.hidden=true;
           status.textContent='Selected: '+item.title;for(const choice of cards.querySelectorAll('.publish-video-card'))choice.classList.toggle('selected',choice===card);const group=section.closest('details');if(group)group.open=true;
         });
         info.append(name,channel,select);card.append(watch,info);cards.append(card);

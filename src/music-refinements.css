@@ -130,3 +130,6 @@ body[data-layout="scenes"] .start-day{grid-column:2;grid-row:4}
 @media(max-width:650px){.editorial-detail-header{gap:6px;min-height:58px}.editorial-detail-header>small{display:none}.editorial-detail-header .music-reading-actions{margin-left:0;gap:4px}.editorial-detail-header .music-reading-actions button{padding:9px 10px!important;font-size:12px!important}.editorial-detail-header .editorial-more-about{margin-right:auto}.editorial-detail-header .editorial-more-about>summary{font-size:12px;padding:8px}.editorial-detail-tabs{top:58px;flex-wrap:nowrap;overflow-x:auto}.editorial-detail-section{scroll-margin-top:116px}}
 
 .song-reading-page .card-bottom>.song-vote{display:none}
+
+.publish-video-card>div>button{min-height:44px;font-size:12px}.publish-video-stage{scroll-margin-block:80px}
+@media(max-width:600px){.publish-video-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.publish-video-card>div{padding:7px}.publish-video-card strong{font-size:13px}.publish-video-card small{line-height:1.4}}
