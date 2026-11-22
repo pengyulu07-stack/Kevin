@@ -231,20 +231,25 @@
   function songRow(song,rank,count,day,voteUsers){
     const row=node('article','day-preview-row'),art=node('button','day-preview-art');
     art.type='button';art.classList.add(window.DaytoneListen?.canPlayHere(song)?'can-play':'find-only');art.title=window.DaytoneListen?.actionLabel(song)||'Find '+song.title;art.setAttribute('aria-label',art.title);
-    art.addEventListener('click',()=>window.DaytoneListen?.open(song));
+    art.classList.remove('can-play','find-only');art.title='Read '+song.title;art.setAttribute('aria-label',art.title);
+    art.addEventListener('click',()=>discussSong(song,day));
     const coverUrl=songCoverUrl(song);if(coverUrl){const image=node('img');image.src=coverUrl;image.alt='';image.loading='lazy';art.append(image);}else art.textContent='♫';
     const open=node('button','day-preview-open');open.type='button';open.append(node('small','',String(rank).padStart(2,'0')),node('strong','',song.title),node('span','',[song.artist,song.nickname].filter(Boolean).join(' · ')));
-    open.addEventListener('click',()=>window.DaytoneListen?.open(song));
+    open.setAttribute('aria-label','Read '+song.title+' shared by '+(song.nickname||song.artist||'a member'));
+    open.addEventListener('click',()=>discussSong(song,day));
     const actions=node('div','day-preview-row-actions');
     const chosen=Boolean(user&&voteUsers?.get(song.id)?.has(user.id));
     const vote=node('button','day-preview-action day-preview-vote'+(chosen?' chosen':''),(chosen?'♥ ':'♡ ')+count);
     vote.type='button';vote.title=chosen?'Remove your vote':'Support this song';vote.setAttribute('aria-label',(chosen?'Remove your vote for ':'Support ')+song.title);vote.setAttribute('aria-pressed',String(chosen));
     vote.addEventListener('click',()=>void voteForSong(song.id,chosen));
     const discuss=node('button','day-preview-action day-preview-discuss');discuss.type='button';discuss.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10.5h8"/></svg>';discuss.title='Discuss '+song.title;discuss.setAttribute('aria-label','Discuss '+song.title);discuss.addEventListener('click',()=>discussSong(song,day));
-    const copy=node('button','paper-copy');copy.type='button';copy.title='Copy song title';copy.setAttribute('aria-label','Copy song title');const icon=node('span','paper-copy-icon');icon.setAttribute('aria-hidden','true');copy.append(icon);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(song.title);toast('Copied: '+song.title);}catch{toast('Select the title to copy it.');}});actions.append(vote,discuss,copy);
+    const copy=node('button','paper-copy');copy.type='button';copy.title='Copy song title';copy.setAttribute('aria-label','Copy song title');const icon=node('span','paper-copy-icon');icon.setAttribute('aria-hidden','true');copy.append(icon);copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(song.title);toast('Copied: '+song.title);}catch{toast('Select the title to copy it.');}});
+    if(window.DaytoneListen?.canPlayHere(song)){const play=node('button','day-preview-action shared-song-play','▶ Play');play.type='button';play.setAttribute('aria-label','Play '+song.title);play.addEventListener('click',()=>window.DaytoneListen.open(song));actions.append(play);}
+    actions.append(vote,discuss);
     const videoLinks=node('span','day-preview-video-links');
     videoLinks.append(window.DaytoneListen.videoSearchLink('youtube',song),window.DaytoneListen.videoSearchLink('bilibili',song),window.DaytoneListen.musicServiceLinks(song));
-    const more=node('details','song-platform-menu');more.append(node('summary','','•••'),videoLinks);actions.append(more);
+    videoLinks.append(copy);
+    const more=node('details','song-platform-menu'),moreLabel=node('summary','','•••');moreLabel.setAttribute('aria-label','More options for '+song.title);more.append(moreLabel,videoLinks);actions.append(more);
     const discover=node('button','day-preview-discover','Related songs');discover.type='button';discover.title='More by this artist and related songs';discover.addEventListener('click',()=>discussSong(song,day));videoLinks.append(discover);
     row.append(art,open,actions);return row;
   }
@@ -308,14 +313,31 @@
         if(activeRoom==='music'&&index>=4)caption.append(node('small','room-daily-new',isZh?'今日加入':'NEW TODAY'));
         card.append(image,caption);list.append(card);
       }
-      section.append(heading,list);shelf.append(section);if(activeRoom==='music')void window.AilleursCatalog?.mount(shelf,day);
+      section.id=activeRoom==='music'?'music-albums':'';
+      if(activeRoom==='music'){section.tabIndex=-1;heading.firstChild.textContent=isZh?'今日专辑 · '+dateLabel:'Albums / '+dateLabel;heading.lastChild.remove();}
+      section.append(heading,list);shelf.append(section);
     }
     return shelf;
   }
   function previewFrame(day){
-    host.replaceChildren();host.dataset.room=activeRoom;host.append(roomShelf(day));
+    host.replaceChildren();host.dataset.room=activeRoom;host.classList.toggle('music-index',activeRoom==='music');
+    const shelf=roomShelf(day);host.append(shelf);
     requestAnimationFrame(()=>{const strip=host.querySelector('.room-shelf-track'),selected=strip?.querySelector('.selected');if(strip&&selected)strip.scrollLeft=selected.offsetLeft-strip.offsetLeft-(strip.clientWidth-selected.clientWidth)/2;});
     if(activeRoom==='news'){const roomContent=node('section','room-content');host.append(roomContent);return {roomContent};}
+    if(activeRoom==='music'){
+      const zh=window.DaytoneLanguage?.get()==='zh';
+      const navigation=node('nav','music-section-nav');navigation.setAttribute('aria-label',zh?'音乐页导航':'Music sections');
+      for(const [id,label] of [['music-albums',zh?'专辑':'Albums'],['music-shares',zh?'大家的分享':'Shared songs'],['music-discover',zh?'精选单曲':'Selected songs']]){const link=node('a','',label);link.href='#'+id;link.addEventListener('click',event=>{event.preventDefault();const target=document.getElementById(id);if(!target)return;target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});target.focus({preventScroll:true});});navigation.append(link);}
+      const share=node('button','music-share-primary',zh?'＋ 分享单曲':'＋ Share a song');share.type='button';share.addEventListener('click',openUpload);navigation.append(share);
+      shelf.querySelector('.room-shelf-track').after(navigation);
+      const music=node('section','day-preview-section day-preview-main');music.id='music-shares';music.tabIndex=-1;
+      const sectionHead=node('div','music-section-heading'),all=node('button','music-all-shares',zh?'查看全部':'All shares');all.type='button';all.addEventListener('click',()=>{app.setDay(day);app.show('music-all');});sectionHead.append(node('h3','',zh?'大家的分享':'Shared songs'),all);music.append(sectionHead);host.append(music);
+      const discovery=node('section','music-discovery');discovery.id='music-discover';discovery.tabIndex=-1;host.append(discovery);void window.AilleursCatalog?.mount(discovery,day);
+      const secondary=node('div','music-secondary'),chart=node('details','music-chart'),chartLabel=node('summary','',zh?'热门分享':'Popular shares'),periodic=node('section','day-preview-section day-preview-periodic');chart.append(chartLabel,periodic);
+      const periodHead=node('div','period-head'),tabs=node('div','period-tabs');for(const [key,label] of [['month',zh?'月':'Month'],['week',zh?'周':'Week']]){const button=node('button',period===key?'active':'',label);button.type='button';button.setAttribute('aria-pressed',String(period===key));button.addEventListener('click',async()=>{period=key;await render();host.querySelector('.music-chart .period-tabs button[aria-pressed="true"]')?.focus({preventScroll:true});});tabs.append(button);}periodHead.append(tabs);periodic.append(periodHead);
+      const gallery=node('section','edition-gallery'),archive=node('section','month-archive');gallery.hidden=true;secondary.append(chart,archive);host.append(gallery,secondary);
+      return {music,periodic,gallery,archive};
+    }
     const head=node('div','day-preview-head');
     head.append(node('div','', ''),node('small','',format(day)+' / A DAY TO SHARE'));
     head.firstChild.append(node('p','kicker','ON THE CALENDAR'),node('h2','', activeRoom==='music'?'Music on this day':rooms.find(room=>room.key===activeRoom).name+' on this day'));
@@ -363,8 +385,10 @@
     }catch(error){if(current!==request)return;host.replaceChildren(node('p','day-preview-empty','Could not load '+title+'. Please try again.'));}
   }
   async function render(){
+    const chartOpen=Boolean(host.querySelector('.music-chart[open]'));
     const openArchiveDates=new Set([...host.querySelectorAll('.month-day[open] summary span')].map(item=>item.textContent));
     const current=++request,day=app.getDay(),{music,periodic,gallery,archive,roomContent}=previewFrame(day);
+    const chart=host.querySelector('.music-chart');if(chart)chart.open=chartOpen;
     if(roomContent){if(activeRoom==='news')window.AilleursNews?.render(roomContent);else if(client)void renderRoomContent(roomContent,day,activeRoom,current);else roomContent.append(node('p','day-preview-empty','The shared database is unavailable.'));return;}
     music.append(node('p','day-preview-loading','Loading today’s music…'));periodic.append(node('p','day-preview-loading','Loading the chart…'));archive.append(node('p','day-preview-loading','Opening the month…'));
     if(!client){music.append(node('p','','The shared database is unavailable.'));return;}
@@ -378,13 +402,12 @@
       if(!todayRows.length)music.append(node('p','day-preview-empty',day<window.AilleursLaunchDay?'No public songs for this day.':'No songs yet. Share the first one.'));
       else todayRows.forEach((song,i)=>music.append(songRow(song,i+1,counts.get(song.id)||0,day,voteUsers)));
       gallery.hidden=true;
-      const musicActions=node('div','day-preview-actions'),allMusic=node('button','','See every song ↗'),share=node('button','','＋ Share a song');
-      allMusic.type=share.type='button';allMusic.addEventListener('click',()=>{app.setDay(day);app.show('music-all');});share.addEventListener('click',openUpload);if(todayRows.some(song=>window.DaytoneListen?.canPlayHere(song))){const playToday=node('button','play-available','▶ Play available');playToday.type='button';playToday.addEventListener('click',()=>window.DaytoneListen?.playQueue(todayRows));musicActions.append(playToday);}musicActions.append(allMusic,share);music.append(musicActions);
+      if(todayRows.filter(song=>window.DaytoneListen?.canPlayHere(song)).length>1){const musicActions=node('div','day-preview-actions'),playToday=node('button','play-available','▶ Play shared songs');playToday.type='button';playToday.addEventListener('click',()=>window.DaytoneListen?.playQueue(todayRows));musicActions.append(playToday);music.append(musicActions);}
       const {weekStart,weekEnd}=boundaries(day),periodRows=songs.filter(song=>period==='month'||song.day>=weekStart&&song.day<weekEnd),leaders=periodRank(periodRows,counts,voteUsers).slice(0,5);
       periodic.append(node('p','period-caption',period==='month'?'Most supported songs shared this month.':'Most supported songs shared this week.'));
       if(!leaders.length)periodic.append(node('p','day-preview-empty','The chart is waiting for its first song.'));
       else leaders.forEach((item,i)=>periodic.append(songRow(item.song,i+1,counts.get(item.song.id)||0,item.song.day,voteUsers)));
-      if(leaders.some(item=>window.DaytoneListen?.canPlayHere(item.song))){const playChart=node('button','play-available','▶ Play available');playChart.type='button';playChart.addEventListener('click',()=>window.DaytoneListen?.playQueue(leaders.map(item=>item.song)));periodic.append(playChart);}
+      if(leaders.filter(item=>window.DaytoneListen?.canPlayHere(item.song)).length>1){const playChart=node('button','play-available','▶ Play available');playChart.type='button';playChart.addEventListener('click',()=>window.DaytoneListen?.playQueue(leaders.map(item=>item.song)));periodic.append(playChart);}
       renderArchive(archive,songs,counts,voteUsers,day);
       for(const summary of archive.querySelectorAll('.month-day summary'))if(openArchiveDates.has(summary.querySelector('span')?.textContent))summary.parentElement.open=true;
       setTimeout(()=>{if(client)void getRoomPosts('film',day).catch(()=>{});},300);

@@ -17,27 +17,28 @@
     const data=await ready;if(!data||!host.isConnected)return;
     const zh=window.DaytoneLanguage?.get()==='zh',section=document.createElement('section');section.className='music-recordings';
     const head=document.createElement('div');head.className='music-recordings-head';
-    const title=document.createElement('h3');title.textContent=zh?'继续听':'Keep listening';
+    const title=document.createElement('h3');title.textContent=zh?'精选单曲':'Selected songs';
     const controls=document.createElement('div'),playAll=document.createElement('button'),search=document.createElement('input');search.type='search';search.placeholder=zh?'歌曲、歌手、专辑':'Song, artist or album';search.setAttribute('aria-label',search.placeholder);
     const more=document.createElement('button');more.type='button';more.className='recordings-more';more.textContent=zh?'显示更多':'Show more';
     const grid=document.createElement('div');grid.className='music-recordings-grid';
-    let limit=12,currentRows=[];
+    let limit=6,currentRows=[];
     const render=()=>{
       const q=norm(search.value),rows=(q?[...new Map(data.albums.flatMap(album=>album.tracks).map(row=>[row.trackId,row])).values()]:active(day)).filter(row=>!q||norm([row.trackName,row.artistName,row.collectionName].join(' ')).includes(q));
       currentRows=rows;playAll.disabled=!rows.length;grid.replaceChildren();
       for(const row of rows.slice(0,limit)){
         const song=asSong(row),card=document.createElement('article');card.className='music-recording-card';
-        const art=document.createElement('button');art.type='button';art.className='music-recording-art';art.setAttribute('aria-label',(zh?'试听 ':'Preview ')+song.title);
+        const sleeve=document.createElement('div');sleeve.className='music-recording-sleeve';
+        const art=document.createElement('button');art.type='button';art.className='music-recording-art';art.setAttribute('aria-label',(zh?'查看专辑 ':'Read about ')+song.album);
         const img=document.createElement('img');img.src=song.catalogCover;img.alt=song.album;img.loading='lazy';
-        const play=document.createElement('span');play.textContent='▶';art.append(img,play);art.addEventListener('click',()=>window.DaytoneListen?.open(song));
-        const detail=document.createElement('button');detail.type='button';detail.className='music-recording-info';detail.append(document.createElement('strong'),document.createElement('small'));detail.firstChild.textContent=song.title;detail.lastChild.textContent=song.artist;detail.addEventListener('click',()=>open(row));
+        const play=document.createElement('button');play.type='button';play.className='music-recording-preview';play.textContent='▶';play.setAttribute('aria-label',(zh?'试听 ':'Preview ')+song.title);play.title=zh?'试听 30 秒':'30-second preview';art.append(img);art.addEventListener('click',()=>open(row));play.addEventListener('click',()=>window.DaytoneListen?.open(song));sleeve.append(art,play);
+        const detail=document.createElement('button');detail.type='button';detail.className='music-recording-info';detail.setAttribute('aria-label',(zh?'查看专辑 ':'Read about ')+song.album+' · '+song.title);detail.append(document.createElement('strong'),document.createElement('small'));detail.firstChild.textContent=song.title;detail.lastChild.textContent=song.artist;detail.addEventListener('click',()=>open(row));
         const store=document.createElement('a');store.href=row.trackViewUrl;store.target='_blank';store.rel='noopener noreferrer';store.className='recording-store';store.textContent='iTunes';store.setAttribute('aria-label','View '+row.trackName+' on iTunes');
-        const read=document.createElement('button');read.type='button';read.className='recording-details';read.textContent=zh?'专辑详情 →':'Album details →';read.addEventListener('click',()=>open(row));card.append(art,detail,read,store);grid.append(card);
+        const read=document.createElement('button');read.type='button';read.className='recording-details';read.textContent=zh?'专辑详情 →':'Album details →';read.addEventListener('click',()=>open(row));card.append(sleeve,detail,read,store);grid.append(card);
       }
       more.hidden=rows.length<=limit;
       if(!rows.length){const empty=document.createElement('p');empty.textContent=zh?'没有找到相符的歌曲。':'No matching recordings.';grid.append(empty);}
     };
-    more.addEventListener('click',()=>{limit+=12;render();});search.addEventListener('input',()=>{limit=12;render();});playAll.type='button';playAll.textContent=zh?'全部试听':'Play all';playAll.className='recordings-play-all';playAll.addEventListener('click',()=>window.DaytoneListen?.playQueue(currentRows.map(asSong)));controls.append(search,playAll);head.append(title,controls);section.append(head,grid,more);
+    more.addEventListener('click',()=>{limit+=12;render();});search.addEventListener('input',()=>{limit=6;render();});playAll.type='button';playAll.textContent=zh?'全部试听':'Preview all';playAll.className='recordings-play-all';playAll.addEventListener('click',()=>window.DaytoneListen?.playQueue(currentRows.map(asSong)));controls.append(search,playAll);head.append(title,controls);section.append(head,grid,more);
     const credit=document.createElement('small');credit.className='recording-credit';credit.textContent=zh?'30 秒试听由 iTunes 提供。':'30-second previews provided courtesy of iTunes.';section.append(credit);host.append(section);render();
   }
   window.AilleursCatalog={ready,active,asSong,open,mount,album:async id=>{await ready;return manifest?.albums.find(a=>a.id===String(id));},search:async(title,artist)=>{await Promise.all([ready,window.AilleursMusicSearch?.ready]);const extra=await supplement;const wanted=norm(title),performer=norm(artist);return [...(manifest?.albums.flatMap(a=>a.tracks)||[]),...extra].filter(row=>norm(row.trackName).includes(wanted)&&(!performer||norm(row.artistName).includes(performer))).slice(0,10);},coverFor:song=>{const id=String(song?.source_url||'').match(/[?&]i=(\d+)/)?.[1];return manifest?.albums.find(album=>album.tracks.some(row=>String(row.trackId)===id))?.cover||'';}};
