@@ -23,6 +23,7 @@
       form.elements.source_url.addEventListener('input', () => { form.elements.media_mode.value = form.elements.source_url.value.trim() ? 'link' : 'none'; });
       form.elements.audio.addEventListener('change', () => { if (form.elements.audio.files.length) form.elements.media_mode.value = 'audio'; });
     }
+    if(type==='songs'){form.dataset.shareType=item.share_type||'song';form.dataset.videoDecision=item.video_url?'selected':'none';form.dataset.videoAutoSelection='';const album=item.share_type==='album';if(album){form.elements.title.closest('label').firstChild.textContent='Album title';form.elements.album.closest('label').hidden=true;dialog.querySelector('#author-dialog-title').textContent='Edit your album';}window.AilleursVideoSearch?.mount(form,{host:fields});}
     dialog.showModal();
   }
   async function upload(groupId, file, kind) {
@@ -55,7 +56,7 @@
       } else {
         const genres=data.getAll('genres').map(String);if(genres.length<1||genres.length>3)throw Error('Choose one to three music categories.');
         changes={title:String(data.get('title')||'').trim(),artist:String(data.get('artist')||'').trim(),note:String(data.get('note')||'').trim(),genres,language:String(data.get('language')||'other_language')};
-        if(type==='songs'){changes.genre=genres[0];changes.album=String(data.get('album')||'').trim();const video=safeUrl(String(data.get('video_url')||''));if(video&&!musicEmbed(video)?.classList.contains('video-player'))throw Error('Paste a direct YouTube or Bilibili video link.');changes.video_url=video;}
+        if(type==='songs'){changes.genre=genres[0];changes.album=item.share_type==='album'?changes.title:String(data.get('album')||'').trim();changes.catalog_data=changes.title===item.title&&changes.artist===item.artist?window.AilleursMusicSharing?.sanitize(item.catalog_data)||{}:{};const video=safeUrl(String(data.get('video_url')||''));if(video&&!musicEmbed(video)?.classList.contains('video-player'))throw Error('Paste a direct YouTube or Bilibili video link.');changes.video_url=video;}
         const media=String(data.get('media_mode')||'keep'),audio=form.elements.audio.files[0],url=String(data.get('source_url')||'');
         if(media==='none'){changes.audio_path=null;changes.source_url=null;changes.file_size=null;}
         if(media==='link'){changes.audio_path=null;changes.file_size=null;changes.source_url=safeUrl(url);if(!changes.source_url)throw Error('Enter a music link or choose title only.');}

@@ -13,7 +13,8 @@
       const labelFor=name=>form.elements[name]?.closest('label');
       for(const [name,id] of [['cover','compose-cover-field'],['video_url','compose-video-field'],['language','compose-language-field']]){const label=labelFor(name);if(label)label.id=id;}
       const intro=form.querySelector('.dialog-intro');if(intro)intro.textContent=zh()?'输入歌名，选择版本。':'Enter a song, choose a recording.';
-      const videoGroup=makeGroup(zh()?'视频':'Video',['.publish-video-results','#compose-video-field','.youtube-publish-preview']);
+      const videoGroup=makeGroup(zh()?'添加视频链接':'Add a video link',['#compose-video-field','.youtube-publish-preview']);
+      const videoChoices=form.querySelector('.publish-video-results'),albumEntry=form.querySelector('.album-entry');if(videoChoices){if(albumEntry)form.elements.note.closest('label').after(albumEntry,videoChoices);else form.elements.note.closest('label').after(videoChoices);}
       makeGroup(zh()?'照片':'Photos',['#compose-cover-field','.song-photo-picker']);
       makeGroup(zh()?'分类与语言':'Category & language',['.upload-genres','#compose-language-field']);
       const otherSources=makeGroup(zh()?'其他音源':'Other sources',['.publish-source-search','.source-choice','#file-field','#link-field']);

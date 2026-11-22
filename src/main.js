@@ -256,7 +256,7 @@ async function loadSongs() {
   const day = selectedDay;
   status("Loading songs for this date…");
   try {
-    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,album,nickname,note,genre,genres,language,audio_path,source_url,video_url,cover_path,media_gallery,created_at").eq("day", day).gte("day", PUBLIC_LAUNCH_DAY).order("created_at", { ascending: false }).order("id"));
+    const nextSongs = await fetchEveryRow(() => client.from("songs").select("id,owner_id,day,daily_slot,title,artist,album,share_type,catalog_data,nickname,note,genre,genres,language,audio_path,source_url,video_url,cover_path,media_gallery,created_at").eq("day", day).gte("day", PUBLIC_LAUNCH_DAY).order("created_at", { ascending: false }).order("id"));
     const nextReactions = new Map();
     const nextVotes = new Map();
     const nextComments = new Map();
@@ -360,7 +360,7 @@ function youtubeVideoId(value) {
     return /^[A-Za-z0-9_-]{11}$/.test(id)?id:'';
   } catch{return '';}
 }
-function songCoverUrl(song) { if(song?.cover_path)return publicFile('images',song.cover_path);const cached=window.AilleursCatalog?.coverFor(song);if(cached)return cached;const id=youtubeVideoId(song?.video_url||song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
+function songCoverUrl(song) { if(song?.cover_path)return publicFile('images',song.cover_path);const identified=window.AilleursMusicSharing?.artFor(song);if(identified)return identified;const cached=window.AilleursCatalog?.coverFor(song);if(cached)return cached;const id=youtubeVideoId(song?.video_url||song?.source_url);return song?.cover_path ? publicFile('images', song.cover_path) : id ? 'https://i.ytimg.com/vi/'+id+'/hqdefault.jpg' : ''; }
 function soundCloudTrackUrl(value) {
   try { const url=new URL(value);if(url.protocol!=='https:'||!['soundcloud.com','www.soundcloud.com','m.soundcloud.com'].includes(url.hostname))return '';
     const parts=url.pathname.split('/').filter(Boolean);if(!(parts.length===2||parts.length===3&&parts[1]==='sets')||['search','discover','you','stream','charts','settings'].includes(parts[0]))return '';
@@ -413,6 +413,7 @@ function createCard(song, rank, discussion = false) {
   card.append(el("div", "song-rank", (rank > 0 ? "#" + rank + " · " : "") + supportCount(song) + (supportCount(song)===1 ? " vote" : " votes")));
   const coverUrl = songCoverUrl(song);
   const art = el("div", "song-art tone-" + (song.title.length % 4) + (coverUrl ? " has-image" : ""));
+  art.dataset.artworkSong=song.id;art.dataset.artworkPending=String(!coverUrl);
   if (coverUrl) {
     const image = el("img");
     image.src = coverUrl;
@@ -429,6 +430,7 @@ function createCard(song, rank, discussion = false) {
   }
   card.append(art);
   const meta = el("div", "song-meta");
+  meta.append(el("small", "music-work-kind", song.share_type==='album'?'Album':'Song'));
   meta.append(el("h3", "", song.title));
   const byline=el('p','song-byline');
   if(song.artist)byline.append(document.createTextNode(song.artist+' · '));
@@ -438,7 +440,7 @@ function createCard(song, rank, discussion = false) {
   for (const key of song.genres || [song.genre || "other"]) genreRow.append(el("span", "song-genre-tag", musicGenreName(key)));
   genreRow.append(el("span", "song-genre-tag language-tag", musicGenreName(song.language || "other_language")));
   if (user?.id === song.owner_id) {
-    const edit = el('button', 'outline-button author-edit', 'Edit song ↗'); edit.type = 'button';
+    const edit = el('button', 'outline-button author-edit', song.share_type==='album'?'Edit album':'Edit song'); edit.type = 'button';
     edit.addEventListener('click', () => window.DaytoneAuthorTools?.openSong(song)); genreRow.append(edit);
   }
   meta.append(genreRow);
@@ -661,6 +663,8 @@ async function publish(event) {
   const title = String(data.get("title") || "").trim();
   const artist = String(data.get("artist") || "").trim();
   const album = String(data.get("album") || "").trim();
+  const shareType=data.get('share_type')==='album'?'album':'song';
+  const catalogData=window.AilleursMusicSharing?.dataFor(form)||{};
   const note = String(data.get("note") || "").trim();
   const genres = data.getAll("genres").map(String);
   if (!genres.length) genres.push("other");
@@ -673,6 +677,7 @@ async function publish(event) {
   const errorNode = $("form-error");
   errorNode.textContent = "";
   if (!title) { errorNode.textContent = "Enter a song title."; return; }
+  const videoChoiceError=window.AilleursVideoSearch?.validate(form);if(videoChoiceError){errorNode.textContent=videoChoiceError;form.querySelector('.publish-video-results')?.scrollIntoView({block:'center',behavior:'auto'});return;}
   if (genres.length > 3) { errorNode.textContent = "Choose up to three music categories."; return; }
   let sourceUrl = null;
   if (source === "link" && urlText) {
@@ -706,7 +711,7 @@ async function publish(event) {
     }
     let coverToUpload = await prepareImage(cover);
     let coverUnavailable = false;
-    if (!(coverToUpload instanceof File) && form.dataset.catalogArtUrl) {
+    if ((!(coverToUpload instanceof File)||!coverToUpload.size) && form.dataset.catalogArtUrl) {
       try { coverToUpload = await catalogCoverFile(form.dataset.catalogArtUrl); }
       catch { coverUnavailable = true; }
     }
@@ -717,7 +722,8 @@ async function publish(event) {
       try { const src=new URL(item.src),page=new URL(item.pageUrl);return src.protocol==='https:'&&['upload.wikimedia.org','thumb.wikimedia.org'].includes(src.hostname)&&page.protocol==='https:'&&page.hostname==='commons.wikimedia.org'&&String(item.title||'').length<=240&&String(item.credit||'').length<=160&&String(item.license||'').length<=80; } catch { return false; }
     }).slice(0,6) : [];
     const song = {
-      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, album, nickname: profile.nickname, note, genre: genres[0], genres, language,
+      id: crypto.randomUUID(), owner_id: user.id, day, title, artist, album:shareType==='album'?title:album, nickname: profile.nickname, note, genre: genres[0], genres, language,
+      share_type:shareType,catalog_data:catalogData,
       audio_path: audioPath, source_url: sourceUrl, video_url:videoUrl, cover_path: coverPath, media_gallery:safeGallery,
       file_size: audioPath ? file.size : null
     };
@@ -737,11 +743,11 @@ async function publish(event) {
     window.DaytoneCommunity?.setDay(day);
     await loadSongs();
     window.dispatchEvent(new CustomEvent('daytone:share-published',{detail:{kind:'music',id:song.id,day}}));
-    toast(coverUnavailable ? 'Song shared. The catalog cover could not be added; you can edit it later.' : 'Song shared.');
+    toast(coverUnavailable ? 'Shared. The catalog cover could not be added; you can edit it later.' : shareType==='album'?'Album shared.':'Song shared.');
   } catch (error) {
     await cleanUploads(uploaded);
     errorNode.textContent = error.message || "Could not publish. Please try again.";
-  } finally { button.disabled = false; button.textContent = "Publish song ↗"; }
+  } finally { button.disabled = false; button.textContent = form.elements.share_type?.value==='album'?'Publish album':'Publish song'; }
 }
 async function publishComment(event, songId, errorNode, button) {
   event.preventDefault();

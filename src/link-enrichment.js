@@ -79,6 +79,7 @@
     };
     const stopSample=()=>{sample.pause();sample.removeAttribute('src');sample.load();sample.hidden=true;};
     const clearCatalog=()=>{
+      delete form.dataset.catalogData;delete form.dataset.entryTrackTitle;form.dataset.albumRequest=String((Number(form.dataset.albumRequest)||0)+1);const entry=form.querySelector('.album-entry');if(entry)entry.hidden=true;
       const autoUrl=form.dataset.catalogAutoSourceUrl;
       if(autoUrl&&form.elements.url?.value.trim()===autoUrl){
         form.elements.url.value='';
@@ -103,7 +104,7 @@
       const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.addEventListener('click',()=>{clearCatalog();status.textContent='Cover removed. You can still add your own photo.';});
       preview.append(image,label,remove);preview.hidden=false;
     };
-    const select=(row,automatic)=>{
+    const select=async(row,automatic)=>{
       results.hidden=true;button.textContent='Change recording';stopSample();
       if(form.dataset.videoAutoSelection&&form.elements.video_url?.value===form.dataset.videoAutoSelection){form.elements.video_url.value='';form.elements.video_url.dispatchEvent(new Event('input',{bubbles:true}));delete form.dataset.videoAutoSelection;}
       const previousAlbum=suggestedAlbum,previousNote=suggestedNote;
@@ -123,6 +124,7 @@
       }
       status.replaceChildren(document.createTextNode((automatic?'Matched: ':'Selected: ')+row.trackName+' · '+row.artistName+'. Check the details. '));
       if(row.trackViewUrl){const source=document.createElement('a');source.href=row.trackViewUrl;source.target='_blank';source.rel='noopener noreferrer';source.textContent='View on '+(row.catalogName||'Apple Music')+' ↗';status.append(source);}
+      if(form.elements.share_type?.value==='album')await window.AilleursMusicSharing?.selectAlbum(row,form);else window.AilleursMusicSharing?.setRecording(form,row);
       form.dispatchEvent(new CustomEvent('daytone:recording-selected',{detail:{title:title.value,artist:artist.value}}));
       for(const option of results.querySelectorAll('.song-lookup-option'))option.setAttribute('aria-pressed',String(option.dataset.recording===String(row.trackViewUrl||'')));
     };
@@ -135,7 +137,7 @@
     });
     artist.addEventListener('input',()=>{clearTimeout(timer);++sequence;clearCatalog();stopSample();results.replaceChildren();status.textContent='';if(title.value.trim().length>=2)timer=setTimeout(()=>void search(),950);});
     artist.addEventListener('change',()=>{if(title.value.trim().length>=2)void search();});
-    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;clearCatalog();stopSample();results.replaceChildren();status.textContent='';button.disabled=false;});
+    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;clearCatalog();stopSample();results.replaceChildren();status.textContent='';button.disabled=false;button.textContent='Find recording again';});
     title.addEventListener('paste',()=>setTimeout(()=>{
       clearTimeout(timer);const value=title.value.trim();if(!value)return;
       if(/^https:\/\//i.test(value)){
@@ -150,18 +152,18 @@
       try{
         await window.AilleursMusicSearch?.ready;if(current!==sequence)return;
         const normal=window.AilleursMusicSearch?.normal || (value=>String(value||'').normalize('NFKC').toLocaleLowerCase().trim());
-        const wantedTitle=normal(title.value),wantedArtist=normal(artist.value);
+        const wantedTitle=normal(title.value),wantedArtist=normal(artist.value),kind=form.elements.share_type?.value||'song';
         const score=row=>{const foundTitle=normal(row.trackName),foundArtist=normal(row.artistName);return (foundTitle===wantedTitle?6:foundTitle.includes(wantedTitle)?2:0)+(wantedArtist?(foundArtist===wantedArtist?5:foundArtist.includes(wantedArtist)?2:0):0);};
-        const bundled=await window.AilleursCatalog?.search(title.value.trim(),artist.value.trim())||[];
+        const bundled=await (kind==='album'?window.AilleursCatalog?.searchAlbums(title.value.trim(),artist.value.trim()):window.AilleursCatalog?.search(title.value.trim(),artist.value.trim()))||[];
         const countries=/[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(query)?['jp','us']:/[\p{Script=Han}]/u.test(query)?['cn','tw','hk']:['us','gb'];
         const storefronts=bundled.some(row=>normal(row.trackName)===wantedTitle&&wantedArtist&&normal(row.artistName)===wantedArtist)?[]:await Promise.allSettled(countries.map(async (country,index)=>{
-          const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:(window.AilleursMusicSearch?.variants(query)||[query])[index % (window.AilleursMusicSearch?.variants(query).length||1)],media:'music',entity:'song',country,limit:'25'}).toString();
+          const url=new URL('https://itunes.apple.com/search');url.search=new URLSearchParams({term:(window.AilleursMusicSearch?.variants(query)||[query])[index % (window.AilleursMusicSearch?.variants(query).length||1)],media:'music',entity:kind==='album'?'album':'song',country,limit:'25'}).toString();
           const response=await fetch(url,{mode:'cors',signal:AbortSignal.timeout(5000)});if(!response.ok)throw Error('Search unavailable');
-          const data=await response.json();return (data.results||[]).filter(row=>row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).map(row=>({...row,catalogName:'Apple Music'}));
+          const data=await response.json();return (data.results||[]).filter(row=>kind==='album'?row.collectionType==='Album'&&row.collectionName&&row.artistName&&row.collectionViewUrl:row.kind==='song'&&row.trackName&&row.artistName&&row.trackViewUrl).map(row=>({...row,trackName:kind==='album'?row.collectionName:row.trackName,trackViewUrl:kind==='album'?row.collectionViewUrl:row.trackViewUrl,storefront:country,catalogName:'Apple Music'}));
         }));
         if(current!==sequence)return;
         let tracks=[...bundled.map(row=>({...row,catalogName:'Apple Music'})),...storefronts.flatMap(result=>result.status==='fulfilled'?result.value:[])];
-        if(!tracks.some(row=>normal(row.trackName)===wantedTitle&&(!wantedArtist||normal(row.artistName)===wantedArtist))){
+        if(kind==='song'&&!tracks.some(row=>normal(row.trackName)===wantedTitle&&(!wantedArtist||normal(row.artistName)===wantedArtist))){
           try{
             const pause=Math.max(0,1100-(Date.now()-lastMusicBrainzRequest));
             if(pause)await new Promise(resolve=>setTimeout(resolve,pause));
@@ -292,64 +294,6 @@
     link.addEventListener('input',update);link.addEventListener('change',update);
     form.addEventListener('reset',()=>setTimeout(()=>{last='';update();},0));
   }
-  function setupVideoSuggestions(form){
-    const title=form?.elements.title,artist=form?.elements.artist,link=form?.elements.url;
-    if(!title||!artist||!link)return;
-    const section=document.createElement('section');section.className='publish-video-results';section.hidden=true;
-    const heading=document.createElement('h3');heading.textContent='Choose a video';
-    const status=document.createElement('p');status.setAttribute('role','status');
-    const cards=document.createElement('div');cards.className='publish-video-grid';
-    const stage=document.createElement('div');stage.className='publish-video-stage';
-    const fallback=document.createElement('a');fallback.target='_blank';fallback.rel='noopener noreferrer';fallback.textContent='Search on YouTube ↗';
-    const bilibili=document.createElement('a');bilibili.target='_blank';bilibili.rel='noopener noreferrer';bilibili.textContent='Search on Bilibili ↗';
-    section.append(heading,status,cards,stage,fallback,bilibili);
-    form.querySelector('.publish-source-search')?.after(section);
-    let timer,sequence=0,unavailable=false;
-    const updateFallback=()=>{const q=encodeURIComponent([title.value.trim(),artist.value.trim()].filter(Boolean).join(' '));fallback.href='https://www.youtube.com/results?search_query='+q;bilibili.href='https://search.bilibili.com/all?keyword='+q;};
-    const render=items=>{
-      cards.replaceChildren();stage.replaceChildren();
-      for(const item of items.slice(0,3)){
-        const card=document.createElement('article');card.className='publish-video-card';
-        const watch=document.createElement('button');watch.type='button';watch.className='publish-video-watch';watch.setAttribute('aria-label','Preview '+item.title);
-        const image=document.createElement('img');image.src=item.thumbnail;image.alt='';image.loading='lazy';
-        const symbol=document.createElement('span');symbol.textContent='▶';watch.append(image,symbol);
-        watch.addEventListener('click',()=>{
-          const player=typeof musicEmbed==='function'?musicEmbed(item.url):null;if(!player)return;
-          window.AilleursVideoPlayer.mount(stage,[{id:item.id||youtubeVideoId(item.url),name:item.title,channel:item.channel,kind:item.kind}],{autoplay:true});stage.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});
-        });
-        const info=document.createElement('div');const name=document.createElement('strong');name.textContent=item.title;const channel=document.createElement('small');channel.textContent=[item.kind,item.channel].filter(Boolean).join(' · ');
-        const select=document.createElement('button');select.type='button';select.textContent='Use this video';select.addEventListener('click',()=>{
-          const video=form.elements.video_url||link;video.value=item.url;video.dispatchEvent(new Event('input',{bubbles:true}));
-          form.dataset.videoAutoSelection=item.url;
-          if(form.elements.confirm_video)form.elements.confirm_video.checked=true;
-          const confirmation=form.querySelector('.youtube-publish-preview');if(confirmation)confirmation.hidden=true;const duplicate=form.querySelector('.publish-source-preview[data-source-field="video_url"]');if(duplicate)duplicate.hidden=true;
-          status.textContent='Selected: '+item.title;for(const choice of cards.querySelectorAll('.publish-video-card'))choice.classList.toggle('selected',choice===card);const group=section.closest('details');if(group)group.open=true;
-        });
-        info.append(name,channel,select);card.append(watch,info);cards.append(card);
-      }
-    };
-    const search=async()=>{
-      const current=++sequence,song=title.value.trim(),performer=artist.value.trim();
-      updateFallback();if(song.length<2){section.hidden=true;return;}
-      section.hidden=false;cards.replaceChildren();stage.replaceChildren();
-      const checked = window.AilleursMusicVideos?.find(song, performer) || [];
-      if(checked.length){status.textContent='';render(checked);return;}
-      if(unavailable){status.textContent='Automatic video search is unavailable right now. You can check YouTube or Bilibili and paste the exact video link.';return;}
-      status.textContent='Finding YouTube versions…';
-      try{
-        const result=await client.functions.invoke('song-video-search',{body:{title:song,artist:performer}});
-        if(current!==sequence||title.value.trim()!==song||artist.value.trim()!==performer)return;
-        if(result.error||!result.data?.available){if(result.data?.reason==='unconfigured')unavailable=true;status.textContent='Video choices are unavailable right now. You can still check YouTube and paste the exact link.';return;}
-        const items=Array.isArray(result.data.items)?result.data.items:[];
-        status.textContent=items.length?'Check the title and channel, then choose the right version.':'No embeddable videos were returned. Check YouTube directly.';
-        render(items);
-      }catch{if(current===sequence)status.textContent='Could not search YouTube right now. Paste a checked link instead.';}
-    };
-    const schedule=()=>{clearTimeout(timer);++sequence;if(form.dataset.videoAutoSelection&&form.elements.video_url?.value===form.dataset.videoAutoSelection){form.elements.video_url.value='';delete form.dataset.videoAutoSelection;form.elements.video_url.dispatchEvent(new Event('input',{bubbles:true}));}if(form.elements.confirm_video)form.elements.confirm_video.checked=false;updateFallback();if(title.value.trim().length<2){section.hidden=true;return;}section.hidden=false;status.textContent='Checking video versions…';timer=setTimeout(()=>void search(),1450);};
-    title.addEventListener('input',schedule);artist.addEventListener('input',schedule);
-    form.addEventListener('daytone:catalog-found',schedule);form.addEventListener('daytone:recording-selected',schedule);
-    form.addEventListener('reset',()=>{clearTimeout(timer);++sequence;cards.replaceChildren();stage.replaceChildren();section.hidden=true;});
-  }
   document.addEventListener('DOMContentLoaded',()=>{
     const song=document.getElementById('upload-form');
     const linkReader=setup(song,song?.elements.url,song?.elements.title,song?.elements.artist);
@@ -357,7 +301,7 @@
     setupQuickImport(song);
     setupSourcePreview(song);
     setupSourcePreview(song,'video_url');
-    setupVideoSuggestions(song);
+    window.AilleursVideoSearch?.mount(song);
     if(song?.elements.video_url){
       const preview=document.createElement('div');preview.className='youtube-publish-preview';preview.hidden=true;
       preview.innerHTML='<img alt="Selected YouTube video thumbnail"><div><strong>Check this video version</strong><p>This is the video listeners will see.</p><label><input type="checkbox" name="confirm_video"> Yes, this is the version I want to share</label></div>';

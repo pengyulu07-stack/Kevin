@@ -68,7 +68,7 @@
   async function mount(host,song){
     if(!host||!song?.title||!song?.artist)return;
     const section=panel();const comments=host.querySelector('.comment-section');if(comments)comments.before(section);else host.append(section);
-    let source=await lookup(song.title,song.artist);
+    let source=song.share_type==='album'?await window.AilleursWorkResearch?.lookup(song.title,song.artist,'music'):await lookup(song.title,song.artist);if(source&&song.share_type==='album')source={...source,scope:'album'};
     if(!source&&song.album&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(song.album,song.artist,'music');source=found?{...found,scope:'album'}:null;}
     if(section.isConnected){show(section,source);gallery(section,song);}
   }
@@ -80,7 +80,7 @@
     const run=async()=>{
       const current=++sequence,song=title.value.trim(),performer=artist.value.trim(),record=album?.value.trim()||'';
       if(song.length<2||performer.length<2){show(section,null);return;}
-      let source=await lookup(song,performer);
+      const albumShare=form.elements.share_type?.value==='album';let source=albumShare?await window.AilleursWorkResearch?.lookup(song,performer,'music'):await lookup(song,performer);if(source&&albumShare)source={...source,scope:'album'};
       if(!source&&record&&window.AilleursWorkResearch){const found=await window.AilleursWorkResearch.lookup(record,performer,'music');source=found?{...found,scope:'album'}:null;}
       if(current===sequence&&song===title.value.trim()&&performer===artist.value.trim()&&record===(album?.value.trim()||'')){
         show(section,source);
