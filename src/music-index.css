@@ -1,5 +1,6 @@
 /* Music has one reading order: albums, member shares, selected songs, archive.
    Covers open a work. Only an explicit play control starts audio. */
+.music-index{container:music-index / inline-size}
 .music-index .room-shelf-head{display:none}
 .music-index .room-shelf-track{border-bottom:1px solid var(--dt-rule,#504943);padding-bottom:12px;gap:6px}
 .music-index .room-switcher .room-shelf-card,
@@ -18,7 +19,7 @@ body[data-layout="scenes"] .music-index .room-switcher .room-shelf-card em{displ
 .music-index .room-daily-prints{margin-top:0;border-top:0;padding-top:8px}
 .music-index .room-daily-prints-heading{margin-bottom:20px}
 .music-index .room-daily-prints-heading small{font:500 12px/1.5 system-ui,sans-serif;letter-spacing:.07em}
-.music-index>.day-preview-main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;padding:24px 0 12px;border:0;border-top:1px solid var(--dt-rule,#504943);background:transparent;box-shadow:none}
+.music-index>.day-preview-main{display:grid;grid-template-columns:1fr;gap:0 32px;padding:24px 0 12px;border:0;border-top:1px solid var(--dt-rule,#504943);background:transparent;box-shadow:none}
 .music-section-heading{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
 .music-index .music-section-heading h3{font:normal 28px/1.2 Georgia,serif;margin:0}
 .music-all-shares{text-decoration:underline;text-underline-offset:4px;color:var(--dt-muted,#bbb)}
@@ -44,6 +45,11 @@ body[data-layout="scenes"] .music-index .room-switcher .room-shelf-card em{displ
 .music-index #music-albums,.music-index #music-shares,.music-index #music-discover{scroll-margin-top:100px}
 .music-index :is(a,button,summary):focus-visible{outline:2px solid var(--dt-text,#eee);outline-offset:4px}
 .music-index :is(#music-albums,#music-shares,#music-discover):focus{outline:0}
+@container music-index (min-width:900px){.music-index>.day-preview-main{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container music-index (min-width:500px) and (max-width:899px){
+  .music-index .music-recordings-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .music-index .music-recordings-head{flex-direction:column;align-items:flex-start;gap:12px}
+}
 @media(max-width:700px){
   .music-index>.day-preview-main{grid-template-columns:1fr;gap:0}
   .music-section-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding-bottom:18px}
