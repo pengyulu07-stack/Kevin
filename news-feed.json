@@ -1,10 +1,28 @@
 {
-  "edition_date": "2026-11-22",
-  "updated_at": "2026-11-22T02:19:43.904966Z",
+  "edition_date": "2026-11-23",
+  "updated_at": "2026-11-23T02:53:40.899477Z",
   "time_zone": "Asia/Shanghai",
   "kind": "source_briefs",
   "categories": {
     "music": [
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "‘Harsh to be under her thumb’: Pitchfork’s Ryan Schreiber on selling to Condé Nast and Anna Wintour",
+        "url": "https://www.theguardian.com/books/2026/nov/22/pitchfork-ryan-schreiber-selling-conde-nast-anna-wintour",
+        "published_at": "2026-11-22T10:00:23Z",
+        "image": "https://i.guim.co.uk/img/media/2f04db0baafa7978ca6f60e65fc9ea8a89fc9878/200_0_2000_1600/master/2000.jpg?width=460&quality=85&auto=format&fit=max&s=4eeea5817e63337d48fb10f327ac97bb",
+        "summary": "He shocked the industry when he ‘sold out’ to corporate media in 2015. For the first time since leaving, he opens up about his new life as an out gay man and why he quit On the early November day that I met Pitchfork founder Ryan Schreiber in New York City…"
+      },
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "‘I do a really good version of AC/DC’s Highway to Hell, which throws people’: Sharleen Spiteri’s honest playlist",
+        "url": "https://www.theguardian.com/music/2026/nov/22/sharleen-spiteri-texas-honest-playlist-acdc-elvis-costello",
+        "published_at": "2026-11-22T09:00:22Z",
+        "image": "https://i.guim.co.uk/img/media/d7bd387c76e3ad6b22360295b1b2fcb3eef4f435/454_400_3795_3036/master/3795.jpg?width=460&quality=85&auto=format&fit=max&s=e2a4ee58e9e2050cceeb21d518c799ea",
+        "summary": "The Texas singer was fascinated by Elvis Costello as a kid and admires Nancy Sinatra’s sass and strength, but which of her own songs changed her life? The first song I fell in love with My mum gave me an old Dansette record player and a pile of albums. I must…"
+      },
       {
         "category": "music",
         "source": "The Guardian",
@@ -13,33 +31,6 @@
         "published_at": "2026-11-21T12:00:58Z",
         "image": "https://i.guim.co.uk/img/media/1233bc85cfa94b596692ad167468b0f4b76847d3/582_87_2809_2247/master/2809.jpg?width=460&quality=85&auto=format&fit=max&s=c871c002108c6f5dcc67db1b7a878205",
         "summary": "Manchester-based Megatone Sound Foundation and Baron Turbo Charge have rejuvenated the culture to offer a sense of belonging and empowerment For a generation of young Black Mancunians, some of the history lessons that mattered most were not taught in…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "The week’s best new tracks and the act you need to know: the rangy folk-prog songwriting of Threshold",
-        "url": "https://www.theguardian.com/music/2026/nov/20/the-weeks-best-new-tracks-and-the-act-you-need-to-know-threshold",
-        "published_at": "2026-11-20T12:00:19Z",
-        "image": "https://i.guim.co.uk/img/media/97c7e25f7fa98a4c63d9dd9195ecc434f7473ccc/47_0_3420_2736/master/3420.jpg?width=460&quality=85&auto=format&fit=max&s=7aa2940eb48265720a6817bf4b55645c",
-        "summary": "Isaac Eiger’s solo venture leaves jangle pop behind for a wilder sound. Often it owes a debt to Alex G, but what indie-rock song doesn’t these days? From New York via Montana Recommended if you like Cameron Winter, Tobias Jesso Jr, Alex G Up next Supporting…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "The month’s best experimental album: Stella Z’s ambient adventures into lucid dreaming",
-        "url": "https://www.theguardian.com/music/2026/nov/20/stella-z-thunder-is-the-sky-dreaming-review-cdr",
-        "published_at": "2026-11-20T09:00:26Z",
-        "image": "https://i.guim.co.uk/img/media/8ba7ac4e688d199126644e25c5261bf0160128d0/0_506_2687_2150/master/2687.jpg?width=460&quality=85&auto=format&fit=max&s=59f08b10f4f0a8fcb289531e5d193632",
-        "summary": "(CDR) Based around sounds recorded on her trips back to China, the Fujian-born, London-based producer creates a curious nocturnal collage on Thunder Is the Sky Dreaming Lucid dreaming is one of the influences behind Thunder Is the Sky Dreaming, the new record…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "‘We’re the most arrogant of all apes!’ A delightfully mind-expanding encounter with Peter Gabriel",
-        "url": "https://www.theguardian.com/music/2026/nov/20/peter-gabriel-interview-ai-music-bonobo-ape-duets-jurassic-park-plants",
-        "published_at": "2026-11-20T05:00:22Z",
-        "image": "https://i.guim.co.uk/img/media/124bc29050c7da765c91e3c9121b3b2ab887ffa0/0_715_4126_3300/master/4126.jpg?width=460&quality=85&auto=format&fit=max&s=ccdd3736a07bfb7d8d3c97483cf5e27a",
-        "summary": "From sampling to streaming, the rock legend has always been in thrall to technology – but is superintelligence a step too far? Back with an epic new album, he unpacks his remarkable ideas Peter Gabriel asks me to fetch my laptop: he wants to show me a video…"
       }
     ],
     "film": [
@@ -84,6 +75,15 @@
       {
         "category": "art",
         "source": "The Guardian",
+        "title": "Peter Fluck obituary",
+        "url": "https://www.theguardian.com/tv-and-radio/2026/nov/22/peter-fluck-obituary",
+        "published_at": "2026-11-22T17:47:04Z",
+        "image": "https://i.guim.co.uk/img/media/0b071d6edf32e8a86295d0b6520cda52a79250ff/0_477_2866_2292/master/2866.jpg?width=460&quality=85&auto=format&fit=max&s=59449533a9caf12ab40c0aa7a95cff29",
+        "summary": "Artist and caricaturist who co-created the hugely popular ITV satire Sptting Image with Roger Law Peter Fluck, who has died aged 85, was, with his fellow artist Roger Law, half of the Fluck & Law partnership that revived satire on TV with Spitting Image, the…"
+      },
+      {
+        "category": "art",
+        "source": "The Guardian",
         "title": "‘Napping together on the reeds, the swans appeared luminous’: Noah Forster’s best phone picture",
         "url": "https://www.theguardian.com/lifeandstyle/2026/nov/21/noah-forster-photographer-best-phone-picture-swans",
         "published_at": "2026-11-21T11:00:57Z",
@@ -98,27 +98,27 @@
         "published_at": "2026-11-21T06:00:51Z",
         "image": "https://i.guim.co.uk/img/media/b4712dee35269fe3c91411e475f7c3d2da1079a0/0_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=b8e2550058bfd3accafede1569064572",
         "summary": "Nathan Fielder’s documentary sensation comes to UK screens, and the middle-aged boyband return with a stadium-ready new album You Can See Everything Out now “Masterpiece” – it’s an overused word, but sometimes, it’s the only word. This funny, tragic…"
-      },
-      {
-        "category": "art",
-        "source": "The Guardian",
-        "title": "In a Sydney gallery, Philippe Parreno’s art is powered by a desert 17,000km away",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/21/in-a-sydney-gallery-philippe-parrenos-art-is-powered-by-a-desert-17000km-away",
-        "published_at": "2026-11-21T01:00:43Z",
-        "image": "https://i.guim.co.uk/img/media/c147ef8d2880c3cb8bf93fd283e4c7bdbb0c6e9f/179_132_3155_2525/master/3155.jpg?width=460&quality=85&auto=format&fit=max&s=3feaa22a843c51f269ac6624935f7543",
-        "summary": "In the Museum of Contemporary Art, the French artist’s first major Australian show is truly unpredictable – influenced by real-time data coming from a Spanish farm I’m standing in a massive white-cube space, staring at a perplexing assortment of objects.…"
-      },
-      {
-        "category": "art",
-        "source": "The Guardian",
-        "title": "Dmitri Kasterine obituary",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/20/dmitri-kasterine-obituary",
-        "published_at": "2026-11-20T20:26:49Z",
-        "image": "https://i.guim.co.uk/img/media/bef03b41310fa779d3fe77908a37679c6fee3cfa/0_612_4279_3422/master/4279.jpg?width=460&quality=85&auto=format&fit=max&s=1dcb034662afc556a0c6f18cca6a3fb9",
-        "summary": "Photographer who captured the humanity of subjects including Queen Elizabeth II, Dirk Bogarde, Jean-Michel Basquiat and Tom Stoppard In 1963, the photographer Dmitri Kasterine heard that Stanley Kubrick was in London filming Dr Strangelove. Kasterine was a…"
       }
     ],
     "books": [
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "Rivals author Jilly Cooper accused of ‘extensive and deliberate plagiarism’",
+        "url": "https://www.theguardian.com/books/2026/nov/22/rivals-author-jilly-cooper-accused-plagiarism",
+        "published_at": "2026-11-22T15:07:42Z",
+        "image": "https://i.guim.co.uk/img/media/f5ed62cd4fe49f2727a2c4dd715669add71e2484/0_76_1639_1311/master/1639.jpg?width=460&quality=85&auto=format&fit=max&s=150f054d0f57453a0f13a764b8e6ce96",
+        "summary": "Analysis reportedly finds striking similarities in dialogue and narrative structure between late author’s novel, Prudence, and two of her contemporaries Jilly Cooper has been accused of plagiarising the works of two other novelists. The bestselling author’s…"
+      },
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "How can we explain psychosomatic illnesses?",
+        "url": "https://www.theguardian.com/science/2026/nov/22/how-can-we-explain-psychosomatic-illnesses",
+        "published_at": "2026-11-22T12:00:27Z",
+        "image": "https://i.guim.co.uk/img/media/b4be834bccd838d90f22a530a434fcbda79a34c2/0_470_1847_1477/master/1847.jpg?width=460&quality=85&auto=format&fit=max&s=7978dcc44ab9d044cca4cfacd78dbae9",
+        "summary": "Emotions play a significant part in physical symptoms – but not in the way people often imagine When Diego started seeing bright flashing lights in his field of vision and felt his legs go weak, he thought he knew immediately what was happening. His mother…"
+      },
       {
         "category": "books",
         "source": "The Guardian",
@@ -127,133 +127,133 @@
         "published_at": "2026-11-21T09:00:53Z",
         "image": "https://i.guim.co.uk/img/media/34091c4da9e8c5587b702d1851f5c3e857a68e56/539_1429_5171_4137/master/5171.jpg?width=460&quality=85&auto=format&fit=max&s=d8eda260b4090b2e2487aee6cf66d096",
         "summary": "Turn off your phone, get cosy and commit to some of literature’s biggest and best novels. From Don DeLillo’s Underworld to The Luminaries by Eleanor Catton, these epic reads are worth taking your time over Life starts all over again when it gets crisp in the…"
-      },
-      {
-        "category": "books",
-        "source": "The Guardian",
-        "title": "Jodi Picoult: ‘Reading Ta-Nehisi Coates made me rethink racism’",
-        "url": "https://www.theguardian.com/books/2026/nov/20/jodi-picoult-reading-ta-nehisi-coates-made-me-rethink-racism",
-        "published_at": "2026-11-20T10:00:27Z",
-        "image": "https://i.guim.co.uk/img/media/f955dbf794bc0c4d77e9b023f9f6d672968f1afa/124_110_4705_3765/master/4705.jpg?width=460&quality=85&auto=format&fit=max&s=5657213a1154ada1a0b6f13ef5678540",
-        "summary": "The American novelist on the wild side of Maurice Sendak, re-evaluating Gone With the Wind, and the magical comforts of Alice Hoffman My favourite book growing up I loved Maurice Sendak’s Where the Wild Things Are. Max’s visit to the land of monsters is…"
       }
     ],
     "politics": [
       {
         "category": "politics",
         "source": "The Guardian · China",
-        "title": "China commits to low-carbon electrification and help for others to improve",
-        "url": "https://www.theguardian.com/environment/2026/nov/21/china-commits-low-carbon-electrification-help-others-improve",
-        "published_at": "2026-11-21T09:47:57Z",
-        "image": "https://i.guim.co.uk/img/media/9e68aee336577ce0e768fd142e23caf3b9396a18/240_71_6107_4885/master/6107.jpg?width=460&quality=85&auto=format&fit=max&s=5b75d30592cf59a975713384b26027a4",
-        "summary": "Exclusive: Countries at Cop31 are being urged to commit to deriving 35% of their energy from electricity by 2035 Cop31 live – latest updates China is pushing for rapid electrification of its economy using low-carbon energy and will help other countries do the…",
+        "title": "Jensen Huang’s reported affair was ‘most expensive sex since Helen of Troy’, US senator says",
+        "url": "https://www.theguardian.com/us-news/2026/nov/22/jensen-huang-nvidia-john-kennedy",
+        "published_at": "2026-11-22T20:23:36Z",
+        "image": "https://i.guim.co.uk/img/media/4c4701470b09edcfeba9cbda93c6910a248a274b/0_116_6218_4975/master/6218.jpg?width=460&quality=85&auto=format&fit=max&s=22028e747e7e2bcd842d4f53b1525f62",
+        "summary": "John Kennedy looks to Trump leaders as he asks how China evidently bypassed export controls for Nvidia’s top AI chips Invoking Greek mythology, US senator John Kennedy has characterized former Nvidia chief executive officer Jensen Huang ’s reported affair…",
         "region": "china"
       },
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "UK should only rejoin EU if it innovates on technology, Blair warns",
-        "url": "https://www.bbc.co.uk/news/articles/c893r4923wngo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-21T19:33:49Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2cc5/live/a77124b0-e5d9-11f1-9ab8-8737221634d6.jpg",
-        "summary": "The former prime minister argues the European Union is probably moving in the wrong direction on technology innovation."
+        "source": "The Guardian",
+        "title": "Theresa May’s blast from the past calls Tories back to their unhappy place | Peter Walker",
+        "url": "https://www.theguardian.com/politics/2026/nov/22/theresa-may-blast-from-the-past-tories-brexit",
+        "published_at": "2026-11-22T22:00:58Z",
+        "image": "https://i.guim.co.uk/img/media/323290cab4a059e743deb4e7ae0928f6d847b2af/681_32_4857_3885/master/4857.jpg?width=460&quality=85&auto=format&fit=max&s=0b8453e0ae593e498074f391e6ac926c",
+        "summary": "Conservatives may instinctively want to push back against closer EU ties, but they have to train their focus elsewhere Anyone who accidentally switched to BBC One at about 9.45am on Sunday to be greeted by Theresa May awkwardly espousing the virtues of Brexit…"
       },
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "First minister 'gobsmacked' by Burnham's devolution calls rejection",
-        "url": "https://www.bbc.co.uk/news/articles/ck9874vydr83o?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-21T16:11:58Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/a0e1/live/d4aecf30-c195-11f1-aa62-b37233e4aed8.jpg",
-        "summary": "The prime minister says he is \"not persuaded\" by the argument that devolution would benefit Wales."
+        "source": "The Guardian",
+        "title": "The Guardian view on Ofsted: its damaged relationship with schools in England needs fixing | Editorial",
+        "url": "https://www.theguardian.com/commentisfree/2026/nov/22/the-guardian-view-on-ofsted-its-damaged-relationship-with-schools-in-england-needs-fixing",
+        "published_at": "2026-11-22T17:25:32Z",
+        "image": "https://i.guim.co.uk/img/media/22cdb66c01e3d3dd27e7c2ead773c060f14662f9/0_0_3950_3160/master/3950.jpg?width=460&quality=85&auto=format&fit=max&s=bb32fc15f0a03c5e85598106459a9bb9",
+        "summary": "The government, as well as the inspectorate, must take responsibility for reforms that have not worked out The inspection and rating of schools is, by definition, a fraught process. There are few things that parents care more about than the education of their…"
       },
       {
         "category": "politics",
-        "source": "BBC News",
-        "title": "Scouts say they face £1m tourist tax cost for overnight trips",
-        "url": "https://www.bbc.co.uk/news/articles/cxdd1e9yvlzjo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-21T13:29:55Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/8a35/live/b16af070-a12a-11f1-8c37-3f30331ac537.jpg",
-        "summary": "The increased cost after the proposed Visitors Levy is imposed could price some young people out of joining Scout camps and other trips, the group said."
+        "source": "The Guardian",
+        "title": "UK taxpayers held more than £1tn in offshore tax havens, latest HMRC data shows",
+        "url": "https://www.theguardian.com/business/2026/nov/22/uk-taxpayer-funds-held-in-offshore-tax-havens-top-1tn-latest-hmrc-data-shows",
+        "published_at": "2026-11-22T15:43:01Z",
+        "image": "https://i.guim.co.uk/img/media/800ce1d542712fe94a187f06f577b17799e2d1b6/15_0_1992_1594/master/1992.jpg?width=460&quality=85&auto=format&fit=max&s=6226e15348004d585a1a31bf0b4bb35e",
+        "summary": "Figures show recent 10% rise in total held in financial centres such as Jersey and Panama, raising fears over cost to public purse The amount of money UK taxpayers hold in offshore accounts in tax havens has exceeded £1tn for the first time, raising concerns…"
       }
     ],
     "technology": [
       {
         "category": "technology",
-        "source": "The Guardian",
-        "title": "Two groups verify mathematician’s claim that Claude helped prove mathematics problem",
-        "url": "https://www.theguardian.com/technology/2026/nov/21/anthropic-riemann-hypothesis-solved-claude-ai",
-        "published_at": "2026-11-21T20:15:57Z",
-        "image": "https://i.guim.co.uk/img/media/d3154f68df589c297fc3d173e2bb3d95faca05c9/530_0_4678_3742/master/4678.jpg?width=460&quality=85&auto=format&fit=max&s=f2ba0bd9087a257513864070b4319d5f",
-        "summary": "Anthropic’s Levent Alpöge says it took six weeks for him using the AI tool to solve 19th-century Riemann hypothesis A mathematician at Anthropic has said that the San Francisco -based artificial intelligence (AI) company’s software has helped crack one of the…"
+        "source": "BBC News",
+        "title": "San Francisco is enjoying an AI boom, but worries about a crash are growing",
+        "url": "https://www.bbc.co.uk/news/articles/cqe9k09j9jv4o?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-23T00:08:00Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4d7f/live/712502a0-e2cd-11f1-99ed-7de3e5932968.jpg",
+        "summary": "AI employees in the industry's epicentre - San Francisco - worry that the sector is overheated."
       },
       {
         "category": "technology",
         "source": "The Guardian",
-        "title": "International UN talks on controlling use of autonomous weapons collapse",
-        "url": "https://www.theguardian.com/technology/2026/nov/21/international-talks-control-ai-autonomous-weapons-collapse",
-        "published_at": "2026-11-21T16:36:11Z",
-        "image": "https://i.guim.co.uk/img/media/247601abada695f09f302253178bbc8f6e58cd42/415_0_4165_3333/master/4165.jpg?width=460&quality=85&auto=format&fit=max&s=65fc3e283f6cc55b87e2414599703459",
-        "summary": "Week-long efforts fail to establish negotiating mandate on AI warfare after Russian ‘filibustering’ Week-long efforts to agree a negotiating mandate for a legally binding international treaty to control the use of autonomous weapons collapsed just before 5am…"
+        "title": "Jensen Huang’s reported affair was ‘most expensive sex since Helen of Troy’, US senator says",
+        "url": "https://www.theguardian.com/us-news/2026/nov/22/jensen-huang-nvidia-john-kennedy",
+        "published_at": "2026-11-22T20:23:36Z",
+        "image": "https://i.guim.co.uk/img/media/4c4701470b09edcfeba9cbda93c6910a248a274b/0_116_6218_4975/master/6218.jpg?width=460&quality=85&auto=format&fit=max&s=22028e747e7e2bcd842d4f53b1525f62",
+        "summary": "John Kennedy looks to Trump leaders as he asks how China evidently bypassed export controls for Nvidia’s top AI chips Invoking Greek mythology, US senator John Kennedy has characterized former Nvidia chief executive officer Jensen Huang ’s reported affair…"
       },
       {
         "category": "technology",
         "source": "The Guardian",
-        "title": "‘I was shaking, crying, having trouble breathing’: the uncharted trauma of breaking up with AI companions",
-        "url": "https://www.theguardian.com/technology/ng-interactive/2026/nov/21/shaking-crying-trouble-breathing-breaking-up-with-ai-companions",
-        "published_at": "2026-11-21T14:00:01Z",
-        "image": "https://i.guim.co.uk/img/media/fbb1db8f761639f3693a6f337b815d2473bc48a3/0_0_5790_4631/master/5790.jpg?width=460&quality=85&auto=format&fit=max&s=155e48fd1658b5f10186bef1ee24b2db",
-        "summary": "People are falling in love with AI systems like ChatGPT and Gemini - and some relationships are ending in ways that feel like the very human experience of being dumped Sónia Veenstra, a 48-year-old former clinical psychologist from Lisbon, Portugal, was with…"
+        "title": "I covered myself in sleep trackers to find the very best",
+        "url": "https://www.theguardian.com/thefilter-us/2026/nov/22/best-sleep-trackers",
+        "published_at": "2026-11-22T19:00:35Z",
+        "image": "https://i.guim.co.uk/img/media/299810b8ddede6ce30a9f856d4c8b57586fd489e/1_0_2499_2000/master/2499.jpg?width=460&quality=85&auto=format&fit=max&s=105f216ae9fa0b987ee653716ca3d745",
+        "summary": "Get a better night’s sleep with monitoring and guidance from smartwatches, smart rings, smart bands and sleep earbuds The best sleep masks and best Bluetooth sleep masks Getting quality sleep is just as crucial as getting enough sleep. And how you feel in the…"
       },
       {
         "category": "technology",
         "source": "The Guardian",
-        "title": "‘Little room for error’: what a debt-laden cloud computing company says about the AI boom",
-        "url": "https://www.theguardian.com/business/2026/nov/21/debt-laden-cloud-computing-company-coreweave-ai-boom",
-        "published_at": "2026-11-21T13:00:01Z",
-        "image": "https://i.guim.co.uk/img/media/4ccf3eba2b9600a32c8f0d9bd1554d5d4fe50e67/504_0_5040_4032/master/5040.jpg?width=460&quality=85&auto=format&fit=max&s=63bbfdf388a900da251de68eb2fb7b75",
-        "summary": "‘Poster child of AI bubble’ CoreWeave symbolises increasingly risky business model of datacentre buildout The Egyptians had pyramids. The Roman empire had roads. The early 21st-century tech bros have massive buildings full of expensive glass and metal blocks…"
+        "title": "Datacentre bosses met Australian state premiers and ministers almost 120 times in three years, analysis finds",
+        "url": "https://www.theguardian.com/australia-news/2026/nov/23/datacentre-bosses-met-australian-state-premiers-and-ministers-almost-120-times-in-three-years-analysis-finds",
+        "published_at": "2026-11-22T19:00:34Z",
+        "image": "https://i.guim.co.uk/img/media/7c9ca8255b51e9604fa64118322f08bb4d19c764/475_0_3640_2912/master/3640.jpg?width=460&quality=85&auto=format&fit=max&s=3054e10d3368009599cebe801e772e55",
+        "summary": "Transparency International says Queensland’s David Crisafulli was ‘by far the most frequently accessed’ state leader, with 13 meetings Get our breaking news email , free app or daily news podcast Bosses at 10 datacentre companies secured almost 120 meetings…"
       }
     ],
     "earth": [
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "‘No time for a culture war’: Victoria’s electricity supply is at risk. Can it avoid power shortages and bill shocks?",
-        "url": "https://www.theguardian.com/australia-news/2026/nov/22/victoria-election-2026-what-are-parties-promising-energy-policy",
-        "published_at": "2026-11-22T01:00:13Z",
-        "image": "https://i.guim.co.uk/img/media/2ba7cd3a290bb4876a32e7f44df6d629f62996df/0_0_6112_4892/master/6112.jpg?width=460&quality=85&auto=format&fit=max&s=4072f3b276fe86d350d7e1db5bdf4bd0",
-        "summary": "State faces electricity supply gap when Yallourn coal-fired power station closes in 2028 as experts warn neither Labor nor the Coalition has adequate plans Sign up for climate and environment editor Adam Morton’s free Clear Air newsletter here Victoria’s…"
+        "title": "The good news out of Cop31? That most of the world’s governments said no to an agreement stripped of meaning | Bill Hare",
+        "url": "https://www.theguardian.com/environment/commentisfree/2026/nov/23/cop31-climate-summit-no-agreement",
+        "published_at": "2026-11-22T22:30:48Z",
+        "image": "https://i.guim.co.uk/img/media/5a9e838799df66f4975edd1ffed1b25c01646193/586_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=ca41f019078ecf38282e7ef587d64f6e",
+        "summary": "Co-chairing global climate talks is clearly not something to be repeated, certainly not by Australia, which is exporting climate pain The failure of Cop31 in Antalya was a line in the sand moment, a victory for multiculturalism as countries stood up to the…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Diplomats race to compromise on fossil fuels as Cop31 teeters on brink of failure – as it happened",
-        "url": "https://www.theguardian.com/environment/live/2026/nov/21/cop31-climate-deal-latest-news-updates",
-        "published_at": "2026-11-21T22:25:25Z",
-        "image": "https://i.guim.co.uk/img/media/b4da7d6ea28bae6380a9f013dbe3b27d6e171620/252_0_5883_4706/master/5883.jpg?width=460&quality=85&auto=format&fit=max&s=d2bfdd68b2d79cbc2a0bb36cfabd9715",
-        "summary": "EU thought to have backing of 130 countries in last-ditch push to get cause of climate crisis mentioned in outcome of UN summit Climate talks stall as countries mull showdown with Saudi Arabia over fossil fuel phaseout Although not quite deserted, the halls…"
+        "title": "Cop31 as it happened: EU and others reject deal as longest climate summit comes to fractious end",
+        "url": "https://www.theguardian.com/environment/live/2026/nov/22/cop31-climate-crisis-talks-turkey-latest-news-updates",
+        "published_at": "2026-11-22T16:45:37Z",
+        "image": "https://i.guim.co.uk/img/media/ea4df22e3283176b004ce79254d62b64700f84bc/553_0_4774_3822/master/4774.jpg?width=460&quality=85&auto=format&fit=max&s=23b5c185acbe5dd7373e5b82c25557eb",
+        "summary": "Countries failed to reach consensus on a key deal that did not mention fossil fuels Full report: Cop31 climate talks set to end in deep division as key deal rejected Mohamed Adow, director of Power Shift Africa, has been looking through the text and says…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "‘Legally, they don’t exist’: the hybrid crabs puzzling biologists and fishers",
-        "url": "https://www.theguardian.com/environment/2026/nov/21/alaska-bering-sea-heatwave-snow-tanner-hybrid-crabs-fishing-quotas",
-        "published_at": "2026-11-21T11:00:57Z",
-        "image": "https://i.guim.co.uk/img/media/9fdb0a2c2757969e8c0d78e2fdaf3c659856ca2b/386_148_4136_3308/master/4136.jpg?width=460&quality=85&auto=format&fit=max&s=80d348ef081a5e6f7a33df76e6bba241",
-        "summary": "A heatwave in the Bering Sea that killed 10bn snow crabs has led to a new hybrid emerging that has no fishing quotas Somewhere out on the Bering Sea, hundreds of miles off the coast of Alaska, a group of researchers onboard the trawler Alaska Knight haul up a…"
+        "title": "EU officials reject Cop31 deal as it 'doesn't speak to reality of the climate crisis' – video",
+        "url": "https://www.theguardian.com/environment/video/2026/nov/22/eu-officials-reject-cop31-deal-as-it-doesnt-speak-to-reality-of-the-climate-crisis-video",
+        "published_at": "2026-11-22T16:08:20Z",
+        "image": "https://i.guim.co.uk/img/media/889097b33a9db4d990e02f63f627671657fe64ce/265_0_3447_2758/master/3447.jpg?width=460&quality=85&auto=format&fit=max&s=2dbb2340113800b5be34aa665c13f101",
+        "summary": "The Cop31 climate talks fell into disarray as the EU, UK and allies in the developing world rejected what they called an unacceptable deal on the future of the climate. Ireland's climate minister, Darragh O'Brien, said the EU could not support the proposed…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "China commits to low-carbon electrification and help for others to improve",
-        "url": "https://www.theguardian.com/environment/2026/nov/21/china-commits-low-carbon-electrification-help-others-improve",
-        "published_at": "2026-11-21T09:47:57Z",
-        "image": "https://i.guim.co.uk/img/media/9e68aee336577ce0e768fd142e23caf3b9396a18/240_71_6107_4885/master/6107.jpg?width=460&quality=85&auto=format&fit=max&s=5b75d30592cf59a975713384b26027a4",
-        "summary": "Exclusive: Countries at Cop31 are being urged to commit to deriving 35% of their energy from electricity by 2035 Cop31 live – latest updates China is pushing for rapid electrification of its economy using low-carbon energy and will help other countries do the…"
+        "title": "Briton swims length of strait of Hormuz to highlight environmental cost of war",
+        "url": "https://www.theguardian.com/world/2026/nov/22/briton-lewis-pugh-swims-strait-of-hormuz-environment-war",
+        "published_at": "2026-11-22T13:36:01Z",
+        "image": "https://i.guim.co.uk/img/media/7d1fe0b76a02fb1cbed49470fb53746f00e897fd/418_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=e5ae746f3f9624a8adf4955c07a96af8",
+        "summary": "UN patron Lewis Pugh saw ships ablaze and fighter jets overhead during three-day swim as Iran conflict continues A British endurance swimmer has completed a three-day swim through the strait of Hormuz to highlight the environmental cost of the Iran war. Lewis…"
       }
     ],
     "space": [
+      {
+        "category": "space",
+        "source": "NASA APOD",
+        "title": "Swirls and Colors on Jupiter from Juno",
+        "url": "https://science.nasa.gov/image-article/apod-2026-november-22-swirls-and-colors-on-jupiter-from-juno/",
+        "published_at": "2026-11-22T05:05:00Z",
+        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/JupiterSwirls_JunoBrealey_3709.jpg?w=3709&h=2772&fit=clip",
+        "summary": "Explanation: What creates the colors in Jupiter's clouds? No one is sure. The thick atmosphere of Jupiter is mostly hydrogen and helium , elements which are colorless at the low temperatures of the Jovian cloud tops . Which trace molecules provide the colors…"
+      },
       {
         "category": "space",
         "source": "NASA APOD",
@@ -262,15 +262,6 @@
         "published_at": "2026-11-21T05:05:00Z",
         "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/Neptune-South-Pole-Voyager-2_2327x1670.jpg?w=2327&h=1670&fit=clip",
         "summary": "Explanation: Cruising through the outer solar system, the Voyager 2 spacecraft made its closest approach to Neptune on August 25, 1989, the only spacecraft to visit the most distant ice giant planet . Based on the images recorded during its close encounter…"
-      },
-      {
-        "category": "space",
-        "source": "NASA APOD",
-        "title": "V-G-R",
-        "url": "https://science.nasa.gov/image-article/apod-2026-november-20-v-g-r/",
-        "published_at": "2026-11-20T05:05:00Z",
-        "image": "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/apod/apod/2026/november/IMG_4364N_Kyriazis.jpg?w=3898&h=4724&fit=clip",
-        "summary": "Explanation: On November 17, fans of interstellar spaceflight around planet Earth were invited to shine a message into the night sky. Traced by a flashlight beam switched on and off, the dashes and dots of a Morse code message captured in this time exposure…"
       }
     ]
   }
