@@ -1,10 +1,19 @@
 {
-  "edition_date": "2026-11-24",
-  "updated_at": "2026-11-24T06:08:39.984323Z",
+  "edition_date": "2026-11-25",
+  "updated_at": "2026-11-25T04:56:09.369322Z",
   "time_zone": "Asia/Shanghai",
   "kind": "source_briefs",
   "categories": {
     "music": [
+      {
+        "category": "music",
+        "source": "The Guardian",
+        "title": "Proposed Beatles attraction on Savile Row faces rooftop gigs ban",
+        "url": "https://www.theguardian.com/music/2026/nov/24/beatles-attraction-savile-row-live-music-ban-westminster-council",
+        "published_at": "2026-11-24T08:00:11Z",
+        "image": "https://i.guim.co.uk/img/media/4a18877293afdaf5a165edfd4e26384248d1cf11/5_738_4303_3441/master/4303.jpg?width=460&quality=85&auto=format&fit=max&s=034d5d802c3dc67d2d1f30e76206922f",
+        "summary": "Westminster council to vote on restrictions at planned tourist venue and site of band’s final public concert The Beatles stunned onlookers when they pitched up on the rooftop of 3 Savile Row in London in 1969 for their final public performance, but now…"
+      },
       {
         "category": "music",
         "source": "The Guardian",
@@ -31,18 +40,36 @@
         "published_at": "2026-11-23T06:00:48Z",
         "image": "https://i.guim.co.uk/img/media/4b0cf12d6c74817a7ac110775221c4e7b7df02e4/489_0_4887_3909/master/4887.jpg?width=460&quality=85&auto=format&fit=max&s=73d4bc76e1954b663368e0670711f4e0",
         "summary": "David Byrne has had more than a lifetime’s worth of genius ideas. The kind that influence art and music decades after they first came about. As the frontman of Talking Heads, Byrne has made some of the greatest albums of all time. He tells Nosheen Iqbal about…"
-      },
-      {
-        "category": "music",
-        "source": "The Guardian",
-        "title": "‘My name was poison’: Donny Osmond on fame, failure – and his friend Michael Jackson",
-        "url": "https://www.theguardian.com/music/2026/nov/23/donny-osmond-interview-fame-failure-michael-jackson-friendship",
-        "published_at": "2026-11-23T05:00:47Z",
-        "image": "https://i.guim.co.uk/img/media/eb001bf98a1453a76569e30cb75161b2b07026aa/0_762_5464_4368/master/5464.jpg?width=460&quality=85&auto=format&fit=max&s=84a3b5a6aad7ac1c16a282b7f03c88d2",
-        "summary": "He was the child star of the Osmonds who become a global celebrity by 14. Then, at 21, his career came crashing down. Here, he reveals how he survived his years in exile – and what happened when Jackson was accused of child abuse For a brief period in the…"
       }
     ],
     "film": [
+      {
+        "category": "film",
+        "source": "The Guardian",
+        "title": "Olivia Colman as a fox and Sam Neill as a sweary magpie: The Fox is one of the best Australian movies in years",
+        "url": "https://www.theguardian.com/film/2026/nov/25/the-fox-movie-trailer-olivia-colman-sam-neill-dario-russo-comedy",
+        "published_at": "2026-11-24T14:00:49Z",
+        "image": "https://i.guim.co.uk/img/media/3190942a922e7d7df726d7ed512bdc90ce94ba4f/213_0_1500_1201/master/1500.jpg?width=460&quality=85&auto=format&fit=max&s=1bfd64af9fc9e4a0afcb3829ee62ee3b",
+        "summary": "Director Dario Russo describes it as being ‘about a guy who gets tricked by a talking fox into pushing his fiancee in a magic hole’ – but that’s just the beginning Get our weekend culture and lifestyle email When Emily Browning first read the synopsis for The…"
+      },
+      {
+        "category": "film",
+        "source": "The Guardian",
+        "title": "Scream 4 came out 15 years ago – but its mockery of online brainrot is more spot-on than ever",
+        "url": "https://www.theguardian.com/film/2026/nov/25/scream-4-movie-film-streaming-prescient-online-brainrot",
+        "published_at": "2026-11-24T14:00:47Z",
+        "image": "https://i.guim.co.uk/img/media/3920d60b7bd5505747b2bf7ec300d43e2271c110/756_339_3074_2461/master/3074.jpg?width=460&quality=85&auto=format&fit=max&s=80052dff69e0f4206d77c8246d444f07",
+        "summary": "When Wes Craven’s final slasher film came out, correctly predicting clout-chasing influencers and social media’s corruption of our lives, Instagram was just six months old Get our weekend culture and lifestyle email It has been almost a year since Australia’s…"
+      },
+      {
+        "category": "film",
+        "source": "The Guardian",
+        "title": "Robert Pattinson is not enough: who should become the new Bond girl?",
+        "url": "https://www.theguardian.com/film/2026/nov/24/who-next-bond-girl-robert-pattinson",
+        "published_at": "2026-11-24T10:00:13Z",
+        "image": "https://i.guim.co.uk/img/media/1e2967e5a9638bf2d633b99f183abaffa6669edb/1688_8_2619_2096/master/2619.jpg?width=460&quality=85&auto=format&fit=max&s=74feb522fbf89864ef790475cef4b493",
+        "summary": "With the British actor securing the role of James Bond, speculation has now begun over who should join him in Denis Villeneuve’s much-anticipated caper After years of speculation, Robert Pattinson has been officially cast as James Bond for a new…"
+      },
       {
         "category": "film",
         "source": "The Guardian",
@@ -51,74 +78,74 @@
         "published_at": "2026-11-23T18:10:31Z",
         "image": "https://i.guim.co.uk/img/media/e1f49c81d555e4febe4fdd970d1f485ba0014e13/328_331_2849_2279/master/2849.jpg?width=460&quality=85&auto=format&fit=max&s=2b0321d861a743b097030f7ad40a8080",
         "summary": "Jessie Buckley, Cillian Murphy and Mark Rylance will reportedly star in adaptation of The Heart in Winter Steven Spielberg has announced his next project: a western scripted by Paul Thomas Anderson. According to Deadline , the two Oscar-winning film-makers…"
-      },
-      {
-        "category": "film",
-        "source": "The Guardian",
-        "title": "Chemicals, Covid and cabbage: why 2026 has been an amazing year for documentaries",
-        "url": "https://www.theguardian.com/film/2026/nov/23/musk-naza-and-you-can-see-everything-idfa-documentary-film-festival",
-        "published_at": "2026-11-23T14:57:07Z",
-        "image": "https://i.guim.co.uk/img/media/85d3250a702f9a1a2c9646bf7ef1443922687b0e/352_0_1350_1080/master/1350.jpg?width=460&quality=85&auto=format&fit=max&s=44f111b32eb1e45ae444fa21fe0fa56a",
-        "summary": "With Musk, NAZA and You Can See Everything finding large audiences, non-fiction cinema is poised to break through. But there are plenty more gripping stories waiting for their turn in the spotlight There comes a time in the life of every film enthusiast when…"
-      },
-      {
-        "category": "film",
-        "source": "The Guardian",
-        "title": "You Can See Everything passes $100m at global box office as UK release starts strong",
-        "url": "https://www.theguardian.com/film/2026/nov/23/you-can-see-everything-global-box-office-uk-release-nathan-fielder-elizabeth-holmes",
-        "published_at": "2026-11-23T11:57:19Z",
-        "image": "https://i.guim.co.uk/img/media/9840b4d9a1af24ca0e7a66b1c9ad03fa098fdb77/448_92_708_567/master/708.jpg?width=460&quality=85&auto=format&fit=max&s=12043f4f6ae2e4778292b31e8a820f39",
-        "summary": "The documentary from Nathan Fielder following fraudster Elizabeth Holmes in the weeks leading up to her imprisonment has broken box office records in the UK Elizabeth Holmes film You Can See Everything has crossed the $100m mark at the global box office as it…"
-      },
-      {
-        "category": "film",
-        "source": "The Guardian",
-        "title": "‘Reminds me of home’: why Coming to America is my feelgood movie",
-        "url": "https://www.theguardian.com/film/2026/nov/23/coming-to-america-feelgood-movie",
-        "published_at": "2026-11-23T10:00:53Z",
-        "image": "https://i.guim.co.uk/img/media/a8825d5875ec4c675ce13ae27e85d5e295e7f0cd/204_0_1483_1186/master/1483.jpg?width=460&quality=85&auto=format&fit=max&s=a49e4b46158329df9419f932d0892084",
-        "summary": "The latest in our series of writers picking their most rewatched comfort films is an ode to Eddie Murphy’s beloved culture-clash comedy “Good morning, my neighbors!” A young Eddie Murphy shouts from the balcony of a shady apartment building. In the bustling…"
       }
     ],
     "art": [
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "Take me to the fatberg! The £437m new Museum of London is an astonishing sight",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/24/fatberg-museum-of-london-astonishing-smithfields-architecture",
-        "published_at": "2026-11-24T00:01:00Z",
-        "image": "https://i.guim.co.uk/img/media/381f195feb2eb31f030d548810f11605993d0089/0_139_7714_6171/master/7714.jpg?width=460&quality=85&auto=format&fit=max&s=ec998cfffc30a8c64e8945eab93b8d70",
-        "summary": "After a 10-year transformation, the glorious cathedral-like Smithfields market is now telling the capital’s story. Our architecture critic enters a world of jewels, axes, DJs and dog races – with unposh coffee from Syd’s century-old stall ‘All the grit and…"
+        "title": "Alia Syed wins £10,000 Jarman award for ‘depth and maturity’ of her experimental films",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/24/alia-syed-wins-10000-jarman-award-for-depth-and-maturity-of-her-experimental-films",
+        "published_at": "2026-11-24T19:30:54Z",
+        "image": "https://i.guim.co.uk/img/media/2d1ce22b2b334580c3ac3c06bc2d49be140a69fa/387_0_2226_1781/master/2226.jpg?width=460&quality=85&auto=format&fit=max&s=460ac0cba2bf2165a3455fd645aa0b67",
+        "summary": "The Welsh-Indian artist takes this year’s award, an established bellwether for future stars, for work focused on memory, migration and hidden histories Alia Syed has won this year’s Film London Jarman award, the prestigious UK prize for groundbreaking artist…"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "‘A fight to demand that humans are worth investing in’: Theaster Gates on taking over America’s last porcelain factory",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/23/theaster-gates-pickard-china-art",
-        "published_at": "2026-11-23T11:00:56Z",
-        "image": "https://i.guim.co.uk/img/media/3d0c2983f7d692b91d056a0644ec38f8acdf2f98/0_1456_3996_3197/master/3996.jpg?width=460&quality=85&auto=format&fit=max&s=2e73edea2e3fa004d14ce27a3ee52c47",
-        "summary": "As he invests in 60,0000 sq ft of midwest real estate, the celebrated artist explains bringing ‘independent thinking’ back to fine china “The worth of hand-painted china depends mainly upon the hand ,” reads an advertisement dating from 1910 and displayed…"
+        "title": "Give architects proper credit | Letter",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/24/give-architects-proper-credit",
+        "published_at": "2026-11-24T17:59:32Z",
+        "image": "https://i.guim.co.uk/img/media/c413a930e0c56899fa1ef221bfc4d857bd7a72b2/448_0_2764_2212/master/2764.jpg?width=460&quality=85&auto=format&fit=max&s=73a81dc1ec037b36278021e026ea5be0",
+        "summary": "They should be appreciated, as are the creators in other artforms, writes Simon Ricketts Your article ( ‘It’s an architect’s dream’: five beautiful eco buildings around the world, 14 November ) includes an excellent list of buildings, but not one credit is…"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "Brioche armchairs, butter sculptures and edible chandeliers: meet the new food artists",
-        "url": "https://www.theguardian.com/food/2026/nov/23/brioche-armchairs-butter-sculptures-and-edible-chandeliers-meet-the-new-food-artists",
-        "published_at": "2026-11-23T10:00:52Z",
-        "image": "https://i.guim.co.uk/img/media/d81b11a32f5970d1491e0aa132a6ffb6bb88404c/0_610_1920_1536/master/1920.jpg?width=460&quality=85&auto=format&fit=max&s=227b622535ee68c1528f9b8b59be821b",
-        "summary": "Culinary artists are turning fashion shows and design fairs into a feast for the eyes A pretty Venetian chandelier featuring delicate pink flowers and cascading blue leaves hangs from a ceiling. A hazy, warm light radiates from its tulip bulbs. Suddenly, a…"
+        "title": "Fire breathers and a stranded cargo ship: photos of the day – Tuesday",
+        "url": "https://www.theguardian.com/news/gallery/2026/nov/24/fire-breathers-stranded-cargo-ship-photos-of-the-day-tuesday",
+        "published_at": "2026-11-24T16:55:34Z",
+        "image": "https://i.guim.co.uk/img/media/7b9789543bbf0fb4ce7eb337754fb97bf1cf9e21/0_0_3250_2600/master/3250.png?width=460&quality=85&auto=format&fit=max&s=249777419223d034c5d119b27dfbb4f1",
+        "summary": "The Guardian’s picture editors select photographs from around the world"
       },
       {
         "category": "art",
         "source": "The Guardian",
-        "title": "Dapper Liam and Noel, experimental Björk, and Bowie ‘cuddling himself’: Rankin reveals his never-before-seen shots of the stars",
-        "url": "https://www.theguardian.com/artanddesign/2026/nov/23/rankin-photographer-interview-contact-david-bowie-oasis",
-        "published_at": "2026-11-23T08:00:50Z",
-        "image": "https://i.guim.co.uk/img/media/0ea2ef6c794663a88261eeaa216cc1c9f547aa65/154_3_2211_1768/master/2211.jpg?width=460&quality=85&auto=format&fit=max&s=4685de328aa86d77315ad000c339c7b3",
-        "summary": "After some satirical experiments with the ‘disgusting’ AI, the photographer has returned to his first love with a book of contact sheets from his celebrity shoots. ‘I wish we could go back and stop everything changing,’ he says “I hate AI,” says Rankin. “A…"
+        "title": "‘The Terence Conran of his day’: the visionary Victorian futurist adored by design superstars today",
+        "url": "https://www.theguardian.com/artanddesign/2026/nov/24/terence-conran-visionary-christopher-dresser-teapots",
+        "published_at": "2026-11-24T16:22:20Z",
+        "image": "https://i.guim.co.uk/img/media/4d922fb677f7720e6617ace5f17e55857500282a/0_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=bbc59c0bca88e929d257dac201e80bf4",
+        "summary": "A professor at the age of 21, Christopher Dresser was a design genius who created beautiful, futuristic homeware, from teapots to toast racks to jugs. Why is his brilliance only now being recognised? Victorian industrial designer Christopher Dresser was…"
       }
     ],
     "books": [
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "Meher Iqbal wins 2026 4thWrite prize with ‘evocative’ coming-of-age story",
+        "url": "https://www.theguardian.com/books/2026/nov/24/meher-iqbal-wins-2026-4thwrite-prize-with-evocative-coming-of-age-story",
+        "published_at": "2026-11-24T20:00:55Z",
+        "image": "https://i.guim.co.uk/img/media/dcde05bc12ac2d128a32d01830d9751b6c90122a/0_503_1125_900/master/1125.jpg?width=460&quality=85&auto=format&fit=max&s=663b7ef970491761ddd0b4b4644eed57",
+        "summary": "After being longlisted twice before, Iqbal takes the award for unpublished short stories by writers of colour for a tale about a teenage female friendship Meher Iqbal has won this year’s 4thWrite prize for short fiction with her story Darkroom, after being…"
+      },
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "‘It was a cover-up’: HarperCollins accused of using lawyers to shut down concerns about David Walliams",
+        "url": "https://www.theguardian.com/tv-and-radio/2026/nov/24/it-was-a-cover-up-harpercollins-accused-of-using-lawyers-to-shut-down-concerns-about-david-walliams",
+        "published_at": "2026-11-24T12:00:45Z",
+        "image": "https://i.guim.co.uk/img/media/b8334fd711ff695b45c619061e440a6bb99aeee5/1_0_4998_4000/master/4998.jpg?width=460&quality=85&auto=format&fit=max&s=4cc8c662b53bd84c2f893008206bb4d2",
+        "summary": "Women who spoke to internal investigation about inappropriate behaviour by Walliams still too scared to speak out The publisher HarperCollins used a leading legal firm and a non-disclosure agreement to “cover up” David Walliams’ inappropriate behaviour…"
+      },
+      {
+        "category": "books",
+        "source": "The Guardian",
+        "title": "First Children’s Booker prize reveals ‘Great Eight’ shortlist",
+        "url": "https://www.theguardian.com/books/2026/nov/24/first-childrens-booker-prize-reveals-great-eight-shortlist",
+        "published_at": "2026-11-24T07:30:09Z",
+        "image": "https://i.guim.co.uk/img/media/47cef9d938abd7db8fcaa8e5d8fdc31c4c56cea8/1650_714_5619_4496/master/5619.jpg?width=460&quality=85&auto=format&fit=max&s=e21c9c7d18577e6584f8985618730fea",
+        "summary": "Judge Frank Cottrell-Boyce introduces the eight titles shortlisted for the inaugural £50,000 award, by authors including Shaun Tan, Eoin Colfer and Liz Hyder Books by the Oscar-winning artist Shaun Tan, Artemis Fowl author Eoin Colfer and Nero award-winner…"
+      },
       {
         "category": "books",
         "source": "The Guardian",
@@ -127,139 +154,121 @@
         "published_at": "2026-11-23T12:30:30Z",
         "image": "https://i.guim.co.uk/img/media/63699cb433076977787909a905eca9f0d4d3f1a3/1000_0_5000_4000/master/5000.jpg?width=460&quality=85&auto=format&fit=max&s=e6618b3bd5d42fca5575df95c85f820c",
         "summary": "From Heated Rivalry to Harry Potter, popular series are inspiring fan fiction read by thousands online. Now the authors of those online works are getting publishing deals of their own Shortly after this year’s London book fair , rumours began to circulate of…"
-      },
-      {
-        "category": "books",
-        "source": "The Guardian",
-        "title": "Rivals author Jilly Cooper accused of ‘extensive and deliberate plagiarism’",
-        "url": "https://www.theguardian.com/books/2026/nov/22/rivals-author-jilly-cooper-accused-plagiarism",
-        "published_at": "2026-11-22T15:07:42Z",
-        "image": "https://i.guim.co.uk/img/media/f5ed62cd4fe49f2727a2c4dd715669add71e2484/0_76_1639_1311/master/1639.jpg?width=460&quality=85&auto=format&fit=max&s=150f054d0f57453a0f13a764b8e6ce96",
-        "summary": "Analysis reportedly finds striking similarities in dialogue and narrative structure between late author’s novel, Prudence, and two of her contemporaries Jilly Cooper has been accused of plagiarising the works of two other novelists. The bestselling author’s…"
-      },
-      {
-        "category": "books",
-        "source": "The Guardian",
-        "title": "How can we explain psychosomatic illnesses?",
-        "url": "https://www.theguardian.com/science/2026/nov/22/how-can-we-explain-psychosomatic-illnesses",
-        "published_at": "2026-11-22T12:00:27Z",
-        "image": "https://i.guim.co.uk/img/media/b4be834bccd838d90f22a530a434fcbda79a34c2/0_470_1847_1477/master/1847.jpg?width=460&quality=85&auto=format&fit=max&s=7978dcc44ab9d044cca4cfacd78dbae9",
-        "summary": "Emotions play a significant part in physical symptoms – but not in the way people often imagine When Diego started seeing bright flashing lights in his field of vision and felt his legs go weak, he thought he knew immediately what was happening. His mother…"
       }
     ],
     "politics": [
       {
         "category": "politics",
-        "source": "The Guardian · China",
-        "title": "Europe’s big threat is not Trump and Putin redrawing the map. It’s our own learned helplessness | Natalie Tocci",
-        "url": "https://www.theguardian.com/commentisfree/2026/nov/24/europes-big-threat-is-not-trump-and-putin-redrawing-the-map-its-our-own-learned-helpnessness",
-        "published_at": "2026-11-24T05:00:06Z",
-        "image": "https://i.guim.co.uk/img/media/85d87ea26f6fe72e97e31eb3500b6ea9cad841cf/836_0_4164_3333/master/4164.jpg?width=460&quality=85&auto=format&fit=max&s=1b46609cd02cccc03cd38c6ed4df3acf",
-        "summary": "The US and Russia lack the power to impose their will on the continent – the Shenzhen summit was no Yalta 2.0 The first ever trilateral summit between Xi Jinping, Donald Trump and Vladimir Putin was rich in symbolism and empty of substance. Many Europeans…",
+        "source": "BBC News · China",
+        "title": "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
+        "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-25T02:59:27Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c0cb/live/da83bf80-e849-11f1-aa88-031e8213533d.jpg",
+        "summary": "The verdict follows a months-long trial in New York.",
         "region": "china"
       },
       {
         "category": "politics",
         "source": "BBC News",
-        "title": "Chris Mason: Can Burnham turn volume down on EU debate?",
-        "url": "https://www.bbc.co.uk/news/articles/c6pw47jyyz5no?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-24T00:45:53Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/d52f/live/4268b250-e79f-11f1-b8f0-1fdd88d7e7ad.jpg",
-        "summary": "The BBC's Chris Mason analyses what the EU conversation means for Labour and the PM."
-      },
-      {
-        "category": "politics",
-        "source": "BBC News",
-        "title": "No 10 North will face greater scrutiny as Burnham's 10-year plan looms",
-        "url": "https://www.bbc.co.uk/news/articles/c6rrg7jx5gdgo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-24T00:31:28Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/86c8/live/2349edc0-e755-11f1-b407-33329b1ec67a.jpg",
-        "summary": "The work of Number 10 North in Manchester has been kept largely away from the headlines since it opened in July."
+        "title": "Ministers ask public for views on changing age of consent",
+        "url": "https://www.bbc.co.uk/news/articles/cwgkl31kmnddo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-25T01:38:39Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/9ec8/live/48a72fa0-e850-11f1-aa88-031e8213533d.jpg",
+        "summary": "Some campaigners have argued that different limits should apply, depending on the age gap between the people involved."
       },
       {
         "category": "politics",
         "source": "The Guardian",
-        "title": "Zack Polanski backs report endorsing Nato membership and maintaining nuclear weapons",
-        "url": "https://www.theguardian.com/politics/2026/nov/24/zack-polanski-backs-report-endorsing-nato-membership-maintaining-nuclear-weapons",
-        "published_at": "2026-11-24T00:01:01Z",
-        "image": "https://i.guim.co.uk/img/media/631070f63a2fb9a39634bf065f768197aa90271b/519_0_4025_3220/master/4025.jpg?width=460&quality=85&auto=format&fit=max&s=36ab9e9ac1858e9c6caeef36edd5837a",
-        "summary": "Position contrasts with Green party’s policies before 2024 election, as polls show just 17% of voters trust them on defence Zack Polanski has given his backing to a paper that endorses Britain’s membership of Nato and the maintenance of the country’s nuclear…"
+        "title": "Metropolitan police still institutionally racist and misogynist, says report",
+        "url": "https://www.theguardian.com/uk-news/2026/nov/25/metropolitan-police-institutionally-racist-misogynist-fairfield-report",
+        "published_at": "2026-11-25T00:01:01Z",
+        "image": "https://i.guim.co.uk/img/media/32a53d47c4e69c1cee3b77ce1cb76cd8bec7c202/541_0_5408_4326/master/5408.jpg?width=460&quality=85&auto=format&fit=max&s=4730bb893cca81b4a3e7baf6a7ecb8fa",
+        "summary": "Independent review finds force has ‘fundamental systemic issues’ three years after damning report on Sarah Everard murder Latest review of Met police culture finds little has changed since last one The Metropolitan police remain institutionally racist…"
+      },
+      {
+        "category": "politics",
+        "source": "BBC News",
+        "title": "Nuclear test veterans will get full truth, says Burnham, as he confirms independent panel",
+        "url": "https://www.bbc.co.uk/news/articles/c6808k8dxvgko?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-24T22:49:41Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/fe2e/live/12d46260-e85c-11f1-8f9c-6751d17fed73.jpg",
+        "summary": "The prime minister says a Hillsborough-style independent panel will examine the health legacy of Britain's Cold War-era atomic programme."
       }
     ],
     "technology": [
       {
         "category": "technology",
-        "source": "The Guardian",
-        "title": "Nvidia rejoices at Jensen Huang’s second coming as White House takes victory lap",
-        "url": "https://www.theguardian.com/technology/2026/nov/23/nvidia-jensen-huang-return-ceo",
-        "published_at": "2026-11-24T01:34:39Z",
-        "image": "https://i.guim.co.uk/img/media/acc6b55b5a2588de1743b839ccdd4877f7978618/463_0_4821_3856/master/4821.jpg?width=460&quality=85&auto=format&fit=max&s=8a47af50288dbd704e85cd18842507d3",
-        "summary": "Huang receives hero’s welcome at firm’s Silicon Valley headquarters as return cements role as key AI figure Jensen Huang made his return to Nvidia’s headquarters with a hero’s welcome on Monday. Hours earlier he’d been reinstated as the CEO of the world’s…"
+        "source": "BBC News",
+        "title": "US attorney general dodges questions about Nvidia investigation",
+        "url": "https://www.bbc.co.uk/news/articles/crpdw1qx7jgxo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-25T03:44:07Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/067a/live/dc6baca0-e839-11f1-a094-5fdc692f3e33.png",
+        "summary": "Nvidia's share price have fallen 7% as lawmakers demand answers about President Donald Trump's involvement in Huang's reinstatement."
       },
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "US to blacklist Asian AI firm Megaspeed after Nvidia scandal",
-        "url": "https://www.bbc.co.uk/news/articles/cv98xpg5dg5zo?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-23T23:16:08Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4a66/live/7c413f70-e78a-11f1-a5c2-c57ab9df3111.jpg",
-        "summary": "Megaspeed has been accused of funneling AI chips to China after a former executive's affair with Jensen Huang became public."
+        "title": "Huawei found guilty of stealing trade secrets but acquitted of racketeering",
+        "url": "https://www.bbc.co.uk/news/articles/cmy49ngydqzpo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-25T02:59:27Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/c0cb/live/da83bf80-e849-11f1-aa88-031e8213533d.jpg",
+        "summary": "The verdict follows a months-long trial in New York."
       },
       {
         "category": "technology",
         "source": "The Guardian",
-        "title": "Jensen Huang reinstated as Nvidia CEO after Trump intervenes",
-        "url": "https://www.theguardian.com/technology/2026/nov/23/jensen-huang-reinstated-as-nvidia-chief-executive",
-        "published_at": "2026-11-23T22:23:40Z",
-        "image": "https://i.guim.co.uk/img/media/d43043e64abd1e9a3d80d7870de50d134c45b4dd/199_0_5507_4407/master/5507.jpg?width=460&quality=85&auto=format&fit=max&s=e5b369084591f3010811a25c77d8cbd1",
-        "summary": "Share price surges as chipmaker reverses decision to remove chief executive after US president ‘convinced’ its board Comment: Nvidia’s humiliated board should resign out of embarrassment Timeline: fall and comeback of Jensen Huang Nvidia has reinstated Jensen…"
+        "title": "Tidal bans 100% AI-generated music with plans to delete more than 27m tracks",
+        "url": "https://www.theguardian.com/music/2026/nov/25/tidal-streaming-service-bans-ai-generated-music",
+        "published_at": "2026-11-25T02:12:22Z",
+        "image": "https://i.guim.co.uk/img/media/b8638ee431643455ce8b3251c145e5241b067c0a/1120_0_5600_4480/master/5600.jpg?width=460&quality=85&auto=format&fit=max&s=56de13936b19ece3180de434e89a7265",
+        "summary": "Streaming service says 43% of uploads to platform in past 90 days were made entirely by artificial intelligence The music streaming service Tidal has announced it will ban entirely AI-generated music from its platform and remove millions of songs, saying AI…"
       },
       {
         "category": "technology",
         "source": "BBC News",
-        "title": "Nvidia value climbs by almost $1tn and tech stocks rally after Jensen Huang returns",
-        "url": "https://www.bbc.co.uk/news/articles/cq62pn6j42jko?at_medium=RSS&at_campaign=rss",
-        "published_at": "2026-11-23T21:23:42Z",
-        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/e297/live/7eb9d0a0-e776-11f1-a8a9-d7c9e8a923b4.jpg",
-        "summary": "The jump in Nvidia shares has also lifted stock markets, with the tech-heavy Nasdaq up 6.5%."
+        "title": "Why tiny cars are taking off across Europe",
+        "url": "https://www.bbc.co.uk/news/articles/cmwy9jne0g7qo?at_medium=RSS&at_campaign=rss",
+        "published_at": "2026-11-25T00:34:05Z",
+        "image": "https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/2edb/live/5d054030-ddcf-11f1-b441-2b33b063138f.jpg",
+        "summary": "Once seen as a car for elderly, rural people, tiny cars are being embraced by a younger demographic."
       }
     ],
     "earth": [
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "Robert Macfarlane says trust in Cop to deliver change on climate is ‘misplaced’",
-        "url": "https://www.theguardian.com/environment/2026/nov/24/robert-macfarlane-trust-cop-climate-summit-deliver-change-misplaced",
-        "published_at": "2026-11-24T00:01:00Z",
-        "image": "https://i.guim.co.uk/img/media/a233b56422ea340a45cd4a18cb15567bce41dfd2/0_378_1344_1075/master/1344.jpg?width=460&quality=85&auto=format&fit=max&s=f0792b817aa52503afce7737fa8d4d32",
-        "summary": "Nature writer reveals in his first Reith lecture that he finds ‘much more hope’ in emerging alliances We are “misplacing our trust” in the Cop climate summits and their “capacity to deliver consequential change”, according to Robert Macfarlane in this year’s…"
+        "title": "Coastal areas in England at risk of erosion to receive £11m in new funding",
+        "url": "https://www.theguardian.com/environment/2026/nov/25/coastal-areas-england-at-risk-erosion-11m-funding-drones-ea",
+        "published_at": "2026-11-25T00:01:01Z",
+        "image": "https://i.guim.co.uk/img/media/ce04a5cb09e22f892bbbb0638df2ea14eea476ff/0_0_3840_3072/master/3840.jpg?width=460&quality=85&auto=format&fit=max&s=6e95c3bbd13bd458677d9975c13b7450",
+        "summary": "Exclusive: Laser-equipped drone surveys and road relocations among schemes to get government support Laser-equipped drone surveys, sand dune restoration and moving roads inland are among the projects that will receive government funding to help seaside…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "The Guardian view on Cop31: a just transition needs more than fine words | Editorial",
-        "url": "https://www.theguardian.com/commentisfree/2026/nov/23/the-guardian-view-on-cop31-a-just-transition-needs-more-than-fine-words",
-        "published_at": "2026-11-23T18:29:05Z",
-        "image": "https://i.guim.co.uk/img/media/6818b2ea94ad11c2cbdf56bf8f969ad34332900e/752_0_5242_4195/master/5242.jpg?width=460&quality=85&auto=format&fit=max&s=8e24b397b7f7ed4a31857691c77b9f5e",
-        "summary": "Petrostates blocked ambition while wealthy nations withheld cash support. The climate crisis demands the next UN summit turns promises into action In a negotiation the maxim is usually that no deal is better than a bad deal. But the failure of Cop31 in Turkey…"
+        "title": "California ‘king tides’ stress test San Francisco as low-lying areas flood",
+        "url": "https://www.theguardian.com/weather/2026/nov/24/california-coast-flooding-thanksgiving-travel",
+        "published_at": "2026-11-24T23:20:24Z",
+        "image": "https://i.guim.co.uk/img/media/80d6a5ade95e2a8670b872bdca5972b45f0d2f71/335_0_3331_2666/master/3331.jpg?width=460&quality=85&auto=format&fit=max&s=194c953ec42d8a86a17f6a0c2a9dd25e",
+        "summary": "Monthly tide records were set across the city, with some expected to hit even higher tomorrow Explainer: What to know about flooding in California over Thanksgiving California is grappling with the stress test of record-high or close to record-high November…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "‘Scapegoating’: green groups condemn plan to axe Environment Agency and Natural England",
-        "url": "https://www.theguardian.com/politics/2026/nov/23/natural-england-could-be-abolished-quango-cull-louise-haigh",
-        "published_at": "2026-11-23T17:47:58Z",
-        "image": "https://i.guim.co.uk/img/media/b46f01566289f841fb7954222888ae0175122aad/1324_870_4795_3835/master/4795.jpg?width=460&quality=85&auto=format&fit=max&s=e7b48a1922d570b685fc68c9f8609129",
-        "summary": "Ministers proposing to abolish the quangos in attempt to give politicians more control over what gets built and where Scientists have accused the government of scapegoating nature for proposing to scrap the only environmental regulator with a legal duty to…"
+        "title": "Climate scientists urge US lawmakers to vote no on sweeping permitting bill",
+        "url": "https://www.theguardian.com/us-news/2026/nov/24/climate-scientists-lawmakers-baaja",
+        "published_at": "2026-11-24T22:09:57Z",
+        "image": "https://i.guim.co.uk/img/media/725b11778789cc1aefe2d9ba334c2392099bb1ea/687_0_6882_5504/master/6882.jpg?width=460&quality=85&auto=format&fit=max&s=063390cc5be5503963e9fc6bc5bb315d",
+        "summary": "Open letter warns Baaja, intended to expedite energy and infrastructure projects, will cause irreversible climate harm A group of more than 120 climate scientists have urged US lawmakers to not pass contentious legislation to speed up the building of energy…"
       },
       {
         "category": "earth",
         "source": "The Guardian",
-        "title": "California on edge as high tides and floods set to wreak havoc over Thanksgiving. Here is what to know",
-        "url": "https://www.theguardian.com/us-news/2026/nov/23/california-high-tides-floods-weather-thanksgiving",
-        "published_at": "2026-11-23T15:43:23Z",
-        "image": "https://i.guim.co.uk/img/media/a47eb19ae70cc87e3125f00f92121acfdefeac14/469_0_4688_3750/master/4688.jpg?width=460&quality=85&auto=format&fit=max&s=a41ff72d12b010ebe01bed0b08744276",
-        "summary": "Coastal cities race to prepare for possible historic floods colliding with El Niño conditions before busy travel week It has already been a rough year for coastal Californians – who have endured flooding , extreme waves and beach erosion during the super El…"
+        "title": "Iowa braces for controlled bomb blast: ‘We had only five days of warning’",
+        "url": "https://www.theguardian.com/us-news/2026/nov/24/iowa-illinois-missouri-hazardous-bomb-explosion-blast-prep-thanksgiving",
+        "published_at": "2026-11-24T21:49:07Z",
+        "image": "https://i.guim.co.uk/img/media/acfcff739fa280e8a12f19f15024fe02a932b14f/1561_1315_2523_2019/master/2523.jpg?width=460&quality=85&auto=format&fit=max&s=36d42d7a2aca235d764796300c609c69",
+        "summary": "Detonation of 68 barrels of lead azide scheduled for Wednesday after several delays amid public outcry Residents of Iowa, Illinois and Missouri who are preparing for Thanksgiving are also bracing themselves for the detonation of hazardous bomb-making…"
       }
     ],
     "space": [
